@@ -71,7 +71,7 @@
             wait.Until(readyCondition);
         }
 
-        public static void JqueryClick(IWebDriver Driver, string selector, int waitTime = MAX_WAIT_TIME) {
+        public static void JqueryClick(IWebDriver Driver, string locator, int waitTime = MAX_WAIT_TIME) {
 
             IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
             bool flag = (bool)js.ExecuteScript("return typeof jQuery == 'undefined'");
@@ -80,7 +80,19 @@
             }
 
             // Click element by lockator
-            js.ExecuteScript("return $('" + selector + "')[0].click();");
+            js.ExecuteScript("$('" + locator + "').first().click();");
+        }
+
+        public static void JquerySendKeys(IWebDriver Driver, string locator, string keys) {
+
+            IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
+            bool flag = (bool)js.ExecuteScript("return typeof jQuery == 'undefined'");
+            if (flag) {
+                js.ExecuteScript("var jq = document.createElement('script');jq.src = '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js';document.getElementsByTagName('head')[0].appendChild(jq);");
+            }
+
+            // Click element by lockator
+            js.ExecuteScript("$('" + locator + "').first().val('" + keys + "');");
         }
 
         //public static string JQueryLocatorConverter(By locator) {

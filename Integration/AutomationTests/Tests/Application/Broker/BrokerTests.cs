@@ -5,12 +5,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
     using UIAutomationTests.Core;
     using UIAutomationTests.Tests.Shared;
     using OpenQA.Selenium;
-    using System.Collections.Generic;
-    using System.Threading;
     using log4net;
-    using TestRailModels.Automation;
-
-    //using System.ComponentModel;
 
     class BrokerTests : WebTestBase {
         private static readonly ILog log = LogManager.GetLogger(typeof(BrokerTests));
@@ -70,15 +65,15 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("7969")]
-        public void TestCase7969() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase7969() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2962")]
-        public void TestCase2962() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2962() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1966")]
-        public void TestCase1966() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1966() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2036")]
@@ -112,10 +107,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    //Precondition 3 - Navigate to broker's sign up page.
+                //Precondition 3 - Navigate to broker's sign up page.
                 string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("BrokerSignupHost"));
-                    Driver.Navigate().GoToUrl(url);
-                    actionBot.WriteToLog("Nevigate to url: " + url);
+                Driver.Navigate().GoToUrl(url);
+                actionBot.WriteToLog("Nevigate to url: " + url);
 
                 //Step 3 - Click the privacy policy link.
                 actionBot.Click(By.XPath("//label[@for='AgreeToPrivacyPolicy']/a"), "(privacy policy link button)");
@@ -151,10 +146,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -179,10 +174,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -210,10 +205,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker and click 'Send'.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -248,10 +243,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Steps 3-7 - Add a new client to broker.
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
@@ -273,14 +268,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition - Prepare a registered broker account.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition - Prepare a registered broker account.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
-                    //Precondition 1 - Prepare a registered broker account with at least one lead: C1352
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Precondition 1 - Prepare a registered broker account with at least one lead: C1352
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                 actionBot.WriteToLog("Begin assert: Verify e-mail address in wizard is: " + leadMail);
                 Assert.AreEqual(SharedServiceClass.ElementIsVisible(Driver, By.Id("Email")).GetAttribute("value"), leadMail);
@@ -292,7 +287,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 actionBot.MoveToTop();
                 actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
-               
+
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
 
@@ -361,10 +356,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 3-7 - Add a new client: Fill, e-mail according to format: C4520
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
@@ -383,7 +378,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 11-12 - Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
                 //Wizard Step 4 - add paypal account
-                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead","liat@ibai.co.il", "1q2w3e4r");
+                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
@@ -407,10 +402,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 3-7 - Add a new client: Fill, e-mail according to format: C4544
                 string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
@@ -453,14 +448,14 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
-                    //Precondition 2 - Add a new client: Fill: C1352.
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Precondition 2 - Add a new client: Fill: C1352.
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
                 WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
 
@@ -469,7 +464,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 2 - Complete customer's Wizard step 2: C1380
                 wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
-                
+
                 SharedServiceClass.WaitForAjaxReady(Driver);
                 actionBot.WriteToLog(Environment.NewLine);
 
@@ -496,24 +491,24 @@ namespace UIAutomationTests.Tests.Application.Broker {
         #region Application: Broker / Broker Dashboard / Marketing materials
         [Test]
         [Category("2040")]
-         public void TestCase2040() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2040() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2041")]
-        public void TestCase2041() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2041() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2042")]
-        public void TestCase2042() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2042() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Broker Dashboard / Terms and conditions
         [Test]
         [Category("2043")]
-        public void TestCase2043() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2043() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2039")]
-        public void TestCase2039() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2039() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Broker Dashboard / Widget
 
@@ -524,31 +519,31 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 1 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 1 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
-                    //Precondition 2 - Broker account is linked to approved customer: C7473.
+                //Precondition 2 - Broker account is linked to approved customer: C7473.
 
-                    //Insert email according to manual decision backdoor format: C4544.
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
-                    brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Insert email according to manual decision backdoor format: C4544.
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
+                brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
-                    WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
 
-                    //Complete customer's Wizard step 1: C3
-                    wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
+                //Complete customer's Wizard step 1: C3
+                wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
-                    //Complete customer's Wizard step 2: C1380
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
+                //Complete customer's Wizard step 2: C1380
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
-                    //Complete customer's Wizard step 3: C91
-                    wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
+                //Complete customer's Wizard step 3: C91
+                wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
-                    //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
-                    //Wizard Step 4 - add paypal account
-                    wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
+                //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
+                //Wizard Step 4 - add paypal account
+                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
                 //Step 2 - Commission widget display the following as disabled.
                 //Step 2.1 - Commission: Unlinked.
@@ -577,37 +572,37 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 2 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 2 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
-                    //Precondition 3 - Broker account is linked to approved customer: C7472.
+                //Precondition 3 - Broker account is linked to approved customer: C7472.
 
-                    //Step 3-7 - Add a new client: Fill, mail according to format: C4520
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
-                    brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Step 3-7 - Add a new client: Fill, mail according to format: C4520
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
+                brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
-                    WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Complete customer's Wizard step 1: C3
-                    wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
+                WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Complete customer's Wizard step 1: C3
+                wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
-                    //Complete customer's Wizard step 2: C26
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "1111111111", "2222222222", true);
+                //Complete customer's Wizard step 2: C26
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "2", "1111111111", "2222222222", true);
 
-                    //Complete customer's Wizard step 3: C91
-                    wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
+                //Complete customer's Wizard step 3: C91
+                wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
-                    //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
-                    //Wizard Step 4 - add paypal account
-                    wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
+                //Complete customer's Wizard step 4: C4537 (Link minimum required marketplace's for approval: C4530)
+                //Wizard Step 4 - add paypal account
+                wizardShared.PerformWizardStepFourPayPal(logHeader + " - PerformWizardStepFour", "BrokerFillLead", "liat@ibai.co.il", "1q2w3e4r");
 
-                    //Log off broker, log into customer, take loan and log off customer.
-                    brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
-                    CustomerShared customerShared = new CustomerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    customerShared.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
-                    customerShared.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
-                    customerShared.CustomerLogOff(logHeader + " - CustomerLogOff");
+                //Log off broker, log into customer, take loan and log off customer.
+                brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
+                CustomerShared customerShared = new CustomerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                customerShared.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
+                customerShared.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
+                customerShared.CustomerLogOff(logHeader + " - CustomerLogOff");
 
                 //Step 1 - Browse to broker dashboard.
                 brokerShared.BrokerLogIn(logHeader + " - BrokerLogIn", brokerMail);
@@ -639,10 +634,10 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 2 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 2 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
                 //Step 2 - Commission widget display the following as disabled.
                 //Step 2.1 - Commission: Unlinked.
@@ -676,7 +671,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1358")]
-        public void TestCase1358() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1358() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1359")]
@@ -690,39 +685,39 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 DateTime testStartTime = DateTime.UtcNow;
                 actionBot.WriteToLog("Begin test: " + logHeader + Environment.NewLine);
 
-                    BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    //Precondition 2 - Prepare a registered broker account: C1202.
-                    string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
-                    brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
+                BrokerShared brokerShared = new BrokerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                //Precondition 2 - Prepare a registered broker account: C1202.
+                string brokerMail = "test+broker_" + DateTime.Now.Ticks + "@ezbob.com";
+                brokerShared.CreateNewBrokerAccount(logHeader + " - CreateNewBrokerAccount", "SomeCompany", "BrokerName", brokerMail, "01111111111", "222222", "123", "123", "123456");
 
-                    //Precondition 3 - Broker account is linked to customer: C1353.
-                    string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
-                    brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
+                //Precondition 3 - Broker account is linked to customer: C1353.
+                string leadMail = "test+lead_" + DateTime.Now.Ticks + "+bds-afg@ezbob.com";
+                brokerShared.BrokerLeadEnrolment(logHeader + " - BrokerLeadEnrolment", "LeadFName", "LeadLName", leadMail, By.Id("LeadFillWizard"));
 
-                    WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                WizardShared wizardShared = new WizardShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
 
-                    //Complete customer's Wizard step 1: C3
-                    wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
+                //Complete customer's Wizard step 1: C3
+                wizardShared.PerformWizardStepOne(logHeader + " - PerformWizardStepOne", "BrokerFillLead", leadMail, "123123", 2, "asd", "1000");
 
-                    //Complete customer's Wizard step 2: C1380
-                    wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
+                //Complete customer's Wizard step 2: C1380
+                wizardShared.PerformWizardStepTwo(logHeader + " - PerformWizardStepTwo", "BrokerFillLead", "LeadFName", "LeadLName", 'M', "2", "Mar.", "1921", "Single", "ab101ba", "3", "6", "1111111111", "2222222222", true);
 
-                    //Complete customer's Wizard step 3: C91
-                    wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
+                //Complete customer's Wizard step 3: C91
+                wizardShared.PerformWizardStepThree(logHeader + " - PerformWizardStepThree", "Entrepreneur", "15", "123");
 
-                    //Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
-                    //Wizard Step 4 - add EKM account
-                    wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", By.CssSelector("a.marketplace-button-account-EKM"), By.Id("ekm_login"), "ezbob", By.Id("ekm_password"), "ezekmshop2013", By.Id("ekm_link_account_button"));
+                //Complete customer's Wizard step 4: C788 - TODO: replaced by EKM account, file upload problem needs to be resolved.
+                //Wizard Step 4 - add EKM account
+                wizardShared.PerformWizardStepFour(logHeader + " - PerformWizardStepFour", "BrokerFillLead", By.CssSelector("a.marketplace-button-account-EKM"), By.Id("ekm_login"), "ezbob", By.Id("ekm_password"), "ezekmshop2013", By.Id("ekm_link_account_button"));
 
-                    //Bank account linked: C1357
-                    brokerShared.BrokerAddBankAccount(logHeader + " - BrokerAddBankAccount", "20115636", "62", "10", "00", 'P');
+                //Bank account linked: C1357
+                brokerShared.BrokerAddBankAccount(logHeader + " - BrokerAddBankAccount", "20115636", "62", "10", "00", 'P');
 
-                    //Log off broker, log into customer, take loan and log off customer.
-                    brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
-                    CustomerShared customerShared = new CustomerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
-                    customerShared.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
-                    customerShared.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
-                    customerShared.CustomerLogOff(logHeader + " - CustomerLogOff");
+                //Log off broker, log into customer, take loan and log off customer.
+                brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
+                CustomerShared customerShared = new CustomerShared(Driver, EnvironmentConfig, BrandConfig, actionBot);
+                customerShared.CustomerLogIn(logHeader + " - CustomerLogIn", true, leadMail);
+                customerShared.CustomerTakeLoan(logHeader + " - CustomerTakeLoan", "LeadFName", "LeadLName", "00000000", "00", "00", "00", 'P', "CardHolderName", "Visa", "4111111111111111", DateTime.UtcNow.AddYears(1).ToString("MM/yy"), "111");
+                customerShared.CustomerLogOff(logHeader + " - CustomerLogOff");
 
                 //Step 1 - Browse to broker dashboard.
                 brokerShared.BrokerLogIn(logHeader + " - BrokerLogIn", brokerMail);
@@ -776,39 +771,39 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1360")]
-        public void TestCase1360() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1360() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         #endregion
         #region Application: Broker / Broker Dashboard / Log In
         [Test]
         [Category("2032")]
-        public void TestCase2032() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2032() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2033")]
-        public void TestCase2033() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2033() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2034")]
-        public void TestCase2034() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2034() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Commission / Fee: Automatic Payments
 
         [Test]
         [Category("1364")]
-        public void TestCase1364() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1364() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1376")]
-        public void TestCase1376() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1376() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1362")]
-        public void TestCase1362() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1362() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1361")]
-        public void TestCase1361() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1361() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1365")]
@@ -816,27 +811,27 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1367")]
-        public void TestCase1367() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1367() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1363")]
-        public void TestCase1363() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1363() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1368")]
-        public void TestCase1368() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1368() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4190")]
-        public void TestCase4190() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4190() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4191")]
-        public void TestCase4191() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4191() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4541")]
-        public void TestCase4541() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4541() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Commission / Fee: Default values
 
@@ -876,260 +871,260 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
         [Test]
         [Category("1369")]
-        public void TestCase1369() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1369() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1370")]
-        public void TestCase1370() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1370() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1384")]
-        public void TestCase1384() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1384() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1385")]
-        public void TestCase1385() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1385() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1373")]
-        public void TestCase1373() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1373() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1372")]
-        public void TestCase1372() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1372() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1374")]
-        public void TestCase1374() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1374() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1375")]
-        public void TestCase1375() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1375() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Commission / Fee: Value manual overrid
         [Test]
         [Category("1377")]
-        public void TestCase1377() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1377() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1378")]
-        public void TestCase1378() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1378() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1389")]
-        public void TestCase1389() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1389() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1379")]
-        public void TestCase1379() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1379() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("3211")]
-        public void TestCase3211() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase3211() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1381")]
-        public void TestCase1381() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1381() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Commission / Fee: Automatic invoice email / Condition for invoice
         [Test]
         [Category("4180")]
-        public void TestCase4180() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4180() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4181")]
-        public void TestCase4181() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4181() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4182")]
-        public void TestCase4182() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4182() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4185")]
-        public void TestCase4185() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4185() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4218")]
-        public void TestCase4218() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4218() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4220")]
-        public void TestCase4220() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4220() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Commission / Fee: Automatic invoice email / Invoice content
         [Test]
         [Category("4183")]
-        public void TestCase4183() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4183() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4184")]
-        public void TestCase4184() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4184() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4187")]
-        public void TestCase4187() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4187() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4222")]
-        public void TestCase4222() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4222() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4221")]
-        public void TestCase4221() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4221() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4223")]
-        public void TestCase4223() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4223() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4224")]
-        public void TestCase4224() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4224() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Update Broker Lead
         [Test]
         [Category("1687")]
-        public void TestCase1687() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1687() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1688")]
-        public void TestCase1688() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1688() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1689")]
-        public void TestCase1689() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1689() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("1690")]
-        public void TestCase1690() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase1690() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Lead/Client details / Personal details
         [Test]
         [Category("2394")]
-        public void TestCase2394() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2394() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2396")]
-        public void TestCase2396() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2396() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2395")]
-        public void TestCase2395() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2395() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2398")]
-        public void TestCase2398() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2398() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2397")]
-        public void TestCase2397() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2397() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2423")]
-        public void TestCase2423() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2423() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2983")]
-        public void TestCase2983() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2983() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Lead/Client details / Director details
         [Test]
         [Category("2412")]
-        public void TestCase2412() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2412() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2413")]
-        public void TestCase2413() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2413() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2414")]
-        public void TestCase2414() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2414() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2530")]
-        public void TestCase2530() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2530() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2415")]
-        public void TestCase2415() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2415() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2420")]
-        public void TestCase2420() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2420() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2529")]
-        public void TestCase2529() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2529() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2957")]
-        public void TestCase2957() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2957() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Lead/Client details / Client files
         [Test]
         [Category("2416")]
-        public void TestCase2416() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2416() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2417")]
-        public void TestCase2417() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2417() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2418")]
-        public void TestCase2418() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2418() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2419")]
-        public void TestCase2419() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2419() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2541")]
-        public void TestCase2541() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2541() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2955")]
-        public void TestCase2955() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2955() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2956")]
-        public void TestCase2956() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2956() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Lead/Client details / CRM events
         [Test]
         [Category("2422")]
-        public void TestCase2422() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2422() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2421")]
-        public void TestCase2421() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2421() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("3150")]
-        public void TestCase3150() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase3150() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2954")]
-        public void TestCase2954() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2954() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2958")]
-        public void TestCase2958() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2958() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
         #region Application: Broker / Lead/Client details / Button display
         [Test]
         [Category("3106")]
-        public void TestCase3106() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase3106() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2537")]
-        public void TestCase2537() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2537() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("2393")]
-        public void TestCase2393() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase2393() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
 
         [Test]
         [Category("4225")]
-        public void TestCase4225() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false);}); Assert.IsTrue(result); }
+        public void TestCase4225() { bool result = this.ExecuteTest((logHeader) => { Assert.IsTrue(false); }); Assert.IsTrue(result); }
         #endregion
     }
 }

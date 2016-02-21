@@ -19,6 +19,12 @@
             log.Info("Sleep for: " + millisecondsTimeout/1000 + "seconds");
         }
 
+        public void JQueryClick(string locator, string description, int waitTime = 120) {
+            SharedServiceClass.JqueryElementReady(Driver, locator, waitTime);
+            SharedServiceClass.JqueryClick(Driver, locator);
+            log.Info(description + " - '" + locator.ToString() + "' - Click.");
+        }
+
         //Moves focus to element selected by locator.
         public void MoveToElement(By locator) {
             log.Debug("Moving focus to element " + locator.ToString());
@@ -36,15 +42,27 @@
             log.Debug("page was crolled to top.");
         }
 
+        //Awaits an element to be clickable By locator,
+        //clicks the element and than asserts By a following locator that the click action was initiated and performed correctly.
+        //public void ClickAssert(By locator, By assertLocator, string description, int waitTime = 120) {
+        //    log.Debug("ClickAssert start.");
+        //    SharedServiceClass.ClickAssert(Driver, locator, assertLocator, waitTime);
+        //    log.Debug("ClickAssert finished.");
+        //    log.Info(description + " - ClickAssert performed. '" + locator.ToString() + "' has been clicked. and '" + assertLocator.ToString() + "' asserted.");
+        //}
+
+        //Awaits an element to be visible By locator, then sends keys string the element.
+        public void JQuerySendKeys(string locator, string keys, string description, int waitTime = 120, bool isClear = true) {
+            SharedServiceClass.JqueryElementReady(Driver, locator, waitTime);
+            if (isClear)
+                SharedServiceClass.JquerySendKeys(Driver, locator, "");
+            SharedServiceClass.JquerySendKeys(Driver, locator, keys);
+            log.Info(description + " - '" + locator.ToString() + "' - SendKeys: '" + keys + "'.");
+        }
+
         //Awaits an element to be clickable By locator, then clicks the element.
         public void Click(By locator, string description, int waitTime = 120) {
             SharedServiceClass.ElementIsClickable(Driver, locator, waitTime).Click();
-            log.Info(description + " - '" + locator.ToString() + "' - Click.");
-        }
-
-        public void JqueryClick(string locator, string description, int waitTime = 120) {
-            SharedServiceClass.JqueryElementReady(Driver, locator, waitTime);
-            SharedServiceClass.JqueryClick(Driver, locator);
             log.Info(description + " - '" + locator.ToString() + "' - Click.");
         }
 

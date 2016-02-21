@@ -207,7 +207,7 @@
             actionBot.MoveToBottom();
             //Step 4 - Click continue.
             //actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
-            actionBot.JqueryClick("#companyContinueBtn", "(continue button)");
+            actionBot.JQueryClick("#companyContinueBtn", "(continue button)");
 
             //TODO: find out when this dialog is displayed, and create more acurate scenario for it.
             try {
@@ -239,9 +239,9 @@
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
-            actionBot.MoveToBottom();
-            actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
-
+            //actionBot.MoveToBottom();
+            //actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
+            actionBot.JQueryClick("#link_account_see_more_less", "(see full data source button)");
             //Step 1 - Click on relevant data source.
             //By marketplacedAssert;
             //switch (marketplace) {
