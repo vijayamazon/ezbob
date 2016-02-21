@@ -92,6 +92,10 @@ namespace ConfigManager {
 			get { return this[Variables.MedalMinOffer]; }
 		}
 
+		public virtual VariableValue MediumLoanAmount {
+			get { return this[Variables.MediumLoanAmount]; }
+		} // MediumLoanAmount
+
 		public virtual VariableValue MinAuthenticationIndexToPassAml {
 			get { return this[Variables.MinAuthenticationIndexToPassAml]; }
 		}
@@ -111,6 +115,10 @@ namespace ConfigManager {
 		public virtual VariableValue MinLoanLifetimeMonths {
 			get { return this[Variables.MinLoanLifetimeMonths]; }
 		}
+
+		public virtual VariableValue MonthsSinceFirstLoan {
+			get { return this[Variables.MonthsSinceFirstLoan]; }
+		} // MonthsSinceFirstLoan
 
 		public virtual VariableValue NewLoanRun {
 			get { return this[Variables.NewLoanRun]; }

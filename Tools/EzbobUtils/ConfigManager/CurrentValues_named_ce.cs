@@ -293,6 +293,22 @@
 			get { return this[Variables.ExperianUIdCertificateThumb]; }
 		}
 
+		public virtual VariableValue EzbobCommissionBigLoan {
+			get { return this[Variables.EzbobCommissionBigLoan]; }
+		} // EzbobCommissionBigLoan
+
+		public virtual VariableValue EzbobCommissionHasLoan {
+			get { return this[Variables.EzbobCommissionHasLoan]; }
+		} // EzbobCommissionHasLoan
+
+		public virtual VariableValue EzbobCommissionMediumLoan {
+			get { return this[Variables.EzbobCommissionMediumLoan]; }
+		} // EzbobCommissionMediumLoan
+
+		public virtual VariableValue EzbobCommissionSmallLoan {
+			get { return this[Variables.EzbobCommissionSmallLoan]; }
+		} // EzbobCommissionSmallLoan
+
 		public virtual VariableValue EzbobMailCc {
 			get { return this[Variables.EzbobMailCc]; }
 		}

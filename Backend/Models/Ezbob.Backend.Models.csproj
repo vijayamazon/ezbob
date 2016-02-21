@@ -70,6 +70,7 @@
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
     <Compile Include="CustomerStatusTransition.cs" />
     <Compile Include="DecisionModel.cs" />
+    <Compile Include="DefaultCommissions.cs" />
     <Compile Include="ExperianTargetingRequest.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
     <Compile Include="ExternalAPI\AlibabaContractDto.cs" />

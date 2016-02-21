@@ -406,9 +406,33 @@
 			get { return this[Variables.BankBasedApprovalSilentToAddress]; }
 		}
 
+		public virtual VariableValue BigLoanAmount {
+			get { return this[Variables.BigLoanAmount]; }
+		} // BigLoanAmount
+
 		public virtual VariableValue BrokerCommissionEnabled {
 			get { return this[Variables.BrokerCommissionEnabled]; }
 		}
+
+		public virtual VariableValue BrokerCommissionBigLoan {
+			get { return this[Variables.BrokerCommissionBigLoan]; }
+		} // BrokerCommissionBigLoan
+
+		public virtual VariableValue BrokerCommissionBigLoanRest {
+			get { return this[Variables.BrokerCommissionBigLoanRest]; }
+		} // BrokerCommissionBigLoanRest
+
+		public virtual VariableValue BrokerCommissionHasLoan {
+			get { return this[Variables.BrokerCommissionHasLoan]; }
+		} // BrokerCommissionHasLoan
+
+		public virtual VariableValue BrokerCommissionMediumLoan {
+			get { return this[Variables.BrokerCommissionMediumLoan]; }
+		} // BrokerCommissionMediumLoan
+
+		public virtual VariableValue BrokerCommissionSmallLoan {
+			get { return this[Variables.BrokerCommissionSmallLoan]; }
+		} // BrokerCommissionSmallLoan
 
 		public virtual VariableValue BrokerForceCaptcha {
 			get { return this[Variables.BrokerForceCaptcha]; }
