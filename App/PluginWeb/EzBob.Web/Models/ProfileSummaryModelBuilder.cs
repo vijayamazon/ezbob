@@ -217,6 +217,15 @@
 					});
 				} // if
 
+				if (customer.CreditResult == CreditResultStatus.PendingInvestor) {
+					summary.Alerts.Warnings.Add(new AlertModel {
+						Abbreviation = "PI",
+						Alert = string.Format("Credit Result : {0}", customer.CreditResult.DescriptionAttr()),
+						AlertType = AlertType.Warning.DescriptionAttr(),
+						Tab = ProfileTab.Dashboard.DescriptionAttr()
+					});
+				} // if
+
 				switch (customer.AMLResult) {
 					case "Rejected":
 						summary.Alerts.Errors.Add(new AlertModel {
