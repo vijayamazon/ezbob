@@ -25,7 +25,7 @@ END
 
 ;with maxTemplates as (select  Max(lat.id) as  maxVersion, lat.TemplateTypeID  
 					from LoanAgreementTemplate lat 
-					where IsApproved = 1 and IsReviewed = 1
+					where IsApproved = 1 and IsReviewed = 1 and OriginID = @OriginID
 					group by lat.TemplateTypeID)
 		select 
 		 lat.Id
