@@ -42,6 +42,12 @@
             log.Info(description + " - '" + locator.ToString() + "' - Click.");
         }
 
+        public void JqueryClick(string locator, string description, int waitTime = 120) {
+            SharedServiceClass.JqueryElementReady(Driver, locator, waitTime);
+            SharedServiceClass.JqueryClick(Driver, locator);
+            log.Info(description + " - '" + locator.ToString() + "' - Click.");
+        }
+
         //Awaits an element to be clickable By locator,
         //clicks the element and than asserts By a following locator that the click action was initiated and performed correctly.
         public void ClickAssert(By locator, By assertLocator, string description, int waitTime = 120) {

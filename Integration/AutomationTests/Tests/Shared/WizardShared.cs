@@ -206,7 +206,8 @@
             //actionBot.MoveToElement(By.Id("companyContinueBtn"));
             actionBot.MoveToBottom();
             //Step 4 - Click continue.
-            actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
+            //actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
+            actionBot.JqueryClick("#companyContinueBtn", "(continue button)");
 
             //TODO: find out when this dialog is displayed, and create more acurate scenario for it.
             try {
