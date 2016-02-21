@@ -117,6 +117,9 @@
 		public bool IsModified { get; set; }
 
 		[DataMember]
+		public int? BrokerID { get; set; }
+		
+		[DataMember]
 		public int IsLoanTypeSelectionAllowed { get; set; }
 
 		[DataMember]

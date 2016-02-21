@@ -12,6 +12,7 @@
       <xs:element minOccurs="0" name="AutomationOfferModel" nillable="true" type="tns:AutomationOfferModel" />
       <xs:element minOccurs="0" name="AvailableAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="BorrowedAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BrokerID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="BrokerSetupFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="CashRequestId" type="xs:long" />

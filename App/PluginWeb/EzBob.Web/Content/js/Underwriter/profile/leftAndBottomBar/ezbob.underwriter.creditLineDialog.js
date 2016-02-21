@@ -525,7 +525,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			this.ui.errorMessage.empty();
 		}
 		this.ui.form.removeData('validator');
-		this.validator = EzBob.validateCreditLineDialogForm(this.ui.form, gradeRange);
+		this.validator = EzBob.validateCreditLineDialogForm(this.ui.form, gradeRange, this.model.get('BrokerID'));
 		this.validator.form();
 
 		this.setTooltips(gradeRange);
@@ -542,7 +542,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var interestRateTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
 		this.ui.interestRate.parent().tooltip('destroy').tooltip({ title: interestRateTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
+		var minSetupFeePercent = this.model.get('BrokerID') ? 0 : gradeRanges.MinSetupFee;
+		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(minSetupFeePercent) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
 		this.ui.manualSetupFeePercent.parent().tooltip('destroy').tooltip({ title: manualSetupFeePercentTooltip, trigger: 'hover focus', placement: 'bottom' });
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
@@ -616,8 +617,9 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 	}, // setAsCurrent
 });
 
-EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
+EzBob.validateCreditLineDialogForm = function(el, gradeRange, isBroker) {
 	var e = el || $('form');
+	var minSetupFeePercent = isBroker ? 0 : (gradeRange.MinSetupFee * 100).toFixed(2);
 	return e.validate({
 		rules: {
 			offeredCreditLine: {
@@ -629,7 +631,7 @@ EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 			interestRate: { required: true, autonumericMin: (gradeRange.MinInterestRate * 100).toFixed(2), autonumericMax: (gradeRange.MaxInterestRate * 100).toFixed(2), },
 			startingFromDate: { required: true, dateCheck: true, },
 			offerValidUntil: { required: true, dateCheck: true, },
-			manualSetupFeePercent: { autonumericMin: (gradeRange.MinSetupFee * 100).toFixed(2), autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
+			manualSetupFeePercent: { autonumericMin: minSetupFeePercent, autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
 			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
 		},
 		messages: {
