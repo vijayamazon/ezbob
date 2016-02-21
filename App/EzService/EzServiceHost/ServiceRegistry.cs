@@ -29,6 +29,7 @@
 			For<ICardInfoRepository>().Use<CardInfoRepository>();
 		
 			For<ICustomerRepository>().Use<CustomerRepository>();
+			For<ILoanLegalRepository>().Use<LoanLegalRepository>();
 			For<ILoanTypeRepository>().Use<LoanTypeRepository>();
 			For<ILoanSourceRepository>().Use<LoanSourceRepository>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();

@@ -28,13 +28,38 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		[Transactional]
+		// [Transactional]
 		public JsonResult Calculate(int amount, int loanType, int repaymentPeriod) {
+			log.Debug(
+				"Calculating schedule for customer {0}: {1} of type {2} for {3} repayments.",
+				this.context.Customer.Stringify(),
+				amount.ToString("C0"),
+				loanType,
+				repaymentPeriod
+			);
+
 			// el: slider of offer display (customer app)
 			LoanOffer loanOffer = CalculateLoan(amount, loanType, repaymentPeriod);
 
+			log.Debug(
+				"Calculating schedule for customer {0}: {1} of type {2} for {3} repayments - loan offer is {4}.",
+				this.context.Customer.Stringify(),
+				amount.ToString("C0"),
+				loanType,
+				repaymentPeriod,
+				loanOffer == null ? "-- null --" : "-- not null --"
+			);
+
 			if (loanOffer == null)
 				return Json(new { error = "Invalid customer state" }, JsonRequestBehavior.AllowGet);
+
+			log.Debug(
+				"Calculating schedule for customer {0}: {1} of type {2} for {3} repayments - hunting for legal docs...",
+				this.context.Customer.Stringify(),
+				amount.ToString("C0"),
+				loanType,
+				repaymentPeriod
+			);
 
 			var productSubTypeID = this.context.Customer.LastCashRequest.ProductSubTypeID;
 			var originId = this.context.Customer.CustomerOrigin.CustomerOriginID;
@@ -48,16 +73,41 @@
 				productSubTypeID ?? 0
 			).LoanAgreementTemplates.ToList();
 
+			log.Debug(
+				"Completed calculating schedule for customer {0}: {1} of type {2} for {3} repayments.",
+				this.context.Customer.Stringify(),
+				amount.ToString("C0"),
+				loanType,
+				repaymentPeriod
+			);
+
 			return Json(loanOffer, JsonRequestBehavior.AllowGet);
 		} // Calculate
 
 		private LoanOffer CalculateLoan(int amount, int loanType, int repaymentPeriod) {
-			if (
-				!this.context.Customer.CreditSum.HasValue ||
-				!this.context.Customer.Status.HasValue ||
-				this.context.Customer.Status.Value != Status.Approved
-			)
+			if (!this.context.Customer.CreditSum.HasValue) {
+				log.Warn(
+					"Cannot calculate loan ({0} of type {1} for {2} repayments) for customer {3}: credit sum is null.",
+					amount.ToString("C0"),
+					loanType,
+					repaymentPeriod,
+					this.context.Customer.Stringify()
+				);
 				return null;
+			} // if
+
+			if (this.context.Customer.Status != Status.Approved) {
+				log.Warn(
+					"Cannot calculate loan ({0} of type {1} for {2} repayments) for customer {3}: customer status is '{4}'.",
+					amount.ToString("C0"),
+					loanType,
+					repaymentPeriod,
+					this.context.Customer.Stringify(),
+					this.context.Customer.Status
+				);
+
+				return null;
+			} // if
 
 			var creditSum = this.context.Customer.CreditSum.Value;
 
@@ -80,10 +130,8 @@
 			if (this.context.Customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
-				if (oDBHelper != null) {
-
+				if (oDBHelper != null)
 					cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
-				} // if
 			} // if
 
 			if (cr.IsCustomerRepaymentPeriodSelectionAllowed)

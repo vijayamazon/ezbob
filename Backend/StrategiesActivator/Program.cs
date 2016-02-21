@@ -32,6 +32,7 @@
 				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 				x.For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 				x.For<ICustomerRepository>().Use<CustomerRepository>();
+				x.For<ILoanLegalRepository>().Use<LoanLegalRepository>();
 			});
 
 			try {

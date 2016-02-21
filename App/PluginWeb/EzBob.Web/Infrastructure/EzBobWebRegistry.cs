@@ -29,6 +29,7 @@ namespace EzBob.Web.Infrastructure
 			For<IWorkplaceContext>().Use<EzBobContext>();
 			For<IEzbobWorkplaceContext>().Use<EzBobContext>();
 			For<ICustomerRepository>().Use<CustomerRepository>();
+			For<ILoanLegalRepository>().Use<LoanLegalRepository>();
 			For<ICashRequestsRepository>().Use<CashRequestsRepository>();
 			For<IPerformencePerUnderwriterReportRepository>().Use<PerformencePerUnderwriterReportRepository>();
 			For<IPerformencePerMedalReportRepository>().Use<PerformencePerMedalReportRepository>();

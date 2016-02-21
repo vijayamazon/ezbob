@@ -52,12 +52,12 @@
 
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.For<ICustomerRepository>().Use<CustomerRepository>();
+				x.For<ILoanLegalRepository>().Use<LoanLegalRepository>();
 				x.For<ILoanTypeRepository>().Use<LoanTypeRepository>();
 				x.For<ILoanSourceRepository>().Use<LoanSourceRepository>();
 				x.For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 				x.For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
-
 			});
 
 			var oLog4NetCfg = new Log4Net().Init();
