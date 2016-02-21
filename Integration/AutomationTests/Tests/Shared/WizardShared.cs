@@ -276,7 +276,8 @@
             //        break;
             //}
             //actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, "(complete button)");
-            actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            actionBot.JQueryClick("#finish-wizard", "(complete button)");
 
             //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {
@@ -335,7 +336,8 @@
 
             //Step 4 - Click complete.
             actionBot.Sleep(5000);
-            actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            actionBot.JQueryClick("#finish-wizard", "(complete button)");
 
             //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {
