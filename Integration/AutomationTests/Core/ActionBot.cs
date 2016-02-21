@@ -26,6 +26,16 @@
             log.Debug("Focus to element was set.");
         }
 
+        public void MoveToTop() {
+            ((IJavaScriptExecutor)Driver).ExecuteScript("window.scrollTo(0, 0);");
+            log.Debug("page was crolled to top.");
+        }
+
+        public void MoveToBottom() {
+            ((IJavaScriptExecutor)Driver).ExecuteScript("window.scrollTo(0, document.body.scrollHeight);");
+            log.Debug("page was crolled to top.");
+        }
+
         //Awaits an element to be clickable By locator, then clicks the element.
         public void Click(By locator, string description, int waitTime = 120) {
             SharedServiceClass.ElementIsClickable(Driver, locator, waitTime).Click();

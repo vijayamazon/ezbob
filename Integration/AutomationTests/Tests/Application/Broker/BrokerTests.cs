@@ -288,7 +288,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 1 - Click "Finish later" button.
                 //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
-                actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
+                //actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
+                actionBot.MoveToTop();
                 actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
                
@@ -474,7 +475,8 @@ namespace UIAutomationTests.Tests.Application.Broker {
 
                 //Step 3 - Click "Finish later" button.
                 //actionBot.ClickAssert(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"),By.CssSelector("tr.odd > td.grid-item-Status"), "(wizard finish later button)");
-                actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
+                //actionBot.MoveToElement(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"));
+                actionBot.MoveToTop();
                 actionBot.Click(By.CssSelector("div.broker-finish-inner > div.button-container > button.button.btn-green.clean-btn"), "(wizard finish later button)");
                 actionBot.WriteToLog(Environment.NewLine);
 
@@ -560,7 +562,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.IsTrue(decimal.Parse(widget.FindElement(By.CssSelector("dd.broker-approved")).Text.Substring(1)) == 0.0m);
                 actionBot.WriteToLog("Positively asserted: Approved ammount  field is empty." + Environment.NewLine);
 
-                brokerShared.BrokerLogOff(logHeader + "BrokerLogOff");
+                brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
                 actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
 
@@ -622,7 +624,7 @@ namespace UIAutomationTests.Tests.Application.Broker {
                 Assert.IsTrue(decimal.Parse(widget.FindElement(By.CssSelector("dd.broker-approved")).Text.Substring(1)) != 0.0m);
                 actionBot.WriteToLog("Positively asserted: Approved ammount  field is not empty." + Environment.NewLine);
 
-                brokerShared.BrokerLogOff(logHeader + "BrokerLogOff");
+                brokerShared.BrokerLogOff(logHeader + " - BrokerLogOff");
 
                 actionBot.WriteToLog("End test: " + logHeader + ". Test duration: " + ((TimeSpan)(DateTime.UtcNow - testStartTime)).ToString(@"hh\:mm\:ss") + Environment.NewLine);
             });

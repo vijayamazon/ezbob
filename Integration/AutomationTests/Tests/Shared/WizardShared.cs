@@ -203,7 +203,8 @@
             //Step 3 - Insert any amount to the Total annual revenue field and focus out.
             actionBot.SendKeys(By.Id("OverallTurnOver"), revenue, "(total annual revenue field)");
 
-            actionBot.MoveToElement(By.Id("companyContinueBtn"));
+            //actionBot.MoveToElement(By.Id("companyContinueBtn"));
+            actionBot.MoveToBottom();
             //Step 4 - Click continue.
             actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
 
@@ -236,7 +237,8 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
-            
+
+            actionBot.MoveToBottom();
             actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
 
             //Step 1 - Click on relevant data source.
@@ -295,9 +297,11 @@
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
             actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
-
+            SharedServiceClass.JqueryElementReady(Driver, ".marketplace-button-account-paypal");
             //Step 1 - Click on relevant data source.
-            actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
+
+            actionBot.Click(By.ClassName("marketplace-button-account-paypal"), "(data source button)");
+            //actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
 
             //PayPal Click continue.
             actionBot.Click(By.Id("paypalContinueBtn"), "(continue to PayPal button)");
@@ -317,7 +321,9 @@
                 actionBot.SendKeys(By.Id("login_password"), passVal, "(data source password field)");
 
                 actionBot.Click(By.Id("login.x"), "(data source login button)");
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                actionBot.WriteToLog("Paypal is already in session. Moving to grant premission page automaticaly.");
+            }
 
             actionBot.Click(By.Name("grant.x"), "(PayPal continue to Ezbob/Everline button)");
 
