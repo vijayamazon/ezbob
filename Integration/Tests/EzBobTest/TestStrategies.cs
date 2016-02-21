@@ -899,5 +899,11 @@
 
 
 		}
+
+		[Test]
+		public void TestFunds() {
+			VerifyEnoughAvailableFunds funds = new VerifyEnoughAvailableFunds(10000000);
+			funds.Execute();
+		}
 	}
 }
