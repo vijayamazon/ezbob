@@ -55,6 +55,7 @@
       <xs:element minOccurs="0" name="LoanTypes" nillable="true" type="tns:ArrayOfLoanTypeModel" />
       <xs:element minOccurs="0" name="LogicalGlueScore" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="ManualSetupFeePercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Medal" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NumOfLoans" type="xs:int" />
       <xs:element minOccurs="0" name="OfferExpired" type="xs:boolean" />
       <xs:element minOccurs="0" name="OfferValidForHours" type="xs:int" />

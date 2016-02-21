@@ -355,6 +355,10 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			SubGrade: {
 				selector: 'span[name="subGradeValue"]',
 				converter: this.currentSubGrade
+			},
+			BrokerID: {
+				selector: 'span[name="broker"]',
+				converter: this.currentBroker
 			}
 		};
 
@@ -385,9 +389,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	currentGrade: function (direction, value, attribute, model) {
 		var gradeID = model.get('GradeID');
-		if (!gradeID) { return ''; }
+		if (!gradeID) { return 'medal: ' + model.get('Medal'); }
 		var grade = _.find(model.get('Grades'), function(gr) { return gr.GradeID == gradeID; }) || { name: gradeID };
-		return grade.Name;
+		return 'grade: ' + grade.Name;
 	},
 
 	currentSubGrade: function (direction, value, attribute, model) {
@@ -395,6 +399,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		if (!subGradeID) { return ''; }
 		var subGrade = _.find(model.get('SubGrades'), function (sg) { return sg.SubGradeID == subGradeID; }) || { name: subGradeID };
 		return subGrade.Name;
+	},
+
+	currentBroker: function (direction, value, attribute, model) {
+		var brokerID = model.get('BrokerID');
+		return brokerID ? 'broker' : '';
 	},
 
 	populateDropDowns: function() {

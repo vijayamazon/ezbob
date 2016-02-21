@@ -198,6 +198,7 @@ BEGIN
 		StartingFromDate = CASE WHEN r.OfferStart IS NULL THEN '' ELSE CONVERT(NVARCHAR, r.OfferStart, 103) END,
 		OfferValidateUntil = CASE WHEN r.OfferValidUntil IS NULL THEN '' ELSE CONVERT(NVARCHAR, r.OfferValidUntil, 103) END,
 		Reason = r.UnderwriterComment,
+		Medal = r.MedalType,
 		IsLoanTypeSelectionAllowed = ISNULL(r.IsLoanTypeSelectionAllowed, 0),
 		IsCustomerRepaymentPeriodSelectionAllowed = ISNULL(r.IsCustomerRepaymentPeriodSelectionAllowed, 0),
 		AnnualTurnover = ISNULL(r.AnualTurnover, 0),

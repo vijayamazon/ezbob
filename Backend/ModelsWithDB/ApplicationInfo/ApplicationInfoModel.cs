@@ -54,6 +54,9 @@
 		public bool Editable { get; set; }
 
 		[DataMember]
+		public string Medal { get; set; }
+
+		[DataMember]
 		public long CashRequestId { get; set; }
 
 		public string CashRequestRowVersion {
