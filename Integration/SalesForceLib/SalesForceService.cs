@@ -59,63 +59,77 @@
 
 		public async Task<RestApiResponse> CreateBrokerAccount(CreateBrokerRequest requestModel) {
 			var requestJson = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
-			return await RunService("CreateBrokerAccount", requestJson);
+			var response = await RunService<RestApiResponse>("CreateBrokerAccount", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateBrokerAccount
 
 		public async Task<GetAccountByIDResponse> GetAccountByID(GetAccountByIDRequest requestModel) {
 			var requestJson = JsonConvert.SerializeObject(requestModel);
-			var response = await RunService("GetAccountByEmail", requestJson);
-			if (response != null && !string.IsNullOrEmpty(response.message) && response.success)
-				return JsonConvert.DeserializeObject<GetAccountByIDResponse>(response.message);
+			var response = await RunService<RestApiResponse>("GetAccountByEmail", requestJson);
+			var res = (RestApiResponse)response;
+			if (response != null && !string.IsNullOrEmpty(res.message) && res.success)
+				return JsonConvert.DeserializeObject<GetAccountByIDResponse>(res.message);
 			return null;
 		}//GetAccountByID
 
 		public async Task<RestApiResponse> CreateUpdateLeadAccount(LeadAccountModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/LeadAccountService", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/LeadAccountService", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateUpdateLeadAccount
 
 		public async Task<RestApiResponse> CreateOpportunity(OpportunityModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/CreateOpportunityService", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/CreateOpportunityService", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateOpportunity
 
 		public async Task<RestApiResponse> UpdateOpportunity(OpportunityModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/UpdateCloseOpportunityService", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/c", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//UpdateOpportunity
 
 		public async Task<RestApiResponse> CreateUpdateContact(ContactModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/ContactService", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/ContactService", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateUpdateContact
 
 		public async Task<RestApiResponse> CreateTask(TaskModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/CreateTask", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/CreateTask", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateTask
 
 		public async Task<RestApiResponse> CreateActivity(ActivityModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/CreateActivity", requestJson);
+			var response = await RunService<RestApiResponse>("EzbobWebServicesNew/CreateActivity", requestJson);
+			RestApiResponse res = (RestApiResponse)response;
+			return res;
 		}//CreateActivity
 
 		public async Task<RestApiResponse> ChangeEmail(ChangeEmailModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			return await RunService("EzbobWebServicesNew/ChangeEmail", requestJson);
+			var resonse = await RunService<RestApiResponse>("EzbobWebServicesNew/ChangeEmail", requestJson);
+			RestApiResponse res = (RestApiResponse)resonse;
+			return res;
 		}//ChangeEmail
 
-		public async Task<GetActivityResultModel> GetActivity(GetActivityModel model) {
+		public async Task<GetActivityRestApiResonse> GetActivity(GetActivityModel model) {
 			var requestJson = JsonConvert.SerializeObject(model, Formatting.Indented);
-			var response = await RunService("SearchLeadAndAccountByEmail", requestJson);
-			GetActivityResultModel resultModel = new GetActivityResultModel { Error = response.errorCode };
-			if (response.success) {
-				resultModel.Activities = JsonConvert.DeserializeObject<IEnumerable<ActivityResultModel>>(response.message);
-			}
-			return resultModel;
+			var response = await RunService<GetActivityRestApiResonse>("SearchLeadAndAccountByEmail", requestJson);
+			GetActivityRestApiResonse res = (GetActivityRestApiResonse)response;
+			return res;
 		}//GetActivity
 
-		private async Task<RestApiResponse> RunService(string service, string requestJson) {
+		private async Task<object> RunService<T>(string service, string requestJson) where T : RestApiResponse {
 			if (this.loginResult == null) {
 				this.loginResult = await Login();
 			}
@@ -135,7 +149,7 @@
 			var result = await response.Content.ReadAsStringAsync();
 			Log.InfoFormat("{0} response {1}", service, result);
 			try {
-				var restApiResponse = JsonConvert.DeserializeObject<RestApiResponse>(result);
+				var restApiResponse = JsonConvert.DeserializeObject<T>(result);
 				return restApiResponse;
 			} catch (Exception ex) {
 				return new RestApiResponse {

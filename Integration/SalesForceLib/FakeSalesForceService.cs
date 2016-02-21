@@ -48,7 +48,7 @@
 			return null;
 		}
 
-		public Task<GetActivityResultModel> GetActivity(GetActivityModel model) {
+		public Task<GetActivityRestApiResonse> GetActivity(GetActivityModel model) {
 			return null;
 		}
 

@@ -15,7 +15,7 @@
 
 		private ISalesForceAppClient client;
 		private ISalesForceService newClient;
-		private int millisecond;
+		private int millisecond = 100;
 
 		[SetUp]
 		public void Init() {
@@ -27,7 +27,7 @@
 
 //			this.client = GetSb1Client();
 			this.newClient = GetSb1Service();
-			this.millisecond = DateTime.UtcNow.Millisecond;
+			
 			//this.client = GetSandboxDevClient();
 			//this.client = GetSandboxClient();
 			//this.client = GetProdClient();
@@ -581,9 +581,12 @@
 			};
 			var activity = this.newClient.GetActivity(request).Result;
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(this.client.Error);
-			Assert.IsNullOrEmpty(activity.Error);
-			Assert.Greater(activity.Activities.Count(), 0);
+			Assert.IsNullOrEmpty(activity.errorCode);
+			Assert.Greater(activity.listObj.Count(), 0);
+			foreach (var a in activity.listObj) {
+				Log.InfoFormat("{0} {1} {2} {3}", a.Description, a.Subject, a.Status, a.StartDate, a.EndDate);
+			}
+			
 		}
 
 		[Test]

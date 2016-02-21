@@ -16,6 +16,6 @@
 		Task<RestApiResponse> CreateTask(TaskModel model);
 		Task<RestApiResponse> CreateActivity(ActivityModel model);
 		Task<RestApiResponse> ChangeEmail(ChangeEmailModel model);
-		Task<GetActivityResultModel> GetActivity(GetActivityModel model);
+		Task<GetActivityRestApiResonse> GetActivity(GetActivityModel model);
 	}
 }
