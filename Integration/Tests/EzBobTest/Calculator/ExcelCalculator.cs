@@ -7,7 +7,6 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using FluentNHibernate.Testing.Values;
     using OfficeOpenXml;
-    using OfficeOpenXml.FormulaParsing;
 
     public class ExcelCalculator : ILoanCalculator {
         public ExcelCalculator(NL_Model nlModel) {
