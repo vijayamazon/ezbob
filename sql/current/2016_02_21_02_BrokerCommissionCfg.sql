@@ -3,7 +3,7 @@ GO
 
 IF OBJECT_ID('tempdb..#cv') IS NOT NULL 
 BEGIN
-DROP TABLE #cv
+	DROP TABLE #cv
 END 
 
 SELECT
@@ -41,10 +41,11 @@ SELECT
 FROM
 	#cv n
 	LEFT JOIN ConfigurationVariables c ON n.Name = c.Name
+	WHERE c.Id IS NULL
 
 IF OBJECT_ID('tempdb..#cv') IS NOT NULL 
 BEGIN
-DROP TABLE #cv
+	DROP TABLE #cv
 END 
 GO
 
