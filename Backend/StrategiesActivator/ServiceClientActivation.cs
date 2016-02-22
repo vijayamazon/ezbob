@@ -179,11 +179,10 @@
 			this.serviceClient.BackfillExperianLtd();
 		}
 
-        [Activation]
-        private void BackfillExperianLtdScoreText()
-        {
-	        this.serviceClient.BackfillExperianLtdScoreText();
-        }
+		[Activation]
+		private void BackfillExperianLtdScoreText() {
+			this.serviceClient.BackfillExperianLtdScoreText();
+		}
 
 		[Activation]
 		private void BackfillHmrcBusinessRelevance() {
@@ -236,7 +235,7 @@
 				this.serviceClient.PostcodeNuts(1, sr["Postcode"].ToString());
 				return Ezbob.Database.ActionResult.Continue;
 			}, "SELECT DISTINCT Postcode FROM CustomerAddress WHERE Postcode IS NOT NULL AND Postcode <> ''", CommandSpecies.Text);
-			
+
 		}
 
 		[Activation]
@@ -1105,33 +1104,32 @@ GeneratePassword manager 123456
 			this.serviceClient.QuickOfferWithPrerequisites(customerId, bSaveOfferToDB);
 		} // QuickOffer
 
-	    [Activation]
+		[Activation]
 		private void RescheduleLoan() {
-	        int loanId;
-	        int userId;
-	        int customerId;
-            if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
-	        {
+			int loanId;
+			int userId;
+			int customerId;
+			if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId)) {
 				this.log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
-	            return;
-	        }
-  
-		    Console.WriteLine("UserID {0}, CustomerID {1}, LoanID {2}", userId, customerId, loanId);
+				return;
+			}
 
-            ReschedulingArgument reModel = new ReschedulingArgument();
-            reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
-            reModel.LoanID = loanId;
-            reModel.SaveToDB = false;
-            reModel.ReschedulingDate = DateTime.UtcNow;
-            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-		    reModel.RescheduleIn = false; // true;
-		    reModel.PaymentPerInterval = 300;
-	
+			Console.WriteLine("UserID {0}, CustomerID {1}, LoanID {2}", userId, customerId, loanId);
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanId;
+			reModel.SaveToDB = false;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+			reModel.RescheduleIn = false; // true;
+			reModel.PaymentPerInterval = 300;
+
 			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
 			this.log.Msg(res.Value);
-	    }
-        
-        [Activation]
+		}
+
+		[Activation]
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
@@ -1490,7 +1488,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.log.Debug("activator: customerID: {0}", customerID);
 
 			// ActionMetaData result =
-			this.serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
+			this.serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null);
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
@@ -1499,7 +1497,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
 
 			this.log.Debug(
-				"Start date is {0}, end date is {1}", 
+				"Start date is {0}, end date is {1}",
 				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
 				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty
 			);
@@ -1526,12 +1524,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			);
 		} // GetDatesForAutomationReports
 
-        [Activation]
-        private void BrokerTransferCommission()
-        {
-            ActionMetaData result = this.serviceClient.BrokerTransferCommission();
-            this.log.Debug("{0}", result.Status.ToString());
-        }
+		[Activation]
+		private void BrokerTransferCommission() {
+			ActionMetaData result = this.serviceClient.BrokerTransferCommission();
+			this.log.Debug("{0}", result.Status.ToString());
+		}
 
 		[Activation]
 		private void BackFillBrokerCommissionInvoice() {
@@ -1575,7 +1572,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void ManualLegalDocsSyncTemplatesFiles() {
 
 			const string pathExample = @"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement";
-				string agreementsPath = null;
+			string agreementsPath;
 
 			if (this.cmdLineArgs.Length == 2) {
 				agreementsPath = this.cmdLineArgs[1];
@@ -1583,7 +1580,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 				this.log.Msg("Usage: ManualLegalDocsSyncTemplatesFiles path to agreements folder like: {0}", pathExample);
 				return;
 			} // if
-			this.serviceClient.ManualLegalDocsSyncTemplatesFiles(agreementsPath);
+			this.serviceClient.ManualLegalDocsSyncTemplatesFiles(string.IsNullOrEmpty(agreementsPath) ? pathExample : agreementsPath);
 		} // ManualLegalDocsSyncTemplatesFiles
 
 
@@ -1608,7 +1605,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		//	);
 		//}
 
-        
+
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;

@@ -22,7 +22,10 @@ CREATE TYPE NL_LoanHistoryList AS TABLE (
 	[RepaymentDate] DATETIME NOT NULL,
 	[PaymentPerInterval] DECIMAL(18, 6) NULL,	-- in "fixed payment" formula
 	[AgreementModel] NVARCHAR(MAX) NULL,
-	[InterestOnlyRepaymentCount] INT NULL
+	[InterestOnlyRepaymentCount] INT NULL,
+	[LateFees] [decimal](18, 6) NOT NULL,
+	[DistributedFees] [decimal](18, 6) NOT NULL,
+	[OutstandingInterest] [decimal](18, 6) NOT NULL
 );
 GO
 
@@ -45,9 +48,12 @@ BEGIN
 	[RepaymentDate],
 	[PaymentPerInterval] ,	
 	[AgreementModel] 	,
-	[InterestOnlyRepaymentCount] 
+	[InterestOnlyRepaymentCount] ,
+	[LateFees] ,
+	[DistributedFees] ,
+	[OutstandingInterest] 
 	) SELECT
-		[LoanID] ,
+	[LoanID] ,
 	[UserID]  ,
 	[LoanLegalID] ,
 	[Amount] ,
@@ -59,8 +65,10 @@ BEGIN
 	[RepaymentDate],
 	[PaymentPerInterval] ,		
 	[AgreementModel] ,
-	[InterestOnlyRepaymentCount] 
-	 
+	[InterestOnlyRepaymentCount] ,
+	[LateFees] ,
+	[DistributedFees] ,
+	[OutstandingInterest] 	 
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

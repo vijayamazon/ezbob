@@ -1,16 +1,13 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using PaymentServices.Calculators;
 
 	internal class CreateScheduleMethod : AMethod {
 
-		public CreateScheduleMethod(ALoanCalculator calculator)
-			: base(calculator, false) {
+		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
 		} // constructor
 
 		/// <exception cref="NoInitialDataException">Condition. </exception>
@@ -40,11 +37,13 @@
 
 			//int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
 
-			// RepaymentCount,  EventTime, InterestRate, RepaymentIntervalType 
-			Calculator.currentHistory.SetDefaults();
+			// EventTime RepaymentIntervalType RepaymentDate
+			Calculator.currentHistory.SetDefaultEventTime(); // now
+			Calculator.currentHistory.SetDefaultRepaymentIntervalType(); // month
+			Calculator.currentHistory.SetDefaultRepaymentDate(); // EqualPrincipal 
 
-			// LoanType, LoanFormulaID, RepaymentDate
-			WorkingModel.Loan.SetDefaults();
+			// LoanFormulaID - have defualt for property
+			//WorkingModel.Loan.SetDefaultFormula();
 
 			// TODO: LoanType balances \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 44, 66, 68
 			// decimal[] balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray(); ???
@@ -59,8 +58,10 @@
 				Log.Error("No schedules created");
 				throw new NoScheduleException();
 			}
+			
+			Log.Debug("servicingFeeAmount: {0}", Calculator.currentHistory.DistributedFees); // "spreaded" amount
 
-			AttachFees();
+			Calculator.AttachDistributedFeesToLoanBySchedule(WorkingModel, Calculator.currentHistory.DistributedFees, Calculator.NowTime);
 
 			int index = WorkingModel.Loan.Histories.IndexOf(Calculator.currentHistory);
 			WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
@@ -159,7 +160,7 @@
 			*/
 		}
 
-		/// <summary>
+	/*	/// <summary>
 		/// calculate setup/servicing (arrangement) fees and attach it to schedule items PlannedDate
 		/// </summary>
 		private void AttachFees() {
@@ -236,7 +237,7 @@
 				//	schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
 				//}
 			}
-		}
+		}*/
 		
 	} // class CreateScheduleMethod
 } // namespace

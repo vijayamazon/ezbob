@@ -5511,36 +5511,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-<<<<<<< HEAD
       <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>ELINAR-PC\elinar</Upn>
-=======
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
->>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-<<<<<<< HEAD
       <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>ELINAR-PC\elinar</Upn>
-=======
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
-      <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
->>>>>>> master
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

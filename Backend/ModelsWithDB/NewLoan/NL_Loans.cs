@@ -32,7 +32,10 @@
 		[FK("NL_LoanFormulas", "FormulaID")]
 		[DataMember]
 		[EnumName(typeof(NLLoanFormulas))]
-		public int LoanFormulaID { get; set; }
+		public int LoanFormulaID {
+			get { return this.loanFormulaID; }
+			set { this.loanFormulaID = value; }
+		}
 
 		[FK("LoanSource", "LoanSourceID")]
 		[DataMember]
@@ -62,6 +65,8 @@
 		[FK("Loan", "Id")]
 		[DataMember]
 		public int? OldLoanID { get; set; }
+
+		private int loanFormulaID = (int)NLLoanFormulas.EqualPrincipal;
 
 		// additions
 		private List<NL_LoanHistory> _histories = new List<NL_LoanHistory>();
@@ -142,7 +147,7 @@
 
 		public void SetDefaults() {
 			SetDefaultFormula();
-			SetDefaultLoanType();
+		//	SetDefaultLoanType();
 		}
 
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>

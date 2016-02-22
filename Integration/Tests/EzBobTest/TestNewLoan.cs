@@ -10,6 +10,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.LegalDocs;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
@@ -92,7 +93,7 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(59) {
+			NL_Model model = new NL_Model(1394) {
 				UserID = 357,
 				Loan = new NL_Loans()
 			};
@@ -196,7 +197,7 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 5095;
+			const int oldLoanID = 7152;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			if (oldLoan == null)
@@ -214,16 +215,16 @@
 				}
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() {
-				EventTime = DateTime.UtcNow, // now,
+				EventTime = now,
 				AgreementModel = JsonConvert.SerializeObject(oldLoan.AgreementModel)
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
-				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
+				LoanAgreementTemplateID = 2065, //(int)NLLoanAgreementTemplateTypes.PreContractAgreement,
+				FilePath =  "2016/2/21/PAD64J14012/Guaranty Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", // "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
-				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
+				LoanAgreementTemplateID = 2067, //(int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
+				FilePath = "2016/2/21/PAD64J14012/Private Company Loan Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", //"guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
 			});
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
@@ -520,7 +521,7 @@
 		[Test]
 		public void CreateSchedule() {
 			DateTime issueDate = DateTime.UtcNow; // new DateTime(2015, 12, 8, 19, 12, 00);
-			NL_Model model = new NL_Model(365) { UserID = 365, Loan = new NL_Loans() };
+			NL_Model model = new NL_Model(1394) { UserID = 357, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
@@ -1134,6 +1135,12 @@
 			}
 		}
 
+
+		[Test]
+		public void TestManualLegalDocsSyncTemplatesFiles() {
+			var stra = new ManualLegalDocsSyncTemplatesFiles(@"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement");
+			stra.Execute();
+		}
 
 	} // class TestNewLoan
 } // namespace

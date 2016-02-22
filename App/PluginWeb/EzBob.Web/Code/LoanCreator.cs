@@ -216,10 +216,10 @@
 
 			try {
 				// copy newly created agreementtemplateID (for new templeates)
-				foreach (NL_LoanAgreements ag in nlModel.Loan.LastHistory().Agreements) {
-					if (ag.LoanAgreementTemplateID == 0)
-						ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateID;
-				}
+				//foreach (NL_LoanAgreements ag in nlModel.Loan.LastHistory().Agreements) {
+				//	if (ag.LoanAgreementTemplateID == 0)
+				//		ag.LoanAgreementTemplateID = oldloan.Agreements.FirstOrDefault(a => a.FilePath.Equals(ag.FilePath)).TemplateID;
+				//}
 
 				this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				// ReSharper disable once CatchAllClause

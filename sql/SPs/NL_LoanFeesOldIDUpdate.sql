@@ -5,7 +5,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 ALTER PROCEDURE [dbo].[NL_LoanFeesOldIDUpdate]
 AS
 BEGIN
@@ -30,7 +29,5 @@ BEGIN
 		nlf.LoanID = charges.LoanID;
 END
 
-IF EXISTS (select id from sysobjects where name='NL_LoanFeesOldIDUpdate') 
-BEGIN
-	EXEC NL_LoanFeesOldIDUpdate;
-END
+
+

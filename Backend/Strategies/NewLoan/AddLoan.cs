@@ -11,6 +11,7 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using MailApi;
+	using PaymentServices.Calculators;
 
 	public class AddLoan : AStrategy {
 
@@ -79,19 +80,19 @@
 			try {
 				if (model.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (model.Loan == null) {
 					Error = NL_ExceptionRequiredDataNotFound.Loan;
-					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (model.Loan.OldLoanID == null) {
 					Error = NL_ExceptionRequiredDataNotFound.OldLoan;
-					NL_AddLog(LogType.Error, "Strategy Failed ", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -99,26 +100,21 @@
 
 				if (history == null) {
 					Error = NL_ExceptionRequiredDataNotFound.LastHistory;
-					NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
 				if (history.Agreements == null || history.Agreements.Count == 0) {
 					Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
-					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
-				if (history.AgreementModel == null) {
+				if (string.IsNullOrEmpty(history.AgreementModel)) {
 					Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
-					NL_AddLog(LogType.Error, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
-
-				// RepaymentIntervalType, EventTime 
-				model.Loan.LastHistory().SetDefaults();
-				// LoanType, LoanFormulaID, RepaymentDate
-				model.Loan.SetDefaults();
 
 				BuildLoanFromOffer dataForLoan = new BuildLoanFromOffer(model);
 				try {
@@ -130,7 +126,7 @@
 
 				if (!string.IsNullOrEmpty(dataForLoan.Error)) {
 					Error = dataForLoan.Error;
-					NL_AddLog(LogType.DataExsistense, "Strategy Failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Strategy failed - Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -139,12 +135,32 @@
 				// prevent to create the same loan (by refnum)
 				if (!string.IsNullOrEmpty(model.Loan.Refnum) && !string.IsNullOrEmpty(dataForLoan.DataForLoan.ExistsRefnums) && dataForLoan.DataForLoan.ExistsRefnums.Contains(model.Loan.Refnum)) {
 					Error = NL_ExceptionLoanExists.DefaultMessage;
+					NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, null, Error, null);
+					return;
 				}
 
-				ALoanCalculator nlCalculator = null;
+				// setup/distributed fees
+
+				// for now: only one-time or "spreaded" setup fees supported
+				// add full fees 2.0 support later
+
+				var offerFees = model.Offer.OfferFees;
+
+				// don't create LoanFees if OfferFees Percent == 0 or AbsoluteAmount == 0
+				var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee && (f.Percent > 0 || f.AbsoluteAmount > 0));
+				var servicingFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee && (f.Percent > 0 || f.AbsoluteAmount > 0)); // equal to "setup spreaded"
+				decimal? brokerFeePercent = model.Offer.BrokerSetupFeePercent;
+			 
+				var feeCalculator = new SetupFeeCalculator(setupFee!=null ?setupFee.Percent: servicingFee.Percent, brokerFeePercent);
+				decimal setupFeeAmount = feeCalculator.Calculate(history.Amount);
+				model.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
+
+				// send ot Calculator to distribute and attach to schedule planned dates
+				history.DistributedFees = servicingFee == null ? 0: setupFeeAmount;
+				
+				ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
 				// 2. Init Schedule and Fees
 				try {
-					nlCalculator = new LegacyLoanCalculator(model);
 					// model should contain Schedule and Fees after this invocation
 					nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees. 7 September - fully completed schedule + fee + amounts due, without payments.
 				} catch (NoInitialDataException noDataException) {
@@ -158,18 +174,18 @@
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
 					Error = string.Format("Failed to get calculator instance/Schedule. customer {0}, err: {1}", model.CustomerID, ex.Message);
-				} finally {
-					if (nlCalculator == null) {
-						Error = string.Format("Failed to get calculator instance. customer {0}, err: {1}", model.CustomerID, Error);
-					}
-				}
-
-				// prevent creation of same loan
-				if (!string.IsNullOrEmpty(Error)) {
-					Log.Info("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
-					NL_AddLog(LogType.Error, "Strategy " + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, null, Error, ex.StackTrace);
 					return;
 				}
+
+				//// prevent creation of same loan
+				//if (!string.IsNullOrEmpty(Error)) {
+				//	Log.Info("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error);
+				//	NL_AddLog(LogType.Error, "Strategy " + string.Format("Failed to calculate Schedule. customer {0}, err: {1}", model.CustomerID, Error), this.strategyArgs, null, Error, null);
+				//	return;
+				//}
+
+				history.OutstandingInterest = nlCalculator.Interest;
 
 				List<NL_LoanSchedules> nlSchedule = new List<NL_LoanSchedules>();
 				List<NL_LoanFees> nlFees = new List<NL_LoanFees>();
@@ -183,7 +199,7 @@
 
 				if (nlSchedule.Count == 0) {
 					Error += "Failed to generate Schedule/fees";
-					NL_AddLog(LogType.Info, "Failed to generate Schedule/fees", this.strategyArgs, null, Error, null);
+					NL_AddLog(LogType.Info, "Strategy failed", this.strategyArgs, null, Error, null);
 					return;
 				}
 
@@ -192,7 +208,7 @@
 				model.Loan.CreationTime = nowTime;
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
 				model.Loan.Position += 1;
-
+				
 				ConnectionWrapper pconn = DB.GetPersistent();
 
 				try {
@@ -215,14 +231,28 @@
 						f.LoanID = LoanID;
 					}
 
-					//nlFees.ForEach(f => Log.Debug("Adding fees: {0}", f));
+					// setup as fee
+					if (setupFee != null) {
+						Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
+						nlFees.Add(
+							new NL_LoanFees() {
+								LoanID = LoanID,
+								Amount = setupFeeAmount,
+								AssignTime = history.EventTime,
+								Notes = "setup fee one-part",
+								LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+								CreatedTime = nowTime,
+								AssignedByUserID = 1
+							});
+					}
+
+					nlFees.ForEach(f => Log.Debug("Adding fees: {0}", f));
 
 					// insert fees
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", nlFees));
 
 					model.Loan.Fees.Clear();
 					model.Loan.Fees.AddRange(nlFees);
-
 
 					// 7. history
 					history.LoanID = LoanID;
@@ -280,7 +310,7 @@
 
 					SendMail("NL: loan rolled back", history, nlFees, nlSchedule, nlAgreements);
 
-					NL_AddLog(LogType.Error, "Strategy Failed - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+					NL_AddLog(LogType.Error, "Strategy failed - Failed to add new loan", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 					return;
 				}
 
@@ -320,13 +350,13 @@
 				SendMail("NL: Saved successfully", history, nlFees, nlSchedule, nlAgreements);
 
 				// copy LoanCharges Ids into OldFeeID, NL_LoanFees
-				DB.ExecuteNonQuery(pconn, "NL_LoanFeesOldIDUpdate", CommandSpecies.StoredProcedure);
+				DB.ExecuteNonQuery("NL_LoanFeesOldIDUpdate", CommandSpecies.StoredProcedure);
 
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, LoanID, Error, null);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				NL_AddLog(LogType.Error, "Strategy Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Strategy failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
 			}
 		}//Execute
 
@@ -336,6 +366,8 @@
 				return;
 
 			var setupFee = model.Loan.Fees.FirstOrDefault(f => f.LoanFeeTypeID == (int)NLFeeTypes.SetupFee);
+
+			Log.Debug("setup fee for offset: {0}", setupFee);
 
 			if (setupFee != null) {
 				NL_Payments setupfeeOffsetpayment = new NL_Payments {

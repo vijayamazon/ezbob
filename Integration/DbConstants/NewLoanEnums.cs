@@ -112,6 +112,8 @@
 		SystemRepay = 12,
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
 
+
+
 	/// <summary>
 	/// used in "pay loan" flows to indicate throuhg which payment system current transaction done
 	/// </summary>

@@ -12,23 +12,23 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		h.LoanHistoryID,
-		h.LoanID,
-		h.UserID,
-		h.LoanLegalID,		
-		h.Amount,
-		h.RepaymentIntervalTypeID,
-		h.RepaymentCount,
-		h.InterestRate,
-		h.EventTime,
-		h.[Description],
-		h.RepaymentDate,
-		h.PaymentPerInterval,
-		h.AgreementModel,
-		h.InterestOnlyRepaymentCount
-	FROM
-		NL_LoanHistory h
-	WHERE
-		h.LoanID = @LoanID 
+		LoanHistoryID,
+		LoanID,
+		UserID,
+		LoanLegalID,		
+		Amount,
+		RepaymentIntervalTypeID,
+		RepaymentCount,
+		InterestRate,
+		EventTime,
+		[Description],
+		RepaymentDate,
+		PaymentPerInterval,
+		AgreementModel,
+		InterestOnlyRepaymentCount,
+		[LateFees] ,
+		[DistributedFees] ,
+		[OutstandingInterest] 
+	FROM NL_LoanHistory WHERE LoanID = @LoanID 
 END
 GO

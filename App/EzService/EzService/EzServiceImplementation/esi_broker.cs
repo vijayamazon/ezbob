@@ -124,7 +124,7 @@
 			if (oInstance != null) {
 				if (oInstance.Properties.BrokerID > 0) {
 					Execute<BrokerGreeting>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
-					Execute<AddUpdateBrokerAccount>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
+					//Execute<AddUpdateBrokerAccount>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
 				}
 				return new BrokerPropertiesActionResult {
 					MetaData = oMetaData,

@@ -21,7 +21,7 @@
 
 			// not accepted rollover
 			if (!Calculator.acceptedRollover.Rollover.IsAccepted || !Calculator.acceptedRollover.Rollover.CustomerActionTime.HasValue) {
-				Log.Alert("RolloverRescheduling: rollover not accepted. {0}", Calculator.acceptedRollover.Rollover);
+				Log.Alert("RolloverRescheduling: rollover not accepted (paid). {0}", Calculator.acceptedRollover.Rollover);
 				return;
 			}
 

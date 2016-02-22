@@ -1,3 +1,33 @@
+
+DECLARE @lastid INT
+
+IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
+BEGIN
+	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
+END
+ELSE
+	update [LoanTransactionMethod]  set Id = 10 where [Name] = 'Write Off';
+
+IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SetupFeeOffset')
+ BEGIN
+	 SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	 INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SetupFeeOffset', 0)
+END
+ELSE
+	update [LoanTransactionMethod]  set Id = 11 where [Name] = 'SetupFeeOffset';
+
+ IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'SystemRepay')
+ BEGIN
+	 SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	 INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'SystemRepay', 0)
+ END
+ ELSE
+	update [LoanTransactionMethod]  set Id = 12 where [Name] = 'SystemRepay';
+
+
+
+
 IF NOT EXISTS(select LoanFeeTypeID from NL_LoanFeeTypes where LoanFeeType = 'OtherCharge')  
 BEGIN  
 	insert into NL_LoanFeeTypes ([LoanFeeTypeID],[LoanFeeType],[DefaultAmount],[Description]) select 8,Name,Value,[Description] from ConfigurationVariables cf where Name = 'OtherCharge';
@@ -35,6 +65,45 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'LateFees') 
+BEGIN
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD LateFees decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
+END
+
+IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'DistributedFees') 
+BEGIN
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD DistributedFees decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
+END
+
+IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'OutstandingInterest') 
+BEGIN
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD OutstandingInterest decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
+END
+
+IF NOT EXISTS (SELECT id FROM sysobjects WHERE  name = 'DF_NL_LoanHistoryLateFees') 
+BEGIN
+	alter table [dbo].[NL_LoanHistory] add constraint DF_NL_LoanHistoryLateFees default 0 for [LateFees];
+END
+IF NOT EXISTS (SELECT id FROM sysobjects WHERE  name = 'DF_NL_LoanHistoryDistributedFees') 
+BEGIN
+	alter table [dbo].[NL_LoanHistory] add constraint DF_NL_LoanHistoryDistributedFees default 0 for DistributedFees;
+END
+IF NOT EXISTS (SELECT id FROM sysobjects WHERE  name = 'DF_NL_LoanHistoryOutstandingInterest') 
+BEGIN
+	alter table [dbo].[NL_LoanHistory] add constraint DF_NL_LoanHistoryOutstandingInterest default 0 for OutstandingInterest;
+END
+
+
+
+
+
+
 IF EXISTS (select id from sysobjects where name='NL_LoansFeesGet') and NOT EXISTS (select id from sysobjects where name='NL_LoanFeesGet')
 BEGIN
 	EXEC sp_rename 'NL_LoansFeesGet', 'NL_LoanFeesGet';
@@ -66,4 +135,9 @@ END
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_Desicion')
 BEGIN
 	alter table [dbo].[NL_Offers] add CONSTRAINT UC_Desicion UNIQUE ([DecisionID]);
+END
+
+IF EXISTS (select id from sysobjects where name='NL_LoanFeesOldIDUpdate') 
+BEGIN
+	EXEC NL_LoanFeesOldIDUpdate;
 END

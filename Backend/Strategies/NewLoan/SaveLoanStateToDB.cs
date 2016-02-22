@@ -10,7 +10,7 @@
 
 	internal class SaveLoanStateToDB : AStrategy {
 
-		public SaveLoanStateToDB(NL_Model nlmodel, bool loanClose = false, bool loanStatusChange = false) {
+		internal SaveLoanStateToDB(NL_Model nlmodel, bool loanClose = false, bool loanStatusChange = false) {
 			model = nlmodel;
 			runClose = loanClose;
 			runStatusChenge = loanStatusChange;
@@ -65,6 +65,15 @@
 					h.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", h));
 					// set for newly created scheduled it historyID
 					h.Schedule.ForEach(s => s.LoanHistoryID = h.LoanHistoryID);
+				}
+
+				// save up-to-date outstanding princpal, outstanding late fees, outstanding distributed fees, outstanding accumulated interest
+				foreach (NL_LoanHistory h in model.Loan.Histories.Where(h => h.LoanHistoryID > 0)) {
+					DB.ExecuteNonQuery(pconn, "NL_LoanHistoryUpdate", CommandSpecies.StoredProcedure,
+						new QueryParameter("LoanHistoryID", h.LoanHistoryID),
+						new QueryParameter("LateFees", h.LoanHistoryID),
+						new QueryParameter("DistributedFees", h.LoanHistoryID),
+						new QueryParameter("AccumulatedInterest", h.LoanHistoryID));
 				}
 
 				// collect all schedules into one list

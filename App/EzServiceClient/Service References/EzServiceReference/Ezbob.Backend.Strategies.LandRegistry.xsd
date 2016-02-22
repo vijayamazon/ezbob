@@ -9,8 +9,8 @@
   <xs:element name="ArrayOfLandRegistryDB" nillable="true" type="tns:ArrayOfLandRegistryDB" />
   <xs:complexType name="LandRegistryDB">
     <xs:sequence>
+      <xs:element minOccurs="0" name="AddressID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="AttachmentPath" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CustomerAddressID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="CustomerId" type="xs:int" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />

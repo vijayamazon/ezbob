@@ -73,6 +73,7 @@
           <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
           <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="OfferFees" nillable="true" type="tns:ArrayOfNL_OfferFees" />
+          <xs:element minOccurs="0" name="ProductSubTypeID" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
           <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
           <xs:element minOccurs="0" name="SendEmailNotification" type="xs:boolean" />
@@ -341,12 +342,15 @@
           <xs:element minOccurs="0" name="Agreements" nillable="true" type="tns:ArrayOfNL_LoanAgreements" />
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DistributedFees" type="xs:decimal" />
           <xs:element minOccurs="0" name="EventTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" type="xs:int" />
           <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LateFees" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanLegalID" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="OutstandingInterest" type="xs:decimal" />
           <xs:element minOccurs="0" name="PaymentPerInterval" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
           <xs:element minOccurs="0" name="RepaymentDate" type="xs:dateTime" />

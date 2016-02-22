@@ -1,15 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
-	using Ezbob.Database;
 	using Newtonsoft.Json.Linq;
-	using NHibernate.Linq;
 
 	/// <summary>
 	/// triggered on payment adding/cancellation, rollover, re-scheduling.
