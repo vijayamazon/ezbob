@@ -26,8 +26,8 @@
     @Loans()
     <div>
         <label class="checkbox">
-            <input type="checkbox" class="show-rejections" checked="checked">
-            Show rejections
+            <input type="checkbox" class="show-all-decisions" checked="checked">
+            Show all decisions
         </label>
     </div>
     <div id="offers-container">
@@ -103,8 +103,9 @@
     <table class="table centered box">
         <thead class="box">
             <tr class="box-title">
+				<th>Id</th>
                 <th>Action</th>
-                <th>Offer</th>
+				<th>Offer</th>
                 <th>Start date</th>
                 <th>End date</th>
                 <th>Amount</th>
@@ -121,10 +122,10 @@
         </thead>
         <tbody class="box-content">
             <%_.each(offers, function(offer){%>   
-                <% if (offer.UnderwriterDecision === "Approved") {%>
+                <% if (offer.Action === "Approve") {%>
                     @TableRowsOfferApproved()
-				<%} else if (offer.UnderwriterDecision === "Rejected") {%>
-                    @TableRowsOfferReject()
+				<%} else {%>
+                    @TableRowsOfferNotApproved()
 				<%}%>
             <%});%>
         </tbody>
@@ -134,7 +135,8 @@
 
 @helper TableRowsOfferApproved() {
     <tr>
-        <td><%- offer.UnderwriterDecision %></td>
+	    <td><%- offer.Id %></td>
+        <td><%- offer.Action %></td>
         <td class="centered">
             <button data-id="<%=offer.Id%>" class="btn btn-primary btn-mini show-schedule"><i class="fa fa-calendar"></i></button>
         </td>
@@ -153,13 +155,13 @@
     </tr>
 }
 
-@helper TableRowsOfferReject() {
+@helper TableRowsOfferNotApproved() {
     <tr>
-        <td><%- offer.UnderwriterDecision %></td>
+		<td><%- offer.Id %></td>
+        <td><%- offer.Action %></td>
         <td class="centered"></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
-        <td colspan="9"></td>
         <td><%- offer.Originator %></td>
-        <td><%- offer.Comments %></td>
+		<td colspan="9"><%- offer.Comments %></td>
     </tr>
 }

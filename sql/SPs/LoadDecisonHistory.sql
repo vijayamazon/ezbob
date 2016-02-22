@@ -12,8 +12,8 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT 
 		d.Id DecisionHistoryID,
-		d.Action,
-		d.[Date] AS 'Date',
+		isnull(d.Action, cr.UnderwriterDecision) AS Action,
+		isnull(d.[Date], cr.UnderwriterDecisionDate) AS 'Date',
 		s.FullName AS UnderwriterName,
 		l.Name AS LoanType,
 		dp.Name AS DiscountPlan,
@@ -25,7 +25,7 @@ BEGIN
 		cr.Originator AS Originator,
 		cr.ManualSetupFeePercent, 
 		cr.BrokerSetupFeePercent,
-		d.Comment + ' (' + dbo.udfGetRejectionReasons(d.Id) + ')' AS Comment,
+		d.Comment + isnull(dbo.udfGetRejectionReasons(d.Id), '') AS Comment,
 		p.Name AS Product,
 		pt.Name AS ProductType,
 		ft.Name AS FundingType,
@@ -34,14 +34,14 @@ BEGIN
 		cr.OfferStart,
 		cr.OfferValidUntil,
 		cr.ApprovedRepaymentPeriod
-	FROM 
-		DecisionHistory d 
+	FROM
+		CashRequests cr 
+	LEFT JOIN 
+		DecisionHistory d ON cr.Id = d.CashRequestId
 	LEFT JOIN 
 		Security_User s ON 	s.UserId = d.UnderwriterId
 	LEFT JOIN 
 		LoanType l ON l.Id = d.LoanTypeId	
-	LEFT JOIN
-		CashRequests cr ON cr.Id = d.CashRequestId
 	LEFT JOIN 
 		DiscountPlan dp ON dp.Id = cr.DiscountPlanId	
 	LEFT JOIN 
@@ -55,8 +55,9 @@ BEGIN
 	LEFT JOIN
 		I_Product p ON p.ProductID = pt.ProductID		
 	WHERE 
-		d.CustomerId = @CustomerID
+		cr.IdCustomer = @CustomerID
 END
+
 GO
 
 

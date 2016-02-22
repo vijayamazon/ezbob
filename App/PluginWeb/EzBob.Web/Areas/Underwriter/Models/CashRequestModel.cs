@@ -16,6 +16,7 @@
 		public decimal SetupFee { get; set; }
 		public string Comments { get; set; }
 		public int? RepaymentPeriod { get; set; }
+		public string Action { get; set; }
 		public string UnderwriterDecision { get; set; }
 		public string LoanType { get; set; }
 		public string DiscountPlan { get; set; }
@@ -35,6 +36,7 @@
 			return new CashRequestModel
 				{
 					Id = item.CashRequestID,
+					Action = item.Action,
 					Amount = item.ApprovedSum,
 					StartDate = item.OfferStart,
 					EndDate = item.OfferValidUntil,
@@ -50,5 +52,7 @@
 					IsOpenPlatform = string.IsNullOrEmpty(item.FundingType) ? "No" : "Yes"
 				};
 		}
+
+		
 	}
 }

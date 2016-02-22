@@ -58,7 +58,7 @@
 				.Loans
 				.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom))).ToList();
 			var decisions = this.serviceClient.Instance.LoadDecisionHistory(customer.Id, this.context.UserId);
-			var offers = decisions.Model.Where(x => x.Action != "Escalate" && x.Action != "Pending" && x.Action != "Waiting")
+			var offers = decisions.Model
 				.Select(CashRequestModel.Create)
 				.ToList();
 

@@ -2,47 +2,47 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.LoanHistoryModel = Backbone.Model.extend({
-	idAttribute: "Id",
+	idAttribute: 'Id',
 	url: function() {
-		return "" + window.gRootPath + "Underwriter/LoanHistory/Index/" + this.customerId;
+		return '' + window.gRootPath + 'Underwriter/LoanHistory/Index/' + this.customerId;
 	}
 });
 
 EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 	initialize: function() {
-		this.template = _.template($("#loanhistory-template").html());
-		this.templateView = _.template($("#loanhistory-view-template").html());
-		this.offersTemplate = _.template($("#offers-history-template").html());
-		this.bindTo(this.model, "reset fetch change sync", this.render, this);
-		this.isRejections = true;
+		this.template = _.template($('#loanhistory-template').html());
+		this.templateView = _.template($('#loanhistory-view-template').html());
+		this.offersTemplate = _.template($('#offers-history-template').html());
+		this.bindTo(this.model, 'reset fetch change sync', this.render, this);
+		this.isAll = true;
 	},
 
 	events: {
-		"click tr.loans.tr-link": "rowClick",
-		"click .export-to-exel": "exportExcel",
-		"click .edit-loan": "editLoan",
-		"click .show-schedule": "showSchedule",
-		"click .show-rejections": "showRejections"
+		'click tr.loans.tr-link': 'rowClick',
+		'click .export-to-exel': 'exportExcel',
+		'click .edit-loan': 'editLoan',
+		'click .show-schedule': 'showSchedule',
+		'click .show-all-decisions': 'showAllDecisions'
 	},
 
-	showRejections: function() {
-		this.isRejections = this.$el.find('.show-rejections').is(':checked');
+	showAllDecisions: function () {
+		this.isAll = this.$el.find('.show-all-decisions').is(':checked');
 		this.renderOffers();
 	},
 
 	exportExcel: function() {
-		location.href = "" + window.gRootPath + "Underwriter/LoanHistory/ExportToExel?id=" + this.model.customerId;
+		location.href = '' + window.gRootPath + 'Underwriter/LoanHistory/ExportToExel?id=' + this.model.customerId;
 	},
 
 	rowClick: function(e) {
-		var id = +e.currentTarget.getAttribute("data-id");
-		if (id == null)
+		var id = e.currentTarget.getAttribute('data-id');
+		if (!id)
 			return;
 
 		var details = new EzBob.Underwriter.LoanHistoryDetailsModel();
 		details.loanid = id;
 
-		var loan = _.find(this.model.get("loans"), function(l) {
+		var loan = _.find(this.model.get('loans'), function(l) {
 			return l.Id === id;
 		});
 
@@ -52,8 +52,8 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 			model: details,
 			loan: loan
 		});
-		detailsView.on("RolloverAdded", this.updateView, this);
-		detailsView.on("ManualPaymentAdded", this.updateView, this);
+		detailsView.on('RolloverAdded', this.updateView, this);
+		detailsView.on('ManualPaymentAdded', this.updateView, this);
 		details.fetch();
 	},
 
@@ -62,7 +62,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 	},
 
 	editLoan: function(e) {
-		var id = e.currentTarget.getAttribute("data-id");
+		var id = e.currentTarget.getAttribute('data-id');
 
 		var loan = new EzBob.LoanModel({
 			Id: id
@@ -70,16 +70,15 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 
 		var xhr = loan.fetch();
 
-		BlockUi("on");
+		BlockUi('on');
 		var self = this;
 
 		xhr.done(function() {
-			var view;
-			view = new EzBob.EditLoanView({
+			var view = new EzBob.EditLoanView({
 				model: loan
 			});
-			view.on("item:saved", self.updateView, self);
-			BlockUi("off");
+			view.on('item:saved', self.updateView, self);
+			BlockUi('off');
 			EzBob.App.jqmodal.show(view);
 		});
 
@@ -89,7 +88,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 	render: function() {
 		this.$el.html(this.templateView());
 
-		this.table = this.$el.find("#loanhistory-table");
+		this.table = this.$el.find('#loanhistory-table');
 
 		var viewModel = this.model.toJSON();
 
@@ -102,19 +101,17 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 
 	renderOffers: function() {
 		var data = { offers: this.filterOffers() };
-		this.offersConteiner = this.$el.find("#offers-container");
+		this.offersConteiner = this.$el.find('#offers-container');
 		this.offersConteiner.html(this.offersTemplate(data));
 		return this;
 	},
 
 	filterOffers: function () {
-		if (this.isRejections) {
-			return _.filter(this.model.get("offers"), function(o) {
-				return o.UnderwriterDecision === "Rejected" || o.UnderwriterDecision === "Approved";
-			});
+		if (this.isAll) {
+			return this.model.get('offers');
 		} else {
-			return _.filter(this.model.get("offers"), function(o) {
-				return o.UnderwriterDecision === "Approved";
+			return _.filter(this.model.get('offers'), function(o) {
+				return o.Action === 'Approve' || o.Action === 'ReApprove' || o.Action === 'Approved';
 			});
 		}
 	},
@@ -122,7 +119,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 	showSchedule: function(e) {
 		var offerId = $(e.currentTarget).data('id');
 
-		var xhr = $.getJSON("" + window.gRootPath + "Underwriter/Schedule/Calculate/" + offerId);
+		var xhr = $.getJSON("" + window.gRootPath + 'Underwriter/Schedule/Calculate/' + offerId);
 
 		var self = this;
 
