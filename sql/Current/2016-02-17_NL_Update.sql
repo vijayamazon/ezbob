@@ -67,21 +67,21 @@ GO
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'LateFees') 
 BEGIN
-	ALTER TABLE [dbo].[NL_LoanHistory] ADD LateFees decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD LateFees decimal(18,6) null ; 
 	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
 	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
 END
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'DistributedFees') 
 BEGIN
-	ALTER TABLE [dbo].[NL_LoanHistory] ADD DistributedFees decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD DistributedFees decimal(18,6) null ; 
 	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
 	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
 END
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('NL_LoanHistory') AND name = 'OutstandingInterest') 
 BEGIN
-	ALTER TABLE [dbo].[NL_LoanHistory] ADD OutstandingInterest decimal(18,6) not null ; 
+	ALTER TABLE [dbo].[NL_LoanHistory] ADD OutstandingInterest decimal(18,6) null ; 
 	ALTER TABLE [dbo].[NL_LoanHistory] drop column [TimestampCounter];
 	ALTER TABLE [dbo].[NL_LoanHistory] ADD TimestampCounter timestamp not null; 
 END
