@@ -1,19 +1,17 @@
 ﻿namespace Ezbob.Backend.Strategies.CallCreditStrategy {
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
-using CallCreditLib;
-using Callcredit.CRBSB;
-using Ezbob.Database;
-using System.Xml.Serialization;
-using Ezbob.Backend.ModelsWithDB;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
+	using CallCreditLib;
+	using Callcredit.CRBSB;
+	using Ezbob.Database;
+	using System.Xml.Serialization;
+	using Ezbob.Backend.ModelsWithDB;
 
 	public class ParseCallCredit : AStrategy {
-
-		public ParseCallCredit(long nServiceLogID)
-        {
+		public ParseCallCredit(long nServiceLogID) {
 			Result = null;
 			m_nServiceLogID = nServiceLogID;
 		}// constructor
@@ -31,8 +29,7 @@ using Ezbob.Backend.ModelsWithDB;
 
 				if (oTbl != null)
 					Result = oTbl;
-			} 
-			catch (Exception) {
+			} catch (Exception) {
 				Log.Error("Parsing CallCredit for service log entry {0} failed.", m_nServiceLogID);
 			}
 
@@ -54,7 +51,7 @@ using Ezbob.Backend.ModelsWithDB;
 				return null;
 			} // if
 
-			try{
+			try {
 				var searchResultSerializer = new XmlSerializer(typeof(CT_SearchResult));
 				var searchResult = (CT_SearchResult)searchResultSerializer.Deserialize(new StringReader(serviceLog.ResponseData));
 				if (searchResult == null) {
@@ -62,8 +59,7 @@ using Ezbob.Backend.ModelsWithDB;
 					return null;
 				}
 				return new Tuple<CT_SearchResult, ServiceLog>(searchResult, serviceLog);
-			} 
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Alert(e, "Parsing CallCredit for service log entry {0} failed.", m_nServiceLogID);
 				return null;
 			}
@@ -81,7 +77,7 @@ using Ezbob.Backend.ModelsWithDB;
 		public CallCredit Save(CallCredit data) {
 			if (data == null)
 				return null;
-			
+
 
 			Log.Info("Saving CallCredit data into DB...");
 
@@ -101,28 +97,25 @@ using Ezbob.Backend.ModelsWithDB;
 
 				//Log.Debug("\n\n\n\n\n\n\n\n\n\nSaveCallCredit - end, new id = {0}\n\n\n\n\n\n\n\n\n\n", CallCreditID);
 
-				if (data.ApplicantData.Any()) 
+				if (data.ApplicantData.Any())
 					SaveCallCreditData(data.ApplicantData, CallCreditID, con);
-				
-				if (data.Amendments.Any()) 
+
+				if (data.Amendments.Any())
 					SaveCallCreditAmendments(data.Amendments, CallCreditID, con);
-				
-				if (data.ApplicantAddresses.Any()) 
+
+				if (data.ApplicantAddresses.Any())
 					SaveCallCreditApplicantAddresses(data.ApplicantAddresses, CallCreditID, con);
-				
-				if (data.ApplicantNames.Any()) 
+
+				if (data.ApplicantNames.Any())
 					SaveCallCreditApplicantNames(data.ApplicantNames, CallCreditID, con);
-				
-				if (data.Email.Any()) 
+
+				if (data.Email.Any())
 					SaveCallCreditEmail(data.Email, CallCreditID, con);
-				
-				if (data.Telephone.Any()) 
+
+				if (data.Telephone.Any())
 					SaveCallCreditTelephone(data.Telephone, CallCreditID, con);
-				
-			} 
 
-
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to save CallCredit data");
 				con.Rollback();
 				return null;
@@ -189,49 +182,49 @@ using Ezbob.Backend.ModelsWithDB;
 					CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<CallCreditData>("Tbl", new List<CallCreditData> { apdat }));
 
-				if (apdat.Accs.Any()) 
+				if (apdat.Accs.Any())
 					SaveCallCreditDataAccs(apdat.Accs, CallCrediDataID, con);
-				
-				if (apdat.AddressConfs.Any()) 
+
+				if (apdat.AddressConfs.Any())
 					SaveCallCreditDataAddressConfs(apdat.AddressConfs, CallCrediDataID, con);
-				
-				if (apdat.SummaryAddresses.Any()) 
+
+				if (apdat.SummaryAddresses.Any())
 					SaveCallCreditDataAddresses(apdat.SummaryAddresses, CallCrediDataID, con);
-				
-				if (apdat.AddressLinks.Any()) 
+
+				if (apdat.AddressLinks.Any())
 					SaveCallCreditDataAddressLinks(apdat.AddressLinks, CallCrediDataID, con);
-				
+
 				if (apdat.AliasLinks.Any())
 					SaveCallCreditDataAliasLinks(apdat.AliasLinks, CallCrediDataID, con);
-				
-				if (apdat.AssociateLinks.Any()) 
+
+				if (apdat.AssociateLinks.Any())
 					SaveCallCreditDataAssociateLinks(apdat.AssociateLinks, CallCrediDataID, con);
-				
-				if (apdat.CifasFiling.Any()) 
+
+				if (apdat.CifasFiling.Any())
 					SaveCallCreditDataCifasFiling(apdat.CifasFiling, CallCrediDataID, con);
-				
-				if (apdat.CifasPlusCases.Any()) 
+
+				if (apdat.CifasPlusCases.Any())
 					SaveCallCreditDataCifasPlusCases(apdat.CifasPlusCases, CallCrediDataID, con);
-				
-				if (apdat.CreditScores.Any()) 
+
+				if (apdat.CreditScores.Any())
 					SaveCallCreditDataCreditScores(apdat.CreditScores, CallCrediDataID, con);
-				
-				if (apdat.Judgments.Any()) 
+
+				if (apdat.Judgments.Any())
 					SaveCallCreditDataJudgments(apdat.Judgments, CallCrediDataID, con);
-				
-				if (apdat.LinkAddresses.Any()) 
+
+				if (apdat.LinkAddresses.Any())
 					SaveCallCreditDataLinkAddresses(apdat.LinkAddresses, CallCrediDataID, con);
-				
-				if (apdat.Nocs.Any()) 
+
+				if (apdat.Nocs.Any())
 					SaveCallCreditDataNocs(apdat.Nocs, CallCrediDataID, con);
-				
-				if (apdat.Rtr.Any()) 
+
+				if (apdat.Rtr.Any())
 					SaveCallCreditDataRtr(apdat.Rtr, CallCrediDataID, con);
-				
-				if (apdat.Searches.Any()) 
+
+				if (apdat.Searches.Any())
 					SaveCallCreditDataSearches(apdat.Searches, CallCrediDataID, con);
-				
-				if (apdat.Tpd.Any()) 
+
+				if (apdat.Tpd.Any())
 					SaveCallCreditDataTpd(apdat.Tpd, CallCrediDataID, con);
 			}
 		} // SaveCallCreditData
@@ -627,8 +620,8 @@ using Ezbob.Backend.ModelsWithDB;
 					rtrnotice.CallCreditDataTpdReviewAlertIndividualsID = CallCreditDataTpdReviewAlertIndividualsID;
 				}
 				if (revalind.ReviewAlertIndividualNocs.Any())
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataTpdReviewAlertIndividualsNocs", CommandSpecies.StoredProcedure,
-						   DB.CreateTableParameter<CallCreditDataTpdReviewAlertIndividualsNocs>("Tbl", revalind.ReviewAlertIndividualNocs));
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataTpdReviewAlertIndividualsNocs", CommandSpecies.StoredProcedure,
+							   DB.CreateTableParameter<CallCreditDataTpdReviewAlertIndividualsNocs>("Tbl", revalind.ReviewAlertIndividualNocs));
 			}
 		}
 	}

@@ -4,7 +4,7 @@
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_DiscountPlanEntries {
+	public class NL_DiscountPlanEntries:AStringable {
 
 		[PK]
 		[NonTraversable]

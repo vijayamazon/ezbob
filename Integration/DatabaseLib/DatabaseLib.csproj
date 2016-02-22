@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
@@ -116,7 +117,6 @@
     <Compile Include="Model\Database\WhatsNewExcludeCustomerOrigin.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
-    <Compile Include="Model\Database\LandRegistryOwner.cs" />
     <Compile Include="Model\Database\Report\ReportArgumentsNames.cs" />
     <Compile Include="Model\Database\Report\ReportArguments.cs" />
     <Compile Include="Model\Database\Report\ReportUserMap.cs" />
@@ -125,7 +125,6 @@
     <Compile Include="Model\Database\Request\RejectReason.cs" />
     <Compile Include="Model\Database\SuggestedAmount.cs" />
     <Compile Include="Model\Database\Customer\VipRequest.cs" />
-    <Compile Include="Model\Database\LandRegistry.cs" />
     <Compile Include="Model\Database\CustomerAddressType.cs" />
     <Compile Include="Model\Database\QuickOffer.cs" />
     <Compile Include="Model\Database\TrustPilotStatus.cs" />
@@ -160,14 +159,13 @@
     <Compile Include="Model\ExternalAPI\ExternalApiLog.cs" />
     <Compile Include="Model\Fraud\FraudIovation.cs" />
     <Compile Include="Model\Fraud\FraudRequest.cs" />
-    <Compile Include="Model\Loans\BrokerSetupFeeMap.cs" />
+    <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanBrokerCommission.cs" />
     <Compile Include="Model\Loans\LoanLegal.cs" />
     <Compile Include="Model\Loans\LoanMap.cs" />
     <Compile Include="Model\Loans\LoanScheduleDeleted.cs" />
     <Compile Include="Model\Loans\LoanSource.cs" />
     <Compile Include="Model\Loans\LoanInterestFreeze.cs" />
-    <Compile Include="Model\Loans\LoanAgreementTemplate.cs" />
     <Compile Include="Model\Loans\LoanStatusType.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethod.cs" />
     <Compile Include="Model\Loans\InstallmentDelta.cs" />
@@ -339,7 +337,6 @@
     <Compile Include="Model\Fraud\FraudPhone.cs" />
     <Compile Include="Model\Fraud\FraudShop.cs" />
     <Compile Include="Model\Fraud\FraudUser.cs" />
-    <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanChangesHistory.cs" />
     <Compile Include="Model\Loans\LoanCharge.cs" />
     <Compile Include="Model\Loans\LoanChargesRepository.cs" />
@@ -355,7 +352,6 @@
     <Compile Include="Model\Database\DailyReportRow.cs" />
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
-    <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeMarketPlaceType.cs" />
     <Compile Include="Model\PayPointAccount.cs" />
     <Compile Include="Model\PayPointCard.cs" />
@@ -600,7 +596,7 @@
       <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\DbConstants\DbConstants.csproj">
-      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\LandRegistryLib\LandRegistryLib.csproj">

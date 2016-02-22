@@ -54,6 +54,15 @@ BEGIN
 								 FROM Loan l
 								 WHERE l.CustomerId = @CustomerID
 								 AND l.Status != 'PaidOff')
+								 
+	--get origin
+	DECLARE @Origin NVARCHAR(10) = (SELECT
+							 			o.Name
+								    FROM 
+								    	Customer c LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID	 
+									WHERE 
+										c.Id = @CustomerID
+								   )
 	
 	--final select						 
 	SELECT 
@@ -63,7 +72,8 @@ BEGIN
 		l.RefNum, 
 		CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate, 
 		l.[Date] LoanDate, 
-		@NumOfActiveLoans AS NumOfActiveLoans
+		@NumOfActiveLoans AS NumOfActiveLoans,
+		@Origin AS Origin
 	FROM 
 		loan l
 	WHERE

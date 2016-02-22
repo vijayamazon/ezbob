@@ -112,7 +112,7 @@ BEGIN
 		@CustomerStatusIsWarning AS CustomerStatusIsWarning,
 		@CustomerStatusName AS CustomerStatusName,
 		IsOffline,
-		Name AS CustomerEmail,
+		c.Name AS CustomerEmail,
 		Company.TypeOfBusiness AS CompanyType,
 		FirstName, 
 		Surname,
@@ -139,15 +139,17 @@ BEGIN
 		c.IsTest,
 		c.FilledByBroker,
 		ISNULL(@NumOfPreviousApprovals, 0) AS NumOfPreviousApprovals,
-		c.Fullname AS FullName
+		c.Fullname AS FullName,
+		o.Name AS Origin,
+		c.OriginID
 	FROM
 		Customer c
 		LEFT JOIN CustomerPropertyStatuses ps ON c.PropertyStatusId = ps.Id
 		LEFT JOIN Company ON Company.Id = c.CompanyId
+		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID 
 	WHERE
 		c.Id = @CustomerId
 
 	------------------------------------------------------------------------------
 END
-
 GO

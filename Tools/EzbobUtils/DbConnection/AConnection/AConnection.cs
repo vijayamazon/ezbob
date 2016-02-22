@@ -106,7 +106,7 @@
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
 			object oRes = Run(oConnectionToUse, ExecMode.Scalar, nSpecies, sQuery, aryParams);
 
-			if (oRes is DBNull)
+			if ((oRes == null) || (oRes is DBNull))
 				return default(T);
 
 			return (T)oRes;
@@ -243,6 +243,10 @@
 
 			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
+
+		public virtual ConnectionWrapper GetPersistentTransaction() {
+			return GetPersistent().BeginTransaction();
+		} // GetPersistentTransaction
 
 		public ConnectionWrapper TakeFromPool() {
 			PooledConnection pc = ms_oPool.Give();

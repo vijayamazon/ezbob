@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoReApproval;
-	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -171,16 +171,6 @@
 			return customers;
 		}
 
-		public OfferInterestRateRangeModelDb GetOfferIneterestRateRange(Medal medal) {
-			return _db.FillFirst<OfferInterestRateRangeModelDb>("AV_OfferInterestRateRange", CommandSpecies.StoredProcedure,
-				new QueryParameter("Medal", medal.ToString()));
-		}
-
-		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans) {
-			var model = _db.FillFirst<PricingScenarioModel>("AV_PricingScenario", new QueryParameter("Amount", amount), new QueryParameter("HasLoans", hasLoans));
-			return model;
-		}
-
 		public AvailableFunds GetAvailableFunds() {
 			var availableFunds = new AvailableFunds();
 			_db.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure)
@@ -204,7 +194,7 @@
 				new QueryParameter("CustomerId", customerId));
 		}
 
-		public void SaveOffer(OfferOutputModel offerOutputModel, OfferCalculationType type) {
+		public void SaveOffer(OfferOutputModel offerOutputModel) {
 			_db.ExecuteNonQuery("AV_StoreOffer", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", offerOutputModel.CustomerId),
 				new QueryParameter("CalculationTime", offerOutputModel.CalculationTime),
@@ -217,10 +207,13 @@
 				new QueryParameter("InterestRate", offerOutputModel.InterestRate),
 				new QueryParameter("SetupFee", offerOutputModel.SetupFee),
 				new QueryParameter("Error", offerOutputModel.Description),
-				new QueryParameter("Type", type.ToString()));
+				new QueryParameter("Type", "Verification"));
 		}
 
-		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID) {
+		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID, long? nlCashRequestID) {
+
+			nlCashRequestID = nlCashRequestID <= 0 ? null : nlCashRequestID;
+
 			if (model.WeightsDict != null) {
 				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))
 					model.WeightsDict[Parameter.BusinessScore] = new Weight();
@@ -319,7 +312,8 @@
 					new QueryParameter("CapOfferByCustomerScoresTable", model.CapOfferByCustomerScoresTable),
 					new QueryParameter("Tag", tag),
 					new QueryParameter("MaxOfferedLoanAmount", model.MaxOfferedLoanAmount),
-					new QueryParameter("CashRequestID", cashRequestID)
+					new QueryParameter("CashRequestID", cashRequestID),
+					new QueryParameter("NLCashRequestID", nlCashRequestID)
 				);
 			} else {
 				_db.ExecuteNonQuery(
@@ -332,7 +326,8 @@
 					new QueryParameter("Error", model.Error),
 					new QueryParameter("NumOfHmrcMps", 0),
 					new QueryParameter("CashRequestID", cashRequestID),
-					new QueryParameter("Tag", tag)
+					new QueryParameter("Tag", tag),
+					new QueryParameter("NLCashRequestID", nlCashRequestID)
 				);
 			} // if
 		} // StoreMedalVerification

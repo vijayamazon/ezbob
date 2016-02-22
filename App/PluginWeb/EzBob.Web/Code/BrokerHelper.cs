@@ -10,6 +10,7 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using log4net;
+	using StructureMap;
 
 	public class BrokerHelper {
 		public static void SetAuth(string sLoginEmail, HttpContextBase oContext = null, string sRole = "Broker") {
@@ -18,10 +19,14 @@
 			if (string.IsNullOrWhiteSpace(sLoginEmail)) {
 				FormsAuthentication.SignOut();
 				oNewUser = new GenericPrincipal(new GenericIdentity(string.Empty), null);
-			}
-			else {
+				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().RemoveSessionOrigin();
+			} else {
 				FormsAuthentication.SetAuthCookie(sLoginEmail, true);
 				oNewUser = new GenericPrincipal(new GenericIdentity(sLoginEmail), new [] { sRole });
+
+				Uri requestUrl = (oContext != null) ? oContext.Request.Url : HttpContext.Current.Request.Url;
+				CustomerOrigin uio = UiCustomerOrigin.Get(requestUrl);
+				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SetSessionOrigin(uio.GetOrigin());
 			} // if
 
 			if (oContext == null)
@@ -87,13 +92,12 @@
 			try {
 				bp = m_oServiceClient.Instance.BrokerLogin(
 					sLoginEmail,
-					new Password(sPassword),
+					new DasKennwort(sPassword), 
 					promotionName,
 					promotionPageVisitTime,
 					uio.CustomerOriginID
 				);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				m_oLog.Warn(
 					e,
 					"Error encountered while trying to login as a broker '{0}' with origin '{1}'.",
@@ -105,6 +109,7 @@
 
 			if ((bp != null) && (bp.Properties != null) && (bp.Properties.BrokerID > 0)) {
 				SetAuth(sLoginEmail);
+
 				m_oLog.Debug(
 					"Succeeded to login as broker '{0}' with origin '{1}', authenticated name is '{2}'.",
 					sLoginEmail,

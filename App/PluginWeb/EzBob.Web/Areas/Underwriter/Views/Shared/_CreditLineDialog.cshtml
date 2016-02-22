@@ -2,126 +2,126 @@
 
 <script id="credit-line-dialog-template" type="text/template">
 	<div class="modal-body">
-		<form id="credit-line-form" class="form-horizontal" action="/" method="POST">
-			<div class="row">
-				<div class="span8">
-					<div class="control-group">
-						<label for="loan-type" class="control-label">Loan Type:</label>
-						<div class="controls">
-							<select id="loan-type" name="loan-type" class="valid form-control selectheight">
-                                <% _.each(LoanTypes, function(loanType) {
-									var selected = (loanType.Id == LoanTypeId) ? "selected='selected'" : "";%>
-                                    <option <%= selected  %> value="<%=loanType.Id%>"><%=loanType.Name%></option>
-                                <%});%>
-                            </select>
-						</div>
-					</div>
-                    
-                    <div class="control-group">
-                        <label for="loan-type" class="control-label">Loan Source:</label>
-                        <div class="controls">
-							<select id="loan-source" name="loan-source" class="valid form-control selectheight">
-								<% _.each(AllLoanSources, function(loanSource) {
-								var selected = (loanSource.Id == LoanSourceID) ? "selected='selected'" : ""; %>
-								<option <%= selected  %> value="<%=loanSource.Id%>"><%=loanSource.Name%></option>
-								<%});%>
-							</select>
-                        </div>
-                    </div>
-
-					<div class="control-group">
-						<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
-						<div class="controls cashControlls">
-							<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="interestRate" class="control-label">Interest rate:</label>
-						<div class="controls cashControlls">
-							<input name="interestRate" id="interestRate" type="text" class="form-control" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="repaymentPeriod" class="control-label">Repayment period:</label>
-						<div class="controls">
-							<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="startingFromDate" class="control-label">Starting from date:</label>
-						<div class="controls">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input name="startingFromDate" id="startingFromDate" type="text" class="form-control" />
-							</div>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="offerValidUntil" class="control-label">Offer valid until:</label>
-						<div class="controls">
-							<div class="input-group">
-								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-								<input name="offerValidUntil" id="offerValidUntil" type="text" class="form-control" />
-							</div>
-						</div>
-					</div>
-                    
-					<div class="control-group">
-						<label for="manualSetupFeePercent" class="control-label">Manual setup fee percent:</label>
-						<div class="controls">
-							<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control" />
-						</div>
-					</div>
-                    
-                    <div class="control-group">
-                        <label for="brokerSetupFeePercent" class="control-label">Broker setup fee percent:</label>
-                        <div class="controls">
-                            <input name="brokerSetupFeePercent" id="brokerSetupFeePercent" type="text" class="form-control" />
-                        </div>
-                    </div>
-					
-                    <div class="control-group">
-						<label for="allowSendingEmail" class="control-label">Send Emails:</label>
-						<div class="controls">
-							<input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" />
-						</div>
-					</div>
-                    
-                    <div class="control-group">
-                        <label for="loanTypeSelection" class="control-label">Loan type selection allowed:</label>
-                        <div class="controls">
-                            <input name="loanTypeSelection" id="loanTypeSelection" type="checkbox" class="form-control" />
-                        </div>
-                    </div>
-                    
-                    <div class="control-group">
-                        <label for="repaymentPeriodSelection" class="control-label">Repayment period selection allowed:</label>
-                        <div class="controls">
-                            <input name="repaymentPeriodSelection" id="repaymentPeriodSelection" type="checkbox" class="form-control" />
-                        </div>
-                    </div>
-
-					<div class="control-group">
-						<label for="loan-type" class="control-label">Discount Plan:</label>
-						<div class="controls">
-							<select id="discount-plan" name="discount-plan" class="valid form-control selectheight"><%
-								_.each(DiscountPlans, function(discountPlan) {
-									var selected = (discountPlan.Id == DiscountPlanId) ? "selected='selected'" : "";
-									%><option <%= selected  %> value="<%=discountPlan.Id%>"><%=discountPlan.Name%></option><%
-								});
-							%></select>
-						</div>
-					</div>
-
+		<div class="box">
+			<div class="box-content">
+				<div>
+					<span name="origin"></span> <span name="broker"></span> customer <span name="gradeValue"></span> <span name="subGradeValue"></span>, requested loan of <span name="requestedLoanAmount"></span> for <span name="requestedLoanTerm"></span> months
 				</div>
+				<div id="error-message" class="red_cell"></div>
+			</div>
+		</div>
+		<form id="credit-line-form" class="form-horizontal" action="/" method="POST">
+			
+			<div class="row">
+				<div class="control-group">
+					<label for="product" class="control-label">Product:</label>
+					<div class="controls">
+						<select id="product" name="product" class="form-control selectheight"></select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="product-type" class="control-label">Product type:</label>
+					<div class="controls">
+						<select id="product-type" name="product-type" class="form-control selectheight"></select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="loan-type" class="control-label">Loan type:</label>
+					<div class="controls">
+						<select id="loan-type" name="loan-type" class="form-control selectheight"></select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="loan-type" class="control-label">Loan Source:</label>
+					<div class="controls">
+						<select id="loan-source" name="loan-source" class="form-control selectheight"></select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label for="loan-type" class="control-label">Funding type (Open platform):</label>
+					<div class="controls">
+						<input name="funding-type" id="funding-type" type="text" class="form-control" readonly="readonly" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
+					<div class="controls" data-toggle="tooltip">
+						<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control tltp" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="interestRate" class="control-label">Interest rate:</label>
+					<div class="controls" data-toggle="tooltip">
+						<input name="interestRate" id="interestRate" type="text" class="form-control tltp" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="repaymentPeriod" class="control-label">Repayment period:</label>
+					<div class="controls" data-toggle="tooltip">
+						<input name="repaymentPeriod" id="repaymentPeriod" type="text" class="form-control tltp" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="startingFromDate" class="control-label">Starting from date:</label>
+					<div class="controls">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							<input name="startingFromDate" id="startingFromDate" type="text" class="form-control" />
+						</div>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="offerValidUntil" class="control-label">Offer valid until:</label>
+					<div class="controls">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							<input name="offerValidUntil" id="offerValidUntil" type="text" class="form-control" />
+						</div>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="manualSetupFeePercent" class="control-label">Manual setup fee percent:</label>
+					<div class="controls" data-toggle="tooltip">
+						<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control tltp" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="brokerSetupFeePercent" class="control-label">Broker setup fee percent:</label>
+					<div class="controls">
+						<input name="brokerSetupFeePercent" id="brokerSetupFeePercent" type="text" class="form-control" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="spreadSetupFee" class="control-label">Spread setup fee: <input name="spreadSetupFee" id="spreadSetupFee" type="checkbox" class="form-control" /></label>
+					<label for="allowSendingEmail" class="control-label">Send Emails: <input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" /></label>
+					<label for="loanTypeSelection" class="control-label">Loan type selection allowed: <input name="loanTypeSelection" id="loanTypeSelection" type="checkbox" class="form-control" /></label>
+					<label for="repaymentPeriodSelection" class="control-label">Repayment period selection allowed: <input name="repaymentPeriodSelection" id="repaymentPeriodSelection" type="checkbox" class="form-control" /></label>
+				</div>
+				
+				<div class="control-group">
+					<label for="loan-type" class="control-label">Discount Plan:</label>
+					<div class="controls">
+						<select id="discount-plan" name="discount-plan" class="valid form-control selectheight"></select>
+					</div>
+				</div>
+
 			</div>
 		</form>
 	</div>
 	<div class="pull-right">
+		<button class="btn btn-primary btnLogicalGlue" style="display: none;">Check logical glue</button>
 		<button class="btn btn-primary btnOk">OK</button>
 	</div>
 </script>

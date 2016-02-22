@@ -40,8 +40,9 @@ EzBob.Underwriter.JournalView = Backbone.Marionette.ItemView.extend({
 				    CustomerSelection: null,
 				    UW: crm.User,
 				    Comment: crm.Comment,
-				    IsCrm: true
-			    });
+				    IsCrm: true,
+				    IsOpenPlatform: null
+				});
 		    });
     	}
 
@@ -62,7 +63,8 @@ EzBob.Underwriter.JournalView = Backbone.Marionette.ItemView.extend({
 				    CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? 'Yes' : 'No'),
 				    UW: dh.UnderwriterName,
 				    Comment: dh.Comment,
-				    IsCrm: false
+				    IsCrm: false,
+					IsOpenPlatform: dh.IsOpenPlatform
 			    });
 		    });
 	    }
@@ -85,7 +87,7 @@ EzBob.Underwriter.JournalView = Backbone.Marionette.ItemView.extend({
     				bAutoWidth: true,
     				aaData: this.journal,
 					aoData: [],
-    				aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment,~IsCrm'),
+    				aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,IsOpenPlatform,UW,Comment,~IsCrm'),
     				aoColumnDefs: [
                         {
                         	"aTargets": [1],

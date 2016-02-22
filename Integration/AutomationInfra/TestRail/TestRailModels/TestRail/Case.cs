@@ -6,8 +6,7 @@
 
     /// <summary>stores information about a case</summary>
     [Serializable]
-    public class Case
-    {
+    public class Case {
         #region Public Properties
         /// <summary>id of the case</summary>
         public ulong? ID { get; set; }
@@ -56,16 +55,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Title;
         }
 
         /// <summary>parses json into a case</summary>
         /// <param name="json">json to parse</param>
         /// <returns>case corresponding to the json</returns>
-        public static Case Parse(JObject json)
-        {
+        public static Case Parse(JObject json) {
             Case c = new Case();
             c.ID = (ulong?)json["id"];
             c.Title = (string)json["title"];
@@ -81,7 +78,7 @@
             c.SuiteID = (ulong)json["suite_id"];
             c.CustomPreConds = (string)json["custom_preconds"];
 
-            JavaScriptSerializer  jss = new JavaScriptSerializer();
+            JavaScriptSerializer jss = new JavaScriptSerializer();
             var jsonSteps = json["custom_steps_separated"];
             var steps = new List<Step>();
 
@@ -91,7 +88,7 @@
 
             c.Steps = steps;
             //var steps = jss.Deserialize<List<Step>>();
-            
+
             //c.Steps = Step.Parse();
 
             JArray jarray = json["custom_label"] as JArray;
@@ -100,8 +97,7 @@
             return c;
         }
 
-        public virtual JObject GetJson()
-        {
+        public virtual JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Title)) { jsonParams.title = Title; }
             if (null != TypeID) { jsonParams.type_id = TypeID.Value; }
@@ -113,8 +109,7 @@
             return jsonParams;
         }
 
-        public virtual JObject GetJsonExtention()
-        {
+        public virtual JObject GetJsonExtention() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Title)) { jsonParams.title = Title; }
             if (null != TypeID) { jsonParams.type_id = TypeID.Value; }

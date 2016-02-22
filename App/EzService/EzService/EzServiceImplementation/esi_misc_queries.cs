@@ -7,7 +7,6 @@
 	using Ezbob.Backend.Strategies.ManualDecision;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
@@ -18,10 +17,6 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData BackfillLandRegistry2PropertyLink() {
-			BackfillLandRegistry2PropertyLink instance;
-			return ExecuteSync(out instance, 0, 0);
-		}
 
 		public ActionMetaData BackfillMedalForAll() {
 			return Execute<BackfillMedalForAll>(null, null);
@@ -45,20 +40,26 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID) {
+		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID) {
 			CalculateMedal instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, DateTime.UtcNow, false, true);
-		}
 
-		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification) {
-			CalculateOffer instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, amount, hasLoans, medalClassification);
-		}
+			var args = new ExecuteArguments(customerId, cashRequestID, nlCashRequestID, DateTime.UtcNow, false, true) {
+				CustomerID = customerId,
+				UserID = underwriterId,
+				OnSuccess = (stra, amd) => {
+					try {
+						var calcMedalStra = stra as CalculateMedal;
 
-		public ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword) {
-			ChangeBrokerEmail instance;
-			return ExecuteSync(out instance, 0, 0, oldEmail, newEmail, newPassword);
-		}
+						if (calcMedalStra != null)
+							calcMedalStra.Notify();
+					} catch (Exception e) {
+						Log.Alert(e, "Failed to send notifications from CalculateMedal strategy.");
+					} // try
+				},
+			};
+
+			return ExecuteSync(out instance, args);
+		} // CalculateMedal
 
 		public NullableDateTimeActionResult GetCompanySeniority(int customerId, bool isLimited, int underwriterId) {
 			GetCompanySeniority instance;
@@ -111,21 +112,6 @@
 				MetaData = result,
 				Value = instance.CurrentBalance
 			};
-		}
-
-		public PropertyStatusesActionResult GetPropertyStatuses() {
-			GetPropertyStatuses instance;
-
-			ActionMetaData result = ExecuteSync(out instance, 0, 0);
-
-			return new PropertyStatusesActionResult {
-				MetaData = result,
-				Groups = instance.Groups
-			};
-		}
-
-		public ActionMetaData GetZooplaData(int customerId, bool reCheck) {
-			return ExecuteSync<ZooplaStub>(customerId, null, customerId, reCheck);
 		}
 
 		public BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType) {
@@ -225,8 +211,8 @@
 			return true;
 		}
 
-		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
-			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
+		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail,decimal? balance = null, bool? isPaidOff = null) {
+			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, sendMail, balance, isPaidOff);
 		}
 
 		public ActionMetaData BackfillBrokerCommissionInvoice() {
@@ -294,5 +280,50 @@
 				},
 			};
 		} // SetManualDecision
+
+		public MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID) {
+			BuildMultiBrandLoanSummary instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID);
+
+			return new MultiBrandLoanSummaryActionResult {
+				MetaData = amd,
+				Summary = instance.Result,
+			};
+		} // BuildMultiBrandLoanSummary
+
+		public DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID) {
+			Ezbob.Backend.Strategies.Misc.LoadDecisionHistory instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, underwriterID, customerID);
+
+			return new DecisionHistoryResult {
+				MetaData = amd,
+				Model = instance.Result,
+			};
+
+		}
+
+		public MessagesListActionResult LoadMessagesSentToUser(int userID) {
+			LoadMessagesSentToUser instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, userID);
+
+			return new MessagesListActionResult {
+				MetaData = amd,
+				Messages = instance.Result,
+			};
+		} // LoadMessagesSentToUser
+
+		public SlidersDataActionResults GetSlidersData(int customerID) {
+			GetSlidersData instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID);
+
+			return new SlidersDataActionResults {
+				MetaData = amd,
+				SlidersData = instance.Result,
+			};
+		} // GetSlidersBoundaries
 	} // class EzServiceImplementation
 } // namespace EzService

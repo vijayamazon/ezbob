@@ -81,6 +81,7 @@ ALTER PROCEDURE AV_StoreNewMedal
 ,@Tag NVARCHAR(256)
 ,@MaxOfferedLoanAmount INT
 ,@CashRequestID BIGINT
+,@NLCashRequestID BIGINT =NULL
 )
 AS
 BEGIN
@@ -175,6 +176,7 @@ BEGIN
 		,TrailTagID
 		,MaxOfferedLoanAmount
 		,CashRequestID
+		,NLCashRequestID 
 	) VALUES
 		(@CustomerId
 		,@CalculationTime
@@ -252,6 +254,7 @@ BEGIN
 		,@TagID
 		,@MaxOfferedLoanAmount
 		,@CashRequestID
+		,@NLCashRequestID 
 	)
 END
 GO

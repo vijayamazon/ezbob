@@ -8,12 +8,18 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using log4net;
+	using ServiceClientProxy;
+	using FrontRequestedLoanModel = EzBob.Web.Areas.Customer.Models.RequestedLoanModel;
 
 	public class CustomerRequestedLoanController : Controller {
+		private readonly ServiceClient serviceClient;
+
 		public CustomerRequestedLoanController(
+			ServiceClient serviceClient,
 			IEzbobWorkplaceContext oContext,
 			CustomerRepository customerRepository
 		) {
+			this.serviceClient = serviceClient;
 			this.context = oContext;
 			this.customerRepository = customerRepository;
 		} // constructor
@@ -23,16 +29,28 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult RequestedLoan() {
 			var customer = this.context.Customer;
-			var requestedLoan = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault() ?? new CustomerRequestedLoan();
-			Log.Info("Load requested loan for customer " + customer.Id + " " + requestedLoan.Amount + " " + requestedLoan.Term);
-			return Json(requestedLoan, JsonRequestBehavior.AllowGet);
+			var slidersResult = this.serviceClient.Instance.GetSlidersData(customer.Id);
+
+			var requestedLoanResult = new EzBob.Web.Areas.Customer.Models.RequestedLoanModel {
+				CustomerId = customer.Id,
+				Amount = (double?)slidersResult.SlidersData.Amount,
+				Term = slidersResult.SlidersData.Term,
+				MinLoanAmount = slidersResult.SlidersData.MinLoanAmount,
+				MaxLoanAmount = slidersResult.SlidersData.MaxLoanAmount,
+				MinTerm = slidersResult.SlidersData.MinTerm,
+				MaxTerm = slidersResult.SlidersData.MaxTerm
+			};
+
+			Log.Info("Load requested loan for customer " + customer.Id + " of amount " + slidersResult.SlidersData.Amount + " for term of " + slidersResult.SlidersData.Term);
+
+			return Json(requestedLoanResult, JsonRequestBehavior.AllowGet);
 		} // RequestedLoan Get
 
 		[Transactional]
 		[Ajax]
 		[HttpPut]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult RequestedLoan(CustomerRequestedLoan requested) {
+		public JsonResult RequestedLoan(FrontRequestedLoanModel requested) {
 			
 			var customer = this.context.Customer;
 			Log.Info("Save requested loan for customer " + customer.Id);
@@ -44,7 +62,14 @@
 			};
 			customer.CustomerRequestedLoan.Add(requestedLoan);
 			this.customerRepository.Save(customer);
-			return Json(requestedLoan, JsonRequestBehavior.AllowGet);
+
+			var requestedLoanResult = new FrontRequestedLoanModel {
+				Created = DateTime.UtcNow,
+				Amount = requested.Amount,
+				Term = requested.Term,
+				CustomerId = customer.Id
+			};
+			return Json(requestedLoanResult, JsonRequestBehavior.AllowGet);
 		} // RequestedLoan Save
 
 

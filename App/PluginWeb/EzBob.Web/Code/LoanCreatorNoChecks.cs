@@ -1,13 +1,11 @@
 ﻿namespace EzBob.Web.Code {
-	using System;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Loans;
-	using Agreements;
-	using Infrastructure;
-	using NHibernate;
-	using PaymentServices.PacNet;
+    using System;
+    using EzBob.Web.Infrastructure;
+    using EZBob.DatabaseLib.Model.Database;
+    using NHibernate;
+    using PaymentServices.PacNet;
 
-	public class LoanCreatorNoChecks : LoanCreator {
+    public class LoanCreatorNoChecks : LoanCreator {
 		public LoanCreatorNoChecks(
 			IPacnetService pacnetService,
 			IAgreementsGenerator agreementsGenerator,

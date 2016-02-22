@@ -8,7 +8,6 @@
 	using AutomationCalculator.ProcessHistory.ReApproval;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -17,12 +16,20 @@
 	public class Agent : AAutoDecisionBase {
 		public virtual ReapprovalTrail Trail { get; private set; }
 
-		public virtual decimal ApprovedAmount { get; private set; }
+		public virtual int ApprovedAmount { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID);
+			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
+			this.tag = tag;
 		} // constructor
 
 		public virtual Agent Init() {
@@ -36,11 +43,14 @@
 			Trail = new ReapprovalTrail(
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+
+			Trail.SetTag(this.tag);
 
 			Funds = new AvailableFunds();
 
@@ -49,88 +59,63 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision(string tag) {
-			Trail.SetTag(tag);
-			RunPrimary();
-
-			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
-
-			bool bSuccess = Trail.EqualsTo(oSecondary.Trail);
-
-			WasMismatch = !bSuccess;
-
-			Log.Debug("Status check result: {0}.", bSuccess ? "success" : "fail");
-
-			if (bSuccess && Trail.HasDecided) {
-				Log.Debug("Match and approved.");
-
-				if (ApprovedAmount == oSecondary.Result.ReApproveAmount) {
-					Log.Debug("Match and approved and same amount of {0}.", ApprovedAmount);
-
-					Trail.Affirmative<SameAmount>(false).Init(ApprovedAmount);
-					oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-				} else {
-					Log.Debug(
-						"Match and approved but different amount: {0} vs {1}.",
-						ApprovedAmount,
-						oSecondary.Result.ReApproveAmount
-					);
-
-					Trail.Negative<SameAmount>(false).Init(ApprovedAmount);
-					oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
-
-					bSuccess = false;
-					WasMismatch = true;
-				} // if
-			} // if
-
-			Trail.Save(DB, oSecondary.Trail);
-
-			return bSuccess;
-		} // MakeAndVerifyDecision
-
-		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
+		public override void MakeAndVerifyDecision() {
 			try {
-				if (MakeAndVerifyDecision(tag) && Trail.HasDecided) {
-					response.HasApprovalChance = true;
-					response.AutoApproveAmount = (int)ApprovedAmount;
-					response.Decision = DecisionActions.ReApprove;
-					response.CreditResult = CreditResultStatus.Approved;
-					response.UserStatus = Status.Approved;
-					response.SystemDecision = SystemDecision.Approve;
-					response.LoanOfferUnderwriterComment = "Auto Re-Approval";
-					response.DecisionName = "Re-Approval";
-					response.AppValidFor = Now.AddDays(MetaData.OfferLength);
-					response.LoanOfferEmailSendingBannedNew = MetaData.IsEmailSendingBanned;
+				RunPrimary();
 
-					var sr = DB.GetFirst(
-						"RapprovalGetLastApproveTerms",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("LacrID", MetaData.LacrID)
-					);
+				AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
 
-					response.InterestRate = sr["InterestRate"];
-					response.RepaymentPeriod = sr["RepaymentPeriod"];
-					response.SetupFee = sr["ManualSetupFeePercent"];
-					response.LoanTypeID = sr["LoanTypeID"];
-					response.LoanSourceID = sr["LoanSourceID"];
-					response.IsCustomerRepaymentPeriodSelectionAllowed = sr["IsCustomerRepaymentPeriodSelectionAllowed"];
-					response.BrokerSetupFeePercent = sr["BrokerSetupFeePercent"];
-					response.SpreadSetupFee = sr["SpreadSetupFee"];
+				WasMismatch = !Trail.EqualsTo(oSecondary.Trail);
+
+				Log.Debug("Auto re-approval matching result: {0}match.", WasMismatch ? "mis" : string.Empty);
+
+				if (!WasMismatch && Trail.HasDecided) {
+					Log.Debug("Match and approved.");
+
+					if (ApprovedAmount == oSecondary.Result.ReApproveAmount) {
+						Log.Debug("Auto re-approval: match and approved and same amount of {0}.", ApprovedAmount);
+
+						Trail.Affirmative<SameAmount>(false).Init(ApprovedAmount);
+						oSecondary.Trail.Affirmative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+					} else {
+						Log.Debug(
+							"Auto re-approval: match and approved but different amounts: {0} primary vs {1} secondary.",
+							ApprovedAmount,
+							oSecondary.Result.ReApproveAmount
+						);
+
+						Trail.Negative<SameAmount>(false).Init(ApprovedAmount);
+						oSecondary.Trail.Negative<SameAmount>(false).Init(oSecondary.Result.ReApproveAmount);
+
+						WasMismatch = true;
+					} // if
 				} // if
+
+				Output.ApprovedAmount = ApprovedAmount;
+
+				Trail.Save(DB, oSecondary.Trail);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during re-approval.");
 				StepFailed<ExceptionThrown>().Init(e);
+				Output.ApprovedAmount = 0;
 			} // try
+		} // MakeAndVerifyDecision
 
-			Log.Msg("Auto re-approved amount: {0}.", ApprovedAmount);
-		} // MakeDecision
+		public override bool WasException {
+			get { return Trail.FindTrace<ExceptionThrown>() != null; }
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
+
+		public virtual DateTime Now { get; protected set; }
+
+		public AutoReapprovalOutput Output { get; private set; }
 
 		protected virtual Configuration InitCfg() {
 			return new Configuration(DB, Log);
 		} // InitCfg
-
-		protected virtual DateTime Now { get; set; }
 
 		protected virtual AConnection DB { get; private set; }
 
@@ -178,6 +163,12 @@
 			Trail.MyInputData.AutoReApproveMaxLatePayment = Cfg.MaxLatePayment;
 			Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans = Cfg.MaxNumOfOutstandingLoans;
 			Trail.MyInputData.MinLoan = ConfigManager.CurrentValues.Instance.MinLoan;
+
+			Output = new AutoReapprovalOutput {
+				AppValidFor = Now.AddHours(MetaData.OfferLength),
+				IsEmailSendingBanned = MetaData.IsEmailSendingBanned,
+				LastApprovedCashRequestID = MetaData.LacrID,
+			};
 		} // GatherData
 
 		protected virtual AvailableFunds Funds { get; set; }
@@ -223,6 +214,7 @@
 				Log,
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Trail.InputData.DataAsOf
 			);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
@@ -319,7 +311,7 @@
 
 		private void SetApprovedAmount() {
 			if (Trail.HasDecided)
-				ApprovedAmount = Math.Truncate(MetaData.ApprovedAmount);
+				ApprovedAmount = (int)Math.Truncate(MetaData.ApprovedAmount);
 
 			if (ApprovedAmount > 0)
 				StepDone<ApprovedAmount>().Init(ApprovedAmount);
@@ -380,5 +372,7 @@
 		private T StepDone<T>() where T : ATrace {
 			return Trail.Affirmative<T>(false);
 		} // StepFailed
+
+		private readonly string tag;
 	} // class Agent
 } // namespace

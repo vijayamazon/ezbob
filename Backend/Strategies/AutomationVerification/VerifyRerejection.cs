@@ -13,12 +13,18 @@
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
-			return new ReRejection(
+			var agent = new ReRejection(
 				oRow.CustomerId,
 				null,
+				null,
+				Tag,
 				DB,
 				Log
-			).MakeAndVerifyDecision(Tag);
+			);
+			
+			agent.MakeAndVerifyDecision();
+
+			return !agent.WasMismatch;
 		} // MakeAndVerifyDecision
 	} // class VerifyRerejection
 } // namespace

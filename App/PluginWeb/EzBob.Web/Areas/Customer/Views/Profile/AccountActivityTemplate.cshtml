@@ -9,13 +9,12 @@
 		<table class="table">
 		<thead>
 			<tr>
-				<th width="15%">Ref. No.</th>
-				<th width="15%">Origination Date</th>
-				<th width="14%">Loan Amount</th>
-				<th width="13%">Status</th>
-				<th width="14%">Open Balance end of term</th>
-				<th width="14%">Open Balance for today</th>
-				<th width="15%"></th>
+				<th width="180px">Ref. No.</th>
+				<th width="179px">Origination Date</th>
+				<th width="159px">Loan Amount</th>
+				<th width="104px">Status</th>
+				<th width="149px">Open Balance end of term</th>
+				<th width="170px"></th>
 			</tr>
 		</thead>
 		<tbody><%
@@ -27,7 +26,6 @@
 					<td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
 					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
 					<td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
-				  	<td><%-EzBob.formatPounds(loan.TotalEarlyPayment)%></td>
 					<td class="last" width="100">
 						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> clean-btn" ui-event-control-id="dashboard:loan-details">Details</a>
 					</td>

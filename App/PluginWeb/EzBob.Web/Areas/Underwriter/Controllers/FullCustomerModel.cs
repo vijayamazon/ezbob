@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.ApplicationInfo;
+	using Ezbob.Backend.ModelsWithDB.ApplicationInfo;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Models;
 

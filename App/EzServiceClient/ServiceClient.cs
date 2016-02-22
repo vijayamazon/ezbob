@@ -52,7 +52,7 @@
 			} // get
 		} // ServiceClient
 
-		private static volatile EzServiceClient ms_oServiceClient;
+		private static EzServiceClient ms_oServiceClient;
 		private static readonly object ms_oInstanceLock = new Object();
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(ServiceClient));

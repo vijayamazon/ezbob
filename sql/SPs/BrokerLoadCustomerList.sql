@@ -7,6 +7,7 @@ GO
 
 ALTER PROCEDURE BrokerLoadCustomerList
 @ContactEmail NVARCHAR(255),
+@Origin INT,
 @BrokerID INT
 AS
 BEGIN
@@ -27,6 +28,8 @@ BEGIN
 			Broker
 		WHERE
 			ContactEmail = @ContactEmail
+			AND
+			OriginID = @Origin
 	END
 	ELSE BEGIN
 		SELECT
@@ -38,35 +41,28 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-	;WITH
-	last_cashrquests AS (
+
+	;WITH last_cashrquests AS (
 		SELECT 
 			MAX(cr.Id) maxid  
 		FROM 
 			CashRequests cr 
-		INNER JOIN 
-			Customer c 
-		ON 
-			c.BrokerID = @BrokerID	
-		GROUP BY cr.IdCustomer
-	),
-	
-	last_cashrquests_prepare AS (
+			INNER JOIN Customer c
+				ON cr.IdCustomer = c.Id
+				AND c.BrokerID = @BrokerID	
+		GROUP BY
+			cr.IdCustomer
+	), last_cashrquests_prepare AS (
 		SELECT 
 			cr.Id,
 			cr.IdCustomer,
 			cr.ManagerApprovedSum
 		FROM 
 			CashRequests cr 
-		INNER JOIN
-		  	last_cashrquests lcr 
-		ON 
-			lcr.maxid = cr.Id
+			INNER JOIN last_cashrquests lcr ON lcr.maxid = cr.Id
 		WHERE
 			cr.UnderwriterDecision = 'Approved'	
-	)
-	
-  	SELECT
+	) SELECT
 		c.Id AS CustomerID,
 		c.FirstName AS FirstName,
 		c.Surname AS LastName,
@@ -100,28 +96,20 @@ BEGIN
 		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
-		INNER JOIN 
-			WizardStepTypes w 
-		ON 
-			c.WizardStep = w.WizardStepTypeID
-		LEFT JOIN 
-			Loan l 
-		ON 
-			l.CustomerId = c.Id AND l.Position = 0
-	  	LEFT JOIN 
-	  		last_cashrquests_prepare lcp 
-	  	ON 
-	  		lcp.IdCustomer = c.Id
-		LEFT JOIN 
-			LoanBrokerCommission lb 
-		ON 
-			lb.LoanID = l.Id
-		WHERE
-			c.BrokerID = @BrokerID
+		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
+		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
+		LEFT JOIN last_cashrquests_prepare lcp ON lcp.IdCustomer = c.Id
+		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
+	WHERE
+		c.BrokerID = @BrokerID
 		AND
-			c.OriginID = @BrokerOriginID
+		c.OriginID = @BrokerOriginID
 	ORDER BY
 		c.Id
+
 	------------------------------------------------------------------------------
 END
+
 GO
+
+

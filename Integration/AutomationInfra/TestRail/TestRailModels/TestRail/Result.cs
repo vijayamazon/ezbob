@@ -3,8 +3,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about the result of a test</summary>
-    public class Result
-    {
+    public class Result {
         #region Public Properties
         /// <summary>ID of the result</summary>
         public ulong ID { get; set; }
@@ -42,15 +41,13 @@
         /// string representation of the object
         /// </summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return string.Format("{0}:{1}", ID, Comment);
         }
         /// <summary>Parse the JSON into a Result</summary>
         /// <param name="json">json object to parse</param>
         /// <returns>a Result</returns>
-        public static Result Parse(JObject json)
-        {
+        public static Result Parse(JObject json) {
             Result r = new Result();
             r.ID = (ulong)json["id"];
             r.TestID = (ulong)json["test_id"];
@@ -67,8 +64,7 @@
 
         /// <summary>Returns a json object that represents this class</summary>
         /// <returns>json object that represents this class</returns>
-        public virtual JObject GetJson()
-        {
+        public virtual JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (null != StatusID) { jsonParams.status_id = (int)StatusID; }
             if (null != Comment) { jsonParams.comment = Comment; }

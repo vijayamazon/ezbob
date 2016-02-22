@@ -98,12 +98,16 @@
 
 	.broker-finish-inner {
 		border: 1px solid #E2E3E5;
-		padding: 0;
+        margin: 0 auto;
+         padding: 20px;
 	}
 
 	.broker-finish-wizard-later .button-container button {
 		position: relative;
 		margin-top: 5px;
+            display: block;
+    margin-bottom: 20px;
+
 	}
 
 	div.wizard-director-text {
@@ -608,6 +612,14 @@
 	.header-info-text,
 	.header-info-right {
 		background: none;
+	}
+
+	.input-tag-wrap.fca-radio {
+		display: inline-block;
+	}
+
+	input#NonFCARegistered {
+		margin-left: 0;
 	}
 }
 

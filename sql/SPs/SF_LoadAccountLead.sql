@@ -55,7 +55,10 @@ BEGIN
         b.ContactName AS BrokerName,
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
-        b.ContactMobile AS BrokerPhoneNumber
+        b.ContactMobile AS BrokerPhoneNumber,
+		b.BrokerID AS BrokerID,
+        cs.Name AS CollectionStatus,
+        ecs.Name AS ExternalCollectionStatus
     FROM Customer c 
     LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
     LEFT JOIN Company co ON co.Id = c.CompanyId
@@ -63,6 +66,8 @@ BEGIN
     LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
     LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
     LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
+    LEFT JOIN CustomerStatuses cs ON cs.Id = c.CollectionStatus
+    LEFT JOIN ExternalCollectionStatuses ecs ON ecs.ExternalCollectionStatusID = c.ExternalCollectionStatusID
     WHERE c.Id=@CustomerID
     
     RETURN
@@ -73,10 +78,12 @@ IF @IsVipLead = 1
 BEGIN
     SELECT TOP 1 
         v.Email AS Email,
+        CAST(v.CustomerId AS NVARCHAR(10)) AS CustomerID,
         isnull(v.Fullname, 'NoName') AS Name,
         v.Phone AS PhoneNumber,
         'VIP' AS EzbobSource,
-        v.RequestDate AS RegistrationDate
+        v.RequestDate AS RegistrationDate,
+        'ezbob' AS Origin
     FROM VipRequest v
     WHERE v.Email = @Email
     ORDER BY v.Id DESC
@@ -88,6 +95,7 @@ IF @IsBrokerLead = 1
 BEGIN
     SELECT 
         l.Email AS Email,
+        CAST(l.CustomerID AS NVARCHAR(10)) AS CustomerID,
         isnull(l.FirstName, '') + ' ' + isnull(l.LastName, '') AS Name,
         l.DateCreated AS RegistrationDate,
         'Broker lead' AS EzbobSource,
@@ -95,9 +103,13 @@ BEGIN
         b.ContactName AS BrokerName,
         b.FirmName AS BrokerFirmName,
         b.ContactEmail AS BrokerEmail,
-        b.ContactMobile AS BrokerPhoneNumber
+        b.ContactMobile AS BrokerPhoneNumber,
+		b.BrokerID AS BrokerID,
+        o.Name AS Origin,
+        b.IsTest AS IsTest
     FROM BrokerLeads l 
     INNER JOIN Broker b ON b.BrokerID = l.BrokerID
+    INNER JOIN CustomerOrigin o ON o.CustomerOriginID = b.OriginID
     WHERE l.Email = @Email
    RETURN    
 END
@@ -107,6 +119,5 @@ SELECT @Email AS Email,
        'Unknown' AS EzbobSource
 
 END
-
 GO
 

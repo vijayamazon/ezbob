@@ -11,10 +11,9 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class AccountSettingsController : Controller {
-
 		public AccountSettingsController(IWorkplaceContext context) {
-			m_oContext = context;
-			m_oServiceClient = new ServiceClient();
+			this.context = context;
+			this.serviceClient = new ServiceClient();
 		} // constructor
 
 		[Ajax]
@@ -25,26 +24,24 @@
 			bool bSuccess = false;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.CustomerChangePassword(
-					m_oContext.User.Name,
-					new Password(oldPassword),
-					new Password(newPassword)
+				StringActionResult sar = this.serviceClient.Instance.CustomerChangePassword(
+					this.context.User.Name,
+					UiCustomerOrigin.Get().GetOrigin(),
+					new DasKennwort(oldPassword),
+					new DasKennwort(newPassword)
 				);
 
 				sErrorMsg = sar.Value;
 
 				bSuccess = string.IsNullOrWhiteSpace(sErrorMsg);
-
-				if (bSuccess)
-					m_oContext.User.IsPasswordRestored = false;
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update password for customer '{0}'.", m_oContext.User.Name);
+				ms_oLog.Alert(e, "Failed to update password for customer '{0}'.", this.context.User.Name);
 				sErrorMsg = "Failed to update password.";
 				bSuccess = false;
 			} // try
 
 			return Json(new { success = bSuccess, error = sErrorMsg, });
-		}
+		} // ChangePassword
 
 		[Ajax]
 		[HttpPost]
@@ -54,9 +51,10 @@
 			bool bSuccess = false;
 
 			try {
-				StringActionResult sar = m_oServiceClient.Instance.UserUpdateSecurityQuestion(
-					m_oContext.User.Name,
-					new Password(password),
+				StringActionResult sar = this.serviceClient.Instance.UserUpdateSecurityQuestion(
+					this.context.User.Name,
+					UiCustomerOrigin.Get().GetOrigin(),
+					new DasKennwort(password),
 					model.Question,
 					model.Answer
 				);
@@ -65,7 +63,7 @@
 
 				bSuccess = string.IsNullOrWhiteSpace(sErrorMsg);
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update security question for customer '{0}'.", m_oContext.User.Name);
+				ms_oLog.Alert(e, "Failed to update security question for customer '{0}'.", this.context.User.Name);
 				sErrorMsg = "Failed to update security question.";
 				bSuccess = false;
 			} // try
@@ -73,10 +71,8 @@
 			return Json(new { success = bSuccess, error = sErrorMsg, });
 		} // UpdateSecurityQuestion
 
-		// ChangePassword
-
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountSettingsController));
-		private readonly IWorkplaceContext m_oContext;
-		private readonly ServiceClient m_oServiceClient;
+		private readonly IWorkplaceContext context;
+		private readonly ServiceClient serviceClient;
 	} // class AccountSettingsController
 } // namespace

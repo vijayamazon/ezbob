@@ -7,27 +7,27 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.Strategies.PricingModel;
-	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
-	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService : // Add base interfaces in the following lines and in alphabetic order. Please.
 		IEzAutomationVerification,
 		IEzServiceBroker,
+		IEzServiceInvestor,
+		IEzServiceLogicalGlue,
 		IEzServiceMainStrategy,
+		IEzServiceNewLoan,
+		IEzServicePricing,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
-		IEzServiceNewLoan
+		IEzServiceUserManagement,
+        IEzServiceLegalDocs,
+        IEzServiceSecurity,
+		IEzServiceLandRegistry
 	{
 		[OperationContract]
-		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
-
-
-        [OperationContract]
-        ActionMetaData AddHistoryDirector(Esigner Edirector);
+		ActionMetaData AddHistoryDirector(Esigner Edirector);
 
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
@@ -35,10 +35,9 @@
 		[OperationContract]
 		ActionMetaData BackfillAml();
 
-
 		[OperationContract]
 		ActionMetaData BackFillExperianNonLtdScoreText();
-		
+
 		[OperationContract]
 		ActionMetaData BackfillExperianConsumer();
 
@@ -48,14 +47,11 @@
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();
 
-        [OperationContract]
-        ActionMetaData BackfillExperianLtdScoreText();
+		[OperationContract]
+		ActionMetaData BackfillExperianLtdScoreText();
 
 		[OperationContract]
 		ActionMetaData BackfillHmrcBusinessRelevance();
-
-		[OperationContract]
-		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]
 		ActionMetaData BackfillMedalForAll();
@@ -79,19 +75,10 @@
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
 		[OperationContract]
-		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID);
+		ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID, long? nlCashRequestID);
 
 		[OperationContract]
 		MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory);
-
-		[OperationContract]
-		ActionMetaData CalculateOffer(
-			int underwriterId,
-			int customerId,
-			int amount,
-			bool hasLoans,
-			Medal medalClassification
-			);
 
 		[OperationContract]
 		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
@@ -110,7 +97,7 @@
 			string idhubTown,
 			string idhubCounty,
 			string idhubPostCode
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData CheckBwa(int customerId, int userId);
@@ -128,31 +115,19 @@
 			string idhubPostCode,
 			string idhubBranchCode,
 			string idhubAccountNumber
-			);
+		);
 
 		[OperationContract]
 		ExperianLtdActionResult CheckLtdCompanyCache(int userId, string sCompanyRefNum);
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType,bool isBankStatement);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType, bool isBankStatement);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
 
 		[OperationContract]
-		StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword);
-
-		[OperationContract]
 		ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID);
-
-		[OperationContract]
-		UserLoginActionResult CustomerSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		);
 
 		[OperationContract]
 		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
@@ -164,23 +139,11 @@
 		ActionMetaData DisplayMarketplaceSecurityData(int nCustomerID);
 
 		[OperationContract]
-		IntActionResult EmailConfirmationCheckOne(Guid oToken);
-
-		[OperationContract]
-		ActionMetaData EmailConfirmationConfirmUser(int nUserID, int nUnderwriterID);
-
-		[OperationContract]
-		EmailConfirmationTokenActionResult EmailConfirmationGenerate(int nUserID);
-
-		[OperationContract]
-		ActionMetaData EmailConfirmationGenerateAndSend(int nUserID, int underwriterId);
-
-		[OperationContract]
 		ActionMetaData EmailHmrcParsingErrors(
 			int nCustomerID,
 			int nCustomerMarketplaceID,
 			SortedDictionary<string, string> oErrorsToEmail
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
@@ -261,48 +224,16 @@
 		IntActionResult GetExperianConsumerScore(int customerId);
 
 		[OperationContract]
-		DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare);
-
-		[OperationContract]
-		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
-
-		[OperationContract]
-		StringListActionResult GetPricingModelScenarios(int underwriterId);
-
-		[OperationContract]
-		PropertyStatusesActionResult GetPropertyStatuses();
-
-		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
 
 		[OperationContract]
 		CollectionSnailMailActionResult GetCollectionSnailMail(int userID, int collectionSnailMailID);
 
 		[OperationContract]
-		ActionMetaData GetZooplaData(int customerId, bool reCheck);
-
-		[OperationContract]
 		ActionMetaData IovationCheck(IovationCheckModel model);
-
-		[OperationContract]
-		string LandRegistryEnquiry(
-			int userId,
-			int customerId,
-			string buildingNumber,
-			string buildingName,
-			string streetName,
-			string cityName,
-			string postCode
-			);
-
-		[OperationContract]
-		string LandRegistryRes(int userId, int customerId, string titleNumber);
-
+		
 		[OperationContract]
 		ActionMetaData LateBy14Days();
-
-		[OperationContract]
-		CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken);
 
 		[OperationContract]
 		StringStringMapActionResult LoadCustomerLeadFieldNames();
@@ -329,13 +260,10 @@
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
-		ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail, decimal? balance = null, bool? isPaidOff = null);
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
-
-		[OperationContract]
-		ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId);
 
 		[OperationContract]
 		ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
@@ -378,13 +306,10 @@
 			string sResponseData,
 			string sErrorMessage,
 			int nUserID
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData PostcodeNuts(int nUserID, string postcode);
-
-		[OperationContract]
-		PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model);
 
 		[OperationContract]
 		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
@@ -405,9 +330,6 @@
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
 
 		[OperationContract]
-		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
-
-		[OperationContract]
 		ActionMetaData SaveAgreement(
 			int customerId,
 			AgreementModel model,
@@ -416,28 +338,14 @@
 			TemplateModel template,
 			string path1,
 			string path2
-			);
+		);
 
 		[OperationContract]
 		BoolActionResult SaveConfigTable(List<ConfigTable> configTableEntries, ConfigTableType configTableType);
 
 		[OperationContract]
-		ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model);
-
-		[OperationContract]
-		ActionMetaData SaveSourceRefHistory(
-			int nUserID,
-			string sSourceRefList,
-			string sVisitTimeList,
-			CampaignSourceRef campaignSourceRef
-		);
-
-		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
-
-		[OperationContract]
-		ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount);
-
+		
 		[OperationContract]
 		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
 
@@ -446,10 +354,7 @@
 			int nCustomerID,
 			decimal nRevenue,
 			string sComment
-			);
-
-		[OperationContract]
-		IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead);
+		);
 
 		[OperationContract]
 		ActionMetaData SetLateLoanStatus();
@@ -459,9 +364,6 @@
 
 		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
-
-		[OperationContract]
-		ActionMetaData UnderwriterSignup(string name, Password password, string role);
 
 		[OperationContract]
 		ActionMetaData UpdateConfigurationVariables(int userId);
@@ -480,41 +382,6 @@
 
 		[OperationContract]
 		ActionMetaData UpdateTransactionStatus();
-
-		[OperationContract]
-		StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
-
-		[OperationContract]
-		StringActionResult UserChangePassword(
-			string sEmail,
-			Password oOldPassword,
-			Password oNewPassword,
-			bool bForceChangePassword
-		);
-
-		[OperationContract]
-		UserLoginActionResult UserLogin(
-			string sEmail,
-			Password sPassword,
-			string sRemoteIp,
-			string promotionName,
-			DateTime? promotionPageVisitTime
-		);
-
-        [OperationContract]
-        StringActionResult UserDisable(
-            int userID,
-            int customerID,
-            string email,
-            bool unsubscribeFromMailChimp,
-            bool changeEmail
-        );
-
-		[OperationContract]
-		StringActionResult UserResetPassword(string sEmail);
-
-		[OperationContract]
-		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);
@@ -540,14 +407,14 @@
 		[OperationContract]
 		ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID);
 
-	    [OperationContract]
-        AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
+		[OperationContract]
+		AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
 
-        [OperationContract]
-        ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+		[OperationContract]
+		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
 
-        [OperationContract]
-        ActionMetaData SaveApiCall(ApiCallData data);
+		[OperationContract]
+		ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
@@ -590,5 +457,17 @@
 
 		[OperationContract]
 		StringStringMapActionResult SetManualDecision(DecisionModel model);
+
+		[OperationContract]
+		MultiBrandLoanSummaryActionResult BuildMultiBrandLoanSummary(int customerID);
+
+		[OperationContract]
+		DecisionHistoryResult LoadDecisionHistory(int customerID, int underwriterID);
+
+		[OperationContract]
+		MessagesListActionResult LoadMessagesSentToUser(int userID);
+
+		[OperationContract]
+		SlidersDataActionResults GetSlidersData(int customerID);
 	} // interface IEzService
 } // namespace EzService

@@ -3,7 +3,12 @@
 		try {
 			if (xhr.status === 423) {
 				console.log('Request', xhr, 'is not authorized by server (error code 423), refreshing page...');
-				location.reload();
+				var dialog = EzBob.ShowMessageTimeout('You are not authorized', 'Error', 3, function () {
+					location.reload();
+				}, 'Ok');
+				dialog.on('dialogclose', function () {
+					location.reload();
+				});
 				return;
 			} // if
 

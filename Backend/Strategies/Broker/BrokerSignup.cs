@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
+	using ConfigManager;
 	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -10,7 +11,6 @@
 	using Misc;
 
 	public class BrokerSignup : AStrategy {
-
 		public BrokerSignup(
 			string sFirmName,
 			string sFirmRegNum,
@@ -19,10 +19,9 @@
 			string sContactMobile,
 			string sMobileCode,
 			string sContactOtherPhone,
-			decimal nEstimatedMonthlyClientAmount,
-			Password oPassword,
+			DasKennwort password,
+			DasKennwort passwordAgain,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
@@ -30,21 +29,19 @@
 			string sLicenseNumber,
 			int uiOriginID
 		) {
-			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
-			m_sMobileCode = sMobileCode;
+			this.isCaptchaEnabled = bIsCaptchaEnabled;
+			this.mobileCode = sMobileCode;
 
-			m_oCreateSp = new SpBrokerSignUp(DB, Log) {
+			this.sp = new SpBrokerSignUp(password.Decrypt(), passwordAgain.Decrypt(), DB, Log) {
 				FirmName = sFirmName,
 				FirmRegNum = sFirmRegNum,
 				ContactName = sContactName,
-				ContactEmail = sContactEmail,
+				ContactEmail = (sContactEmail ?? string.Empty).Trim().ToLowerInvariant(),
 				ContactMobile = sContactMobile,
 				ContactOtherPhone = sContactOtherPhone,
-				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
-				Password = oPassword.Primary,
-				Password2 = oPassword.Confirmation,
+				EstimatedMonthlyClientAmount = 0,
 				FirmWebSiteUrl = sFirmWebSiteUrl,
-				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
+				EstimatedMonthlyApplicationCount = 0,
 				BrokerTermsID = nBrokerTermsID,
 				ReferredBy = sReferredBy,
 				Strategy = this,
@@ -61,15 +58,15 @@
 		public BrokerProperties Properties { get; private set; }
 
 		public override void Execute() {
-			if (!m_bIsCaptchaEnabled) {
-				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode);
+			if (!this.isCaptchaEnabled) {
+				var oValidator = new ValidateMobileCode(this.sp.ContactMobile, this.mobileCode);
 				oValidator.Execute();
 
 				if (!oValidator.IsValidatedSuccessfully())
 					Properties.ErrorMsg = "Failed to validate mobile code.";
 			} // if
 
-			m_oCreateSp.FillFirst(Properties);
+			this.sp.FillFirst(Properties);
 
 			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg)) {
 				Log.Warn("Failed to create a broker: {0}", Properties.ErrorMsg);
@@ -82,29 +79,37 @@
 			} // if
 		} // Execute
 
-		private readonly bool m_bIsCaptchaEnabled;
-		private readonly string m_sMobileCode;
+		private readonly bool isCaptchaEnabled;
+		private readonly string mobileCode;
 
-		private readonly SpBrokerSignUp m_oCreateSp;
+		private readonly SpBrokerSignUp sp;
 
 		private class SpBrokerSignUp : AStoredProc {
-			public SpBrokerSignUp(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+			public SpBrokerSignUp(
+				string rawPassword,
+				string rawPasswordAgain,
+				AConnection oDB,
+				ASafeLog oLog
+			) : base(oDB, oLog) {
+				this.rawPassword = rawPassword;
+				this.rawPasswordAgain = rawPasswordAgain;
+				SetPassword();
+			} // constructor
 
 			public override bool HasValidParameters() {
 				FirmName = Validate(FirmName, "Broker name");
 				FirmRegNum = Validate(FirmRegNum, "Broker registration number", false);
 				ContactName = Validate(ContactName, "Contact person full name");
-				ContactEmail = Validate(ContactEmail, "Contact person email");
+				ContactEmail = Validate(ContactEmail, "Contact person email").ToLowerInvariant();
 
 				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
+				
+				this.rawPassword = Validate(this.rawPassword, "Password");
 
-				if (EstimatedMonthlyClientAmount <= 0)
-					throw new StrategyWarning(Strategy, "Estimated monthly amount is out of range.");
-
-				Password = Validate(m_sPassword, "Password");
-
-				if (m_sPassword != Password2)
+				if (this.rawPassword != this.rawPasswordAgain)
 					throw new StrategyWarning(Strategy, "Passwords do not match.");
+
+				SetPassword();
 
 				FirmWebSiteUrl = (FirmWebSiteUrl ?? string.Empty).Trim();
 
@@ -121,7 +126,13 @@
 			public string ContactName { get; set; }
 
 			[UsedImplicitly]
-			public string ContactEmail { get; set; }
+			public string ContactEmail {
+				get { return this.contactEmail; }
+				set {
+					this.contactEmail = value;
+					SetPassword();
+				} // set
+			} // ContactEmail
 
 			[UsedImplicitly]
 			public string ContactMobile { get; set; }
@@ -133,12 +144,23 @@
 			public decimal EstimatedMonthlyClientAmount { get; set; }
 
 			[UsedImplicitly]
-			public string Password {
-				get { return SecurityUtils.HashPassword(ContactEmail, m_sPassword); } // get
-				set { m_sPassword = value; } // set
-			} // Password
+			public string Password { get; set; } // Password
 
-			private string m_sPassword;
+			[UsedImplicitly]
+			public string Salt { get; set; } // Salt
+
+			[UsedImplicitly]
+			public string CycleCount { get; set; } // CycleCount
+
+			private void SetPassword() {
+				var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
+				var pass = pu.Generate(ContactEmail, this.rawPassword);
+
+				Password = pass.Password;
+				CycleCount = pass.CycleCount;
+				Salt = pass.Salt;
+			} // SetPassword
 
 			[UsedImplicitly]
 			public string FirmWebSiteUrl { get; set; }
@@ -167,10 +189,6 @@
 			} // AgreedToPrivacyPolicyDate
 
 			// ReSharper restore ValueParameterNotUsed
-
-			[NonTraversable]
-			[UsedImplicitly]
-			public string Password2 { get; set; }
 
 			[UsedImplicitly]
 			public int BrokerTermsID { get; set; }
@@ -210,7 +228,9 @@
 				return sValue;
 			} // Validate
 
+			private string contactEmail;
+			private string rawPassword;
+			private readonly string rawPasswordAgain;
 		} // SpBrokerSignUp
-
 	} // class BrokerSignup
 } // namespace Ezbob.Backend.Strategies.Broker

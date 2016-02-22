@@ -19,16 +19,28 @@ BEGIN
 	DECLARE @MpID INT = NULL
 	DECLARE @OtherCustomerID INT = NULL
 
-	DECLARE @Email NVARCHAR(128) = (SELECT Name FROM Customer WHERE Id = @CustomerID)
+	DECLARE @Email NVARCHAR(128)
+	DECLARE @OriginID INT
 	DECLARE @HmrcID INT = (SELECT Id FROM MP_MarketplaceType WHERE InternalId = @Hmrc)
+
+	SELECT
+		@Email = Name,
+		@OriginID = OriginID
+	FROM
+		Customer
+	WHERE
+		Id = @CustomerID
 
 	SELECT
 		@MpID = m.Id,
 		@OtherCustomerID = m.CustomerID
 	FROM
 		MP_CustomerMarketPlace m
+		INNER JOIN Customer c ON m.CustomerId = c.Id
 	WHERE
 		m.DisplayName = @Email
+		AND
+		c.OriginID = @OriginID
 		AND
 		m.MarketPlaceId = @HmrcID
 

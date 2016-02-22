@@ -1,10 +1,8 @@
-﻿namespace TestRailModels.TestRail
-{
+﻿namespace TestRailModels.TestRail {
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a user</summary>
-    public class User
-    {
+    public class User {
         #region Public Properties
         /// <summary>
         /// id of the user 
@@ -42,8 +40,7 @@
         /// Displays the User's ID : User Name
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return string.Format("{0}:{1}", ID, Name);
         }
 
@@ -52,8 +49,7 @@
         /// </summary>
         /// <param name="json">json to parse</param>
         /// <returns>a user object corresponding to the json object</returns>
-        public static User Parse(JObject json)
-        {
+        public static User Parse(JObject json) {
             User u = new User();
             u.ID = (ulong)json["id"];
             u.Name = (string)json["name"];

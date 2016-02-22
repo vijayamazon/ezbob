@@ -41,6 +41,11 @@ BEGIN
 		WHERE
 			Id = @CustomerID
 
+		UPDATE Security_User SET
+			OriginID = (SELECT CustomerOriginID FROM CustomerOrigin WHERE Name = @Origin)
+		WHERE
+			UserId = @CustomerID
+
 		COMMIT TRANSACTION
 	END
 

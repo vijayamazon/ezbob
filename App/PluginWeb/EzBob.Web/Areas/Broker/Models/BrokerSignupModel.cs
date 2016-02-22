@@ -7,11 +7,9 @@
 		public string ContactMobile { get; set; }
 		public string MobileCode { get; set; }
 		public string ContactOtherPhone { get; set; }
-		public decimal EstimatedMonthlyClientAmount { get; set; }
 		public string Password { get; set; }
 		public string Password2 { get; set; }
 		public string FirmWebSite { get; set; }
-		public int EstimatedMonthlyAppCount { get; set; }
 		public int IsCaptchaEnabled { get; set; }
 		public int TermsID { get; set; }
 		public bool FCARegistered { get; set; }

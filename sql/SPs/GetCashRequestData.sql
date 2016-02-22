@@ -9,16 +9,19 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT TOP 1
-		InterestRate,
-		ManualSetupFeeAmount,
-		SystemCalculatedSum,
-		ManagerApprovedSum,
-		Id
+		cr.InterestRate,
+		isnull(cr.ManualSetupFeePercent, 0) AS ManualSetupFeePercent,
+		isnull(cr.BrokerSetupFeePercent, 0) AS BrokerSetupFeePercent,
+		cr.SystemCalculatedSum,
+		cr.ManagerApprovedSum,
+		cr.Id
 	FROM
-		CashRequests
+		CashRequests cr
 	WHERE
 		IdCustomer = @CustomerId
 	ORDER BY
 		Id DESC
 END
+
 GO
+

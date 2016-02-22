@@ -10,6 +10,10 @@
 			get { return this[Variables.CAISPath2]; }
 		}
 
+		public virtual VariableValue CallCreditEnabled {
+			get { return this[Variables.CallCreditEnabled]; }
+		} // CallCreditEnabled
+
 		public virtual VariableValue CallCreditUrl {
 			get { return this[Variables.CallCreditUrl]; }
 		}
@@ -66,10 +70,13 @@
 			get { return this[Variables.CollectionPeriod3]; }
 		}
 
-        public virtual VariableValue CollectionToAddress {
-            get { return this[Variables.CollectionToAddress]; }
+		public virtual VariableValue CollectionToAddress {
+			get { return this[Variables.CollectionToAddress]; }
 		}
-        
+
+		public virtual VariableValue CompaniesHouseApiKey {
+			get { return this[Variables.CompaniesHouseApiKey]; }
+		}
 		public virtual VariableValue CompanyCaisLateAlertLongMonths {
 			get { return this[Variables.CompanyCaisLateAlertLongMonths]; }
 		}
@@ -102,15 +109,17 @@
 			get { return this[Variables.ConnectionPoolReuseCount]; }
 		}
 
-        public virtual VariableValue CreditSafeUserName
-        {
-            get { return this[Variables.CreditSafeUserName]; }
-        }
+		public virtual VariableValue CreditSafeEnabled {
+			get { return this[Variables.CreditSafeEnabled]; }
+		} // CreditSafeEnabled
 
-        public virtual VariableValue CreditSafePassword
-        {
-            get { return this[Variables.CreditSafePassword]; }
-        }
+		public virtual VariableValue CreditSafeUserName {
+			get { return this[Variables.CreditSafeUserName]; }
+		}
+
+		public virtual VariableValue CreditSafePassword {
+			get { return this[Variables.CreditSafePassword]; }
+		}
 
 		public virtual VariableValue CustomerAnalyticsDefaultHistoryYears {
 			get { return this[Variables.CustomerAnalyticsDefaultHistoryYears]; }
@@ -126,6 +135,10 @@
 
 		public virtual VariableValue DefaultFeedbackValue {
 			get { return this[Variables.DefaultFeedbackValue]; }
+		}
+
+		public virtual VariableValue DefaultLoanCalculator {
+			get { return this[Variables.DefaultLoanCalculator]; }
 		}
 
 		public virtual VariableValue DirectorDetailsNonLimitedParserConfiguration {
@@ -180,10 +193,10 @@
 			get { return this[Variables.EbayRuNameEverline]; }
 		}
 
-        public virtual VariableValue EbayRuNameAlibaba {
-            get { return this[Variables.EbayRuNameAlibaba]; }
+		public virtual VariableValue EbayRuNameAlibaba {
+			get { return this[Variables.EbayRuNameAlibaba]; }
 		}
-        
+
 		public virtual VariableValue EbayServiceType {
 			get { return this[Variables.EbayServiceType]; }
 		}
@@ -232,14 +245,10 @@
 			get { return this[Variables.Environment]; }
 		}
 
-		public virtual VariableValue EverlineRefinanceEmailReciever {
-			get { return this[Variables.EverlineRefinanceEmailReciever]; }
-		}
-
 		public virtual VariableValue EverlineLoanStatusTestMode {
 			get { return this[Variables.EverlineLoanStatusTestMode]; }
 		}
-		
+
 		public virtual VariableValue ExperianAuthTokenService {
 			get { return this[Variables.ExperianAuthTokenService]; }
 		}
@@ -283,6 +292,22 @@
 		public virtual VariableValue ExperianUIdCertificateThumb {
 			get { return this[Variables.ExperianUIdCertificateThumb]; }
 		}
+
+		public virtual VariableValue EzbobCommissionBigLoan {
+			get { return this[Variables.EzbobCommissionBigLoan]; }
+		} // EzbobCommissionBigLoan
+
+		public virtual VariableValue EzbobCommissionHasLoan {
+			get { return this[Variables.EzbobCommissionHasLoan]; }
+		} // EzbobCommissionHasLoan
+
+		public virtual VariableValue EzbobCommissionMediumLoan {
+			get { return this[Variables.EzbobCommissionMediumLoan]; }
+		} // EzbobCommissionMediumLoan
+
+		public virtual VariableValue EzbobCommissionSmallLoan {
+			get { return this[Variables.EzbobCommissionSmallLoan]; }
+		} // EzbobCommissionSmallLoan
 
 		public virtual VariableValue EzbobMailCc {
 			get { return this[Variables.EzbobMailCc]; }

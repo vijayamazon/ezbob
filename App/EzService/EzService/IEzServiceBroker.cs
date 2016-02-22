@@ -4,11 +4,12 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using EzService.ActionResults;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceBroker {
 		[OperationContract]
-		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
+		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
 		ActionMetaData BrokerAddCustomerLead(
@@ -16,7 +17,8 @@
 			string sLeadLastName,
 			string sLeadEmail,
 			string sLeadAddMode,
-			string sContactEmail
+			string sContactEmail,
+			CustomerOriginEnum origin
 		);
 
 		[OperationContract]
@@ -50,13 +52,19 @@
 		ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
 
 		[OperationContract]
-		ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs);
+		ActionMetaData BrokerDeleteCustomerFiles(
+			string sCustomerRefNum,
+			string sContactEmail,
+			int[] aryFileIDs,
+			CustomerOriginEnum origin
+		);
 
 		[OperationContract]
 		BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(
 			string sCustomerRefNum,
 			string sContactEmail,
-			int nFileID
+			int nFileID,
+			CustomerOriginEnum origin
 		);
 
 		[OperationContract]
@@ -75,37 +83,50 @@
 		);
 
 		[OperationContract]
-		BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
+		BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(
+			int nLeadID,
+			string sLeadEmail,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		);
 
 		[OperationContract]
 		BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
 
 		[OperationContract]
-		ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
+		ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
-		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
+		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(
+			string sCustomerRefNum,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		);
 
 		[OperationContract]
-		BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail);
+		BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
-		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
+		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(
+			string sCustomerRefNum,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		);
 
 		[OperationContract]
-		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
+		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
 		BrokerCustomersActionResult BrokerLoadCustomersByID(int nBrokerID);
 
 		[OperationContract]
-		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
+		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
 		BrokerPropertiesActionResult BrokerLoadPropertiesByID(int nBrokerID);
 
 		[OperationContract]
-		StringListActionResult BrokerLoadSignedTerms(string sContactEmail);
+		StringListActionResult BrokerLoadSignedTerms(string sContactEmail, CustomerOriginEnum origin);
 
 		[OperationContract]
 		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID);
@@ -113,7 +134,7 @@
 		[OperationContract]
 		BrokerPropertiesActionResult BrokerLogin(
 			string sEmail,
-			Password oPassword,
+			DasKennwort oPassword,
 			string promotionName,
 			DateTime? promotionPageVisitTime,
 			int uiOriginID
@@ -129,7 +150,8 @@
 			int nStatusID,
 			string sComment,
 			string sCustomerRefNum,
-			string sContactEmail
+			string sContactEmail,
+			CustomerOriginEnum origin
 		);
 
 		[OperationContract]
@@ -137,7 +159,8 @@
 			string sCustomerRefNum,
 			string sContactEmail,
 			byte[] oFileContents,
-			string sFileName
+			string sFileName,
+			CustomerOriginEnum origin
 		);
 
 		[OperationContract]
@@ -149,10 +172,9 @@
 			string sContactMobile,
 			string sMobileCode,
 			string sContactOtherPhone,
-			decimal nEstimatedMonthlyClientAmount,
-			Password oPassword,
+			DasKennwort password,
+			DasKennwort passwordAgain,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
@@ -165,10 +187,13 @@
 		ActionMetaData BrokerTransferCommission();
 
 		[OperationContract]
-		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
-
-		[OperationContract]
-		ActionMetaData ChangeBrokerEmail(string oldEmail, string newEmail, string newPassword);
+		ActionMetaData BrokerUpdatePassword(
+			string contactEmail,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword,
+			DasKennwort newPasswordAgain
+		);
 
 		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail, int uiOrigin);

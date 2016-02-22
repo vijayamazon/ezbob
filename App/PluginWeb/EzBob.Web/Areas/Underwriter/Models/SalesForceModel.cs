@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
@@ -71,13 +72,6 @@
 					UpdateError = x.UpdateError,
 					Updated = x.UpdatingEnd
 				})
-				.ToList();
-
-			Decisions = customer
-				.CashRequests
-				.SelectMany(x => x.DecisionHistories)
-				.Select(DecisionHistoryModel.Create)
-				.OrderBy(x => x.Date)
 				.ToList();
 
 			Loans = customer

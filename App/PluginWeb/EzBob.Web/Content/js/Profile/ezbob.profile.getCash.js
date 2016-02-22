@@ -72,13 +72,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	initialize: function(options) {
 		this.templates = {
-			"get": _.template($('#d-getCash-template').html()),
-			"apply": _.template($('#d-getCash-template-apply').html()),
-			"wait": _.template($('#d-getCash-template-wait').html()),
-			"disabled": _.template($('#d-getCash-template-bad').html()),
-			//"bad": _.template($('#d-getCash-template-bad').html()),
-			"bad": _.template($('#d-getCash-template-apply').html()),
-			"late": _.template($('#d-getCash-template-late').html())
+			"get":      { template: _.template($('#d-getCash-template')      .html()), name: 'getCash' },
+			"apply":    { template: _.template($('#d-getCash-template-apply').html()), name: 'apply' },
+			"wait":     { template: _.template($('#d-getCash-template-wait') .html()), name: 'wait' },
+			"disabled": { template: _.template($('#d-getCash-template-bad')  .html()), name: 'bad' },
+			"bad":      { template: _.template($('#d-getCash-template-apply').html()), name: 'apply' },
+			"late":     { template: _.template($('#d-getCash-template-late') .html()), name: 'late' }
 		};
 
 		this.refreshAccountData = null;
@@ -111,7 +110,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		'click button.apply-for-loan': 'applyForALoan',
 	}, // events
 
-	getCash: function() {
+	getCash: function () {
 		if (this.customer.get('state') !== 'get')
 			return;
 
@@ -153,6 +152,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	applyForALoan: function() {
 		UnBlockUi();
+		this.sliders.changeLoanAmount('saveOnly');
 
 		if (this.customer.get('IsDefaultCustomerStatus'))
 			return;
@@ -657,7 +657,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		data.offerStart = this.customer.get('OfferStart');
 		data.creditResult = this.customer.get('CreditResult');
 
-		this.$el.html(this.templates[state](data));
+		this.$el.html(this.templates[state].template(data));
 
 		this.$el.find('button').popover({ placement: 'top' });
 
@@ -675,6 +675,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (!(this.customer.get('ActiveLoans').length > 0)) {
 			$('.apply-for-loan').removeClass('clean-btn').addClass('ev-btn-org');
 			$('.choose-amount-wait').removeClass('clean-btn').addClass('ev-btn-org');
+		}
+
+		if (this.templates[state].name === 'apply') {
+			var slidersEl = this.$el.find('.request-cash-sliders');
+			this.slidersModel = new EzBob.SlidersModel({ Id: this.customer.get('Id') });
+			this.sliders = new EzBob.SlidersView({ el: slidersEl, model: this.slidersModel, type: 'dashboardRequestLoan' });
+			this.slidersModel.fetch();
 		}
 
 		return this;

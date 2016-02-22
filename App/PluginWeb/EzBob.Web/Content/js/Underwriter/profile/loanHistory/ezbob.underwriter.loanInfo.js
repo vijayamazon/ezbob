@@ -7,10 +7,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		initialize: function(options) {
 			this.bindTo(this.model, "change reset sync", this.render, this);
-
-			this.personalInfo = options.personalInfo;
-			this.bindTo(this.personalInfo, "change", this.UpdateNewCreditLineState, this);
-			this.bindTo(this.personalInfo, "change:CreditResult", this.changeCreditResult, this);
+			this.medalModel = options.medalModel;
 
 			EzBob.App.vent.on('newCreditLine:done', this.showCreditLineDialog, this);
 			EzBob.App.vent.on('newCreditLine:error', this.showErrorDialog, this);
@@ -23,7 +20,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			'click [name="newCreditLineBtn"]': 'runNewCreditLine',
 			'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
 			'click #create-loan-hidden-btn': 'createLoanHidden',
-			'click #editOfferButton': 'showCreditLineDialog'
+			'click #editOfferButton': 'showCreditLineDialog',
+			'click .downloadOfferButton': 'downloadOffer'
 		},
 
 		toggleCreateLoanHidden: function(event) {
@@ -106,6 +104,18 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			return false;
 		}, // runNewCreditLine
 
+		downloadOffer: function(e) {
+			var $el = $(e.currentTarget);
+			var isExcel = false;
+			if ($el.data('type') == 'excel') {
+				isExcel = true;
+			}
+			return $el.attr('href', window.gRootPath + 'Underwriter/Schedule/Export?id=' +
+				this.model.get('CashRequestId') +
+				'&isExcel=' + isExcel +
+				'&isShowDetails=false&customerId=' + this.model.get('CustomerId'));
+		},//downloadOffer
+
 		createNewCreditLine: function(newCreditLineOption) {
 			BlockUi();
 
@@ -129,7 +139,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		validateLoanSourceRelated: function () {
 		    var loanSourceID = this.model.get('LoanSourceID');
-		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; });
+		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; }) || {};
 
 			this.validateInterestVsSource(loanSourceModel.MaxInterest);
 
@@ -170,7 +180,13 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			this.$el.find('.discount-exceeds-max-by-loan-source').addClass('hide');
 
-			var sPercentList = this.model.get('DiscountPlanPercents');
+			var discountPlanID = this.model.get('DiscountPlanId');
+			if (!discountPlanID)
+				return [];
+
+			var discountPlan = _.find(this.model.get('DiscountPlans'), function(d) { return d.Id === discountPlanID; });
+			var sPercentList = discountPlan.DiscountPlanPercents;
+
 
 			if (!sPercentList)
 				return [];
@@ -203,29 +219,41 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			return _results;
 		},
 
-		UpdateNewCreditLineState: function() {
-			var waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
-			var disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
+		UpdateNewCreditLineState: function () {
+			var waiting = this.model.get("CreditResult") === "WaitingForDecision";
+			var disabled = waiting || !this.model.get('IsCustomerInEnabledStatus');
 			$("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
 			$("#newCreditLineLnkId").toggleClass("disabled", disabled);
 		},
 
 		statuses: {},
 
-		serializeData: function() {
+		serializeData: function () {
+			var self = this;
+			var loanSource = _.find(this.model.get('AllLoanSources'), function (ls) { return self.model.get('LoanSourceID') === ls.Id; });
+			var loanType = _.find(this.model.get('LoanTypes'), function (lt) { return self.model.get('LoanTypeId') === lt.Id; });
+			var product = _.find(this.model.get('Products'), function (p) { return self.model.get('CurrentProductID') === p.ProductID; });
+			var productType = _.find(this.model.get('ProductTypes'), function (pt) { return self.model.get('CurrentProductTypeID') === pt.ProductTypeID; });
+			var fundingType = _.find(this.model.get('FundingTypes'), function (ft) { return self.model.get('CurrentFundingTypeID') === ft.FundingTypeID; });
+			var discountPlan = _.find(this.model.get('DiscountPlans'), function (dp) { return self.model.get('DiscountPlanId') === dp.Id; });
 			return {
-				m: this.model.toJSON()
+				m: this.model.toJSON(),
+				productName: product ? product.Name : '-',
+				productTypeName: productType ? productType.Name : '-',
+				loanTypeName: loanType ? loanType.Name : '-',
+				loanSourceName: loanSource ? loanSource.Name : '-',
+				fundingTypeName: fundingType ? fundingType.Name : '-',
+				discountPlanName: discountPlan ? discountPlan.Name : '-',
 			};
 		},
 
-		onRender: function() {
+		onRender: function () {
 			this.$el.find(".tltp").tooltip();
 			this.$el.find(".tltp-left").tooltip({
 				placement: "left"
 			});
 
 			this.UpdateNewCreditLineState();
-			this.initSwitch(".spreadSetupFeeSwitch", 'SpreadSetupFee', this.toggleValue, 'SpreadSetupFee');
 			this.validateLoanSourceRelated();
 			EzBob.handleUserLayoutSetting();
 		},
@@ -261,12 +289,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 				UnBlockUi();
 			});
 		},
-
-		changeCreditResult: function() {
-			this.model.fetch();
-			this.personalInfo.fetch();
-		},
-
+		
 		showCreditLineDialog: function() {
 			var self = this;
 
@@ -284,7 +307,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 					var dialog = new EzBob.Underwriter.CreditLineDialog({
 						model: self.model,
-						brokerCommissionDefaultResult: result
+						brokerCommissionDefaultResult: result,
+						medalModel: self.medalModel
 					});
 
 					EzBob.App.jqmodal.show(dialog);

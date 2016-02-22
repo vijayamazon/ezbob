@@ -1,4 +1,6 @@
-﻿@using EZBob.DatabaseLib.Model.Database
+﻿@using System
+@using System.Linq
+@using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Areas.Underwriter.Models
 @using Ezbob.Backend.Models
 @using Ezbob.Utils.Extensions
@@ -294,7 +296,7 @@
                         companyNum = company.CompanyNumber;
                         postcode = company.CompanyAddress; //todo experian
                         companyName = company.CompanyName; //todo experian
-                        propertyOwnedByCompany = company.PropertyOwnedByCompany.HasValue ? company.PropertyOwnedByCompany.Value : false;
+                        propertyOwnedByCompany = company.PropertyOwnedByCompany ?? false;
                         vatReporting = company.VatReporting.DescriptionAttr<VatReporting?>();
                     }
     

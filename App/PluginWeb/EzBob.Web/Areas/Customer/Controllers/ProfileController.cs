@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-
 	using System;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
@@ -20,6 +19,8 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Linq;
+	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using PaymentServices.Calculators;
@@ -225,11 +226,10 @@
 		public RedirectResult AddPayPoint() {
 			var oCustomer = m_oContext.Customer;
 			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
-            int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
+			int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "Profile",
-				new
-				{
+				new {
 					Area = "Customer",
 					customerId = oCustomer.Id,
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
@@ -237,13 +237,14 @@
 					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 
-			
-            
+
+
 			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5.00m, callback);
 
 			return Redirect(url);
 		} // AddPayPoint
 
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Transactional]
 		[HttpGet]
 		public ActionResult PayPointCallback(
@@ -328,17 +329,31 @@
 				payPointFacade.PayPointAccount
 			);
 
-            bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
-		    if (amount > 0 && hasOpenLoans) {
-		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
-		        var f = new LoanPaymentFacade();
-                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay");
-		    }
+			bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
+			if (amount > 0 && hasOpenLoans) {
 
-            if (amount > 0 && !hasOpenLoans) {
-                this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(cust.Id, cust.Id, amount.Value, trans_id);
-            }
-		    return View(new { success = true });
+				Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
+
+				NL_Payments	nlPayment = new NL_Payments() {
+					Amount = amount.Value,
+					CreatedByUserID = this.m_oContext.UserId,
+					//	LoanID = nlLoanId,
+					//PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint,
+					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay,
+					PaymentTime = DateTime.UtcNow,
+					Notes = "add payPoint card",
+					CreationTime = DateTime.UtcNow
+				};
+
+				var f = new LoanPaymentFacade();
+				f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay", false, null, nlPayment);
+			}
+
+			if (amount > 0 && !hasOpenLoans) {
+				this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(cust.Id, cust.Id, amount.Value, trans_id);
+			}
+			return View(new { success = true });
 		} // PayPointCallback
 
 		private void DoApplyForLoan() {
@@ -376,7 +391,7 @@
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession m_oSession;
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(ProfileController));
 		private string hostname;
 		private readonly ISecurityQuestionRepository questions;
 	} // class ProfileController

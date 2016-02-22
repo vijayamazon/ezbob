@@ -7,6 +7,7 @@
 		public ReapprovalTrail(
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			ASafeLog oLog,
 			string toExplanationMailAddress = null,
 			string fromEmailAddress = null,
@@ -14,6 +15,7 @@
 		) : base(
 			nCustomerID,
 			cashRequestID,
+			nlCashRequestID,
 			DecisionStatus.Affirmative,
 			oLog,
 			toExplanationMailAddress,

@@ -32,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 			Map(u => u.SecurityAnswer, "SecurityAnswer1").Length(200);
 			Map(u => u.EzPassword).Length(255);
 			Map(u => u.EmailStateID);
+			Map(u => u.OriginID);
 		} // constructor
 	} // class UserMap
 } // namespace

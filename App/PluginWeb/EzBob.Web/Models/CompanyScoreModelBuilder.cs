@@ -89,12 +89,15 @@
 
 			try {
 				oLtdAr = m_oServiceClient.Instance.CheckLtdCompanyCache(m_oContext.UserId, customer.Company.ExperianRefNum);
+				model.CompaniesHouseModel = oLtdAr.CompaniesHouse;
+				FindCustomerOfficersAndAppointments(model);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load Experian parsed data for a company '{0}'.", customer.Company.ExperianRefNum);
 
 				model.result = "Failed to load data.";
 				model.DashboardModel = new ComapanyDashboardModel {Error = "Failed to load data.",};
+				
 				return model;
 			} // try
 
@@ -112,13 +115,46 @@
 			AddOwners(oResult, oLtdAr.Value.RegisteredNumberOfTheCurrentUltimateParentCompany);
 
 			return oResult;
-		}
+		}// Create
+
+		private void FindCustomerOfficersAndAppointments(CompanyScoreModel model) {
+			if (model.CompanyDetails == null || 
+				string.IsNullOrEmpty(model.CompanyDetails.CustomerFirstName) || 
+				string.IsNullOrEmpty(model.CompanyDetails.CustomerSurname) || 
+				model.CompaniesHouseModel == null || 
+				model.CompaniesHouseModel.Officers == null) {
+				return;
+			}//if
+				
+			foreach (var officer in model.CompaniesHouseModel.Officers) {
+				if (!string.IsNullOrEmpty(officer.Name) &&
+					officer.Name.ToLowerInvariant().Contains(model.CompanyDetails.CustomerFirstName) &&
+					officer.Name.ToLowerInvariant().Contains(model.CompanyDetails.CustomerSurname)) {
+					officer.IsCustomer = true;
+				}//if
+
+				if (officer.AppointmentOrder == null || officer.AppointmentOrder.Appointments == null) {
+					continue;
+				}//if
+
+				foreach (var appointment in officer.AppointmentOrder.Appointments.Where(appointment => !string.IsNullOrEmpty(appointment.Name) &&
+					appointment.Name.ToLowerInvariant().Contains(model.CompanyDetails.CustomerFirstName) &&
+					appointment.Name.ToLowerInvariant().Contains(model.CompanyDetails.CustomerSurname))) {
+					appointment.IsCustomer = true;
+				}//foreach
+			}//foreach
+		} //FindCustomerOfficersAndAppointments
 
 		private CompanyDetails BuildDetails(Customer customer) {
 			var details = new CompanyDetails{
 				CustomerId = customer.Id,
-				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.ToString() : TypeOfBusiness.Entrepreneur.ToString()
 			};
+
+			if (customer.PersonalInfo != null) {
+				details.TypeOfBusiness = customer.PersonalInfo.TypeOfBusiness.ToString();
+				details.CustomerFirstName = string.IsNullOrEmpty(customer.PersonalInfo.FirstName) ? "" : customer.PersonalInfo.FirstName.ToLowerInvariant();
+				details.CustomerSurname = string.IsNullOrEmpty(customer.PersonalInfo.Surname) ? "" : customer.PersonalInfo.Surname.ToLowerInvariant();
+			}
 
 			if (customer.Company != null) {
 				details.CompanyName = customer.Company.ExperianCompanyName ?? customer.Company.CompanyName;
@@ -129,9 +165,7 @@
 				details.CompanyAddress = customer.AddressInfo.PersonalAddress.ToList();
 			}
 			return details;
-		}
-
-// Create
+		}//BuildDetails
 
 		public ComapanyDashboardModel BuildNonLimitedDashboardModel(CompanyData data, string refNumber)
 		{
@@ -318,6 +352,7 @@
 				company_ref_num = oExperianLtd.Value.RegisteredNumber,
 				Data = null,
 				DashboardModel = BuildLimitedDashboardModel(oExperianLtd),
+				CompaniesHouseModel = oExperianLtd.CompaniesHouse
 			};
 		} // BuildLimitedScoreModel
 

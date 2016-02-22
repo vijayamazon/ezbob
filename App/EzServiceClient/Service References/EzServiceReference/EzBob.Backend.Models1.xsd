@@ -5,6 +5,7 @@
   <xs:complexType name="AgreementModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="APR" type="xs:double" />
+      <xs:element minOccurs="0" name="AdministrationCharge" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompanyAdress" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompanyNumber" nillable="true" type="xs:string" />
@@ -24,6 +25,7 @@
       <xs:element minOccurs="0" name="IsBrokerFee" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsEverlineRefinanceLoan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsManualSetupFee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LatePaymentCharge" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LoanType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ManualSetupFee" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PersonAddress" nillable="true" type="xs:string" />

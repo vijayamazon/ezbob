@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+
+<script type="text/template" id="investors-list-template">
+    @UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor)
+    <div id="main-content">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-content">
+                
+                        <div class="row">
+                          
+                                <h2>Manage Investor</h2>
+                            <div class="tab-pane investors-tables">
+                                <div class="table-responsive table-ezbig">
+                                    <table class="table grid-data  table-hover main-investors-table " id="manage-investors-table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Active</th>
+                                                <th></th>
+                                            </tr>
+                                            <% data = data || {}; %>
+                                            <%_.each(data, function(a){ %>
+                                            <tr class="manage-investor-row activeHover" data-id="<%-a.InvestorID%>">
+                                                <td class="manage-investor-id"><%-a.InvestorID%></td>
+                                                <td><%-a.CompanyName%></td>
+                                                <td><%-a.InvestorType%></td>
+                                                <td><img src="/Content/img/<%-a.IsActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+                                                <td class="edit-investor"><button class="btn btn-primary edit-investor-details"><i class="fa fa-pencil "></i></button></td>
+                                            </tr>
+                                            <%});%>
+
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                             
+                        </div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

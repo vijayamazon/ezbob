@@ -3,16 +3,17 @@
     using System.Resources;
     using NUnit.Framework;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using UIAutomationTests.Core;
 
     class WizardShared : WebTestBase {
-        private readonly object Locker;
+        private readonly object Locker; // TODO to be removed
 
-        public WizardShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
+        public WizardShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig, ActionBot actionBot) {
             this.Driver = Driver;
             this.EnvironmentConfig = EnvironmentConfig;
             this.BrandConfig = BrandConfig;
-            this.actionBot = new ActionBot(Driver);
+            this.actionBot = actionBot;
             this.Locker = new object();
         }
 
@@ -30,7 +31,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             if (string.Equals("ClientSignup", origin)) {
-                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("WizardHost"));
+                string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("WizardHost"));
 
                 //Step 2 - Browse to OM app.
                 Driver.Navigate().GoToUrl(url);
@@ -101,6 +102,7 @@
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             SharedServiceClass.WaitForAjaxReady(Driver);
+            SharedServiceClass.WaitForBlockUiOff(Driver);
 
             //TODO: remove a-sync locks. must be a workaround this problem.
             if (string.Equals("ClientSignup", origin)) {
@@ -132,9 +134,11 @@
                     formRadioCtrl = By.XPath("//label[@for='FormRadioCtrl_M']");
                     break;
             }
+            actionBot.MoveToElement(formRadioCtrl);
             actionBot.Click(formRadioCtrl, "(gender select button)");
 
             //Step 4 - 	Select date of birth and focus out.
+            actionBot.MoveToElement(By.Id("DateOfBirthDay"));
             actionBot.SelectByValue(By.Id("DateOfBirthDay"), dobDay, "(date of birth - day select)");
 
             actionBot.SelectByText(By.Id("DateOfBirthMonth"), dobMonth, "(date of birth - month select)");
@@ -183,7 +187,6 @@
         public void PerformWizardStepThree(
             string logHeader,
             string businessType,
-            bool isSmallBusiness,
             string indType,
             string revenue
             ) {
@@ -200,8 +203,11 @@
             //Step 3 - Insert any amount to the Total annual revenue field and focus out.
             actionBot.SendKeys(By.Id("OverallTurnOver"), revenue, "(total annual revenue field)");
 
+            //actionBot.MoveToElement(By.Id("companyContinueBtn"));
+            actionBot.MoveToBottom();
             //Step 4 - Click continue.
-            actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
+            //actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
+            actionBot.JQueryClick("#companyContinueBtn", "(continue button)");
 
             //TODO: find out when this dialog is displayed, and create more acurate scenario for it.
             try {
@@ -222,74 +228,116 @@
         public void PerformWizardStepFour(
             string logHeader,
             string origin,
-            string marketplace,
-            string accLogin,
+            By marketplace,
+            By accLogin,
             string loginVal,
-            string accPass,
+            By accPass,
             string passVal,
-            string accBtn
+            By accBtn
+            ) {
+            actionBot.WriteToLog("Begin method: " + logHeader);
+
+            SharedServiceClass.WaitForBlockUiOff(Driver);
+
+            //actionBot.MoveToBottom();
+            //actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
+            actionBot.JQueryClick("#link_account_see_more_less", "(see full data source button)");
+            //Step 1 - Click on relevant data source.
+            //By marketplacedAssert;
+            //switch (marketplace) {
+            //    case "a.marketplace-button-account-paypal":
+            //        marketplacedAssert = By.Id("paypalContinueBtn");
+            //        break;
+            //    default:
+            //        marketplacedAssert = By.Id(accLogin);
+            //        break;
+            //}
+            //actionBot.ClickAssert(By.CssSelector(marketplace), marketplacedAssert, "(data source button)");
+            
+            actionBot.Click(marketplace, "(data source button)");
+
+            //Step 3 - Insert prepared credentials and click sign in.
+            actionBot.SendKeys(accLogin, loginVal, "(data source login field)", 20);
+
+            actionBot.SendKeys(accPass, passVal, "(data source password field)");
+
+            actionBot.Click(accBtn, "(data source login button)");
+
+            SharedServiceClass.WaitForAjaxReady(Driver);
+
+            //Step 4 - Click complete.
+            //By finishWizardAssert = By.Id("");
+            //switch (origin) {
+            //    case "BrokerFillLead":
+            //        finishWizardAssert = By.Id("AddNewCustomer");
+            //        break;
+            //    case "ClientSignup":
+            //        finishWizardAssert = By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']");
+            //        break;
+            //}
+            //actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, "(complete button)");
+            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            actionBot.JQueryClick("#finish-wizard", "(complete button)");
+
+            //Step 5 - Accept dialog.
+            if (String.Equals("ClientSignup", origin)) {
+                actionBot.Click(By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']"), "(accept dialog button)");
+            }
+
+            actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
+        }
+
+        //origin - BrokerFillLead: when broker fills lead's wizard; ClientSignup: when accessing from main wizard page.
+        public void PerformWizardStepFourPayPal(
+            string logHeader,
+            string origin,
+            string loginVal,
+            string passVal
             ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
             actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
-
+            SharedServiceClass.JqueryElementReady(Driver, ".marketplace-button-account-paypal");
             //Step 1 - Click on relevant data source.
-            By marketplacedAssert;
-            switch (marketplace) {
-                case "a.marketplace-button-account-paypal":
-                    marketplacedAssert = By.Id("paypalContinueBtn");
-                    break;
-                default:
-                    marketplacedAssert = By.Id(accLogin);
-                    break;
-            }
-            actionBot.ClickAssert(By.CssSelector(marketplace), marketplacedAssert, "(data source button)");
 
-            if (String.Equals("a.marketplace-button-account-paypal", marketplace)) {
+            actionBot.Click(By.ClassName("marketplace-button-account-paypal"), "(data source button)");
+            //actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
 
-                //PayPal Click continue.
-                actionBot.Click(By.Id("paypalContinueBtn"), "(continue to PayPal button)");
+            //PayPal Click continue.
+            actionBot.Click(By.Id("paypalContinueBtn"), "(continue to PayPal button)");
 
-                //Move focus to the pop-uped window.
-                actionBot.SwitchToWindow(2, "(PayPal add account window)");
+            //Move focus to the pop-uped window.
+            actionBot.SwitchToWindow(2, "(PayPal add account window)");
 
-                //Verify the pop-up address is correct.
-                actionBot.WriteToLog("Begin assert: Verify web address contains the sub-string: 'webscr'");
-                SharedServiceClass.WebAddressContains(Driver, "webscr", 20);
-                actionBot.WriteToLog("Positively asserted: web address contains the sub-string.");
-            }
+            //Verify the pop-up address is correct.
+            actionBot.WriteToLog("Begin assert: Verify web address contains the sub-string: 'webscr'");
+            SharedServiceClass.WebAddressContains(Driver, "webscr", 20);
+            actionBot.WriteToLog("Positively asserted: Web address contains the sub-string.");
 
             //Step 3 - Insert prepared credentials and click sign in.
-            actionBot.SendKeys(By.Id(accLogin), loginVal, "(data source login field)");
+            try {
+                actionBot.SendKeys(By.Id("login_email"), loginVal, "(data source login field)", 20);
 
-            actionBot.SendKeys(By.Id(accPass), passVal, "(data source password field)");
+                actionBot.SendKeys(By.Id("login_password"), passVal, "(data source password field)");
 
-            actionBot.Click(By.Id(accBtn), "(data source login button)");
-
-            if (String.Equals("a.marketplace-button-account-paypal", marketplace)) {
-                //By.XPath("//input[@name='grant.x']")
-                //PayPal Click continue.
-                actionBot.Click(By.Name("grant.x"), "(PayPal continue to Ezbob/Everline button)");
-
-                //Move focus back to Ezbob/Everline window.
-                actionBot.SwitchToWindow(1, "(back to Ezbob/Everline application window)");
+                actionBot.Click(By.Id("login.x"), "(data source login button)");
+            } catch (Exception e) {
+                actionBot.WriteToLog("Paypal is already in session. Moving to grant premission page automaticaly.");
             }
+
+            actionBot.Click(By.Name("grant.x"), "(PayPal continue to Ezbob/Everline button)");
+
+            //Move focus back to Ezbob/Everline window.
+            actionBot.SwitchToWindow(1, "(back to Ezbob/Everline application window)");
 
             SharedServiceClass.WaitForAjaxReady(Driver);
 
             //Step 4 - Click complete.
-            By finishWizardAssert = By.Id("");
-            switch (origin) {
-                case "BrokerFillLead":
-                    finishWizardAssert = By.Id("AddNewCustomer");
-                    break;
-                case "ClientSignup":
-                    finishWizardAssert = By.XPath("//button[@ui-event-control-id='profile:request-processing-continue-popup-nodecision']");
-                    break;
-            }
-            actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, "(complete button)");
+            actionBot.Sleep(5000);
+            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            actionBot.JQueryClick("#finish-wizard", "(complete button)");
 
             //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {

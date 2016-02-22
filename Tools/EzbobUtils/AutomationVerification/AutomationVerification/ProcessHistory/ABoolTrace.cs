@@ -4,8 +4,7 @@
 			return Init(DecisionStatus == DecisionStatus.Affirmative);
 		} // Init
 
-		public virtual ATrace Init(bool value)
-		{
+		public virtual ATrace Init(bool value) {
 			HasProperty = value;
 
 			Comment = string.Format("customer has {0}{1}", HasProperty ? string.Empty : "no ", PropertyName);

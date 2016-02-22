@@ -1,21 +1,14 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Repository;
-using StructureMap;
-
-namespace EzBob.Web.Infrastructure {
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
+﻿namespace EzBob.Web.Infrastructure.Membership {
+	using System;
 	using Ezbob.Utils;
+	using ServiceClientProxy;
 
 	public class EzbobRoleProvider : System.Web.Security.RoleProvider {
-		private readonly Cache<string, string[]> m_oCache;  
-
 		public EzbobRoleProvider() {
-			m_oCache = new Cache<string, string[]>(TimeSpan.FromMinutes(25), sUserName => {
-				var users = ObjectFactory.GetInstance<IUsersRepository>();
-				var user = users.GetUserByLogin(sUserName);
-				return user == null ? new string[0] : user.Roles.Select(r => r.Name).ToArray();
-			});
+			this.cache = new Cache<string, string[]>(
+				TimeSpan.FromMinutes(25),
+				userName => new ServiceClient().Instance.LoadAllLoginRoles(userName, null, true).Records
+			);
 		} // constructor
 
 		public override bool IsUserInRole(string username, string roleName) {
@@ -23,7 +16,7 @@ namespace EzBob.Web.Infrastructure {
 		}
 
 		public override string[] GetRolesForUser(string username) {
-			return m_oCache[username];
+			return this.cache[username];
 		} // GetRolesForUser
 
 		public override void CreateRole(string roleName) {
@@ -62,5 +55,7 @@ namespace EzBob.Web.Infrastructure {
 			get { throw new System.NotImplementedException(); }
 			set { throw new System.NotImplementedException(); }
 		}
+
+		private readonly Cache<string, string[]> cache;
 	} // class EzbobRoleProvider
 } // namespace

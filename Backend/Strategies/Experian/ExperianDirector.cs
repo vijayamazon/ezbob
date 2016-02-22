@@ -210,11 +210,14 @@
 		public string RefNum {
 			get {
 				if (string.IsNullOrWhiteSpace(m_sRefNum)) {
-					m_sRefNum = "EZ" + SecurityUtils.Hash(
+					m_sRefNum = "EZ" + PasswordUtility.HashPasswordOldWay(
 						FirstName.ToUpperInvariant() + " " +
 						MiddleName.ToUpperInvariant() + " " +
 						LastName.ToUpperInvariant() + " " +
-						(BirthDate.HasValue ? BirthDate.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty)
+						(BirthDate.HasValue
+							? BirthDate.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture)
+							: string.Empty
+						)
 					);
 				} // if
 

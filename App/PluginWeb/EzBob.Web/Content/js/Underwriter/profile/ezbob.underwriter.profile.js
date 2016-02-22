@@ -44,6 +44,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		var fraudDetection = this.$el.find('#fraudDetection');
 		var properties = this.$el.find('#properties');
 		var affordability = this.$el.find('#affordability');
+		var logicalGlue = this.$el.find('#logical-glue-history');
 
 		this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
 		this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
@@ -112,26 +113,29 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			model: this.medalCalculationModel
 		});
 
+		this.logicalGlueView = new EzBob.Underwriter.LogicalGlueHistoryView({
+			el: logicalGlue,
+			model: this.medalCalculationModel
+		});
+
 		this.automationCalculationModel = new EzBob.Underwriter.AutomationCalculationModel();
 		this.automationCalculationView = new EzBob.Underwriter.AutomationCalculationView({
 		    el: automationCalculations,
 		    model: this.automationCalculationModel
 		});
 
-		this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
 		this.pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel();
 		this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
 			el: this.$el.find('#pricing-calc'),
 			model: this.pricingModelCalculationsModel,
-			scenarios: this.pricingModelScenarios
 		});
 
 		this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
 		this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
-			el: self.$el.find('#company-score-list'),
+			el: this.$el.find('#company-score-list'),
 			model: this.companyScoreModel
 		});
-
+		
 		this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
 			el: this.$el.find('#customer-info')
 		});
@@ -197,7 +201,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
 			el: profileHead,
 			model: this.summaryInfoModel,
-			personalModel: this.personalInfoModel,
 			loanModel: this.loanInfoModel,
 			medalModel: this.medalCalculationModel,
 			parentView: this
@@ -253,6 +256,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 						BlockUi('off', self.alertDocsView.$el);
 					});
 
+					self.messagesModel.clear({ silent: true });
 					self.messagesModel.set({ Id: self.customerId }, { silent: true });
 					self.messagesModel.fetch().done(function () {
 						BlockUi('off', self.Message.$el);
@@ -283,7 +287,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					});
 
 				    self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
-					self.pricingModelScenarios.fetch();
 					self.pricingModelCalculationsModel.fetch().done(function () {
 						self.pricingModelCalculationsModel.trigger('fetch');
 						BlockUi('off', self.pricingModelCalculationsView.$el);
@@ -554,7 +557,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	ApproveBtnClick: function(e) {
 		if ($(e.currentTarget).hasClass('disabled'))
 			return false;
-        
+
 		if (this.loanInfoModel.get('InterestRate') <= 0) {
 			EzBob.ShowMessage('Wrong Interest Rate value (' + this.loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error');
 			return false;
@@ -570,23 +573,29 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			return false;
 		} // if
 
-	    if (this.personalInfoModel.get('CompanyExperianRefNum') === 'NotFound' && _.contains([1, 3, 5],this.loanInfoModel.get('TypeOfBusiness'))) {
-		    EzBob.ShowMessage('Customer with limited/pship business type have selected company not found, this must be fixed in order to approve a loan', 'Error');
-		    return false;
-		}
-	    
-	    $('.editOfferDiv').addClass('hide');
+		if (this.personalInfoModel.get('CompanyExperianRefNum') === 'NotFound' && _.contains([1, 3, 5],this.loanInfoModel.get('TypeOfBusiness'))) {
+			EzBob.ShowMessage('Customer with limited/pship business type have selected company not found, this must be fixed in order to approve a loan', 'Error');
+			return false;
+		} // if
 
-	    $.cookie('editOfferVisible', false);
-	    $(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px' });
+		$('.editOfferDiv').addClass('hide');
 
-		this.skipPopupForApprovalWithoutAML = this.loanInfoModel.get('SkipPopupForApprovalWithoutAML');
+		$.cookie('editOfferVisible', false);
+		$(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px' });
 
-		if (this.loanInfoModel.get('AMLResult') !== 'Passed' && !this.skipPopupForApprovalWithoutAML) {
+		var skipPopupForApprovalWithoutAml = this.loanInfoModel.get('SkipPopupForApprovalWithoutAML');
+
+		var showBecauseOfAml = (this.loanInfoModel.get('AMLResult') !== 'Passed') && !skipPopupForApprovalWithoutAml;
+		var showBecauseOfMultiBrand = this.loanInfoModel.get('IsMultiBranded');
+		var showBecauseOfFCAIncompliance = !this.personalInfoModel.get('IsBrokerRegulated') && this.personalInfoModel.get('IsRegulated') && this.personalInfoModel.get('IsWizardComplete');
+
+		if (showBecauseOfAml || showBecauseOfMultiBrand) {
 			var approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
 				model: this.loanInfoModel,
 				parent: this,
-				skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML
+				showBecauseOfAml: showBecauseOfAml,
+				showBecauseOfMultiBrand: showBecauseOfMultiBrand,
+				showBecauseOfFCAIncompliance: showBecauseOfFCAIncompliance
 			});
 
 			EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);

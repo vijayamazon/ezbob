@@ -15,6 +15,8 @@ ALTER PROCEDURE BrokerSignUp
 @TempSourceRef NVARCHAR(255),
 @EstimatedMonthlyClientAmount DECIMAL(18, 4),
 @Password NVARCHAR(255),
+@Salt NVARCHAR(255),
+@CycleCount NVARCHAR(255),
 @FirmWebSiteUrl NVARCHAR(255),
 @EstimatedMonthlyApplicationCount INT,
 @AgreedToTermsDate DATETIME,
@@ -39,14 +41,19 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@ContactEmail, @ContactMobile, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@ContactEmail, @UiOriginID, @ContactMobile, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+	END
+
+	IF @ErrMsg = ''
+	BEGIN
+		SET @ErrMsg = dbo.udfCheckExternalBrokerEmailCollissions(@ContactEmail)
 	END
 
 	IF @ErrMsg = ''
 	BEGIN
 		BEGIN TRY
-			INSERT INTO Security_User (UserName, FullName, Email, BranchId, EzPassword)
-				VALUES (@ContactEmail, @FirmName, @ContactEmail, 0, @Password)
+			INSERT INTO Security_User (UserName, FullName, Email, BranchId, EzPassword, Salt, CycleCount, OriginID)
+				VALUES (@ContactEmail, @FirmName, @ContactEmail, 0, @Password, @Salt, @CycleCount, @UiOriginID)
 		END TRY
 		BEGIN CATCH
 			SET @ErrMsg = 'Failed to create a user entry: ' + dbo.udfGetErrorMsg()

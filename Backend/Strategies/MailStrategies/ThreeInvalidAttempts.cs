@@ -6,14 +6,13 @@
 	using UserManagement;
 
 	public class ThreeInvalidAttempts : AMailStrategyBase {
-
 		public ThreeInvalidAttempts(int customerId) : base(customerId, true) {
 		} // constructor
 
 		public override string Name { get {return "Three Invalid Attempts"; } } // Name
 
 		protected override void SetTemplateAndVariables() {
-			var oNewPassGenerator = new UserResetPassword(CustomerData.Mail);
+			var oNewPassGenerator = new UserResetPassword(CustomerId);
 			oNewPassGenerator.Execute();
 
 			if (!oNewPassGenerator.Success)
@@ -21,13 +20,20 @@
 
 			TemplateName = "Mandrill - Temporary password";
 
-			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
+			var sp = new InitCreatePasswordTokenByUserID(CustomerId, DB, Log);
+			sp.Execute();
+
+			if (sp.Token == Guid.Empty) {
+				throw new StrategyAlert(
+					this,
+					"Failed to generate a change password token for customer " + CustomerId
+				);
+			} // if
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "customer" : CustomerData.FirstName},
-				{"Link", CustomerData.OriginSite + "/Account/CreatePassword?token=" + oToken.ToString("N")}
+				{"Link", CustomerData.OriginSite + "/Account/CreatePassword?token=" + sp.Token.ToString("N")}
 			};
 		} // SetTemplateAndVariables
-
 	} // class ThreeInvalidAttempts
 } // namespace

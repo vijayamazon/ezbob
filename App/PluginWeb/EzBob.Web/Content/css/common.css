@@ -1927,32 +1927,7 @@ input.form_field_right_side {
     resize: none;
 }
 
-.broker-finish-wizard-later {
-    text-align: left;
-    background-image: url(../img/service-portfolio.png);
-    background-size: 64px 52px;
-    background-position: 20px center;
-    background-repeat: no-repeat;
-    padding: 30px 0;
-    border: 1px solid #E2E3E5;
-    width: 1000px;
-    margin: 10px auto;
-}
 
-.broker-finish-inner {
-    padding-left: 100px;
-    padding-right: 30px;
-}
-
-.broker-finish-wizard-later .button-container {
-    position: relative;
-}
-
-.broker-finish-wizard-later .button-container button {
-    display: inline-block;
-    position: absolute;
-    right: 0;
-}
 
 .LoanLegal .attardi-input {
     display: inline;
@@ -3307,7 +3282,10 @@ table.payment-schedule-table {
 
 .bank-account .for-radio { display: inline !important; }
 .bank-account { width: 70%; }
-input#baBusiness { margin-left: 20px; }
+input#baBusiness,
+input#NonFCARegistered {
+	 margin-left: 20px;
+}
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
 
 .narrow-as-possible {
@@ -3379,11 +3357,12 @@ iframe[src^='https://finimpact'] {
     display: block;
     font-size:14px;
     color: #565656;
-    height: 60px;
+    min-height: 60px;
     padding: 0 18px 15px 18px;
     background-color: white;
     margin-bottom: 10px;
 	box-sizing: border-box;
+	position: relative;
 }
 
 .d-widget h3 {
@@ -3480,7 +3459,6 @@ iframe[src^='https://finimpact'] {
     border-radius: 5px 5px 0 0;
     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
-    margin: 0 auto;
     position: relative;
     border-bottom: 1px solid #87847f;
     top: 6px; 
@@ -3490,11 +3468,9 @@ iframe[src^='https://finimpact'] {
     border-radius: 0 0 5px 5px;
     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
-    margin: 0 auto;
     position: relative;
     border-top: 1px solid #e8e8e8;
     top: 6px;
-   
  }
   .slider-label,.minus ,.plus,.slider-input {
       display:none;

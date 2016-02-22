@@ -165,6 +165,23 @@ a.clean-btn{
 	font-weight: normal;
 }
 
+.main-page-everline .d-widget .sliders .summary h3 {
+    color: #6b6862;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+    position: relative;
+    top: 0;
+}
+
+.main-page-everline .d-widget .sliders .summary .summary_total h3 {
+    color: #494949;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 23px;
+}
+
 .main-page-everline .d-widgets dl {
 	position: relative;
     background-color: #e6e6e6;
@@ -177,6 +194,11 @@ a.clean-btn{
 	font-weight: bold;
 	font-size:20px !important;
 	margin-left: 0;
+}
+
+.main-page-everline .d-widgets .apply-button-wrapper {
+	position: relative;
+	height: 100px;
 }
 
 .main-page-everline .d-widgets .ev-btn-org,

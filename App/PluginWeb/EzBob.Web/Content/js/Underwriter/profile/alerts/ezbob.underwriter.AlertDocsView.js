@@ -22,7 +22,7 @@ EzBob.Underwriter.UploadDocView = Backbone.Marionette.ItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: 'Upload Doc',
+			title: 'Add document',
 			position: 'center',
 			draggable: false,
 			width: 530,

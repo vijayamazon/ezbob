@@ -352,7 +352,8 @@ table.squeezed tbody tr td {
 .controls.error textarea, 
 .controls select.error, 
 .controls textArea.error, 
-.controls input.error {
+.controls input.error,
+#accounting-tbl input.error {
     color: #b94a48;
     border: 2px solid #b94a48;
 }
@@ -1110,6 +1111,12 @@ textarea.BusinessAddress {
     background-color: transparent;
     border-color: transparent;
     color: #000000;
+}
+
+.alert a:hover,
+.alert a:visited,
+.alert a:active {
+    color: inherit;
 }
 
 .table-finaccount .alert {
@@ -2392,10 +2399,266 @@ input[type="text"].err-field-red {
 	margin-bottom: 0;
 }
 
+#liInvestors span.create-new-investor {
+	padding-left: 10px;
+}
 #MainStrategyIsInProgress {
 	font-weight: bold;
 	font-size: 90%;
 	display: inline-block;
 	margin: 0 20px 0 5px;
 	color: red;
+}
+
+.multi-brand-area {
+	border-top: 1px solid #e5e5e5;
+	color: #c71585;
+}
+
+.table > tbody > tr > td.grid-btn {
+	padding: 3px 0;
+}
+
+.table > tbody > tr > td.grid-btn div a.btn-primary{
+	padding: 4px 12px;
+}
+
+.table > tbody > tr > td.grid-btn select.form-control {
+	height: 30px !important;
+	padding-top: 2px;
+	width: 220px; 
+	border-color: #c9c9c9;
+}
+
+.table > tbody > tr > td.grid-item-ChooseInvestor {
+	text-align: right;
+	padding-right: 14px;
+}
+
+.table tr th.grid-item-ChooseInvestor {
+	text-align: center;
+}
+
+.table td.grid-money {
+	text-align: right;
+	padding-right: 2%;
+}
+
+/*
+.tab-pane#accounting-tbl tr,.investors-tables .main-investors-table{
+	border: 1px solid #dddddd;
+	border-right: 2px solid #dddddd;
+}
+*/
+
+
+.tab-pane#accounting-tbl td > span {
+	width: 45%;
+	display: inline-block;
+	padding-left: 10px;
+	vertical-align: middle;
+	text-align: right;
+}
+
+.tab-pane#accounting-tbl td > p {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/*investors tables rules*/
+.investors-tables .table td {
+    vertical-align:middle;
+}
+.investors-tables  .form-horizontal .form-group {
+    margin-left:0;
+    margin-right:0;
+}
+.investors-tables  .form-horizontal .btn-primary{
+    float:right;
+}
+  
+    .investor-box {
+        background:white;
+        padding:20px;
+    }
+    .table > tbody > tr > td.td-no-padding,.table > thead > tr > td.td-no-padding {
+        padding:0;
+        border-right:1px solid #dddddd;
+        border-left:1px solid #dddddd;
+    }
+    .investor-box.investor-box-borders{
+        border:1px solid #dddddd;
+    }
+    tr.edit-details-view-area td{
+        padding-top:30px !important;
+        
+    }
+      .investors-tables table tr.activeHover:hover td,.investors-tables table tr.active:hover td , .investors-tables table tr.active td ,tr.manage-investor-row.active td,.table tbody tr.bank-investor-row.active td,.table tbody tr.contact-investor-row.active  td {
+       background:#eaf0f4 !important ;
+       color:#4d4d4d;
+   }
+       .investor-sub-content-box,.edit-details-view-area,.manage-investor-view,.table.sub-investor-table {
+        background:#fafbfc;
+    }
+/* manage investor */
+
+.tab-pane#accounting-tbl tr:last-child {
+	border-bottom: 2px solid #dddddd;
+}
+table.sub-investor-table > tbody > tr > td{
+    padding:10px;
+}
+.btn-investor-submit {
+    margin-left:20px;
+}
+
+   .table > thead > tr > td.edit-investor {
+    text-align: right;
+    padding-right: 2%;
+    }
+     td.submition-buttons {
+         text-align: right;
+	-o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+   }
+   .manage-investor-view .col-md-12 {
+       padding-left:0;
+   }
+   .Cancel-Investor-Edit {
+       margin-right:20px;
+   }
+	
+ 
+   .table tbody tr.bank-investor-row.active:hover,.table tbody tr.contact-investor-row.active:hover {
+       background:#eaf0f4;
+       color:#4d4d4d;
+   }
+   .table > thead > tr > td.manage-investor-column {
+       border:0;
+   }
+    .tab-pane.investors-tables tr.manage-investor-view {
+       border-top:0;
+   }
+    .tab-pane.investors-tables tr.edit-details-view-area {
+        border-bottom:0;
+    }
+
+.tab-pane#accounting-tbl td > span.accounting-btn {
+	padding-top: 4px;
+	text-align: left;
+}
+
+.tab-pane#add-transaction-tbl td > span {
+	width: initial;
+}
+.tab-pane#add-transaction-tbl td.accounting-sign,.tab-pane#funding-transactions-tbl td.accounting-sign,div#repayments-transactions-tbl  td.accounting-sign{
+    font-weight: bold;
+    vertical-align: top;
+    padding: 14px 0 0 7px;
+    font-size: 16px;
+}
+div#funding-transactions-tbl td,div#repayments-transactions-tbl  td{
+    vertical-align: middle;
+}
+.tab-pane#funding-transactions-tbl td.accounting-sign,.tab-pane#repayments-transactions-tbl td.accounting-sign  {
+    padding:12px 0 0 7px;
+}
+.medal-box .btn-group li{
+	display: inline;
+}
+
+.medal-box .btn-group li.active .btn {
+	background: linear-gradient(to bottom, #adadad, #6d6d6d);
+	color: #fff;
+}
+.transactions-range {
+	display: inline-block;
+	float: right;
+}
+
+.transactions-range span {
+	line-height: 30px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.transactions-range .input-group {
+	margin: 0 15px 0 5px;
+}
+
+div.add-transaction {
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+/*Logical glue profile head*/
+.logical-glue .logical-glue-bucket {
+	text-align: center;
+	font-size: 20px;
+}
+
+.logical-glue .logical-glue-score {
+	display: inline-block;
+	float: left;
+	width: 49%;
+	font-size: 12px;
+    padding: 0 !important;
+}
+
+.logical-glue .logical-glue-score div {
+	text-align: center;
+}
+
+.logical-glue .logical-glue-bucket-progress {
+	margin-bottom: 5px;
+}
+
+iframe#logical-glue-iframe{
+	width: 100%;
+    height: 100%;
+    min-height: 600px;
+}
+
+#configSchedulerForm .form-control {
+	width: 25%;
+	margin-left: 5%;
+	margin-bottom: 0;
+}
+
+ #configSchedulerForm .control-label {
+	width: 40%;
+}
+
+ #configSchedulerForm.form-horizontal .form-group {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+#add-investor-form .col-md-6{
+    margin-left:50px;
+} 
+#add-investor-form .col-md-6 .form-group {
+    margin-left:0;
+}
+#add-investor-title {
+    margin-left:50px;
+}
+
+.config-scheduler-fields {
+	display: inline-block;
+	width: 60%;
+	vertical-align: top;
+}
+
+.config-scheduler-labels {
+	display: inline-block;
+	margin-top: 7px;
+	width: 20%;
+}
+
+.fca-incompliance-area .modal-header {
+	margin-bottom: 10px;
 }

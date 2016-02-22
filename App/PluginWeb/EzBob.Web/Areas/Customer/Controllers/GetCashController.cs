@@ -1,60 +1,55 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
+	using System.Web.Script.Serialization;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.LegalDocs;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Utils.Extensions;
+	using EzBob.CommonLib;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using CommonLib;
-	using Ezbob.Backend.Models;
-	using Infrastructure.Attributes;
-	using Code;
-	using Ezbob.Backend.Models.NewLoan;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using EzBob.Models.Agreements;
-	using EzBob.Web.Areas.Customer.Models;
-	using Infrastructure;
+	using log4net;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using StructureMap;
-	using log4net;
-	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate.Util;
 
 	public class GetCashController : Controller {
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly ICustomerNameValidator _validator;
-		private static readonly ILog _log = LogManager.GetLogger(typeof(GetCashController));
-		private readonly IPacnetPaypointServiceLogRepository _logRepository;
-		private readonly ICustomerRepository _customerRepository;
-		private readonly ILoanCreator _loanCreator;
-		private readonly PayPointAccountRepository payPointAccountRepository;
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ICustomerNameValidator validator;
+		private static readonly ILog log = LogManager.GetLogger(typeof(GetCashController));
+		private readonly IPacnetPaypointServiceLogRepository logRepository;
+		private readonly ICustomerRepository customerRepository;
+		private readonly ILoanCreator loanCreator;
 
 		public GetCashController(
 			IEzbobWorkplaceContext context,
 			ICustomerNameValidator validator,
 			IPacnetPaypointServiceLogRepository logRepository,
 			ICustomerRepository customerRepository,
-			ILoanCreator loanCreator,
-			PayPointAccountRepository payPointAccountRepository
-		) {
-			_context = context;
-			m_oServiceClient = new ServiceClient();
-			_validator = validator;
-			_logRepository = logRepository;
-			_customerRepository = customerRepository;
-			_loanCreator = loanCreator;
-			this.payPointAccountRepository = payPointAccountRepository;
+			ILoanCreator loanCreator) {
+			this.context = context;
+		    this.serviceClient = new ServiceClient();
+			this.validator = validator;
+		    this.logRepository = logRepository;
+		    this.customerRepository = customerRepository;
+		    this.loanCreator = loanCreator;
 		}
 
 		[NoCache]
 		public RedirectResult GetTransactionId(decimal loan_amount, int loanType, int repaymentPeriod) {
-			Customer customer = _context.Customer;
+			Customer customer = this.context.Customer;
 
 			CheckCustomerStatus(customer);
 
@@ -62,8 +57,6 @@
 				loan_amount = (int)Math.Floor(customer.CreditSum.Value);
 			}
 			var cr = customer.LastCashRequest;
-
-
 
 			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			if (customer.IsLoanTypeSelectionAllowed == 1) {
@@ -81,14 +74,14 @@
 											 Area = "Customer",
 											 loan_amount,
 											 fee,
-											 username = _context.User.Name,
+											 username = this.context.User.Name,
 											 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
 											 origin = customer.CustomerOrigin.Name
 										 },
 										 "https");
 
 			string url = payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
-			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
+		    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
 			return Redirect(url);
 		}
 
@@ -134,27 +127,27 @@
 			}
 
 			DateTime now = DateTime.UtcNow;
-			Customer cus = _context.Customer;
+			Customer cus = this.context.Customer;
 			try {
 				if (!valid || code != "A") {
 					if (code == "N") {
-						_log.WarnFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
+						log.WarnFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
 					} else {
-						_log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
+						log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
 					}
 
 					// continue to log paypoint and pacnet transactions also for NL, i.e. do nothig new
-					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
+				    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 									   String.Format("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id,
 													 code, message));
 
-					_context.Customer.PayPointErrorsCount++;
+					this.context.Customer.PayPointErrorsCount++;
 
 					try {
 						// sending mail "Mandrill - Debit card authorization problem"
-						m_oServiceClient.Instance.GetCashFailed(_context.User.Id);
+					    this.serviceClient.Instance.GetCashFailed(this.context.User.Id);
 					} catch (Exception e) {
-						_log.Error("Failed to send 'get cash failed' email.", e);
+						log.Error("Failed to send 'get cash failed' email.", e);
 					} // try
 
 					TempData["code"] = code;
@@ -165,33 +158,28 @@
 
 				PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate(), cus.CustomerOrigin.Name);
 				if (!payPointFacade.CheckHash(hash, Request.Url)) {
-					_log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);
+					log.ErrorFormat("Paypoint callback is not authenticated for user {0}", this.context.Customer.Id);
 					// continue to log paypoint transaction also for NL
-					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
+				    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 									   String.Format("Paypoint callback is not authenticated for user {0}",
-													 _context.Customer.Id));
+													 this.context.Customer.Id));
 					//return View("Error");
 					throw new Exception("check hash failed");
 				}
 
 				ValidateCustomerName(customer, cus);
 
-				// 5 pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
+				// "x rebate" pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
 
 				// continue to log paypoint transaction also for NL
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
-
+			    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-				NL_Model nlModel = new NL_Model(cus.Id);
+				Loan loan = this.loanCreator.CreateLoan(cus, loan_amount, card, now);
 
-				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
-
-				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
-	
-				RebatePayment(amount, loan, trans_id, now, nlModel);
+				RebatePayment(amount, loan, trans_id, now);
 
 				cus.PayPointErrorsCount = 0;
 
@@ -199,7 +187,7 @@
 				TempData["bankNumber"] = cus.BankAccount.AccountNumber;
 				TempData["card_no"] = card_no;
 
-				_customerRepository.Update(cus);
+			    this.customerRepository.Update(cus);
 
 				// el: TODO save NL_Payments -> NL_PaypointTransactions for this PayPointCard; "AssignPaymentToLoan" strategy; 
 				/* 
@@ -221,14 +209,14 @@
 				return RedirectToAction("Index", "PacnetStatus", new { Area = "Customer" });
 
 			} catch (OfferExpiredException) {
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
+			    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 								   "Invalid apply for a loan period");
 				return RedirectToAction("ErrorOfferDate", "Paypoint", new { Area = "Customer" });
 			} catch (PacnetException) {
 				try {
-					m_oServiceClient.Instance.TransferCashFailed(_context.User.Id);
+				    this.serviceClient.Instance.TransferCashFailed(this.context.User.Id);
 				} catch (Exception e) {
-					_log.Error("Failed to send 'transfer cash failed' email.", e);
+					log.Error("Failed to send 'transfer cash failed' email.", e);
 				} // try
 				return RedirectToAction("Error", "Pacnet", new { Area = "Customer" });
 			} catch (TargetInvocationException) {
@@ -236,84 +224,133 @@
 			}
 		}
 
-		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now) {
 			if (amount == null || amount <= 0)
 				return;
 			var f = new LoanPaymentFacade();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", nlModel: nlModel);
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
 		}
 
 		[Transactional]
 		[HttpPost]
 		public JsonResult Now(int cardId, decimal amount) {
-			var cus = _context.Customer;
+			var cus = this.context.Customer;
 			var card = cus.PayPointCards.First(c => c.Id == cardId);
 			DateTime now = DateTime.UtcNow;
 
 			NL_Model nlModel = new NL_Model(cus.Id);
-			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel: nlModel);
+			var loan = this.loanCreator.CreateLoan(cus, amount, card, now, nlModel);
 
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
 			return Json(new { url = url });
 		}
 
+
+
 		private void ValidateCustomerName(string customer, Customer cus) {
-			if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Warning",
+			if (!this.validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {
+			    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Warning",
 								   String.Format("Name {0} did not passed validation check for {1} {2}", customer,
 												 cus.PersonalInfo.Surname, cus.PersonalInfo.Surname));
-				_log.WarnFormat("Name {0} did not passed validation check for {1} {2}", customer,
+				log.WarnFormat("Name {0} did not passed validation check for {1} {2}", customer,
 								cus.PersonalInfo.Surname,
 								cus.PersonalInfo.Surname);
 				try {
-					m_oServiceClient.Instance.PayPointNameValidationFailed(_context.User.Id, cus.Id, customer);
+				    this.serviceClient.Instance.PayPointNameValidationFailed(this.context.User.Id, cus.Id, customer);
 				} catch (Exception e) {
-					_log.Error("Failed to send 'paypoint name validation failed' email.", e);
+					log.Error("Failed to send 'paypoint name validation failed' email.", e);
 				} // try
 			}
 		}
 
 		[Transactional]
 		[HttpPost]
-		public JsonResult LoanLegalSigned(
-			decimal loanAmount,
-			int repaymentPeriod,
-			bool preAgreementTermsRead = false,
-			bool agreementTermsRead = false,
-			bool euAgreementTermsRead = false,
-			bool cosmeAgreementTermsRead = false,
-			string signedName = "",
-			bool notInBankruptcy = false
-		) {
-			_log.DebugFormat(
-				"LoanLegalModel " +
-				"agreementTermsRead: {0}" +
-				"preAgreementTermsRead: {1}" +
-				"euAgreementTermsRead: {2}" +
-				"cosmeAgreementTermsRead: {3}",
-				agreementTermsRead,
-				preAgreementTermsRead,
+		public JsonResult LoanLegalSigned(FormCollection collection) {
+		    
+            decimal loanAmount = Convert.ToDecimal(collection["loanAmount"]);
+			int repaymentPeriod = Convert.ToInt32(collection["repaymentPeriod"]);
+		    string signedName = collection["signedName"];
+			bool notInBankruptcy = Convert.ToBoolean(collection["notInBankruptcy"]);
+            bool euAgreementTermsRead = Convert.ToBoolean(collection["euAgreementTermsRead"]);
+            bool cosmeAgreementTermsRead = Convert.ToBoolean(collection["cosmeAgreementTermsRead"]);
+
+
+		    Dictionary<LegalDocsEnums.LoanAgreementTemplateType, bool> dynamicLoanAgreements = new Dictionary<LegalDocsEnums.LoanAgreementTemplateType, bool>();
+
+            foreach (var loanAgreementTemplateName in Enum.GetNames(typeof(LegalDocsEnums.LoanAgreementTemplateType))) {
+                var key = loanAgreementTemplateName + "TermsRead";
+                if (collection.AllKeys.Contains(key))
+                {
+                    var value = Convert.ToBoolean(collection[key]);
+                    dynamicLoanAgreements.Add((LegalDocsEnums.LoanAgreementTemplateType)Enum.Parse(typeof(LegalDocsEnums.LoanAgreementTemplateType),loanAgreementTemplateName), value);
+                }
+            }
+            var dynamicLoanAgreementsStringified = new JavaScriptSerializer().Serialize(dynamicLoanAgreements.ToDictionary(x => x.Key.DescriptionAttr(), x => x.Value.ToString()));
+
+             
+			log.DebugFormat(
+				"LoanLegalModel - " +
+                "dynamicLoanAgreementsStringified : {0}" +
+				"euAgreementTermsRead: {1}" +
+				"cosmeAgreementTermsRead: {2}",
+                dynamicLoanAgreementsStringified,
 				euAgreementTermsRead,
-				cosmeAgreementTermsRead
+				cosmeAgreementTermsRead                
 			);
 
-			var cashRequest = _context.Customer.LastCashRequest;
-			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
+			var cashRequest = this.context.Customer.LastCashRequest;
+			var typeOfBusiness = this.context.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
-			bool hasError =
-                !preAgreementTermsRead ||
-				!agreementTermsRead ||
-				(cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) ||
+            //dynamic agreements validation
+            foreach (var dynamicLoanAgreement in dynamicLoanAgreements) {
+                if (dynamicLoanAgreement.Value != true) {
+                    var errorMsg = string.Format("You must agree on {0} agreement", dynamicLoanAgreement.Key.DescriptionAttr());
+                    return Json(new { error = errorMsg });
+                }
+		    }
+
+		    var personalInfo = cashRequest.Customer.PersonalInfo;
+            
+            //customer name validation
+            var seperator = " ";
+		    List<String> nameCombinations = new List<string>() {
+		        string.Format("{0}{3}{1}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{0}{3}{2}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{1}{3}{0}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{1}{3}{2}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{2}{3}{0}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{2}{3}{1}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
+		        string.Format("{0}{2}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, seperator),
+		        string.Format("{1}{2}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, seperator),
+		    };
+            if (!nameCombinations.Contains(signedName))
+                return Json(new { error = "sign name supplied is incorrect" });
+
+			
+            if ((cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) ||
 				(cashRequest.LoanSource.Name == LoanSourceName.COSME.ToString() && !cosmeAgreementTermsRead) ||
-				!notInBankruptcy;
-
-			if (hasError)
+				!notInBankruptcy)
 				return Json(new { error = "You must agree to all agreements." });
 
-			DateTime now = DateTime.UtcNow;
+            var productSubTypeID = cashRequest.ProductSubTypeID;
+		    var originId = cashRequest.Customer.CustomerOrigin.CustomerOriginID;
+            var isRegulated = cashRequest.Customer.PersonalInfo.TypeOfBusiness.IsRegulated();
 
-			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
+		    var requiredlegalDocsTemplates = this.serviceClient.Instance.GetLegalDocs(cashRequest.Customer.Id, this.context.UserId,originId,isRegulated,productSubTypeID ?? 0)
+		        .LoanAgreementTemplates.Select(x => x.TemplateTypeID);
+
+		    //validate sign on the right agreements
+		    foreach (var requiredlegalDocTemplate in requiredlegalDocsTemplates) {
+		        if (!dynamicLoanAgreements.ContainsKey((LegalDocsEnums.LoanAgreementTemplateType)requiredlegalDocTemplate))
+		            return Json(new {
+		                error = "You must agree to all agreements."
+		            });
+		    }
+
+		    DateTime now = DateTime.UtcNow;
+
+			this.context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
 				CashRequest = cashRequest,
 				Created = now,
 				EUAgreementAgreed = euAgreementTermsRead,
@@ -324,11 +361,11 @@
 				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
-				AlibabaCreditFacilityTemplate = null,
+                SignedLegalDocs = dynamicLoanAgreementsStringified
 			});
 
 
-			NL_LoanLegals loanLegals = new NL_LoanLegals {
+			NL_LoanLegals nlLoanLegals = new NL_LoanLegals {
 				Amount = loanAmount,
 				RepaymentPeriod = repaymentPeriod,
 				SignatureTime = now,
@@ -340,9 +377,12 @@
 				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
+                SignedLegalDocs = dynamicLoanAgreementsStringified
 			};
-			//this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
-			//el: TODO add LoanLegal for offer
+
+			var nlStrategyLegals = this.serviceClient.Instance.AddLoanLegals(this.context.UserId, this.context.Customer.Id, nlLoanLegals);
+
+			//_log.Debug("NL_LoanLegals: ID {0}, Error: {1}", nlStrategyLegals.Value, nlStrategyLegals.Error);
 
 			return Json(new { });
 
@@ -356,7 +396,7 @@
 			string signedName = "",
 			bool creditFacilityAccepted = false
 		) {
-			_log.DebugFormat(
+			log.DebugFormat(
 				"CreditLineSignatureModel " +
 				"customer ID: {0}" +
 				"cash request ID: {1}" +
@@ -368,10 +408,10 @@
 				creditFacilityAccepted
 			);
 
-			var customer = _context.Customer;
+			var customer = this.context.Customer;
 
 			if ((customer == null) || (customer.Id != customerID)) {
-				_log.ErrorFormat(
+				log.ErrorFormat(
 					"CreditLineSigned: invalid or unmatched customer ({0}) for requested id {1}.",
 					customer.Stringify(),
 					customerID
@@ -383,7 +423,7 @@
 			CashRequest cashRequest = customer.CashRequests.FirstOrDefault(r => r.Id == cashRequestID);
 
 			if (cashRequest == null) {
-				_log.WarnFormat(
+				log.WarnFormat(
 					"CreditLineSigned: cash request not found by id {0} at customer {1}.",
 					cashRequestID,
 					customer.Stringify()
@@ -395,7 +435,7 @@
 			bool hasError = !creditFacilityAccepted;
 
 			if (hasError) {
-				_log.WarnFormat(
+				log.WarnFormat(
 					"CreditLineSigned: credit facility not accepted for cash request {0} at customer {1}.",
 					cashRequestID,
 					customer.Stringify()
@@ -404,14 +444,13 @@
 				return Json(new { success = false, error = "You must agree to all agreements.", });
 			} // if
 
-			IAgreementsTemplatesProvider templateProvider = ObjectFactory.GetInstance<IAgreementsTemplatesProvider>();
+            var productSubTypeID = cashRequest.ProductSubTypeID;
+		    var originId = customer.CustomerOrigin.CustomerOriginID;
+            var isRegulated = customer.PersonalInfo.TypeOfBusiness.IsRegulated();
 
-            var ezbobAlibabaCreditFacilityTemplatePath = templateProvider.GetTemplatePath(LoanAgreementTemplateType.CreditFacility, false, true, false);
-
-            string templateText = templateProvider.GetTemplateByName(ezbobAlibabaCreditFacilityTemplatePath);
-
-			var template = ObjectFactory.GetInstance<DatabaseDataHelper>()
-				.LoadOrCreateLoanAgreementTemplate(templateText, LoanAgreementTemplateType.CreditFacility);
+		    var loanAgreementTemplates =
+		        this.serviceClient.Instance.GetLegalDocs(customer.Id, this.context.UserId, originId, isRegulated, productSubTypeID ?? 0)
+		            .LoanAgreementTemplates.ToDictionary(x => x.TemplateTypeName, x => true);
 
 			customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
 				CashRequest = cashRequest,
@@ -424,12 +463,12 @@
 				GuarantyAgreementAgreed = false,
 				SignedName = signedName,
 				NotInBankruptcy = false,
-				AlibabaCreditFacilityTemplate = template,
+                SignedLegalDocs = new JavaScriptSerializer().Serialize(loanAgreementTemplates.ToDictionary(x => x.Key.DescriptionAttr(), x => x.Value.ToString()))
 			});
 
 			//el: TODO add LoanLegal for offer
 
 			return Json(new { success = true, error = string.Empty, });
-		} // CreditLineSigned
+		}// CreditLineSigned
 	}
-}
+}//ns

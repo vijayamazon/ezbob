@@ -1,11 +1,9 @@
 ﻿namespace AutomationVerification {
 	using System;
 	using System.Collections.Generic;
-	using AutomationCalculator.AutoDecision;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
-	using AutomationCalculator.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using NUnit.Framework;
@@ -41,7 +39,7 @@
 
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
-        
+
 		[Test]
 		public void TestMedalChooser() {
 			var medalChooser = new MedalChooser(_db, Log);
@@ -69,31 +67,6 @@
 		public void TestMedal() {
 			var medalChooser = new MedalChooser(_db, Log);
 			medalChooser.GetMedal(18626, DateTime.UtcNow);
-		}
-
-		[Test]
-		public void TestOfferCalculator() {
-			var db = _db;
-			var offerCalculator = new OfferCalculator(db, Log);
-			var input = new OfferInputModel {
-				Amount = 17000,
-				HasLoans = false,
-				AspireToMinSetupFee = true,
-				Medal = Medal.Gold,
-				CustomerId = 18263,
-                RepaymentPeriod = 15,
-                LoanSourceId = 3,
-			};
-
-			var offer1 = offerCalculator.GetCosmeOffer(input);
-			//var offer2 = offerCalculator.GetOfferByBoundaries(input);
-
-			Log.Debug("Offer1 is: {0}", offer1);
-		//	Log.Debug("Offer2 is: {0}", offer2);
-		//	Assert.AreEqual(offer1.InterestRate, offer2.InterestRate);
-		//	Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
-			offer1.SaveToDb(Log, db, OfferCalculationType.Seek);
-		//	offer2.SaveToDb(Log, db, OfferCalculationType.Boundaries);
 		}
 
 		[Test]

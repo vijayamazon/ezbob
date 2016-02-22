@@ -4,9 +4,15 @@
 	using Ezbob.Logger;
 
 	public class SameDataAgent : Agent {
-		public SameDataAgent(int customerID, long? cashRequestID, DateTime now, AConnection db, ASafeLog log)
-			: base(customerID, cashRequestID, db, log)
-		{
+		public SameDataAgent(
+			int customerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			DateTime now,
+			string tag,
+			AConnection db,
+			ASafeLog log
+		) : base(customerID, cashRequestID, nlCashRequestID, tag, db, log) {
 			this.now = now; // Not assigning directly to Now to avoid "virtual call in constructor".
 		} // constructor
 
@@ -18,10 +24,10 @@
 			return this;
 		} // Init
 
-		public virtual void Decide(string tag) {
+		public virtual void Decide() {
 			RunPrimary();
 
-			Trail.SetTag(tag).Save(DB, null);
+			Trail.Save(DB, null);
 		} // Decide
 
 		protected override void GatherAvailableFunds() {

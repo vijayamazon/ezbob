@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8D2C4B94-EB8F-470E-927E-F22B7BEEC42F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ezbob.Integration.LogicalGlue</RootNamespace>
+    <AssemblyName>Ezbob.Integration.LogicalGlue</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Engine\Interface\Bucket.cs" />
+    <Compile Include="Engine\Interface\EtlData.cs" />
+    <Compile Include="Engine\Interface\GetInferenceMode.cs" />
+    <Compile Include="Engine\Interface\InferenceError.cs" />
+    <Compile Include="Engine\Interface\InferenceExt.cs" />
+    <Compile Include="Engine\Interface\InferenceStatus.cs" />
+    <Compile Include="Engine\Interface\MonthlyRepaymentData.cs" />
+    <Compile Include="Exceptions\Engine\EngineAlert.cs" />
+    <Compile Include="Exceptions\Engine\EngineWarning.cs" />
+    <Compile Include="Exceptions\Engine\FailedToLoadInputDataAlert.cs" />
+    <Compile Include="Exceptions\Engine\NoHarvesterEngineAlert.cs" />
+    <Compile Include="Exceptions\Engine\NoConnectionEngineAlert.cs" />
+    <Compile Include="Exceptions\Harvester\BadInputDataAlert.cs" />
+    <Compile Include="Exceptions\Harvester\HarvesterAlert.cs" />
+    <Compile Include="Exceptions\Harvester\HarvesterWarning.cs" />
+    <Compile Include="Exceptions\Harvester\BadConfigurationAlert.cs" />
+    <Compile Include="Exceptions\Harvester\NoConfigurationAlert.cs" />
+    <Compile Include="Exceptions\Harvester\NoInputDataAlert.cs" />
+    <Compile Include="Exceptions\Keeper\SetIsTryOutStatusAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceRequestSaverNoDataAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverWrongRequestIDAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverNoDataAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceSaverAlert.cs" />
+    <Compile Include="Harvester\Implementation\TestHarvester.cs" />
+    <Compile Include="Harvester\Interface\DirectorData.cs" />
+    <Compile Include="Harvester\Interface\EquifaxData.cs" />
+    <Compile Include="Harvester\Interface\HarvesterConfiguration.cs" />
+    <Compile Include="Harvester\Interface\IConvertableToShortString.cs" />
+    <Compile Include="Harvester\Interface\InferenceInputPackage.cs" />
+    <Compile Include="Harvester\Interface\InferenceOutputDecision.cs" />
+    <Compile Include="Harvester\Interface\InferenceOutputDecisionModels.cs" />
+    <Compile Include="Keeper\Implementation\ACustomerActionBase.cs" />
+    <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
+    <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
+    <Compile Include="Keeper\Implementation\InferenceHistoryLoader.cs" />
+    <Compile Include="Keeper\Implementation\AInferenceLoaderBase.cs" />
+    <Compile Include="Keeper\Implementation\InferenceLoadAttempter.cs" />
+    <Compile Include="Keeper\Implementation\InputDataLoader.cs" />
+    <Compile Include="Exceptions\Keeper\InputDataLoaderAlert.cs" />
+    <Compile Include="Exceptions\Keeper\NoConnectionKeeperAlert.cs" />
+    <Compile Include="Exceptions\Keeper\KeeperAlert.cs" />
+    <Compile Include="Exceptions\Keeper\KeeperWarning.cs" />
+    <Compile Include="Harvester\Interface\Etl.cs" />
+    <Compile Include="Engine\Interface\EtlCode.cs" />
+    <Compile Include="Harvester\Interface\InferenceInputSerializer.cs" />
+    <Compile Include="Harvester\Interface\InferenceInput.cs" />
+    <Compile Include="Harvester\Interface\EncodingFailure.cs" />
+    <Compile Include="Harvester\Interface\IHarvester.cs" />
+    <Compile Include="Harvester\Interface\InferenceOutput.cs" />
+    <Compile Include="Harvester\Interface\ModelOutput.cs" />
+    <Compile Include="Harvester\Interface\Reply.cs" />
+    <Compile Include="Harvester\Interface\Response.cs" />
+    <Compile Include="Engine\Interface\TimeoutSources.cs" />
+    <Compile Include="Harvester\Interface\Warning.cs" />
+    <Compile Include="Harvester\Implementation\Harvester.cs" />
+    <Compile Include="InjectorStub.cs" />
+    <Compile Include="Engine\Interface\ICanBeEmpty.cs" />
+    <Compile Include="Engine\Interface\ModelNames.cs" />
+    <Compile Include="Engine\Interface\EncodingFailure.cs" />
+    <Compile Include="Engine\Interface\ModelError.cs" />
+    <Compile Include="Engine\Interface\Inference.cs" />
+    <Compile Include="Engine\Interface\Grade.cs" />
+    <Compile Include="Engine\Interface\ModelOutput.cs" />
+    <Compile Include="Engine\Interface\Utility.cs" />
+    <Compile Include="Engine\Interface\Warning.cs" />
+    <Compile Include="Engine\Interface\IEngine.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\ModelOutput.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceRequestSaverAlert.cs" />
+    <Compile Include="Exceptions\Keeper\InferenceLoaderAlert.cs" />
+    <Compile Include="Exceptions\LogicalGlueWarning.cs" />
+    <Compile Include="Exceptions\LogicalGlueAlert.cs" />
+    <Compile Include="Exceptions\LogicalGlueException.cs" />
+    <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
+    <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInferenceIfExists.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveCustomerHistory.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveEtlData.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveWarning.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveOutputRatio.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveMissingColumn.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveEncodingFailure.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveRawResponse.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveModelOutput.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveResponse.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SaveInferenceRequest.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadInputData.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\SetRequestIsTryOut.cs" />
+    <Compile Include="Keeper\Interface\ModuleConfiguration.cs" />
+    <Compile Include="Keeper\Interface\IKeeper.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\AWithModelOutputID.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\EncodingFailure.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\OutputRatio.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\MissingColumn.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\Response.cs" />
+    <Compile Include="Keeper\Implementation\DBTable\Warning.cs" />
+    <Compile Include="Keeper\Implementation\Keeper.cs" />
+    <Compile Include="Keeper\Implementation\InferenceLoader.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="Engine\Implementation\Engine.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\ABaseTest.cs" />
+    <Compile Include="Tests\BasicFlow.cs" />
+    <Compile Include="Tests\CreateStoredProcs.cs" />
+    <Compile Include="Tests\LGReply.cs" />
+    <Compile Include="Tests\InputSerialization.cs" />
+    <Compile Include="Tests\KeeperTests.cs" />
+    <Compile Include="Tests\ModelOutputSerialization.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\LibraryGlobals\LibraryGlobals.csproj">
+      <Project>{83a9efc6-0bd4-46fa-9058-329bee135bda}</Project>
+      <Name>LibraryGlobals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\MiniResharper\MiniResharper.csproj">
+      <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
+      <Name>MiniResharper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -157,23 +157,23 @@
 
 		public virtual VariableValue ImailUserName {
 			get { return this[Variables.ImailUserName]; } // get
-		} 
+		}
 
 		public virtual VariableValue IMailPassword {
 			get { return this[Variables.IMailPassword]; } // get
-		} 
+		}
 
 		public virtual VariableValue IMailDebugModeEnabled {
 			get { return this[Variables.IMailDebugModeEnabled]; } // get
-		} 
+		}
 
 		public virtual VariableValue IMailDebugModeEmail {
 			get { return this[Variables.IMailDebugModeEmail]; } // get
-		} 
+		}
 
 		public virtual VariableValue IMailSavePath {
 			get { return this[Variables.IMailSavePath]; } // get
-		} 
+		}
 
 		public virtual VariableValue IntervalWaitForAmlCheck {
 			get { return this[Variables.IntervalWaitForAmlCheck]; }
@@ -199,25 +199,41 @@
 			get { return this[Variables.InvalidPasswordBlockSeconds]; }
 		}
 
+		public virtual VariableValue InvestorServicingFeePercent {
+			get { return this[Variables.InvestorServicingFeePercent]; }
+		}
+
+        public virtual VariableValue InvestorBudgetAmplitude {
+            get { return this[Variables.InvestorBudgetAmplitude]; }
+        }
+		
+		public virtual VariableValue InvestorFundsUtilized75 {
+			get { return this[Variables.InvestorFundsUtilized75]; }
+		}
+
+		public virtual VariableValue InvestorFundsUtilized90 {
+			get { return this[Variables.InvestorFundsUtilized90]; }
+		}
+
 		public virtual VariableValue IovationAdminAccountName {
 			get { return this[Variables.IovationAdminAccountName]; }
 		}
-        public virtual VariableValue IovationAdminSubscriber {
-            get { return this[Variables.IovationAdminSubscriber]; }
+		public virtual VariableValue IovationAdminSubscriber {
+			get { return this[Variables.IovationAdminSubscriber]; }
 		}
-        public virtual VariableValue IovationAdminPassword {
+		public virtual VariableValue IovationAdminPassword {
 			get { return this[Variables.IovationAdminPassword]; }
 		}
-        public virtual VariableValue IovationEnabled {
+		public virtual VariableValue IovationEnabled {
 			get { return this[Variables.IovationEnabled]; }
 		}
-        public virtual VariableValue IovationEnvironment {
+		public virtual VariableValue IovationEnvironment {
 			get { return this[Variables.IovationEnvironment]; }
 		}
-        public virtual VariableValue IovationSubscriberAccount {
+		public virtual VariableValue IovationSubscriberAccount {
 			get { return this[Variables.IovationSubscriberAccount]; }
 		}
-        public virtual VariableValue IovationSubscriberId {
+		public virtual VariableValue IovationSubscriberId {
 			get { return this[Variables.IovationSubscriberId]; }
 		}
 		public virtual VariableValue IovationSubscriberPasscode {
@@ -226,12 +242,12 @@
 		public virtual VariableValue IovationUrl {
 			get { return this[Variables.IovationUrl]; }
 		}
-        public virtual VariableValue IovationCheckPeriod {
-            get { return this[Variables.IovationCheckPeriod]; }
+		public virtual VariableValue IovationCheckPeriod {
+			get { return this[Variables.IovationCheckPeriod]; }
 		}
-        public virtual VariableValue IovationAdminUrl {
-            get { return this[Variables.IovationAdminUrl]; }
-        }
+		public virtual VariableValue IovationAdminUrl {
+			get { return this[Variables.IovationAdminUrl]; }
+		}
 		public virtual VariableValue IsSmsValidationActive {
 			get { return this[Variables.IsSmsValidationActive]; }
 		}
@@ -270,6 +286,38 @@
 		public virtual VariableValue LoginValidity {
 			get { return this[Variables.LoginValidity]; }
 		}
+
+		public virtual VariableValue LogicalGlueAuthorizationScheme {
+			get { return this[Variables.LogicalGlueAuthorizationScheme]; }
+		} // LogicalGlueAuthorizationScheme
+
+		public virtual VariableValue LogicalGlueCacheAcceptanceDays {
+			get { return this[Variables.LogicalGlueCacheAcceptanceDays]; }
+		} // LogicalGlueCacheAcceptanceDays
+
+		public virtual VariableValue LogicalGlueEnabled {
+			get { return this[Variables.LogicalGlueEnabled]; }
+		} // LogicalGlueEnabled
+
+		public virtual VariableValue LogicalGlueHostName {
+			get { return this[Variables.LogicalGlueHostName]; }
+		} // LogicalGlueHostName
+
+		public virtual VariableValue LogicalGlueNewCustomerRequestPath {
+			get { return this[Variables.LogicalGlueNewCustomerRequestPath]; }
+		} // LogicalGlueNewCustomerRequestPath
+
+		public virtual VariableValue LogicalGlueOldCustomerRequestPath {
+			get { return this[Variables.LogicalGlueOldCustomerRequestPath]; }
+		} // LogicalGlueOldCustomerRequestPath
+
+		public virtual VariableValue LogicalGluePassword {
+			get { return this[Variables.LogicalGluePassword]; }
+		} // LogicalGluePassword
+
+		public virtual VariableValue LogicalGlueUserName {
+			get { return this[Variables.LogicalGlueUserName]; }
+		} // LogicalGlueUserName
 
 		public virtual VariableValue LogOffMode {
 			get { return this[Variables.LogOffMode]; }

@@ -1,0 +1,64 @@
+<connectionStrings>
+	<!--
+	***************************************************************************
+	***
+	*** DEVELOPMENT environments
+	***
+	***************************************************************************
+	-->
+
+	<add name="dev-elinar" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-elinar-prod-auto" connectionString="Server=localhost;Database=prod_auto;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<add name="dev-dora"    connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-mishas"  connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=Or@nge123;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-romanp"  connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-sashaf"  connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-server"  connectionString="Server=10.0.0.220;Database=prod_auto;User Id=sa;Password=Ezbobdevdb1;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-shlomim" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-stasd"   connectionString="Server=STASD-PC\SQLEXPRESS;Database=ezbob;User Id=stas;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-yarons"  connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<add name="dev-alexbo"           connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=automation_report_foxtrot;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="production-alexbo"    connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<!--
+	***************************************************************************
+	***
+	*** QA environments
+	***
+	***************************************************************************
+	-->
+
+	<add name="qa"   connectionString="user id=sa;password=Ezbobqadb1;server=ezqa01;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-2" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa02;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-3" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa03;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<add name="qa-prod-auto"  connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_auto;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-medal" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="qa-prod-test"  connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_test;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<!--
+	***************************************************************************
+	***
+	*** UAT environments
+	***
+	***************************************************************************
+	-->
+
+	<add name="uat" connectionString="user id=sa;Password=Ezbobuatdb1;server=192.168.120.17;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+
+	<!--
+	***************************************************************************
+	***
+	*** PRODUCTION environments
+	***
+	***************************************************************************
+	-->
+
+	<add name="production"           connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="production-auto_exec" connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="production-stasd"     connectionString="user id=sa;password=Or@nge123;server=192.168.120.10;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+</connectionStrings>
+

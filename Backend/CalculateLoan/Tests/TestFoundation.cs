@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Tests {
 	using ConfigManager;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
@@ -20,9 +21,8 @@
 			ConfigManager.CurrentValues.Init(DB, Log);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
-
-			Ezbob.Backend.CalculateLoan.Models.Library.Initialize(Env, DB, Log);
-			Ezbob.Backend.CalculateLoan.LoanCalculator.Library.Initialize(Env, DB, Log);
+			
+			Library.Initialize(Env, DB, Log);
 		} // Init
 
 		protected AConnection DB { get; private set; }

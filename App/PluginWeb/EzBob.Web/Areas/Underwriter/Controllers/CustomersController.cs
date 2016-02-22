@@ -14,9 +14,7 @@
 	using Code;
 	using Infrastructure.csrf;
 
-	// In order to block sales from UW dashboard uncomment and add this permission to all relevant roles:
-	// [Permission(Name = "Underwriter")]
-
+	[Permission(Name = "UnderwriterDashboard")]
 	public class CustomersController : Controller {
 		public CustomersController(
 			CustomerStatusesRepository customerStatusesRepo,
@@ -35,7 +33,7 @@
 
 		public ViewResult Index() {
 			var grids = new LoansGrids {
-				IsEscalated = this.context.User.Roles.Any(r => r.Name == "manager"),
+				IsEscalated = this.context.UserRoles.Any(r => r == "manager"),
 				MpTypes = this.mpType.GetAll().ToList(),
 				CollectionStatuses = this.customerStatusesRepo.GetVisible().ToList(),
 				MaxLoan = this.loanLimit.GetMaxLimit(),
@@ -55,6 +53,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[Permissions(Names = new [] {"ApproveReject" ,"Escalate", "SuspendBtn", "ReturnBtn"})]
 		public JsonResult SetDecision(DecisionModel model) {
 			model.attemptID = Guid.NewGuid().ToString("N");
 			model.underwriterID = this.context.UserId;

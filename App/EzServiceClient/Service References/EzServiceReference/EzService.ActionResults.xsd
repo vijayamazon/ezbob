@@ -2,8 +2,12 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Authentication" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.LandRegistry" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" />
   <xs:complexType name="BrokerInstantOfferResponseActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -14,31 +18,103 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerInstantOfferResponseActionResult" nillable="true" type="tns:BrokerInstantOfferResponseActionResult" />
-  <xs:complexType name="SalesForceActivityActionResult">
+  <xs:complexType name="NLModelActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/EzService" base="q3:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" minOccurs="0" name="Value" nillable="true" type="q4:GetActivityResultModel" />
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Value" nillable="true" type="q4:NL_Model" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NLModelActionResult" nillable="true" type="tns:NLModelActionResult" />
+  <xs:complexType name="ListNewLoanActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Value" nillable="true" type="q6:ArrayOfNL_Loans" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ListNewLoanActionResult" nillable="true" type="tns:ListNewLoanActionResult" />
+  <xs:complexType name="PricingScenarioNameListActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Names" nillable="true" type="q8:ArrayOfPricingScenarioName" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PricingScenarioNameListActionResult" nillable="true" type="tns:PricingScenarioNameListActionResult" />
+  <xs:complexType name="SalesForceActivityActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/EzService" base="q9:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" minOccurs="0" name="Value" nillable="true" type="q10:GetActivityResultModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
+  <xs:complexType name="SecurityUserActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" base="q11:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Authentication" minOccurs="0" name="User" nillable="true" type="q12:User" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SecurityUserActionResult" nillable="true" type="tns:SecurityUserActionResult" />
+  <xs:complexType name="LandRegistryActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" base="q13:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.LandRegistry" minOccurs="0" name="Value" nillable="true" type="q14:ArrayOfLandRegistryDB" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LandRegistryActionResult" nillable="true" type="tns:LandRegistryActionResult" />
   <xs:complexType name="ApplicationInfoResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
+      <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/EzService" base="q15:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ApplicationInfo" minOccurs="0" name="Model" nillable="true" type="q6:ApplicationInfoModel" />
+          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" minOccurs="0" name="Model" nillable="true" type="q16:ApplicationInfoModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ApplicationInfoResult" nillable="true" type="tns:ApplicationInfoResult" />
+  <xs:complexType name="DecisionHistoryResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q17="http://schemas.datacontract.org/2004/07/EzService" base="q17:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="Model" nillable="true" type="q18:ArrayOfDecisionHistoryDBModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DecisionHistoryResult" nillable="true" type="tns:DecisionHistoryResult" />
+  <xs:complexType name="SlidersDataActionResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q19="http://schemas.datacontract.org/2004/07/EzService" base="q19:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="SlidersData" nillable="true" type="q20:SlidersDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SlidersDataActionResults" nillable="true" type="tns:SlidersDataActionResults" />
   <xs:complexType name="CollectionSnailMailActionResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">
+      <xs:extension xmlns:q21="http://schemas.datacontract.org/2004/07/EzService" base="q21:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q8:CollectionSnailMailMetadataModel" />
+          <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" minOccurs="0" name="SnailMail" nillable="true" type="q22:CollectionSnailMailMetadataModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

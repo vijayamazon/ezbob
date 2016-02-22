@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults.Investor" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" />
+  <xs:complexType name="InvestorActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="Investor" nillable="true" type="q2:InvestorModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InvestorActionResult" nillable="true" type="tns:InvestorActionResult" />
+  <xs:complexType name="AccountingDataResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/EzService" base="q3:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="AccountingData" nillable="true" type="q4:ArrayOfAccountingDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountingDataResult" nillable="true" type="tns:AccountingDataResult" />
+  <xs:complexType name="ListInvestorsResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="Investors" nillable="true" type="q6:ArrayOfOneInvestorModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ListInvestorsResult" nillable="true" type="tns:ListInvestorsResult" />
+  <xs:complexType name="TransactionsDataResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/EzService" base="q7:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="TransactionsData" nillable="true" type="q8:ArrayOfTransactionsDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TransactionsDataResult" nillable="true" type="tns:TransactionsDataResult" />
+  <xs:complexType name="SchedulerDataResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/EzService" base="q9:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Investor" minOccurs="0" name="SchedulerData" nillable="true" type="q10:SchedulerDataModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SchedulerDataResult" nillable="true" type="tns:SchedulerDataResult" />
+  <xs:complexType name="LogicalGlueResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/EzService" base="q11:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Interface" minOccurs="0" name="Bucket" nillable="true" type="q12:Bucket" />
+          <xs:element minOccurs="0" name="BucketPercent" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BucketStr" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FLScore" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IsHardReject" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsTryout" type="xs:boolean" />
+          <xs:element minOccurs="0" name="MonthlyRepayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="NNScore" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ScoreIsReliable" type="xs:boolean" />
+          <xs:element minOccurs="0" name="UniqueID" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LogicalGlueResult" nillable="true" type="tns:LogicalGlueResult" />
+  <xs:complexType name="ArrayOfLogicalGlueResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LogicalGlueResult" nillable="true" type="tns:LogicalGlueResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLogicalGlueResult" nillable="true" type="tns:ArrayOfLogicalGlueResult" />
+  <xs:complexType name="LegalDocsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" base="q13:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" minOccurs="0" name="LoanAgreementTemplates" nillable="true" type="q14:ArrayOfLoanAgreementTemplate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LegalDocsActionResult" nillable="true" type="tns:LegalDocsActionResult" />
+  <xs:complexType name="LegalDocActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/EzService" base="q15:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.LegalDocs" minOccurs="0" name="LoanAgreementTemplate" nillable="true" type="q16:LoanAgreementTemplate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LegalDocActionResult" nillable="true" type="tns:LegalDocActionResult" />
+</xs:schema>

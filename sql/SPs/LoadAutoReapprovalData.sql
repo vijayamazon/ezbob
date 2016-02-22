@@ -53,11 +53,15 @@ BEGIN
 	DECLARE @LacrTime DATETIME
 	DECLARE @EmailSendingBanned BIT
 	DECLARE @ManagerApprovedSum INT
+	DECLARE @OfferStart DATETIME
+	DECLARE @OfferValidUntil DATETIME
 
 	SELECT
 		@LacrTime = UnderwriterDecisionDate,
 		@EmailSendingBanned = EmailSendingBanned,
-		@ManagerApprovedSum = ManagerApprovedSum
+		@ManagerApprovedSum = ManagerApprovedSum,
+		@OfferStart = OfferStart,
+		@OfferValidUntil = OfferValidUntil
 	FROM
 		CashRequests
 	WHERE
@@ -185,8 +189,8 @@ BEGIN
 		RepaidPrincipal    = @RepaidPrincipal,
 		SetupFees          = @SetupFees,
 		EmailSendingBanned = @EmailSendingBanned,
-		OfferValidUntil    = c.ValidFor,
-		OfferStart         = c.ApplyForLoan
+		OfferValidUntil    = @OfferValidUntil,
+		OfferStart         = @OfferStart
 	FROM
 		Customer c
 	WHERE

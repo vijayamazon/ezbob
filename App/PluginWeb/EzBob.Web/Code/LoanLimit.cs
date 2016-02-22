@@ -26,7 +26,7 @@
 		} // Check
 
 		public int GetMaxLimit() {
-			return this.context.User.Roles.Any(r => r.Name == "manager")
+			return this.context.UserRoles.Any(r => r == "manager" || r == "Underwriter")
 				? CurrentValues.Instance.ManagerMaxLoan
 				: CurrentValues.Instance.MaxLoan;
 		} // GetMaxLimit

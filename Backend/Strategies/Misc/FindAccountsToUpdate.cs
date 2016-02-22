@@ -11,8 +11,8 @@
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using Ezbob.ValueIntervals;
-	using Integration.ChannelGrabberConfig;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberConfig;
+	using global::Integration.ChannelGrabberFrontend;
 	using JetBrains.Annotations;
 	using MailStrategies;
 	using YodleeLib.connector;
@@ -34,7 +34,7 @@
 
 			Guid oEkmType = new EkmDatabaseMarketPlace().InternalId;
 			Guid oYodleeType = new YodleeDatabaseMarketPlace().InternalId;
-			VendorInfo oHmrc = Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc;
+			VendorInfo oHmrc = global::Integration.ChannelGrabberConfig.Configuration.GetInstance(Log).Hmrc;
 
 			m_oStra.Execute();
 

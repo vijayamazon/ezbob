@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.Common {
 	using System.ComponentModel;
+	using System.Runtime.Serialization;
 
 	public enum Decision {
 		Approve,
@@ -66,15 +67,28 @@
 		SoleTrader,
 	}
 
+	public static class MedalTypeExtension {
+		public static bool IsOnline(this MedalType variable) {
+			return variable.In(
+				MedalType.OnlineLimited,
+				MedalType.OnlineNonLimitedNoBusinessScore,
+				MedalType.OnlineNonLimitedWithBusinessScore
+			);
+		} // class MedalTypeExtension
+
+		public static bool In(this MedalType variable, params MedalType[] args) {
+			foreach (MedalType mt in args)
+				if (variable == mt)
+					return true;
+
+			return false;
+		} // class MedalTypeExtension
+	} // class MedalTypeExtension
+
 	public enum TurnoverType {
 		HMRC,
 		Bank,
 		Online,
-	}
-
-	public enum OfferCalculationType {
-		Seek,
-		Boundaries
 	}
 
 	public enum Parameter {
@@ -117,4 +131,14 @@
 		SoundEqual = 4,
 		Equal = 5,
 	} // enum StringDifference
-}
+
+	public enum LGEtlCode {
+		Success = 1,
+		HardReject = 2,
+	} // enum LGEtlCode
+
+	public enum LGTimeoutSources {
+		Equifax = 1,
+		LogicalGlueInferenceApi = 2,
+	} // enum LGTimeoutSources
+} // namespace

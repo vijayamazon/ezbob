@@ -1,0 +1,360 @@
+﻿@model dynamic
+		   
+<script type="text/template" id="accounting-investor-template">
+	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
+	<div id="main-content">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">					
+					<div class="row">
+
+						<h3>Investor Status</h3>
+
+                        <div class="tab-pane investors-tables " id="accounting-tbl">
+                            <div class="table-responsive table-ezbig">
+                                <table class="table grid-data main-investors-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Type</th>
+                                            <th>Name</th>
+                                            <th style="text-align: center">Funds Status</th>
+											<th>Funds inc. Obligations</th>
+                                            <th style="text-align: center">Accumulated Repayments <br /> for Investor</th>
+                                            <th>Servicing fee discount</th>
+                                            <th>Config Schedulers</th>
+                                            <th>Is Active</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% data = data || {}; %>
+                                        <%_.each(data, function(a){ %>
+                                        <tr class="investor-data-row activeHover">
+                                            <td><%-a.InvestorID%></td>
+                                            <td><%-a.InvestorType%></td>
+                                            <td><%-a.InvestorName%></td>
+                                            <td>
+												<span data-toggle="tooltip" data-title="Bank account number <%-a.FundingBankAccountNumber%>">
+													<%-EzBob.formatPoundsNoDecimals(a.FundsStatus)%>
+												</span>
+                                                <span class="accounting-btn">
+													<button class="btn btn-primary funding-transactions" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show finding transactions"><i class="fa fa-exchange"></i></button>
+                                                </span>
+                                            </td>
+											<td>
+												<span data-toggle="tooltip" data-title="<%-a.FundingBankAccountNumber%>">
+													<%-EzBob.formatPoundsNoDecimals(a.ObligationsStatus)%>
+												</span>
+											</td>
+                                            <td>
+                                                <span>
+                                                    <p data-toggle="tooltip" data-title="<%-a.RepaymentsBankAccountNumber%>"><%-EzBob.formatPoundsNoDecimals(a.AccumulatedRepayments)%></p>
+                                                    <%if(a.TotalNonActiveAccumulatedRepayments) {%>
+                                                    <p data-toggle="tooltip" data-title="<%-a.InactiveRepaymentsAccountsNumbers%>"><%-EzBob.formatPoundsNoDecimals(a.TotalNonActiveAccumulatedRepayments)%></p>
+                                                    <%}%>
+                                                </span>
+                                                <span class="accounting-btn">
+													<button class="btn btn-primary repayments-transactions" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show repayments transactions"><i class="fa fa-exchange"></i></button>
+                                                </span>
+                                            </td>
+                                            <td><%-EzBob.formatPercents(a.ServicingFeeDiscount)%></td>
+                                            <td>
+                                                <span class="accounting-btn">
+													<button class="btn btn-primary investor-scheduler" data-investorid="<%-a.InvestorID%>" data-toggle="tooltip" data-title="Show config scheduler"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </td>
+                                            <td><img src="/Content/img/<%-a.IsInvestorActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+                                        </tr>
+                                        <%});%>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+						<div>
+							<label class="checkbox">
+								<input type="checkbox" class="includeNonActiveInvestors" />
+								Include non active investors
+							</label>
+						</div>
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="funding-transactions-template">
+	<div class="">
+		<div class="">
+            <div class="row">
+
+                <div class="add-transaction">
+                    <button class="btn btn-primary add-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
+                    <div class="add-transaction-wrapper"></div>
+                </div>
+
+                <h3 class="panel-title" style="display: inline-block">Funding Transactions</h3>
+
+                <div class="investor-box investor-box-borders">
+                    <div class="row transactions-range">
+                        <span class="float_left">
+                            Choose range from
+                        </span>
+                        <span class="float_left" style="margin-left: 13px;">
+                            <div class="input-group">
+                                <input class="form-control input-width" type="text" id="funding-transactions-from">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </span>
+                        <span class="float_left">
+                            &nbsp;to&nbsp;
+                        </span>
+                        <span class="float_left">
+                            <div class="input-group">
+                                <input class="form-control input-width" type="text" id="funding-transactions-to">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </span>
+                        <button class="btn btn-primary pull-left" id="funding-transactions-range-submit-btn" style="margin-right: 10px;">Select</button>
+                    </div>
+
+
+
+                    <div class="tab-pane investors-tables" id="funding-transactions-tbl">
+                        <div class="table-responsive table-ezbig">
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>#</th>
+                                        <th>Transaction Date</th>
+                                        <th>Transaction Amount</th>
+                                        <th>Previous Amount</th>
+                                        <th>New Amount</th>
+                                        <th>Bank Transaction Ref</th>
+                                        <th>Bank Account #</th>
+                                        <th>Bank Account Name</th>
+                                        <th>Is Account Active</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% accountingData = accountingData || {};%>
+                                    <%_.each(accountingData, function(a){ %>
+                                    <tr class="activeHover">
+                                        <td class="accounting-sign"><%-a.PreviousAmount > a.NewAmount ? '-':'+'%></td>
+                                        <td><%-a.TransactionID%></td>
+                                        <td><%-EzBob.formatDateUK(a.TransactionDate)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(a.TransactionAmount)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
+                                        <td class="bank-transaction-ref"><p data-toggle="tooltip" data-title="<%-a.BankTransactionRef%>"><%-a.BankTransactionRef%></p></td>
+                                        <td><%-a.BankAccountNumber%></td>
+                                        <td><%-a.BankAccountName%></td>
+                                        <td><img src="/Content/img/<%-a.IsBankAccountActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+                                        <td class="transaction-comment"><p data-toggle="tooltip" data-title="<%-a.Comment%>"><%-a.Comment%></p></td>
+                                    </tr>
+                                        <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/template" id="repayments-transactions-template">
+	<div class="">
+		<div class="">
+			<div class="row">
+
+				<div class="add-transaction">
+					<button class="btn btn-primary add-transaction-btn" data-id="<%-InvestorID%>">Add Transaction</button>
+					<div class="add-transaction-wrapper"></div>
+				</div>
+
+				<h3 class="panel-title" style="display: inline-block">Repayments Transactions</h3>
+                <div class="investor-box investor-box-borders">
+                    <div class="row transactions-range">
+                        <span class="float_left">
+                            Choose range from
+                        </span>
+                        <span class="float_left" style="margin-left: 13px;">
+                            <div class="input-group">
+                                <input class="form-control input-width" type="text" id="repayments-transactions-from">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </span>
+                        <span class="float_left">
+                            &nbsp;to&nbsp;
+                        </span>
+                        <span class="float_left">
+                            <div class="input-group">
+                                <input class="form-control input-width" type="text" id="repayments-transactions-to">
+                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </span>
+                        <button class="btn btn-primary pull-left" id="repayments-transactions-range-submit-btn" style="margin-right: 10px;">Select</button>
+                    </div>
+
+
+                    <div class="tab-pane investors-tables" id="repayments-transactions-tbl">
+                        <div class="table-responsive table-ezbig">
+                            <table class="table grid-data">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>#</th>
+                                        <th>Transaction Date</th>
+                                        <th>Transaction Amount</th>
+                                        <th>Previous Amount</th>
+                                        <th>New Amount</th>
+                                        <th>Bank Transaction Ref</th>
+                                        <th>Bank Account #</th>
+                                        <th>Bank Account Name</th>
+                                        <th>Is Account Active</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% accountingData = accountingData || {};%>
+                                    <%_.each(accountingData, function(a){ %>
+                                    <tr class="activeHover">
+                                        <td class="accounting-sign"><%- ((a.PreviousAmount > a.NewAmount) || (a.TransactionAmount < 0)) ? '-':'+'%></td>
+                                        <td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>">
+											<i class="<%-a.TransactionAmount<0 ? 'fa fa-bank' : 'fa fa-cog' %>" data-toggle="tooltip" data-title="<%-a.TransactionAmount<0 ? 'BankAccountTransactions data' : 'SystemBalance data' %>"></i>
+												<%-a.TransactionID%>
+										</td>
+                                        <td><%-EzBob.formatDateUK(a.TransactionDate)%></td>
+                                        <td><%-EzBob.formatPoundsNoDecimals(Math.abs(a.TransactionAmount))%></td>
+										<td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>"><%-EzBob.formatPoundsNoDecimals(a.PreviousAmount)%></td>
+										<td style="font-style: <%-a.TransactionAmount<0 ? 'italic' : 'normal' %>"><%-EzBob.formatPoundsNoDecimals(a.NewAmount)%></td>
+                                        <td class="bank-transaction-ref"><p data-toggle="tooltip" data-title="<%-a.BankTransactionRef%>"><%-a.BankTransactionRef%></p></td>
+                                        <td><%-a.BankAccountNumber%></td>
+                                        <td><%-a.BankAccountName%></td>
+                                        <td><img src="/Content/img/<%-a.IsBankAccountActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+                                        <td class="transaction-comment"><p data-toggle="tooltip" data-title="<%-a.Comment%>"><%-a.Comment%></p></td>
+                                    </tr>
+                                        <%});%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/template" id="add-transaction-template">
+    <h3 class="panel-title">Add Transaction</h3>
+    <div class="investor-box investor-box-borders">
+        
+        <form id="addTransactionForm" class="form-horizontal" action="">
+            <div class="row">
+                
+                <div class="tab-pane" id="add-transaction-tbl">
+                    <div class="table-responsive table-ezbig">
+                        <table class="table grid-data">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Transaction Date</th>
+                                    <th>Transaction Amount</th>
+                                    <th>Bank Transaction Ref</th>
+                                    <th>Comment</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="accounting-sign">+</td>
+                                    <td>
+                                        <span class="float_left">
+                                            <div class="input-group">
+                                                <input class="form-control input-width" name="AddTransactionDate" type="text" id="AddTransactionDate">
+                                                <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <div class="input-group">
+                                                <input class="form-control input-width cashInput" style="width: 150px" name="AddTransactionAmount" type="text" id="AddTransactionAmount">
+                                            </div>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="ref-div">
+                                            <input class="form-control" name="AddBankTransactionRef" type="text" id="AddBankTransactionRef">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="comment-div">
+                                            <input class="form-control" name="AddTransactionComment" type="text" id="AddTransactionComment">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary pull-left" id="add-transaction-cancel-btn" style="margin-right: 10px;">Cancel</button>
+                                        <button class="btn btn-primary pull-left" id="add-transaction-submit-btn" style="margin-right: 10px;">Submit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+	
+</script>
+
+<script type="text/template" id="config-scheduler-template">
+    <div class="">
+        <div class="">
+
+            <form id="configSchedulerForm" class="form-horizontal" action="">
+                <div class="row">
+
+                    <h3 class="panel-title" style="display: inline-block">Config Scheduler</h3>
+
+					<div class="investor-box investor-box-borders">
+						<div class="">
+							<div class="row">
+
+								<div style="margin-bottom: 15px">
+									<label class="config-scheduler-labels">Funding</label>
+									<div class="config-scheduler-fields">
+										@EzForm.InputTextUnderwriter(this, "monthlyFundingCapital", "Periodic Tranfer of Funds for Investment in Amount of", null, "cashInput")
+										@EzForm.InputTextUnderwriter(this, "fundsTransferSchedule", "Bank Will be transfered every", null)
+										@EzForm.InputTextUnderwriter(this, "fundsTransferDate", "On", null)
+									</div>
+								</div>
+
+								<div style="border-bottom: 1px solid #DDDDDD; width: 59%"></div>
+
+								<div style="margin-top: 30px">
+									<label class=" config-scheduler-labels">
+										Repayments
+									</label>
+									<div class="config-scheduler-fields">
+										@EzForm.InputTextUnderwriter(this, "repaymentsTransferSchedule", "Repayments to be cleared", null)
+									</div>
+								</div>
+								<button class="btn btn-primary pull-right" id="config-scheduler-submit-btn" style="margin-right: 10px;">Submit</button>
+								<button class="btn btn-primary pull-right" id="config-scheduler-cancel-btn" style="margin-right: 10px;">Cancel</button>
+
+							</div>
+						</div>
+					</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>

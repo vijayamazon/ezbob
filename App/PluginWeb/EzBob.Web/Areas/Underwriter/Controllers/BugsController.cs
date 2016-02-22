@@ -31,6 +31,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "OpenBug")]
 		public JsonResult CreateBug(BugModel bug)
 		{
 			var b = bug.FromModel(_customers, _users);
@@ -41,6 +42,7 @@
 
 		[Ajax]
 		[Transactional]
+		[Permission(Name = "CloseEditBug")]
 		public JsonResult UpdateBug(BugModel bugModel)
 		{
 			var bug = _bugs.Get(bugModel.Id);
@@ -63,6 +65,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "CloseEditBug")]
 		public JsonResult Close(BugModel bugm)
 		{
 			var bug = _bugs.Get(bugm.Id);
@@ -76,6 +79,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "OpenBug")]
 		public JsonResult Reopen(BugModel bugModel)
 		{
 			var bug = _bugs.Get(bugModel.Id);

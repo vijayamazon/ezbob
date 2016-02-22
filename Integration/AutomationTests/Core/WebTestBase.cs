@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.Drawing.Imaging;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Resources;
@@ -23,6 +25,7 @@
 
         private static bool? isDebugMode;
 
+
         protected static bool IsDebugMode {
             get {
                 if (isDebugMode == null) {
@@ -32,9 +35,24 @@
             }
         }
 
+        public static string IsRunLocal {
+            get {
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["isRunLocal"]) == false)
+                    return "";
+                return ":44300";
+            }
+        }
+
+        [TestFixtureSetUp]
+        public void RunBeforeTests() {
+            FileInfo fileInfo = new FileInfo(@"C:\Exception\Log4NetConfig.config");
+            log4net.Config.XmlConfigurator.Configure(fileInfo);
+        }
+
         [TestFixtureTearDown]
-        public void Dispose() {
-            if (IsDebugMode) 
+        public void RunAfterTests() {
+            LogManager.Shutdown();
+            if (IsDebugMode)
                 return;
             foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
                 GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
@@ -56,9 +74,8 @@
                 }
                 return false;
             }
-            bool res=true;
+            bool res = true;
             foreach (AutomationModels.Browser browser in browsers) {
-                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                 foreach (AutomationModels.Environment enviorment in enviorments) {
                     EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                     foreach (AutomationModels.Brand brand in brands) {
@@ -69,21 +86,36 @@
                                 return false;
                             }
 
-                            this.actionBot = new ActionBot(Driver);
-                            Driver.Manage().Cookies.DeleteAllCookies();
-                            codeToExecute.Invoke(caseID.ToString() + " - " + TestRailRepository.TestRailCaseName(caseID));
+                            Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                            actionBot = new ActionBot(Driver);
+
+                            //for (int i = Driver.WindowHandles.Count; i < 1; i--) {
+                            //    Driver.SwitchTo().Window(Driver.WindowHandles[1]);
+                            //    Driver.Close();
+                            //}
+                            //Driver.Manage().Cookies.DeleteAllCookies();
+
+                            codeToExecute.Invoke(caseID.ToString() + " - " + brand.ToString() + " - " + browser.ToString() + (isDebugMode == false ? " - " + TestRailRepository.TestRailCaseName(caseID) : ""));
+                            Driver.Quit();
 
                             if (!IsDebugMode) {
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                             }
                         } catch (Exception ex) {
-                            System.IO.File.AppendAllText(@"C:\Exception\Errors.txt", String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(),DateTime.UtcNow.ToString("u")));
                             log.Error(String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(), DateTime.UtcNow.ToString("u")));
+                            try {
+                                string scrshtFileName = DateTime.Now.Ticks + " - " + DateTime.UtcNow.ToString("yyyy-MM-ddTHH.mm.ssZ") + " - CaseId_" + caseID.ToString() + " - Enviorment_" + EnvironmentConfig.BaseName.Split('.')[3] + " - Brand_" + BrandConfig.BaseName.Split('.')[3] + " - Browser_" + Driver.GetType().ToString().Split('.')[2] + ".png";
+                                (Driver as ITakesScreenshot).GetScreenshot().SaveAsFile("C:\\Exception\\" + scrshtFileName, ImageFormat.Png);
+                                log.Error("Screenshot of last screen was taken and saved in C:\\Exception\\" + scrshtFileName);
+                            } catch (Exception e) {
+                                log.Error("ERROR: failed to save screen shot.");
+                            }
                             if (!IsDebugMode) {
                                 UpdateBlockedList(caseID);
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                             }
                             res = false;
+                            Driver.Quit();
                         }
                     }
                 }

@@ -3,8 +3,8 @@
 
 	public class CollectionMails : AMailStrategyBase {
 
-		public CollectionMails(int customerId, string templateName, Dictionary<string, string> variables)
-			: base(customerId, true) {
+		public CollectionMails(int customerId, string templateName, Dictionary<string, string> variables, bool sendToCustomer)
+			: base(customerId, sendToCustomer) {
 			this.tempateName = templateName;
 			this.variables = variables;
 		} // constructor

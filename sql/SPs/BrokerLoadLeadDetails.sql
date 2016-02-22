@@ -4,7 +4,8 @@ GO
 
 ALTER PROCEDURE BrokerLoadLeadDetails
 @LeadID INT,
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -17,6 +18,8 @@ BEGIN
 		Broker
 	WHERE
 		ContactEmail = @ContactEmail
+		AND
+		OriginID = @Origin
 
 	SELECT
 		l.BrokerLeadID AS Id,

@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Text;
 	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoRejection;
@@ -12,7 +13,6 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -23,27 +23,36 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Lingvo;
-	using EZBob.DatabaseLib.Model.Database;
 
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
-		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
+		public Agent(
+			int nCustomerID,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID);
+			Args = new Arguments(nCustomerID, cashRequestID, nlCashRequestID);
 			HasApprovalChance = false;
+			this.tag = tag;
 		} // constructor
 
 		public virtual Agent Init() {
 			Trail = new RejectionTrail(
 				Args.CustomerID,
 				Args.CashRequestID,
+				Args.NLCashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+			Trail.SetTag(this.tag);
 
 			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
@@ -59,54 +68,50 @@
 
 		public bool HasApprovalChance { get; private set; }
 
-		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
-			Trail.SetTag(tag);
-
-			RunPrimary();
-
-			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = RunSecondary();
-
-			if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
-				Trail.Negative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				oSecondary.Trail.Negative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-			} else {
-				Trail.Affirmative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-				oSecondary.Trail.Affirmative<SameApprovalChance>(false)
-					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
-			} // if
-
-			WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
-
-			Trail.Save(DB, oSecondary.Trail);
-
-			return !WasMismatch;
-		} // MakeAndVerifyDecision
-
-		public virtual void RunPrimaryOnly() {
-			RunPrimary();
-		} // RunPrimaryOnly
-
-		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
-			bool bSuccess = false;
-
+		public override void MakeAndVerifyDecision() {
+			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = null;
 			try {
-				bSuccess = MakeAndVerifyDecision(tag);
+				RunPrimary();
+
+				oSecondary = RunSecondary();
+
+				if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
+					Trail.Negative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+					oSecondary.Trail.Negative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				} else {
+					Trail.Affirmative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+					oSecondary.Trail.Affirmative<SameApprovalChance>(false)
+						.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				} // if
+
+				WasMismatch = !Trail.EqualsTo(oSecondary.Trail);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
-			if (bSuccess && Trail.HasDecided) {
-				response.CreditResult = CreditResultStatus.Rejected;
-				response.UserStatus = Status.Rejected;
-				response.SystemDecision = SystemDecision.Reject;
-				response.DecisionName = "Rejection";
-				response.Decision = DecisionActions.Reject;
-			} // if
-		} // MakeDecision
+			Trail.Save(DB, oSecondary == null ? null : oSecondary.Trail);
+		} // MakeAndVerifyDecision
+
+		public override bool WasException {
+			get {
+				if (Trail == null)
+					return false;
+
+				return Trail.FindTrace<ExceptionThrown>() != null;
+			} // get
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get { return Trail.HasDecided; }
+		} // AffirmativeDecisionMade
+
+		public virtual void RunPrimaryOnly() {
+			RunPrimary();
+		} // RunPrimaryOnly
 
 		/// <summary>
 		/// Calculate annual and quarter turnover for R
@@ -512,7 +517,7 @@
 
 		private AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent RunSecondary() {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
-				new RejectionAgent(DB, Log, Args.CustomerID, Args.CashRequestID, Cfg.Values);
+				new RejectionAgent(DB, Log, Args.CustomerID, Args.CashRequestID, Args.NLCashRequestID, Cfg.Values);
 
 			oSecondary.MakeDecision(oSecondary.GetRejectionInputData(Trail.InputData.DataAsOf));
 
@@ -765,5 +770,6 @@
 
 		private decimal quarterTurnover;
 		private decimal annualTurnover;
+		private readonly string tag;
 	} // class Agent
 } // namespace

@@ -1,73 +1,71 @@
-﻿namespace EzBob.Web.Controllers
-{
-	using System.Linq;
-	using System.Web.Mvc;
-	using Backend.Models;
-	using Code;
-	using EZBob.DatabaseLib.Exceptions;
-	using EZBob.DatabaseLib.Model.Loans;
-	using Infrastructure;
-	using Newtonsoft.Json;
-	using ActionResult = System.Web.Mvc.ActionResult;
+﻿namespace EzBob.Web.Controllers {
+    using System.Linq;
+    using System.Web.Mvc;
+    using Backend.Models;
+    using Code;
+    using Ezbob.Backend.ModelsWithDB.LegalDocs;
+    using EZBob.DatabaseLib.Exceptions;
+    using EZBob.DatabaseLib.Model.Loans;
+    using Infrastructure;
+    using Newtonsoft.Json;
+    using ServiceClientProxy;
+    using ActionResult = System.Web.Mvc.ActionResult;
 
-	[Authorize]
-    public class AgreementsController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly ILoanAgreementRepository _agreements;
-        private readonly AgreementRenderer _agreementRenderer;
-		private readonly ILoanAgreementTemplateRepository _loanAgreementTemplateRepository;
+    [Authorize]
+    public class AgreementsController : Controller {
+        private readonly IEzbobWorkplaceContext context;
+        private readonly ILoanAgreementRepository agreements;
+        private readonly AgreementRenderer agreementRenderer;
+        private readonly ServiceClient serviceClient;
+
         public AgreementsController(IEzbobWorkplaceContext context,
-			ILoanAgreementRepository agreements, 
-			AgreementRenderer agreementRenderer, 
-			ILoanAgreementTemplateRepository loanAgreementTemplateRepository)
-        {
-            _agreementRenderer = agreementRenderer;
-	        _loanAgreementTemplateRepository = loanAgreementTemplateRepository;
-	        _context = context;
-            _agreements = agreements;
+            ILoanAgreementRepository agreements,
+            AgreementRenderer agreementRenderer,
+            ServiceClient serviceClient) {
+            this.agreementRenderer = agreementRenderer;
+            this.serviceClient = serviceClient;
+            this.context = context;
+            this.agreements = agreements;
         }
 
-        public ActionResult Download(int id)
-        {
-            var agreement = _agreements.Get(id);
+        public ActionResult Download(int id) {
+            var agreement = this.agreements.Get(id);
 
-            try
-            {
-                var customer = _context.Customer;
-                if (customer != null && agreement.Loan.Customer != customer) return new HttpNotFoundResult();
+            try {
+                if (this.context.Customer != null && agreement.Loan.Customer != this.context.Customer) return new HttpNotFoundResult();
             }
-            catch (InvalidCustomerException )
-            {
+            catch (InvalidCustomerException) {
                 //if customer is not found, assume that it is underwriter
             }
 
-	        var agreementModel = JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel);
-	        string template = agreement.TemplateRef.Template;
+            var agreementModel = JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel);
 
-			if (string.IsNullOrEmpty(agreementModel.FullName)) {
-				var customer = agreement.Loan.Customer;
-				agreementModel.FullName = customer.PersonalInfo.Fullname;
-				var company = customer.Company;
-				if (company != null) {
-					agreementModel.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-					agreementModel.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
-					try {
-						agreementModel.CompanyAdress = company.CompanyAddress.First().FormattedAddress;
-					}catch {}
+            var customer = agreement.Loan.Customer;
+            if (string.IsNullOrEmpty(agreementModel.FullName)) {
 
-				}
+                agreementModel.FullName = customer.PersonalInfo.Fullname;
+                var company = customer.Company;
+                if (company != null) {
+                    agreementModel.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+                    agreementModel.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+                    try {
+                        agreementModel.CompanyAdress = company.CompanyAddress.First()
+                            .FormattedAddress;
+                    } catch {
+                        //nothing
+                    }
 
-				template = _loanAgreementTemplateRepository.GetUpdateTemplate(agreement.TemplateRef.TemplateType) ?? template;
-			}
+                }
+            }
 
-            var pdf = _agreementRenderer.RenderAgreementToPdf(template, agreementModel);
+            LoanAgreementTemplate loanAgreementTemplate = this.serviceClient.Instance.GetLegalDocById(customer.Id, this.context.UserId, agreement.TemplateID).LoanAgreementTemplate;
+
+            var pdf = this.agreementRenderer.RenderAgreementToPdf(loanAgreementTemplate.Template, agreementModel);
             return File(pdf, "application/pdf", GenerateFileName(agreement));
         }
 
-        private string GenerateFileName(LoanAgreement agreement)
-        {
-            return _context.User.Roles.Any(r => r.Name == "Underwriter") ? agreement.LongFilename() : agreement.ShortFilename();
+        private string GenerateFileName(LoanAgreement agreement) {
+            return this.context.UserRoles.Any(r => r == "Underwriter") ? agreement.LongFilename() : agreement.ShortFilename();
         }
     }
 }

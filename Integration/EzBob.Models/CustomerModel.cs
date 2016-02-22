@@ -33,9 +33,10 @@ namespace EzBob.Models {
 
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 
-        public TypeOfBusinessReduced TypeOfBusinessReduced { get; set; }
+		public TypeOfBusinessReduced TypeOfBusinessReduced { get; set; }
+		public bool IsRegulated { get { return TypeOfBusiness.IsRegulated(); } }
 
-	    public VatReporting? VatReporting { get; set; }
+		public VatReporting? VatReporting { get; set; }
 		public bool VatRegistered { get; set; }
 		public string YearsInCompany { get; set; }
 		public static CompanyInfoMap FromCompany(Company company) {
@@ -48,7 +49,7 @@ namespace EzBob.Models {
 				TimeAtAddress = company.TimeAtAddress,
 				BusinessPhone = company.BusinessPhone,
 				TypeOfBusiness = company.TypeOfBusiness,
-                TypeOfBusinessReduced = company.TypeOfBusiness.Reduce(),
+				TypeOfBusinessReduced = company.TypeOfBusiness.Reduce(),
 				TimeInBusiness = company.TimeInBusiness,
 				PropertyOwnedByCompany = company.PropertyOwnedByCompany,
 				YearsInCompany = company.YearsInCompany,
@@ -107,9 +108,9 @@ namespace EzBob.Models {
 		public bool? HasApprovalChance { get; set; }
 
 		public int Id { get; set; }
-        
-        public string RefNumber { get; set; }
-		
+
+		public string RefNumber { get; set; }
+
 		public bool IsAlibaba { get; set; }
 
 		public bool IsBrokerFill { get; set; }
@@ -121,7 +122,7 @@ namespace EzBob.Models {
 		public bool IsDisabled { get; set; }
 
 		public bool IsEarly { get; set; }
-		
+
 		public bool IsTest { get; set; }
 
 		public bool IsLastApprovedLoanSourceEu { get; set; }
@@ -133,7 +134,7 @@ namespace EzBob.Models {
 		public bool IsLoanDetailsFixed { get; set; }
 
 		public int IsLoanTypeSelectionAllowed { get; set; }
-		
+
 		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public bool? IsOffline { get; set; }
@@ -146,7 +147,7 @@ namespace EzBob.Models {
 		public int LastApprovedLoanTypeID { get; set; }
 
 		public int LastApprovedRepaymentPeriod { get; set; }
-		
+
 		public int LastRepaymentPeriod { get; set; }
 
 		public decimal LastPaymentFees { get; set; }
@@ -218,15 +219,13 @@ namespace EzBob.Models {
 		public string LotteryCode { get; set; }
 		public string Origin { get; set; }
 		public bool IsEverline { get; set; } //used to show popup in wizard
-		public bool IsEverlineRefinance { get; set; }
-
+		
 		public string FirstName { get; set; }
 		public string MiddleName { get; set; }
 		public string LastName { get; set; }
 
 		public int LastApprovedAmount { get; set; }
 
-		public string AlibabaCreditFacilityTemplate { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel {

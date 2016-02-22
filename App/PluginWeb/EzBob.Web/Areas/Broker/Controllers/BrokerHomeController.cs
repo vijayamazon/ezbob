@@ -88,7 +88,7 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -120,7 +120,7 @@
 			StringListActionResult slar;
 
 			try {
-				slar = this.m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail);
+				slar = this.m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load signed terms for contact email {0}.", sContactEmail);
 				return new SignedTermsBrokerForJsonResult("Failed to load signed terms.");
@@ -144,7 +144,7 @@
 			BrokerPropertiesActionResult oResult;
 
 			try {
-				oResult = this.m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
 				return new PropertiesBrokerForJsonResult("Failed to load broker properties.");
@@ -168,7 +168,7 @@
 			BrokerCustomersActionResult oResult;
 
 			try {
-				oResult = this.m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
 				return new CustomerListBrokerForJsonResult("Failed to load customer list.");
@@ -199,7 +199,11 @@
 			BrokerCustomerDetailsActionResult oDetails;
 
 			try {
-				oDetails = this.m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadCustomerDetails(
+					sCustomerID,
+					sContactEmail,
+					UiOrigin
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -238,7 +242,7 @@
 			BrokerLeadDetailsDataActionResult oDetails;
 
 			try {
-				oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -255,7 +259,7 @@
 				sLeadID
 			);
 
-			return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
+			return new LeadDetailsBrokerForJsonResult(oDetails: oDetails.BrokerLeadDataModel);
 		} // LoadLeadDetails
 
 		[HttpGet]
@@ -326,7 +330,8 @@
 					status,
 					comment,
 					customerId,
-					sContactEmail
+					sContactEmail,
+					UiOrigin
 				);
 			} catch (Exception e) {
 				ms_oLog.Alert(e,
@@ -353,7 +358,7 @@
 				type, action, status, customerId, sContactEmail,
 				string.IsNullOrWhiteSpace(oResult.Value) ? "complete" : "failed",
 				string.IsNullOrWhiteSpace(oResult.Value) ? "no error" : oResult.Value
-				);
+			);
 
 			return new BrokerForJsonResult(oResult.Value);
 		} // SaveCrmEntry
@@ -378,7 +383,11 @@
 			BrokerCustomerFilesActionResult oFiles;
 
 			try {
-				oFiles = this.m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
+				oFiles = this.m_oServiceClient.Instance.BrokerLoadCustomerFiles(
+					sCustomerID,
+					sContactEmail,
+					UiOrigin
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -459,7 +468,8 @@
 							sCustomerID,
 							sContactEmail,
 							oFileContents,
-							oFile.FileName
+							oFile.FileName,
+							UiOrigin
 						);
 					} catch (Exception e) {
 						ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
@@ -493,7 +503,12 @@
 			BrokerCustomerFileContentsActionResult oFile;
 
 			try {
-				oFile = this.m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
+				oFile = this.m_oServiceClient.Instance.BrokerDownloadCustomerFile(
+					sCustomerID,
+					sContactEmail,
+					nFileID,
+					UiOrigin
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -573,7 +588,12 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
+				this.m_oServiceClient.Instance.BrokerDeleteCustomerFiles(
+					sCustomerID,
+					sContactEmail,
+					aryFileIDs,
+					UiOrigin
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -624,7 +644,8 @@
 					LeadLastName,
 					LeadEmail,
 					LeadAddMode,
-					ContactEmail
+					ContactEmail,
+					UiOrigin
 				);
 			} catch (Exception e) {
 				ms_oLog.Warn(
@@ -643,7 +664,9 @@
 				(int?)null,
 				LeadEmail,
 				(int?)null,
-				true,false);
+				true,
+				false // TODO add origin
+			);
 
 			ms_oLog.Debug(
 				"Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.",
@@ -662,7 +685,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType) {
 			ms_oLog.Debug(
-				"Broker add bank request for contact email {0}: {1} {2} {3}.", 
+				"Broker add bank request for contact email {0}: {1} {2} {3}.",
 				ContactEmail,
 				AccountNumber,
 				SortCode,
@@ -678,7 +701,8 @@
 					AccountNumber = AccountNumber,
 					SortCode = SortCode,
 					BankAccountType = bankAccountType,
-					BrokerEmail = ContactEmail
+					BrokerEmail = ContactEmail,
+					Origin = UiOrigin,
 				});
 			} catch (Exception ex) {
 				ms_oLog.Warn(
@@ -713,7 +737,7 @@
 				return oIsAuthResult;
 
 			try {
-				this.m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail, UiOrigin);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -768,7 +792,12 @@
 			BrokerLeadDetailsActionResult bld;
 
 			try {
-				bld = this.m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
+				bld = this.m_oServiceClient.Instance.BrokerLeadCanFillWizard(
+					nLeadID.Value,
+					sLeadEmail,
+					sContactEmail,
+					UiOrigin
+				);
 			} catch (Exception e) {
 				ms_oLog.Alert(
 					e,
@@ -811,7 +840,7 @@
 				bld.FirstName,
 				bld.LastName,
 				true
-				);
+			);
 			// ReSharper restore ObjectCreationAsStatement
 
 			ms_oLog.Debug(
@@ -1000,6 +1029,17 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+			try {
+				long nlLoanId = this.m_oServiceClient.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, context.UserId).Value;
+				if (nlLoanId > 0) {
+					var nlModel = this.m_oServiceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, loan.Date, context.UserId, true).Value;
+					ms_oLog.Info("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				ms_oLog.Info("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			var apr = loan.LoanAmount == 0 ? 0 : aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 

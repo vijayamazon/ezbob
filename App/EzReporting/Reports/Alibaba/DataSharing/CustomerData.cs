@@ -11,7 +11,6 @@
 	using OfficeOpenXml;
 
 	public class CustomerData {
-
 		static CustomerData() {
 			TotalApprovedAmount = 0;
 

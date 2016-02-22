@@ -18,6 +18,7 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 			Map(x => x.SourceRef).Not.Nullable().Length(255);
 			Map(x => x.EstimatedMonthlyClientAmount);
 			References(x => x.WhiteLabel, "WhiteLabelId").Cascade.All();
+			Map(x => x.FCARegistered);
 
             HasMany(m => m.BankAccounts)
                 .AsSet()

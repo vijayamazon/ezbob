@@ -29,7 +29,7 @@
 			string sBrokerEmail = sp.ExecuteScalar<string>();
 
 			if (!string.IsNullOrWhiteSpace(sBrokerEmail))
-				aryAddresses.Add(new Addressee(sBrokerEmail, userID: CustomerData.BrokerID, isBroker: true));
+				aryAddresses.Add(new Addressee(sBrokerEmail, userID: CustomerData.BrokerID, addSalesforceActivity: false));
 
 			return aryAddresses.ToArray();
 		} // GetRecipients

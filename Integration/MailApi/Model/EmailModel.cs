@@ -8,6 +8,14 @@ namespace MailApi.Model {
 	public class merge_var {
 		public string name;
 		public string content;
+
+		public override string ToString() {
+			return string.Format(
+				"{{ variable name: '{0}', content: '{1}' }}", 
+				name ?? "-- null --",
+				content ?? "-- null --"
+			);
+		} // ToString
 	} // class merge_var
 
 	public class template_content {
@@ -15,7 +23,7 @@ namespace MailApi.Model {
 		public string content;
 
 		public override string ToString() {
-			return string.Format("{{ name: '{0}', content: '{1}' }}", name ?? "-- null --", content ?? "-- null --");
+			return string.Format("{{ content name: '{0}', content: '{1}' }}", name ?? "-- null --", content ?? "-- null --");
 		} // ToString
 	} // class template_content
 
@@ -23,12 +31,20 @@ namespace MailApi.Model {
 		public string type;
 		public string name;
 		public string content;
+
+		public override string ToString() {
+			return string.Format("{{ attachment name: '{0}', type: '{1}' }}", name ?? "-- null --", type ?? "-- null --");
+		} // ToString
 	} // class attachment
 
 	public class image {
 		public string type;
 		public string name;
 		public string content;
+
+		public override string ToString() {
+			return string.Format("{{ attachment name: '{0}', type: '{1}' }}", name ?? "-- null --", type ?? "-- null --");
+		} // ToString
 	} // class image
 
 	public class EmailModel {

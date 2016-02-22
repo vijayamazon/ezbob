@@ -1,29 +1,15 @@
 var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
-EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
-	
-    initialize: function () {
-    	this.onTabSwitch = this.options.onTabSwitch;
-    	this.template = _.template($(this.getTemplate()).html());
+EzBob.Profile.AgreementView = Backbone.Marionette.ItemView.extend({
+    initialize: function (options) {
+        this.onTabSwitch = options.onTabSwitch;
+        this.templates = options.templates;
+        this.template = _.template($('#agreement-template').html());
     }, // initialize
-    getAgreementType: function() {
-	    var type = 'ezbob';
-	    if (this.options.isAlibaba) {
-		    type = 'alibaba';
-	    }
-	    if (this.options.isEverline) {
-		    type = 'everline';
-	    }
-	    if (this.options.isEverlineRefinance) {
-	    	type = 'everlineRefinance';
-	    }
-	    
-	    return type;
-    }, //serializeData
-    render: function(data) {
-    	data.agreementType = this.getAgreementType();
-	    var temp = Handlebars.compile(this.template(data));
+    
+    render: function (data) {
+	    var temp = Handlebars.compile(this.template({ templates: this.templates, data: data }));
     	this.$el.html(temp(data));
 
         this.addScroll();
@@ -33,7 +19,6 @@ EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
         this.$el.find("a[data-toggle=\"tab\"]").on("shown", function () {
             if (self.onTabSwitch)
                 self.onTabSwitch();
-
             return self.addScroll();
         });
 
@@ -46,22 +31,3 @@ EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
     	return this.$el.find(".overview").jScrollPane({ verticalDragMinHeight: 40 });
     }, // addScroll
 }); // EzBob.Profile.AgreementViewBase
-
-EzBob.Profile.CompaniesAgreementView = EzBob.Profile.AgreementViewBase.extend({
-	getTemplate: function() {
-        return "#companies-agreement-template";
-    }, // getTemplate
-}); // EzBob.Profile.CompaniesAgreementView
-
-EzBob.Profile.ConsumersAgreementView = EzBob.Profile.AgreementViewBase.extend({
-	getTemplate: function() {
-		return "#consumers-agreement-template";
-    }, // getTemplate
-
-    render: function (data) {
-        $(".company-preAgreement").hide();
-        $(".consumer-preAgreement").show();
-        EzBob.Profile.ConsumersAgreementView.__super__.render.call(this, data);
-    }, // render
-}); // EzBob.Profile.ConsumersAgreementView
-

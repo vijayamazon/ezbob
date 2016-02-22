@@ -14,6 +14,7 @@ ALTER PROCEDURE AV_StoreNewMedalError
 ,@NumOfHmrcMps INT
 ,@CashRequestID BIGINT
 ,@Tag NVARCHAR(256)
+,@NLCashRequestID BIGINT =NULL
 )
 AS 
 BEGIN 
@@ -33,10 +34,10 @@ BEGIN
 
 	INSERT INTO MedalCalculationsAV (
 		CustomerId, IsActive, CalculationTime, MedalType, Medal, Error, NumOfHmrcMps,
-		CashRequestID, TrailTagID
+		CashRequestID, TrailTagID, NLCashRequestID
 	) VALUES (
 		@CustomerId, 1, @CalculationTime, @MedalType, @Medal, @Error, @NumOfHmrcMps,
-		@CashRequestID, @TagID
+		@CashRequestID, @TagID, @NLCashRequestID
 	)
 
 	------------------------------------------------------------------------------

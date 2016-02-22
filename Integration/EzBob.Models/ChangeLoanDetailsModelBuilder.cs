@@ -90,7 +90,7 @@
 				Interest = item.Interest,
 				InterestRate = item.InterestRate,
 				Fees = item.Fees,
-				Deletable = true,
+				Deletable = false,
 				Editable = true,
 				Editor = "Installment",
 				Status = item.Status.ToString(),

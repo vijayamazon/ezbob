@@ -124,7 +124,7 @@
                 <td class="customer-personal-status-alignment"><span class="pull-right red_cell">Alibaba Customer</span></td>
             </tr>
             <%}%>
-            <tr>
+            <tr class="reset-password-tr">
                 <td class="customer-personal-status-alignment"><a href="#" class="reset-password-123456">Reset password to 123456</a></td>
             </tr>
         </tbody>
@@ -267,7 +267,7 @@
 			@RowCell("Mobile", "<%- data.BrokerContactMobile %>", "ez-green")
         </tbody>
         <tbody class="box-content">
-            <tr>
+            <tr class="change-broker-tr">
                 <td class="customer-personal-status-alignment"><a href="#" class="change-broker">Update broker</a></td>
             </tr>
         </tbody>
@@ -347,9 +347,9 @@
             @RowCell("User status", "<%- data.UserStatus %>")
         </tbody>
         <tfoot>
-            <tr>
-                <th><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
-            </tr>
+			<tr class="finish-wizard-tr">
+				<th><button id="ForceFinishWizard" class="btn btn-mini btn-primary">Finish wizard</button></th>
+			</tr>
         </tfoot>
     </table>
      <div class="lightDarkThemeSwitch make-switch switch-mini" data-on="info" data-off="default" data-animated="true" data-off-label="dark" data-on-label="light" style="width: 100%">
@@ -359,6 +359,8 @@
 
 <script id="profile-loan-info-template" type="text/template">
     <% (function(m) { %>
+	
+	<%if(m.CashRequestId) { %>
     <div class="col-md-6 col-lg-6 col-sm-12">
         <table class="table squeezed rright">
         <thead class="box">
@@ -368,6 +370,7 @@
         </thead>
         <tbody class="box-content">
             @RawCell("System decision", "<%- m.SystemDecision %>")
+			@RawCell("Credit result", "<%- m.CreditResult%>")
             @RawCell("System amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
             @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
 
@@ -413,12 +416,7 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            <%if(m.Editable){%>
-                @RawCellWithSlider("Spread setup fee", "spreadSetupFeeSwitch", "No", "Yes", "", "info")
-            <%} else{%>
-                @RawCell("Spread setup fee", "<%= m.SpreadSetupFee ? 'Yes' : 'No' %>")
-            <%}%>
-
+            @RawCell("Spread setup fee", "<%= m.SpreadSetupFee ? 'Yes' : 'No' %>")
             <tr>
                 <td>setup fee</td>
                 <td>
@@ -433,8 +431,7 @@
             </tr>
         </tbody>
     </table>
-
-        <table class="table squeezed rright">
+		<table class="table squeezed rright">
         <thead class="box">
             <tr class="box-title">
                 <th colspan="2">Other Properties</th>
@@ -446,22 +443,34 @@
             
             <tr>
                 <td>Discount plan</td>
-                <td><%= m.DiscountPlan %>
+                <td><%= discountPlanName %>
                     <i data-title="" class="tltp-left fa fa-question-circle" data-original-title=""></i> 
                     <div class="hide red discount-exceeds-max-by-loan-source">Interest rate for at least one month exceeds max rate for this loan source.</div>
                 </td>
             </tr>
-            @RawCell("Loan Type", "<%= m.LoanType %>")
-            @RawCell("Loan Source", "<%- m.LoanSource %>")
+			@RawCell("Product", "<%= productName %>")
+			@RawCell("Product type", "<%= productTypeName %>")
+			@RawCell("Open platform", "<%= fundingTypeName %>")
+            @RawCell("Loan type", "<%= loanTypeName %>")
+            @RawCell("Loan source", "<%- loanSourceName %>")
             @RawCell("Loan type selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
             @RawCell("Repayment period selection", "<%= m.IsCustomerRepaymentPeriodSelectionAllowed ? 'Yes' : 'No' %>")
         </tbody>
     </table>
     </div>
+	<% } else {%>
+		<div>Customer status : <%- m.SystemDecision %></div>
+	<% } %>
     <div class="control-group">
-        <%if(m.Editable){%>
+        <% if(m.Editable) { %>
             <button id="editOfferButton" class="btn btn-dashboard" name="editOfferButton">Edit offer</button>
-        <%}%>
+        <% } %>
+
+		<% if(m.CashRequestId) { %>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="pdf">Download offer pdf</a>
+			<a class="btn btn-dashboard downloadOfferButton" data-type="excel">Download offer excel</a>
+		<% } %>
+
         <button id="newCreditLineButtonId" class="btn btn-dashboard" name="newCreditLineBtn">New Credit Line</button>
     </div>
     <% })(m); %>

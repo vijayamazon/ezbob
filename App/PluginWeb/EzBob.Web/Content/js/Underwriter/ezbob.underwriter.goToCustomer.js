@@ -28,7 +28,7 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 			allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>';
 		} // for
 
-		var el = $("<div id='go-to-template'/>").html(
+		var el = $("<div id='go-to-template'></div>").html(
 			"<input type=text class='goto-customerId form-control' autocomplete='off'/><br/>" +
 			"<label>Recent customers:</label>" +
 				"<select id='recentCustomers'class='selectheight form-control'>" + allOptions + "</select><br/>" +
@@ -49,9 +49,17 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 	onRender: function() {
 		var self = this;
 
-		this.dialog = EzBob.ShowMessage(this.ui.template, 'Customer ID?', (function() {
-			return self.okTrigger();
-		}), 'OK', null, 'Cancel');
+		this.dialog = EzBob.ShowMessageEx({
+			message: this.ui.template,
+			title: 'Customer ID?',
+			timeout: 0,
+			onOk: function () { return self.okTrigger(); },
+			okText: 'OK',
+			onCancel: null,
+			cancelText: 'Cancel',
+			closeOnEscape: true,
+			dialogWidth: 555,
+		});
 
 		this.ui.input.on('keydown', function(e) {
 			return self.keydowned(e);
@@ -71,7 +79,7 @@ EzBob.Underwriter.goToCustomerId = Backbone.Marionette.ItemView.extend({
 		var val = this.ui.input.val();
 
 		if (!IsInt(val, true))
-			val = val.substring(0, val.indexOf(','));
+			val = val.substring(0, val.indexOf(':'));
 
 		if (!IsInt(val, true)) {
 			var selectVal = this.ui.select.val();

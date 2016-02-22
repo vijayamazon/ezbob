@@ -6,7 +6,8 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 ALTER PROCEDURE UserDataForLogin
-@Email NVARCHAR(250)
+@Email NVARCHAR(250),
+@OriginID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,6 +17,8 @@ BEGIN
 		UserName AS Email,
 		Password,
 		EzPassword,
+		Salt,
+		CycleCount,
 		CreationDate,
 		IsDeleted,
 		DisableDate,
@@ -28,5 +31,10 @@ BEGIN
 		Security_User
 	WHERE
 		UserName = @Email
+		AND (
+			(@OriginID IS NULL AND OriginID IS NULL)
+			OR
+			(@OriginID IS NOT NULL AND OriginID = @OriginID)
+		)
 END
 GO

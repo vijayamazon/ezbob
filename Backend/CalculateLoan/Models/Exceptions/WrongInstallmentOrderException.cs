@@ -1,4 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Models.Exceptions {
+	// TODO: revive
+	/*
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	public class WrongInstallmentOrderException : ALoanCalculatorModelException {
@@ -6,4 +8,5 @@
 			: base("Installment '" + previous + "' does not precedes installment '" + next + "'.") {
 		} // constructor
 	} // class WrongInstallmentOrderException
+	*/
 } // namespace

@@ -1,29 +1,21 @@
-using EZBob.DatabaseLib.Model.Database;
+namespace EzBob.Web.Code.MpUniq {
+	using EZBob.DatabaseLib.Model.Database;
 
-namespace EzBob.Web.Code.MpUniq
-{
-    public class BankAccountUniqChecker
-    {
-	    private readonly ICardInfoRepository cardInfoRepository;
-	    protected readonly IBankAccountWhiteListRepository whiteList;
-
-		public BankAccountUniqChecker(ICardInfoRepository cardInfoRepository, IBankAccountWhiteListRepository whiteList)
-        {
+	public class BankAccountUniqChecker {
+		public BankAccountUniqChecker(ICardInfoRepository cardInfoRepository, IBankAccountWhiteListRepository whiteList) {
 			this.cardInfoRepository = cardInfoRepository;
 			this.whiteList = whiteList;
-        }
+		} // constructor
 
-        public virtual void Check(int customerID, CardInfo cardInfo)
-        {
-            if (this.whiteList.IsBankAccountInWhiteList(cardInfo))
-            {
-                return;
-            }
+		public virtual void Check(int customerID, CardInfo cardInfo) {
+			if (this.whiteList.IsBankAccountInWhiteList(cardInfo))
+				return;
 
 			if (this.cardInfoRepository.Exists(cardInfo, customerID))
-            {
-                throw new BankAccountIsAlreadyAddedException();
-            }
-        }
-    }
-}
+				throw new BankAccountIsAlreadyAddedException();
+		} // Check
+
+		private readonly IBankAccountWhiteListRepository whiteList;
+		private readonly ICardInfoRepository cardInfoRepository;
+	} // class BankAccountUniqChecker
+} // namespace

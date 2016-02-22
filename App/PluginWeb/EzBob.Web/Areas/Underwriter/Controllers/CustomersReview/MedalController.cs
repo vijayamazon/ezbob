@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System;
 	using Code;
 	using System.Web.Mvc;
 	using Infrastructure;
@@ -8,7 +9,7 @@
 	using ServiceClientProxy;
 
 	public class MedalController : Controller {
-		public MedalController(CustomerRepository customersRepository, IWorkplaceContext context) {
+		public MedalController(CustomerRepository customersRepository, IEzbobWorkplaceContext context) {
 			this.customerRepository = customersRepository;
 			this.serviceClient = new ServiceClient();
 			this.context = context;
@@ -31,8 +32,11 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "RecalculateMedal")]
 		public void RecalculateMedal(int customerId) {
-			this.serviceClient.Instance.CalculateMedal(this.context.UserId, customerId, null);
+			// TODO: insert actual values of cashRequestID and nlCashRequestID (if they exist).
+			// I.e. if customer is e.g. "waiting for decision", then insert actual values.
+			this.serviceClient.Instance.CalculateMedal(this.context.UserId, customerId, null, null);
 		} // RecalculateMedal
 
 		private readonly CustomerRepository customerRepository;

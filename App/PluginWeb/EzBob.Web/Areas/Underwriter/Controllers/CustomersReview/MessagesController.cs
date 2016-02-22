@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Web.Mvc;
 	using Aspose.Words;
@@ -9,43 +10,39 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Backend.Models;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using Models;
 	using ServiceClientProxy;
 	using StructureMap;
 
 	public class MessagesController : Controller {
-		private readonly ServiceClient m_oServiceClient;
-		private readonly CustomerRepository _customersRepository;
-		private readonly IWorkplaceContext _workplaceContext;
-		private readonly IDecisionHistoryRepository _historyRepository;
-		private readonly MessagesModelBuilder _builder;
-		private readonly ExportResultRepository _exportResultRepository;
-		private readonly AskvilleRepository _askvilleRepository;
-
 		public MessagesController(
 			CustomerRepository customers,
 			ExportResultRepository exportResultRepository,
 			AskvilleRepository askvilleRepository,
-			IDecisionHistoryRepository historyRepository,
-			MessagesModelBuilder builder
+			IDecisionHistoryRepository historyRepository
 		) {
 			m_oServiceClient = new ServiceClient();
 			_exportResultRepository = exportResultRepository;
 			_askvilleRepository = askvilleRepository;
 			_historyRepository = historyRepository;
-			_builder = builder;
 			_customersRepository = customers;
 			_workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 		}
 
 		[HttpGet]
 		public JsonResult Index(int id) {
-			var customer = _customersRepository.Get(id);
-			var model = _builder.Create(customer);
+			List<MessagesModel> model = new List<MessagesModel>();
+
+			try {
+				model.AddRange(m_oServiceClient.Instance.LoadMessagesSentToUser(id).Messages);
+			} catch (Exception e) {
+				log.Alert(e, "Failed to load messages list for customer {0}.", id);
+			} // try
+
 			return Json(model, JsonRequestBehavior.AllowGet);
-		}
+		} // Index
 
 		public ActionResult DownloadMessagesDocument(string id, bool download = false) {
 			Guid guid;
@@ -58,7 +55,6 @@
 				fs = File(askvilleData, "application/pdf");
 				fileName = string.Format("Askville({0}).pdf", FormattingUtils.FormatDateTimeToStringWithoutSpaces(askville.CreationDate));
 			} else {
-				
 				var f = _exportResultRepository.Get(Convert.ToInt32(id));
 				if (f == null) {
 					throw new Exception(String.Format("File id={0} not found", id));
@@ -114,6 +110,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreAMLInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
@@ -125,6 +122,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreAMLandBWAInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreAmlAndBwaInformation(_workplaceContext.User.Id, customer.Id);
@@ -136,6 +134,7 @@
 		[Transactional]
 		[HttpPost]
 		[Ajax]
+		[Permission(Name = "SendingMessagesToClients")]
 		public void MoreBWAInformation(int id) {
 			var customer = _customersRepository.Get(id);
 			m_oServiceClient.Instance.MoreBwaInformation(_workplaceContext.User.Id, customer.Id);
@@ -150,5 +149,14 @@
 			var user = workplaceContext.User;
 			_historyRepository.LogAction(DecisionActions.Pending, status.ToString(), user, customer);
 		}
-	}
-}
+
+		private readonly ServiceClient m_oServiceClient;
+		private readonly CustomerRepository _customersRepository;
+		private readonly IWorkplaceContext _workplaceContext;
+		private readonly IDecisionHistoryRepository _historyRepository;
+		private readonly ExportResultRepository _exportResultRepository;
+		private readonly AskvilleRepository _askvilleRepository;
+
+		private static readonly ASafeLog log = new SafeILog(typeof(MessagesController));
+	} // class MessagesController
+} // namespace

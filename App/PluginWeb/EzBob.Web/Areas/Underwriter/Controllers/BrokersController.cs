@@ -58,6 +58,7 @@
 		} // LoadProperties
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ResetBrokerPassword")]
 		public JsonResult ResetPassword123456(int nBrokerID) {
 			try {
 				new ServiceClient().Instance.ResetPassword123456(m_oContext.User.Id, nBrokerID, PasswordResetTarget.Broker);
@@ -69,6 +70,7 @@
 		} // ResetPassword123456
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ChangeBrokerEmail")]
 		public JsonResult UpdateEmail(int brokerID, string newEmail) {
 			if (string.IsNullOrWhiteSpace(newEmail))
 				return Json(new { success = false, error = "email address is empty", });
@@ -90,6 +92,7 @@
 		} // UpdateEmail
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		[Permission(Name = "ChangeBroker")]
 		public JsonResult AttachCustomer(int nCustomerID, int nBrokerID) {
 			try {
 				m_oServiceClient.Instance.BrokerAttachCustomer(nCustomerID, nBrokerID <= 0 ? (int?)null : nBrokerID, m_oContext.User.Id);
@@ -119,6 +122,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
+		[Permission(Name = "BrokerWhiteLabel")]
 		public JsonResult SaveWhiteLabel(int brokerId, WhiteLabelProvider whiteLabel) {
 			ms_oLog.Debug("Save broker white label request for broker {0}...", brokerId);
 

@@ -41,7 +41,7 @@
 		{
 			if (CustomerData.IsAlibaba)
 			{
-				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc);
+				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc, addSalesforceActivity:false);
 				Log.Info("Sending Alibaba internal rejection mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal rejection email", Variables, new[] { address });
 			}

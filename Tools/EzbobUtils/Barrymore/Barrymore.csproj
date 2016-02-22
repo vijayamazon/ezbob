@@ -33,10 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\CryptSharp\CryptSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -47,9 +52,14 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ARetryer.cs" />
+    <Compile Include="Attributes\DecimalFormatAttribute.cs" />
+    <Compile Include="Attributes\EnumNameAttribute.cs" />
+    <Compile Include="Attributes\ExcludeFromToStringAttribute.cs" />
+    <Compile Include="Attributes\IgnoreAttribute.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="dbutils\LengthAttribute.cs" />
+    <Compile Include="Extensions\ForeachExt.cs" />
     <Compile Include="Extensions\ObjectExt.cs" />
     <Compile Include="Extensions\StrExt.cs" />
     <Compile Include="Formula\Boolean\ABinaryBoolOperator.cs" />
@@ -100,8 +110,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyTraverser.cs" />
     <Compile Include="Security\Encrypted.cs" />
+    <Compile Include="Security\HashedPassword.cs" />
+    <Compile Include="Security\PasswordUtility.cs" />
+    <Compile Include="Security\PasswordValidationResult.cs" />
+    <Compile Include="Security\RefNumber.cs" />
     <Compile Include="Security\SecurityUtils.cs" />
-    <Compile Include="Security\SimplePassword.cs" />
     <Compile Include="Exceptions\SeldenException.cs" />
     <Compile Include="Serialization\Serialized.cs" />
     <Compile Include="SimpleRetryer.cs" />
@@ -120,6 +133,10 @@
     <EmbeddedResource Include="uk\postcode\regions.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
@@ -129,6 +146,8 @@
       <Name>MiniResharper</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

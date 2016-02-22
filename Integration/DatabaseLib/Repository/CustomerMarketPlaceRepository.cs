@@ -1,11 +1,9 @@
-namespace EZBob.DatabaseLib.Model.Database.Repository
-{
-    using System;
+namespace EZBob.DatabaseLib.Model.Database.Repository {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using DatabaseWrapper;
-	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
     using Ezbob.Database;
     using Ezbob.Logger;
     using NHibernate;
@@ -16,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         bool Exists(Customer customer, MP_MarketplaceType marketplaceType);
         IEnumerable<MP_CustomerMarketPlace> Get(Customer customer, MP_MarketplaceType marketplaceType);
         MP_CustomerMarketPlace Get(int customerId, Guid marketPlaceInternalId, string marketPlaceName);
-        bool Exists(Guid marketplace, string displayName);
+        bool Exists(Guid marketplace, int originID, string displayName);
         bool Exists(Guid marketplace, Customer customer, string displayName);
         DateTime? GetLastAmazonOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
@@ -63,15 +61,15 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             return GetAll().FirstOrDefault(cmp => cmp.Customer.Id == customerId && cmp.Marketplace.InternalId == marketPlaceInternalId && cmp.DisplayName.Equals(marketPlaceName));
         }
 
-        public bool Exists(Guid marketplace, string displayName)
-        {
-            return Session
-                .QueryOver<MP_CustomerMarketPlace>()
-                .Where(m => m.DisplayName == displayName)
-                .JoinQueryOver(m => m.Marketplace)
-                .Where(m => m.InternalId == marketplace)
-                .RowCount() != 0;
-        }
+		public bool Exists(Guid marketplace, int originID, string displayName) {
+			return Library.Instance.DB.ExecuteScalar<bool>(
+				"CheckMarketplaceExists",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MpTypeID", marketplace),
+				new QueryParameter("OriginID", originID),
+				new QueryParameter("Token", displayName)
+			);
+		} // Exists
 
         public bool Exists(Guid marketplace, Customer customer, string displayName)
         {

@@ -1,23 +1,22 @@
 ﻿namespace UIAutomationTests.Tests.Shared {
     using System;
     using System.Resources;
-    using log4net;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Interactions;
     using UIAutomationTests.Core;
 
     class UnderWriterShared : WebTestBase {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UnderWriterShared));
 
-        public UnderWriterShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
+        public UnderWriterShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig, ActionBot actionBot) {
             this.Driver = Driver;
             this.EnvironmentConfig = EnvironmentConfig;
             this.BrandConfig = BrandConfig;
+            this.actionBot = actionBot;
         }
 
         public void LogIn(string logHeader, string user, string pass) {
             actionBot.WriteToLog("Begin method: " + logHeader);
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), "/Account/AdminLogOn");
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, "/Account/AdminLogOn");
 
             Driver.Navigate().GoToUrl(url);
 

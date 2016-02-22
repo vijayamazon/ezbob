@@ -33,7 +33,33 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
  ALTER TABLE [WriteOffReasons] DROP CONSTRAINT FK_WriteOffReasons_Payments ;
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_Payments_Loan')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_Loan;	
+GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UQ_LoanID_LoanFeeTypeID_Amount_AssignTime')
+	ALTER TABLE NL_LoanFees DROP CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_CRDecisionTime')
+	ALTER TABLE NL_Decisions DROP CONSTRAINT UC_CRDecisionTime;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_OldCR')
+	ALTER TABLE NL_CashRequests DROP CONSTRAINT UC_OldCR;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_Desicion')
+	ALTER TABLE NL_Offers DROP CONSTRAINT UC_Desicion;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'FK_NL_Offers_I_ProductSubType')
+	ALTER TABLE NL_Offers DROP CONSTRAINT FK_NL_Offers_I_ProductSubType;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'FK_NL_LoanFees_UpdateUser')
+	ALTER TABLE NL_LoanFees DROP CONSTRAINT FK_NL_LoanFees_UpdateUser;	
+GO
 
 
 -------------------------------------------------------------------------------
@@ -110,8 +136,8 @@ IF OBJECT_ID('NL_LoanOptionsGet') IS NOT NULL
 	DROP PROCEDURE NL_LoanOptionsGet
 GO
 
-IF OBJECT_ID('NL_LoanOptionsSave') IS NOT NULL
-	DROP PROCEDURE NL_LoanOptionsSave
+IF OBJECT_ID('NL_SaveLoanOptions') IS NOT NULL
+	DROP PROCEDURE NL_SaveLoanOptions
 GO
 
 IF OBJECT_ID('NL_LoanRolloversSave') IS NOT NULL
@@ -144,6 +170,10 @@ GO
 
 IF OBJECT_ID('NL_LoansFeesGet') IS NOT NULL
 	DROP PROCEDURE NL_LoansFeesGet
+GO
+
+IF OBJECT_ID('NL_LoanFeesGet') IS NOT NULL
+	DROP PROCEDURE NL_LoanFeesGet
 GO
 
 IF OBJECT_ID('NL_LoansSave') IS NOT NULL
@@ -206,22 +236,34 @@ IF OBJECT_ID('NL_loansGet') IS NOT NULL
 	DROP PROCEDURE NL_loansGet
 GO
 
+IF OBJECT_ID('NL_CustomersForAutoCharger') IS NOT NULL
+	DROP PROCEDURE NL_CustomersForAutoCharger
+GO
+
+IF OBJECT_ID('NL_LateLoanMailDataGet') IS NOT NULL
+	DROP PROCEDURE NL_LateLoanMailDataGet
+GO
+
+IF OBJECT_ID('NL_CuredLoansGet') IS NOT NULL
+	DROP PROCEDURE NL_CuredLoansGet
+GO
+
 -------------------------------------------------------------------------------
 --
 -- Drop new rows in old tables
 --
 -------------------------------------------------------------------------------
 
-DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'ChargeBack', 'WrongPayment', 'SystemRepay')
+DELETE FROM LoanTransactionMethod WHERE Name IN ('WriteOff', 'Write Off', 'ChargeBack', 'SetupFee Offset', 'SetupFeeOffset', 'WrongPayment', 'SystemRepay')
 GO
 
 DECLARE @lastid INT
 
-IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
-BEGIN
-	SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
-	INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
-END
+-- IF NOT EXISTS (SELECT Id FROM LoanTransactionMethod WHERE Name = 'Write Off')
+-- BEGIN
+	-- SET @lastid = (SELECT Max(Id) FROM LoanTransactionMethod)
+	-- INSERT INTO LoanTransactionMethod (Id, Name, DisplaySort) VALUES(@lastid + 1, 'Write Off', 0)
+-- END
 
 -------------------------------------------------------------------------------
 --
@@ -279,6 +321,26 @@ GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_CollectionLog_NL_LoanHistory')
 	ALTER TABLE CollectionLog DROP CONSTRAINT FK_CollectionLog_NL_LoanHistory
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Loans')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Loans
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Offers')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Offers
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_InvestorSystemBalance_NL_Payments')
+	ALTER TABLE [dbo].[I_InvestorSystemBalance] DROP CONSTRAINT FK_I_InvestorSystemBalance_NL_Payments
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_OpenPlatformOffer_NL_Offers')
+	ALTER TABLE [dbo].[I_OpenPlatformOffer] DROP CONSTRAINT FK_I_OpenPlatformOffer_NL_Offers
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_I_Portfolio_I_NL_Loans')
+	ALTER TABLE [dbo].[I_Portfolio] DROP CONSTRAINT [FK_I_Portfolio_I_NL_Loans]
 GO
 
 IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('DecisionTrail') AND name = 'NLCashRequestID')
@@ -494,3 +556,5 @@ END;
 IF OBJECT_ID('NL_PaidSchedulesLoad') IS NOT NULL BEGIN
 	DROP PROCEDURE [dbo].[NL_PaidSchedulesLoad];
 END;
+
+

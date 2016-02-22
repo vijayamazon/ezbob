@@ -1,4 +1,4 @@
-﻿namespace TestRailData{
+﻿namespace TestRailData {
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -20,8 +20,7 @@
         protected string _Password_;
 
         /// <summary>projects in the test rail database</summary>
-        public List<Project> Projects
-        {
+        public List<Project> Projects {
             get { return _Projects.Value; }
         }
 
@@ -58,8 +57,7 @@
 
         private Lazy<List<Project>> _Projects;
 
-        private Dictionary<ulong, int> _PriorityIDToLevel
-        {
+        private Dictionary<ulong, int> _PriorityIDToLevel {
             get { return _LazyPriorityIDToLevel.Value; }
         }
 
@@ -319,10 +317,9 @@
         /// <param name="assignedToID">(optional)the ID of the user the test run should be assigned to</param>
         /// <param name="include_all">(optional)true for including all test cases of the test suite and false for a custom selection (default: true)</param>
         /// <returns></returns>
-        public CommandResult<ulong> AddPlanEntry(ulong planID, ulong suiteID, string name = null, ulong? assignedToID = null, List<ulong> caseIDs = null, List<Run> runList= null)
-        {
+        public CommandResult<ulong> AddPlanEntry(ulong planID, ulong suiteID, string name = null, ulong? assignedToID = null, List<ulong> caseIDs = null, List<Run> runList = null) {
             string uri = _CreateUri_(_CommandType_.add, _NODE_PLAN_ENTRY_, planID);
-            
+
             PlanEntry pe = new PlanEntry() {
                 AssignedToID = assignedToID,
                 SuiteID = suiteID,
@@ -369,19 +366,16 @@
             return _UpdateCase_(caseID, title, typeID, priorityID, estimate, milestoneID, refs, null);
         }
 
-        public CommandResult<ulong> UpdateCase(Case caseItem)
-        {
+        public CommandResult<ulong> UpdateCase(Case caseItem) {
             return _UpdateCase_(caseItem);
         }
 
-        private CommandResult<ulong> _UpdateCase_(Case caseItem)
-        {
-            if (caseItem == null)
-            {
+        private CommandResult<ulong> _UpdateCase_(Case caseItem) {
+            if (caseItem == null) {
                 return new CommandResult<ulong>(false, 0, new ArgumentNullException("caseItem"));
             }
             string uri = _CreateUri_(_CommandType_.update, _NODE_CASE_, caseItem.ID);
-            JObject jsonParams = JsonUtility.Merge(caseItem.GetJsonExtention() , null);
+            JObject jsonParams = JsonUtility.Merge(caseItem.GetJsonExtention(), null);
             return _SendCommand(uri, jsonParams);
         }
 

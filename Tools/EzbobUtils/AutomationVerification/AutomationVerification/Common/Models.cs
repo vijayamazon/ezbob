@@ -53,9 +53,9 @@
 		public int ConsumerScore { get; set; }
 		public int BusinessScore { get; set; }
 
-		public void SaveToDb(long? cashRequestID, string tag, AConnection db, ASafeLog log) {
+		public void SaveToDb(long? cashRequestID, long? nlCashRequestID, string tag, AConnection db, ASafeLog log) {
 			var dbHelper = new DbHelper(db, log);
-			dbHelper.StoreMedalVerification(this, tag, cashRequestID);
+			dbHelper.StoreMedalVerification(this, tag, cashRequestID, nlCashRequestID);
 		} // SaveToDb
 
 		public override string ToString() {
@@ -392,7 +392,7 @@
 		public decimal CollectionRate { get; set; }
 		public decimal Cogs { get; set; }
 		public decimal BrokerSetupFee { get; set; }
-        public decimal CosmeCollectionRate { get; set; }
+		public decimal CosmeCollectionRate { get; set; }
 	}
 
 	public class OfferInputModel {
@@ -401,8 +401,8 @@
 		public Medal Medal { get; set; }
 		public bool AspireToMinSetupFee { get; set; }
 		public int CustomerId { get; set; }
-        public int LoanSourceId { get; set; }
-        public int RepaymentPeriod { get; set; }
+		public int LoanSourceId { get; set; }
+		public int RepaymentPeriod { get; set; }
 	}
 
 	public class OfferOutputModel : IEquatable<OfferOutputModel> {
@@ -410,7 +410,7 @@
 		public Medal Medal { get; set; }
 		public DateTime CalculationTime { get; set; }
 
-		public int RepaymentPeriod { get; set; } 
+		public int RepaymentPeriod { get; set; }
 
 		public LoanType LoanType {
 			get { return LoanType.StandardLoanType; }
@@ -420,8 +420,8 @@
 		public int Amount { get; set; }
 		public string ScenarioName { get; set; }
 
-        public int LoanSourceID { get; set; }
-        public bool IsError { get; set; }
+		public int LoanSourceID { get; set; }
+		public bool IsError { get; set; }
 		public bool IsMismatch { get; set; }
 		public bool HasDecision { get; set; }
 		public string Message { get; set; }
@@ -440,9 +440,9 @@
 				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSourceID, Description);
 		}
 
-		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type) {
+		public void SaveToDb(ASafeLog log, AConnection db) {
 			var dbHelper = new DbHelper(db, log);
-			dbHelper.SaveOffer(this, type);
+			dbHelper.SaveOffer(this);
 		}
 
 		public string Description {

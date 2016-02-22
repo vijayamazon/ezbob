@@ -1,35 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:complexType name="NL_CashRequests">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CashRequestID" type="xs:int" />
-      <xs:element minOccurs="0" name="CashRequestOriginID" type="xs:int" />
-      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
-      <xs:element minOccurs="0" name="OldCashRequestID" type="xs:long" />
-      <xs:element minOccurs="0" name="RequestTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="UserID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q1:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CashRequestID" type="xs:long" />
+          <xs:element minOccurs="0" name="CashRequestOriginID" type="xs:int" />
+          <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+          <xs:element minOccurs="0" name="OldCashRequestID" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="RequestTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="UserID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_CashRequests" nillable="true" type="tns:NL_CashRequests" />
   <xs:complexType name="NL_Decisions">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CashRequestID" type="xs:int" />
-      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
-      <xs:element minOccurs="0" name="DecisionNameID" type="xs:int" />
-      <xs:element minOccurs="0" name="DecisionTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsAmountSelectionAllowed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Position" type="xs:int" />
-      <xs:element minOccurs="0" name="SendEmailNotification" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="UserID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q2:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CashRequestID" type="xs:long" />
+          <xs:element minOccurs="0" name="DecisionID" type="xs:long" />
+          <xs:element minOccurs="0" name="DecisionNameID" type="xs:int" />
+          <xs:element minOccurs="0" name="DecisionTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Position" type="xs:int" />
+          <xs:element minOccurs="0" name="UserID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_Decisions" nillable="true" type="tns:NL_Decisions" />
   <xs:complexType name="ArrayOfNL_DecisionRejectReasons">
@@ -39,156 +41,239 @@
   </xs:complexType>
   <xs:element name="ArrayOfNL_DecisionRejectReasons" nillable="true" type="tns:ArrayOfNL_DecisionRejectReasons" />
   <xs:complexType name="NL_DecisionRejectReasons">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
-      <xs:element minOccurs="0" name="DecisionRejectReasonID" type="xs:int" />
-      <xs:element minOccurs="0" name="RejectReasonID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q3:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DecisionID" type="xs:long" />
+          <xs:element minOccurs="0" name="DecisionRejectReasonID" type="xs:int" />
+          <xs:element minOccurs="0" name="RejectReasonID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_DecisionRejectReasons" nillable="true" type="tns:NL_DecisionRejectReasons" />
   <xs:complexType name="NL_Offers">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
-      <xs:element minOccurs="0" name="DiscountPlanID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="EndTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsAmountSelectionAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
-      <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="SendEmailNotification" type="xs:boolean" />
-      <xs:element minOccurs="0" name="SetupFeeAddedToLoan" type="xs:boolean" />
-      <xs:element minOccurs="0" name="StartTime" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q4:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DecisionID" type="xs:long" />
+          <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DiscountPlan" nillable="true" type="q5:ArrayOfdecimal" />
+          <xs:element minOccurs="0" name="DiscountPlanID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="EndTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" type="xs:int" />
+          <xs:element minOccurs="0" name="IsAmountSelectionAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LoanLegalID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfferFees" nillable="true" type="tns:ArrayOfNL_OfferFees" />
+          <xs:element minOccurs="0" name="ProductSubTypeID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
+          <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="SendEmailNotification" type="xs:boolean" />
+          <xs:element minOccurs="0" name="SetupFeeAddedToLoan" type="xs:boolean" />
+          <xs:element minOccurs="0" name="StartTime" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_Offers" nillable="true" type="tns:NL_Offers" />
-  <xs:complexType name="NL_LoanLegals">
+  <xs:complexType name="ArrayOfNL_OfferFees">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="COSMEAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="CreditActAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="EUAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="GuarantyAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LoanLegalID" type="xs:int" />
-      <xs:element minOccurs="0" name="NotInBankruptcy" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="OfferID" type="xs:int" />
-      <xs:element minOccurs="0" name="PreContractAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="PrivateCompanyLoanAgreementAgreed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
-      <xs:element minOccurs="0" name="SignatureTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="SignedName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_OfferFees" nillable="true" type="tns:NL_OfferFees" />
     </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_OfferFees" nillable="true" type="tns:ArrayOfNL_OfferFees" />
+  <xs:complexType name="NL_OfferFees">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q6:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AbsoluteAmount" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DistributedPartPercent" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="OfferFeeID" type="xs:long" />
+          <xs:element minOccurs="0" name="OfferID" type="xs:long" />
+          <xs:element minOccurs="0" name="OneTimePartPercent" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Percent" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_OfferFees" nillable="true" type="tns:NL_OfferFees" />
+  <xs:complexType name="NL_LoanLegals">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q7:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="COSMEAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="CreditActAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="EUAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="GuarantyAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LoanLegalID" type="xs:long" />
+          <xs:element minOccurs="0" name="NotInBankruptcy" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="OfferID" type="xs:long" />
+          <xs:element minOccurs="0" name="PreContractAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="PrivateCompanyLoanAgreementAgreed" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+          <xs:element minOccurs="0" name="SignatureTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="SignedLegalDocs" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SignedName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanLegals" nillable="true" type="tns:NL_LoanLegals" />
   <xs:complexType name="NL_LoanOptions">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AutoCharge" type="xs:boolean" />
-      <xs:element minOccurs="0" name="AutoInterest" type="xs:boolean" />
-      <xs:element minOccurs="0" name="AutoLateFees" type="xs:boolean" />
-      <xs:element minOccurs="0" name="CaisAccountStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="EmailSendingAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LatePaymentNotification" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LoanID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanOptionsID" type="xs:int" />
-      <xs:element minOccurs="0" name="MailSendingAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="ManualCaisFlag" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ReductionFee" type="xs:boolean" />
-      <xs:element minOccurs="0" name="SmsSendingAllowed" type="xs:boolean" />
-      <xs:element minOccurs="0" name="StopAutoChargeDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="StopAutoInterestDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="StopAutoLateFeesDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q8:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CaisAccountStatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EmailSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LatePaymentNotification" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanOptionsID" type="xs:long" />
+          <xs:element minOccurs="0" name="MailSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ManualCaisFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PartialAutoCharging" type="xs:boolean" />
+          <xs:element minOccurs="0" name="SmsSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="StopAutoChargeDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopLateFeeFromDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopLateFeeToDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanOptions" nillable="true" type="tns:NL_LoanOptions" />
+  <xs:complexType name="NL_Model">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q9:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="APR" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BrokerComissions" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FundTransfer" nillable="true" type="tns:NL_FundTransfers" />
+          <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Loan" nillable="true" type="tns:NL_Loans" />
+          <xs:element minOccurs="0" name="NextEarlyPayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Offer" nillable="true" type="tns:NL_Offers" />
+          <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+          <xs:element minOccurs="0" name="RolloverPayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalEarlyPayment" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalEarlyPaymentSavedAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_Model" nillable="true" type="tns:NL_Model" />
   <xs:complexType name="NL_FundTransfers">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FundTransferID" type="xs:int" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="LoanID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanTransactionMethodID" type="xs:int" />
-      <xs:element minOccurs="0" name="TransferTime" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q10:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FundTransferID" type="xs:long" />
+          <xs:element minOccurs="0" name="FundTransferStatusID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanTransactionMethodID" type="xs:int" />
+          <xs:element minOccurs="0" name="PacnetTransactions" nillable="true" type="tns:ArrayOfNL_PacnetTransactions" />
+          <xs:element minOccurs="0" name="TransferTime" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_FundTransfers" nillable="true" type="tns:NL_FundTransfers" />
-  <xs:complexType name="NL_Loans">
+  <xs:complexType name="ArrayOfNL_PacnetTransactions">
     <xs:sequence>
-      <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DateClosed" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="EzbobBankAccountID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="InitialLoanAmount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
-      <xs:element minOccurs="0" name="IssuedTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="LoanID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="OfferID" type="xs:int" />
-      <xs:element minOccurs="0" name="OldLoanID" type="xs:int" />
-      <xs:element minOccurs="0" name="Position" type="xs:int" />
-      <xs:element minOccurs="0" name="Refnum" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
-      <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_PacnetTransactions" nillable="true" type="tns:NL_PacnetTransactions" />
     </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_PacnetTransactions" nillable="true" type="tns:ArrayOfNL_PacnetTransactions" />
+  <xs:complexType name="NL_PacnetTransactions">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q11:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FundTransferID" type="xs:long" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PacnetTransactionID" type="xs:long" />
+          <xs:element minOccurs="0" name="PacnetTransactionStatusID" type="xs:int" />
+          <xs:element minOccurs="0" name="StatusUpdatedTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TrackingNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_PacnetTransactions" nillable="true" type="tns:NL_PacnetTransactions" />
+  <xs:complexType name="NL_Loans">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q12:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AcceptedRollovers" nillable="true" type="tns:ArrayOfNL_LoanRollovers" />
+          <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DateClosed" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="EzbobBankAccountID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Fees" nillable="true" type="tns:ArrayOfNL_LoanFees" />
+          <xs:element minOccurs="0" name="FreezeInterestIntervals" nillable="true" type="tns:ArrayOfNL_LoanInterestFreeze" />
+          <xs:element minOccurs="0" name="Histories" nillable="true" type="tns:ArrayOfNL_LoanHistory" />
+          <xs:element minOccurs="0" name="LoanFormulaID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanOptions" nillable="true" type="tns:NL_LoanOptions" />
+          <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="OfferID" type="xs:long" />
+          <xs:element minOccurs="0" name="OldLoanID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Payments" nillable="true" type="tns:ArrayOfNL_Payments" />
+          <xs:element minOccurs="0" name="Position" type="xs:int" />
+          <xs:element minOccurs="0" name="PrimaryLoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="Refnum" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Rollovers" nillable="true" type="tns:ArrayOfNL_LoanRollovers" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_Loans" nillable="true" type="tns:NL_Loans" />
-  <xs:complexType name="ArrayOfNL_LoanAgreements">
+  <xs:complexType name="ArrayOfNL_LoanRollovers">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanAgreements" nillable="true" type="tns:NL_LoanAgreements" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanRollovers" nillable="true" type="tns:NL_LoanRollovers" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanAgreements" nillable="true" type="tns:ArrayOfNL_LoanAgreements" />
-  <xs:complexType name="NL_LoanAgreements">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FilePath" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LoanAgreementID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanAgreementTemplateID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanHistoryID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  <xs:element name="ArrayOfNL_LoanRollovers" nillable="true" type="tns:ArrayOfNL_LoanRollovers" />
+  <xs:complexType name="NL_LoanRollovers">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q13:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CreatedByUserID" type="xs:int" />
+          <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="CustomerActionTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="ExpirationTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="IsAccepted" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LoanFeeID" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanRolloverID" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NL_LoanAgreements" nillable="true" type="tns:NL_LoanAgreements" />
-  <xs:complexType name="ArrayOfNL_LoanFeeTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanFeeTypes" nillable="true" type="tns:NL_LoanFeeTypes" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanFeeTypes" nillable="true" type="tns:ArrayOfNL_LoanFeeTypes" />
-  <xs:complexType name="NL_LoanFeeTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LoanFeeType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_LoanFeeTypes" nillable="true" type="tns:NL_LoanFeeTypes" />
+  <xs:element name="NL_LoanRollovers" nillable="true" type="tns:NL_LoanRollovers" />
   <xs:complexType name="ArrayOfNL_LoanFees">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanFees" nillable="true" type="tns:NL_LoanFees" />
@@ -196,99 +281,169 @@
   </xs:complexType>
   <xs:element name="ArrayOfNL_LoanFees" nillable="true" type="tns:ArrayOfNL_LoanFees" />
   <xs:complexType name="NL_LoanFees">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="AssignTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="AssignedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DisabledTime" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="LoanFeeID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q14:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="AssignTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="AssignedByUserID" type="xs:int" />
+          <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="DisabledTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="LoanFeeID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OldFeeID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="PaidAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="UpdateTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="UpdatedByUserID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanFees" nillable="true" type="tns:NL_LoanFees" />
-  <xs:complexType name="NL_LoanHistory">
+  <xs:complexType name="ArrayOfNL_LoanInterestFreeze">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AgreementModel" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="EventTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="InterestRate" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="LoanHistoryID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanLegalID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
-      <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanInterestFreeze" nillable="true" type="tns:NL_LoanInterestFreeze" />
     </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_LoanInterestFreeze" nillable="true" type="tns:ArrayOfNL_LoanInterestFreeze" />
+  <xs:complexType name="NL_LoanInterestFreeze">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q15:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ActivationDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="AssignedByUserID" type="xs:int" />
+          <xs:element minOccurs="0" name="DeactivationDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanInterestFreezeID" type="xs:long" />
+          <xs:element minOccurs="0" name="OldID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_LoanInterestFreeze" nillable="true" type="tns:NL_LoanInterestFreeze" />
+  <xs:complexType name="ArrayOfNL_LoanHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanHistory" nillable="true" type="tns:NL_LoanHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_LoanHistory" nillable="true" type="tns:ArrayOfNL_LoanHistory" />
+  <xs:complexType name="NL_LoanHistory">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q16:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AgreementModel" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Agreements" nillable="true" type="tns:ArrayOfNL_LoanAgreements" />
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DistributedFees" type="xs:decimal" />
+          <xs:element minOccurs="0" name="EventTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" type="xs:int" />
+          <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LateFees" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanLegalID" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="OutstandingInterest" type="xs:decimal" />
+          <xs:element minOccurs="0" name="PaymentPerInterval" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
+          <xs:element minOccurs="0" name="RepaymentDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="Schedule" nillable="true" type="tns:ArrayOfNL_LoanSchedules" />
+          <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanHistory" nillable="true" type="tns:NL_LoanHistory" />
-  <xs:complexType name="ArrayOfNL_LoanStatuses">
+  <xs:complexType name="ArrayOfNL_LoanAgreements">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanStatuses" nillable="true" type="tns:NL_LoanStatuses" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanAgreements" nillable="true" type="tns:NL_LoanAgreements" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanStatuses" nillable="true" type="tns:ArrayOfNL_LoanStatuses" />
-  <xs:complexType name="NL_LoanStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LoanStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  <xs:element name="ArrayOfNL_LoanAgreements" nillable="true" type="tns:ArrayOfNL_LoanAgreements" />
+  <xs:complexType name="NL_LoanAgreements">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q17:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="FilePath" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LoanAgreementID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanAgreementTemplateID" type="xs:int" />
+          <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NL_LoanStatuses" nillable="true" type="tns:NL_LoanStatuses" />
-  <xs:complexType name="NL_PacnetTransactions">
+  <xs:element name="NL_LoanAgreements" nillable="true" type="tns:NL_LoanAgreements" />
+  <xs:complexType name="ArrayOfNL_LoanSchedules">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="FundTransferID" type="xs:int" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PacnetTransactionID" type="xs:int" />
-      <xs:element minOccurs="0" name="PacnetTransactionStatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="StatusUpdatedTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="TrackingNumber" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_PacnetTransactions" nillable="true" type="tns:NL_PacnetTransactions" />
-  <xs:complexType name="ArrayOfNL_PacnetTransactionStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_PacnetTransactionStatuses" nillable="true" type="tns:NL_PacnetTransactionStatuses" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfNL_PacnetTransactionStatuses" nillable="true" type="tns:ArrayOfNL_PacnetTransactionStatuses" />
-  <xs:complexType name="NL_PacnetTransactionStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="PacnetTransactionStatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="TransactionStatus" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+  <xs:element name="ArrayOfNL_LoanSchedules" nillable="true" type="tns:ArrayOfNL_LoanSchedules" />
+  <xs:complexType name="NL_LoanSchedules">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q18:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Balance" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FeesAssigned" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FeesPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FiveDaysDueMailSent" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InterestOP" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanHistoryID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanScheduleStatusID" type="xs:int" />
+          <xs:element minOccurs="0" name="PlannedDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Position" type="xs:int" />
+          <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+          <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TwoDaysDueMailSent" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NL_PacnetTransactionStatuses" nillable="true" type="tns:NL_PacnetTransactionStatuses" />
+  <xs:element name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
+  <xs:complexType name="ArrayOfNL_Payments">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_Payments" nillable="true" type="tns:NL_Payments" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_Payments" nillable="true" type="tns:ArrayOfNL_Payments" />
   <xs:complexType name="NL_Payments">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
-      <xs:element minOccurs="0" name="CreatedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentTime" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q19:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CreatedByUserID" type="xs:int" />
+          <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FeePayments" nillable="true" type="tns:ArrayOfNL_LoanFeePayments" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaymentDestination" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
+          <xs:element minOccurs="0" name="PaymentStatusID" type="xs:int" />
+          <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="PaymentSystemType" type="q20:NLPaymentSystemTypes" />
+          <xs:element minOccurs="0" name="PaymentTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="PaypointTransactions" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
+          <xs:element minOccurs="0" name="SchedulePayments" nillable="true" type="tns:ArrayOfNL_LoanSchedulePayments" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_Payments" nillable="true" type="tns:NL_Payments" />
   <xs:complexType name="ArrayOfNL_LoanFeePayments">
@@ -298,16 +453,44 @@
   </xs:complexType>
   <xs:element name="ArrayOfNL_LoanFeePayments" nillable="true" type="tns:ArrayOfNL_LoanFeePayments" />
   <xs:complexType name="NL_LoanFeePayments">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="LoanFeeID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanFeePaymentID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q21="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q21:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanFeeID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanFeePaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="NewEntry" type="xs:boolean" />
+          <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="ResetAmount" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanFeePayments" nillable="true" type="tns:NL_LoanFeePayments" />
+  <xs:complexType name="ArrayOfNL_PaypointTransactions">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_PaypointTransactions" nillable="true" type="tns:NL_PaypointTransactions" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_PaypointTransactions" nillable="true" type="tns:ArrayOfNL_PaypointTransactions" />
+  <xs:complexType name="NL_PaypointTransactions">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q22:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="PaypointCardID" type="xs:int" />
+          <xs:element minOccurs="0" name="PaypointTransactionID" type="xs:long" />
+          <xs:element minOccurs="0" name="PaypointTransactionStatusID" type="xs:int" />
+          <xs:element minOccurs="0" name="PaypointUniqueID" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_PaypointTransactions" nillable="true" type="tns:NL_PaypointTransactions" />
   <xs:complexType name="ArrayOfNL_LoanSchedulePayments">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanSchedulePayments" nillable="true" type="tns:NL_LoanSchedulePayments" />
@@ -315,66 +498,26 @@
   </xs:complexType>
   <xs:element name="ArrayOfNL_LoanSchedulePayments" nillable="true" type="tns:ArrayOfNL_LoanSchedulePayments" />
   <xs:complexType name="NL_LoanSchedulePayments">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
-      <xs:element minOccurs="0" name="LoanScheduleID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanSchedulePaymentID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
-      <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q23:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="LoanScheduleID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanSchedulePaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="NewEntry" type="xs:boolean" />
+          <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
+          <xs:element minOccurs="0" name="PrincipalPaid" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ResetInterestPaid" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ResetPrincipalPaid" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanSchedulePayments" nillable="true" type="tns:NL_LoanSchedulePayments" />
-  <xs:complexType name="NL_PaypointTransactions">
+  <xs:complexType name="ArrayOfNL_Loans">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaypointCardID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaypointTransactionID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaypointTransactionStatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaypointUniqID" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_PaypointTransactions" nillable="true" type="tns:NL_PaypointTransactions" />
-  <xs:complexType name="ArrayOfNL_RepaymentIntervalTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_RepaymentIntervalTypes" nillable="true" type="tns:NL_RepaymentIntervalTypes" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_Loans" nillable="true" type="tns:NL_Loans" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfNL_RepaymentIntervalTypes" nillable="true" type="tns:ArrayOfNL_RepaymentIntervalTypes" />
-  <xs:complexType name="NL_RepaymentIntervalTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="RepaymentIntervalType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_RepaymentIntervalTypes" nillable="true" type="tns:NL_RepaymentIntervalTypes" />
-  <xs:complexType name="ArrayOfNL_LoanSchedules">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanSchedules" nillable="true" type="tns:ArrayOfNL_LoanSchedules" />
-  <xs:complexType name="NL_LoanSchedules">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
-      <xs:element minOccurs="0" name="LoanHistoryID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanScheduleID" type="xs:int" />
-      <xs:element minOccurs="0" name="PlannedDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Position" type="xs:int" />
-      <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
+  <xs:element name="ArrayOfNL_Loans" nillable="true" type="tns:ArrayOfNL_Loans" />
 </xs:schema>

@@ -2,7 +2,6 @@
 	using System;
 
 	public class CreatePasswordModel : LogOnModel {
-
 		public CreatePasswordModel() {
 			Token = Guid.Empty;
 			BrokerLeadStr = "no";
@@ -19,14 +18,10 @@
 			set { m_sFirstName = (value ?? string.Empty).Trim(); }
 		} // FirstName
 
-		private string m_sFirstName;
-
 		public string LastName {
 			get { return m_sLastName; }
 			set { m_sLastName = (value ?? string.Empty).Trim(); }
 		} // LastName
-
-		private string m_sLastName;
 
 		public string FullName {
 			get { return (FirstName + " " + LastName).Trim(); }
@@ -46,8 +41,6 @@
 			} // set
 		} // RawToken
 
-		private string m_sRawToken;
-
 		public Guid Token { get; private set; }
 
 		public bool IsTokenValid {
@@ -56,5 +49,8 @@
 
 		public string signupPass2 { get; set; } // RawToken
 
+		private string m_sFirstName;
+		private string m_sLastName;
+		private string m_sRawToken;
 	} // CreatePasswordModel
 } // namespace

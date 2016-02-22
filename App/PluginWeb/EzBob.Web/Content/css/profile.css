@@ -888,10 +888,6 @@ span.sign-full-name {
 	margin-right: 1em;
 }
 
-.wizard-request-loan-section {
-	display: none;
-}
-
 .calc-header{
 	display: none;
 }
@@ -998,4 +994,85 @@ div.existing-card-data {
 
 .early-payment-form #rollover-select {
 	width: 374px;
+}
+
+/*Sliders request loan dashboard*/
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main {
+	background-color: transparent;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper {
+	background: transparent;
+
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container {
+    background: transparent;
+    box-shadow: none;
+    display: inline-block;
+    float: left;
+    width: 65%;
+    padding: 0;
+    margin: 0;
+	margin-top: 6px;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container .slider-wrap{
+	width: 55%;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container .amount-caption,
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container .period-caption {
+	padding-left: 40px;
+}
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container .amount-area {
+    border-radius: 5px 0 0 0;
+	height: 58px;
+	border-right: 1px solid #e8e8e8;
+ }
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .slider-wrapper .sliders-container .period-area {
+	  border-radius: 0 0 0 5px;
+	  height: 58px;
+	  border-right: 1px solid #e8e8e8;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .slider-wrapper{
+	width: 86%;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .total-wrapper {
+	background: #cdcdcd;
+    box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
+    border-left: 1px solid #87847f;
+    width: 18%;
+    display: block;
+    float: left;
+    margin: 12px auto 0;
+    text-align: center;
+    min-height: 118px;
+    border-radius: 0 5px 5px 0;
+    box-sizing: border-box;
+	text-shadow: 0px 1px 1px #FFFFFF;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .total-wrapper .total-caption {
+	font-family: 'Titillium Web Semi Bold';
+	font-size: 18px;
+	padding-top: 28px;
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .sliders-main .total-wrapper .total {
+	font-size: 24px;
+	font-family: 'Titillium Web Light'
+}
+
+.main-page-ezbob .d-widget .request-cash-sliders .dashboard-request-loan-section{
+	display: none;
+}
+
+.main-page-ezbob .d-widget .apply-button-wrapper{
+	position: absolute;
+    right: 17px;
+    top: 13px;
 }

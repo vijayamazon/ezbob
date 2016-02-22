@@ -73,8 +73,6 @@
     <Compile Include="Calculators\LoanRepaymentScheduleCalculator.cs" />
     <Compile Include="Calculators\LoanRepaymentScheduleCalculatorEvent.cs" />
     <Compile Include="Calculators\PaymentResult.cs" />
-    <Compile Include="Calculators\BrokerCommissionDefaultCalculator.cs" />
-    <Compile Include="Calculators\SetupFeeCalculatorLegacy.cs" />
     <Compile Include="Calculators\SetupFeeCalculator.cs" />
     <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
     <Compile Include="PacNet\IPacnetService.cs" />
@@ -157,6 +155,10 @@
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\PayPoint\PayPoint.csproj">
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>

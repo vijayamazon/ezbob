@@ -10,10 +10,10 @@
 	using System.Globalization;
 	using EKM;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
-	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Database;
 	using FreeAgent;
-	using Integration.ChannelGrabberFrontend;
+	using global::Integration.ChannelGrabberFrontend;
 	using PayPoint;
 	using Sage;
 	using YodleeLib.connector;
@@ -54,6 +54,7 @@
 			bool disabled = false;
 			string marketplaceDisplayName = string.Empty;
 			bool firstTime = false;
+			bool longUpdateTime = false;
 
 			SafeReader sr = DB.GetFirst(
 				"GetMarketplaceDetailsForUpdate",
@@ -66,11 +67,20 @@
 				disabled = sr["Disabled"];
 				marketplaceDisplayName = sr["DisplayName"];
 				firstTime = sr["FirstTime"];
+				longUpdateTime = sr["LongUpdateTime"];
 			} // if
 
 			if (disabled) {
 				Log.Info("MP:{0} is disabled and won't be updated", this.marketplaceId);
 				return;
+			} // if
+
+			if (longUpdateTime) {
+				Context.Description = string.Format(
+					"This strategy can take long time (updating {0} marketplace with id {1}).",
+					marketplaceName,
+					this.marketplaceId
+				);
 			} // if
 
 			int tokenExpired = 0;
@@ -87,7 +97,7 @@
 				oMpUpdateTimesSetter.Start();
 
 				IMarketplaceRetrieveDataHelper oRetrieveDataHelper = null;
-				var vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
+				var vi = global::Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName);
 
 				if (null != vi)
 					oRetrieveDataHelper = new RetrieveDataHelper(DbHelper, new DatabaseMarketPlace(marketplaceName));

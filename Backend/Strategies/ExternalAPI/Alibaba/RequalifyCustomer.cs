@@ -36,15 +36,15 @@
 			} // if
 
 			try {
-				MainStrategy strategy = new MainStrategy(
-					1, // TODO: apply real underwriter ID
-					customer.Id,
-					NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
-					0,
-					null,
-					null,
-					CashRequestOriginator.RequalifyCustomerStrategy
-				);
+				MainStrategy strategy = new MainStrategy(new MainStrategyArguments {
+					UnderwriterID = 1, // TODO: apply real underwriter ID
+					CustomerID = customer.Id,
+					NewCreditLine = NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+					AvoidAutoDecision = 0,
+					FinishWizardArgs = null,
+					CashRequestID = null,
+					CashRequestOriginator = CashRequestOriginator.RequalifyCustomerStrategy
+				});
 				strategy.Execute();
 			} catch (Exception ex1) {
 				throw new StrategyAlert(

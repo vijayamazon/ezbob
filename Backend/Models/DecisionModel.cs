@@ -68,6 +68,18 @@
 		public string attemptID { get; set; }
 
 		/// <summary>
+		/// Used in PendingInvestor flow to assign investor manually
+		/// </summary>
+		[DataMember]
+		public bool ForceInvestor { get; set; }
+
+		/// <summary>
+		/// Used in PendingInvestor flow to assign investor manually
+		/// </summary>
+		[DataMember]
+		public int? InvestorID { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>

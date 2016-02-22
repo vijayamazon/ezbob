@@ -8,7 +8,10 @@ GO
 ALTER PROCEDURE UserUpdateSecurityQuestion
 @UserID INT,
 @QuestionID BIGINT,
-@Answer VARCHAR(200)
+@Answer VARCHAR(200),
+@EzPassword NVARCHAR(255),
+@Salt NVARCHAR(255),
+@CycleCount NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -20,7 +23,10 @@ BEGIN
 
 	UPDATE Security_User SET
 		SecurityQuestion1Id = @QuestionID,
-		SecurityAnswer1 = @Answer
+		SecurityAnswer1 = @Answer,
+		EzPassword = ISNULL(@EzPassword, EzPassword),
+		Salt = ISNULL(@Salt, Salt),
+		CycleCount = ISNULL(@CycleCount, CycleCount)
 	WHERE
 		UserId = @UserID
 

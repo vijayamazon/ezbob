@@ -21,7 +21,7 @@
 				{ "BrokerCompanyName", BrokerData.FirmName },
 				{ "BrokerContactName", BrokerData.FullName },
 				{ "Phone", BrokerData.MobilePhone },
-				{ "Email", BrokerData.Email },
+				{ "Email", BrokerData.Email},
 				{ "Date", this.model.CommissionTime.ToString("dd/MM/yyyy") },
 				{ "CustomerName", this.model.CustomerName },
 				{ "CommissionAmount", FormattingUtils.NumericFormats(this.model.CommissionAmount) },
@@ -53,8 +53,13 @@
 		protected override Addressee[] GetRecipients() {
 			var aryAddresses = new List<Addressee>();
 
-			if (!string.IsNullOrWhiteSpace(BrokerData.Email))
-				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true));
+			if (!string.IsNullOrWhiteSpace(BrokerData.Email)) {
+				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true, origin: BrokerData.Origin, addSalesforceActivity: false));
+			}
+
+			if (!string.IsNullOrWhiteSpace(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail)) {
+				aryAddresses.Add(new Addressee(ConfigManager.CurrentValues.Instance.AccountingBrokersEmail, userID: BrokerData.BrokerID, isBroker: true, origin: BrokerData.Origin, addSalesforceActivity: false));
+			}
 
 			return aryAddresses.ToArray();
 		} // GetRecipients

@@ -43,6 +43,27 @@
 			};
 		} // static constructor
 
+		public static bool IsSubclassOf(Type typeToTest, Type baseTypeCandidate, ASafeLog log = null) {
+			if ((typeToTest == null) || (baseTypeCandidate == null)) {
+				if (log != null) {
+					log.Warn(
+						"IsSubclassOf('{0}', '{1}') returns false because at least one of the operands is null.",
+						typeToTest,
+						baseTypeCandidate
+					);
+				} // if
+
+				return false;
+			} // if
+
+			bool isSubclass = (typeToTest == baseTypeCandidate) || typeToTest.IsSubclassOf(baseTypeCandidate);
+
+			if (log != null)
+			log.Warn("IsSubclassOf('{0}', '{1}') = {2}.", typeToTest, baseTypeCandidate, isSubclass);
+
+			return isSubclass;
+		} // IsSubclassOf
+
 		public static Type FindType(string sName, ASafeLog oLog = null) {
 			if (string.IsNullOrWhiteSpace(sName))
 				return null;

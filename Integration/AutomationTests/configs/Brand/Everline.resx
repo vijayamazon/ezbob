@@ -121,10 +121,10 @@
     <value>.everline.com</value>
   </data>
   <data name="BrokerLoginHost" xml:space="preserve">
-    <value>.everline.com/Broker#login</value>
+    <value>/Broker#login</value>
   </data>
   <data name="BrokerSignupHost" xml:space="preserve">
-    <value>.everline.com/Broker#signup</value>
+    <value>/Broker#signup</value>
   </data>
   <data name="C2037_Privacy_content" xml:space="preserve">
     <value>Privacy &amp; cookie policy</value>
@@ -136,9 +136,9 @@
     <value>A message from your finance broker</value>
   </data>
   <data name="CustomerLogIn" xml:space="preserve">
-    <value>.everline.com/Account/LogOn</value>
+    <value>/Account/LogOn</value>
   </data>
   <data name="WizardHost" xml:space="preserve">
-    <value>.everline.com/Customer/Wizard</value>
+    <value>/Customer/Wizard</value>
   </data>
 </root>

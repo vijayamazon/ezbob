@@ -1,0 +1,79 @@
+﻿@using System.Collections.Generic
+@using Ezbob.Backend.ModelsWithDB.OpenPlatform
+@using EzBob.CommonLib
+@model dynamic
+@{
+	Dictionary<string, string> investorTypes = I_InvestorTypeEnum.Private.ToDictionaryInt<I_InvestorTypeEnum>();
+	Dictionary<string, string> accountTypes = I_InvestorAccountTypeEnum.Funding.ToDictionaryInt<I_InvestorAccountTypeEnum>();
+}
+<script type="text/template" id="add-investor-template">
+	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
+	<div id="main-content">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-content">
+                    <h2 class="add-investor-title">Create New Investor</h2>
+					<form id="add-investor-form" class="form-horizontal">
+						<div class="row">
+							<div class="col-md-6">
+
+								<h4>Investor</h4>
+								<!--Investor fields-->
+								@EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
+								@EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
+								@EzForm.InputTextUnderwriter(this, "MonthlyFundingCapital", "Monthly funding capital", null, "cashInput")
+								@EzForm.InputTextUnderwriter(this, "FundsTransferDate", "Date to transfer funds each month", "1")
+								@EzForm.InputTextUnderwriter(this, "FundingLimitForNotification", "Funding limit for notification", "250000", "cashInput")
+
+								<h4>Investor primary contact</h4>
+								<!--Investor contact fields-->
+								@EzForm.InputTextUnderwriter(this, "ContactPersonalName", "Contact personal name", null)
+								@EzForm.InputTextUnderwriter(this, "ContactLastName", "Contact last name", null)
+								@EzForm.InputTextUnderwriter(this, "ContactEmail", "Contact email", null)
+								@EzForm.InputTextUnderwriter(this, "Role", "Role", null)
+								@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile", null, "phone")
+								@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null, "phone")
+								@EzForm.InputTextUnderwriter(this, "Comment", "Comment", null)
+								<!--Is Primary = 1-->
+
+								<h4>Investor bank details</h4>
+								<!--Investor bank details-->
+								
+								@InvestorBank(0, accountTypes)
+								<div class="control-group">
+									<label class="control-label"></label>
+									<div class="control">
+										<label class="checkbox">
+											<input name="SameBank" id="SameBank" type="checkbox" value="true" checked="checked" />
+                                            Repayment account is the same as Funding account
+										</label>
+									</div>
+								</div>
+								
+								<div class="second-bank" style="display: none">
+									@InvestorBank(1, accountTypes)
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+                                    <button id="CancelAddInvestor" class="btn btn-primary cancel-add-investor">Cancel</button>
+									<button class="btn btn-primary add-investor pull-right">Submit</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+
+@helper InvestorBank(int i, Dictionary<string, string> bankTypes) {
+	@EzForm.SelectUnderwriter("InvestorBank[" + i + "].AccountType", "Bank account type", bankTypes, "Bank account type")
+	@EzForm.InputTextUnderwriter(this, "InvestorBank[" + i + "].BankSortCode", "Bank sort code", null, "numeric")
+	@EzForm.InputTextUnderwriter(this, "InvestorBank[" + i + "].BankAccountNumber", "Bank account number", null, "numeric")
+	@EzForm.InputTextUnderwriter(this, "InvestorBank[" + i + "].BankAccountName", "Bank account name", null)
+}

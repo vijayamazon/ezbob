@@ -23,7 +23,8 @@ BEGIN
 		DiscountPlanId DiscountPlanID,
 		IsCustomerRepaymentPeriodSelectionAllowed,
 		BrokerSetupFeePercent,
-		SpreadSetupFee = ISNULL(SpreadSetupFee, 0)
+		SpreadSetupFee = ISNULL(SpreadSetupFee, 0),
+		ProductSubTypeID
 	FROM
 		CashRequests
 	WHERE 

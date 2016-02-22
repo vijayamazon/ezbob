@@ -1,0 +1,64 @@
+﻿@model dynamic
+
+<script id="logical-glue-history-template" type="text/template">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-title">
+					<h3>Logical glue history</h3>
+					<div class="box-tool">
+						<a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="box-content">
+					<%if(logicalGlue) {%>
+					<table class="table box table-striped">
+						<thead class="box">
+							<tr class="box-title">
+								<th>Date</th>
+								<th>Bucket</th>
+								<th>Monthly payment</th>
+								<th>Neural network score</th>
+								<th>Fuzzy logic score</th>
+								<th>Is tryout</th>
+								<th>Is hard reject</th>
+								<th>Is score reliable</th>
+								<th>Error</th>
+							</tr>
+						</thead>
+						<tbody class="box-content">
+							<% _.each(logicalGlue, function(lg, i) {
+								var rowClass = '';
+								if(i == currentHistoryID) {
+									rowClass='active';
+								}
+								var uniqueID = lg.UniqueID || '';
+								uniqueID = uniqueID.toLowerCase().replace(/-/g,'');
+							%>
+							
+							<tr class="logical-glue-tr <%-rowClass%>" data-line="<%-i%>" data-id="<%-uniqueID%>">
+								<td><%-EzBob.formatDateUK(lg.Date)%></td>
+								<td><%-lg.BucketStr%></td>
+								<td><%-EzBob.formatPoundsAsInt(lg.MonthlyRepayment)%></td>
+								<td><%-lg.NNScore%></td>
+								<td><%-lg.FLScore%></td>
+								<td><img src="/Content/img/<%- lg.IsTryout ? 'check_icon.svg' : 'close_icon.svg' %>" style="height:100%" /></td>
+								<td><span class="<%- lg.IsHardReject ? 'red_cell' : '' %>"><%- lg.IsHardReject ? 'Yes' : 'No' %></span></td>
+								<td><img src="/Content/img/<%- lg.ScoreIsReliable ? 'check_icon.svg' : 'close_icon.svg' %>" style="height:100%" /></td>
+								<td><%-lg.Error%></td>
+							</tr>
+							<%}); %>
+						</tbody>
+					</table>
+					<%}%>
+
+					<%if(currentGuid){%>
+					<div>
+						<iframe id="logical-glue-iframe" src="https://everline.app.logicalglue.net/#/project/3/deployment/view/27/history?externalIdFilter=<%-currentGuid%>"></iframe>
+					</div>
+					<%}%>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

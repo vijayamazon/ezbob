@@ -4,8 +4,7 @@
     using TestRailCore;
 
     /// <summary>stores information about a case field</summary>
-    public class CaseField
-    {
+    public class CaseField {
         #region Public Properties
         /// <summary>id of the field</summary>
         public ulong? ID { get; private set; }
@@ -44,16 +43,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>Parses the json object into a CaseField object</summary>
         /// <param name="json">json to parse into a CaseField</param>
         /// <returns>CaseField corresponding to the json</returns>
-        public static CaseField Parse(JObject json)
-        {
+        public static CaseField Parse(JObject json) {
             CaseField cf = new CaseField();
             cf.ID = (ulong?)json["id"];
             cf.Name = (string)json["name"];
@@ -65,8 +62,7 @@
             cf.LocationID = (ulong?)json["location_id"];
             cf.DisplayOrder = (ulong?)json["display_order"];
             JArray jarray = json["configs"] as JArray;
-            if (null != jarray)
-            {
+            if (null != jarray) {
                 cf.Configs = JsonUtility.ConvertJArrayToList<Config>(jarray, Config.Parse);
             }
             cf.IsMulti = (bool?)json["is_multi"];

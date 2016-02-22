@@ -596,6 +596,7 @@
 
 	.form_field_container.control-group.customer-logon-remember-me .input-title,
 	.form_field_container.control-group.form_read_and_accept .input-title,
+	.form_field_container.control-group.form_fca .input-title,
 	.wizard-inner-wrap .clearfix .form_buttons_container .input-title,
 	.simple-login .form_buttons_container .input-title,
 	.PersonalDetailsForm  .form_buttons_container .input-title {
@@ -643,11 +644,19 @@
 		width: 22px;
 	}
 
-
 	label span.label-first-line,
 	label span.label-second-line {
 		display: inline-block;
 	}
+
+	.error-wrap {
+		display: inline;
+	}
+
+	div.broker-page-content {
+		padding-bottom: 10px !important;
+	}
+
 }
 
 @media screen and (max-width: 500px) {

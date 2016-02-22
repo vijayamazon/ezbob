@@ -1,5 +1,4 @@
-﻿namespace TestRailEngine
-{
+﻿namespace TestRailEngine {
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -7,21 +6,16 @@
     using TestRailData;
     using TestRailModels.TestRail;
 
-    public class TestRailManager
-    {
+    public class TestRailManager {
         public static volatile TestRailData instance;
         private static readonly object syncRoot = new Object();
         private static Dictionary<ulong, Suite> suiteRepository;
 
 
-        public static TestRailData Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (syncRoot)
-                    {
+        public static TestRailData Instance {
+            get {
+                if (instance == null) {
+                    lock (syncRoot) {
                         var url = ConfigurationManager.AppSettings["testRailUrl"];
                         var user = ConfigurationManager.AppSettings["testRailUser"];
                         var apikey = ConfigurationManager.AppSettings["testRailApiKey"];
@@ -44,10 +38,8 @@
             }
         }
 
-        public static Dictionary<ulong, Suite> SuiteRepository
-        {
-            get
-            {
+        public static Dictionary<ulong, Suite> SuiteRepository {
+            get {
                 if (suiteRepository == null) {
                     suiteRepository = new Dictionary<ulong, Suite>();
                     var ezbobProject = Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
@@ -57,10 +49,10 @@
                             if (suiteItem.ID != null)
                                 suiteRepository.Add((ulong)suiteItem.ID, suiteItem);
                         }
-                        }
                     }
+                }
                 return suiteRepository;
-                }            
+            }
             set { suiteRepository = value; }
         }
 

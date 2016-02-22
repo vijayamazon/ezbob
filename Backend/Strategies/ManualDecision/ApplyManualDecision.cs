@@ -1,14 +1,16 @@
 ﻿namespace Ezbob.Backend.Strategies.ManualDecision {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-	using System.Threading.Tasks;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.Investor;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
@@ -32,6 +34,7 @@
 
 		public string Error { get; private set; }
 
+		/// <exception cref="ArgumentOutOfRangeException">Condition. </exception>
 		public override void Execute() {
 			Log.Debug("Applying manual decision by model: {0}.", this.decisionModel.Stringify());
 
@@ -119,55 +122,19 @@
 				break;
 			} // switch
 
-			if (notifyAlibaba) {
-				FireToBackground(
-					"notify Alibaba",
-					() => new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute()
-				);
-			} // if
+			if (notifyAlibaba)
+				FireToBackground(new DataSharing(this.decisionModel.customerID, AlibabaBusinessType.APPLICATION_REVIEW));
 
 			if (silentAutomationCaller.HasValue) {
 				FireToBackground(
-					"silent automation",
-					() => {
-						new SilentAutomation(this.decisionModel.customerID)
-							.SetTag(silentAutomationCaller.Value)
-							.PreventMainStrategy()
-							.Execute();
-					}
+					new SilentAutomation(this.decisionModel.customerID)
+						.SetTag(silentAutomationCaller.Value)
+						.PreventMainStrategy()
 				);
 			} // if
 
 			Log.Debug("Done applying manual decision by model: {0}.", this.decisionModel.Stringify());
 		} // Execute
-
-		private void FireToBackground(string description, Action task, Action<Exception> onFailedToStart = null) {
-			if (task == null)
-				return;
-
-			string taskID = Guid.NewGuid().ToString("N");
-
-			StrategyLog log = Log;
-
-			log.Debug("Starting background task '{1}' with id '{0}'...", taskID, description);
-
-			try {
-				Task.Run(() => {
-					try {
-						task();
-
-						log.Debug("Background task '{1}' (id: '{0}') completed successfully.", taskID, description);
-					} catch (Exception e) {
-						log.Alert(e, "Background task '{1}' (id: '{0}') failed.", taskID, description);
-					} // try
-				});
-			} catch (Exception e) {
-				Log.Alert(e, "Failed to fire task '{1}' (id: '{0}') to background.", taskID, description);
-
-				if (onFailedToStart != null)
-					onFailedToStart(e);
-			} // try
-		} // FireToBackground
 
 		private ChangeDecisionOption CanChangeDecision() {
 			var checker = new DecisionIsChangable(this.decisionModel);
@@ -202,13 +169,16 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Waiting;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s40);
 		} // ReturnCustomerToWaitingForDecision
@@ -222,13 +192,10 @@
 
 			newDecision.DecisionNameID = (int)DecisionActions.Pending;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			nlAddDecision.Execute();
 
 			UpdateSalesForceOpportunity((this.decisionModel.signature == 1) ? OpportunityStage.s75 : OpportunityStage.s50);
 
@@ -243,20 +210,21 @@
 				return;
 
 			FireToBackground(
-				"send 'escalated' email",
-				() => new Escalated(this.decisionModel.customerID).Execute(),
+				new Escalated(this.decisionModel.customerID),
 				e => Warning = "Failed to send 'escalated' email: " + e.Message
 			);
 
 			newDecision.DecisionNameID = (int)DecisionActions.Escalate;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionModel.underwriterID,
-			// 	this.decisionModel.customerID,
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s20);
 		} // EscalateCustomer
@@ -267,7 +235,11 @@
 			this.decisionToApply.Customer.NumRejects = 1 + this.currentState.NumOfPrevRejections;
 
 			this.decisionToApply.CashRequest.RejectionReasons.Clear();
-			this.decisionToApply.CashRequest.RejectionReasons.AddRange(this.decisionModel.rejectionReasons);
+			List<NL_DecisionRejectReasons> nlRejectReasonsList = new List<NL_DecisionRejectReasons>();
+			if (this.decisionModel.rejectionReasons != null && this.decisionModel.rejectionReasons.Any()) {
+				this.decisionToApply.CashRequest.RejectionReasons.AddRange(this.decisionModel.rejectionReasons);
+				nlRejectReasonsList = this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToList();
+			}
 
 			if (!SaveDecision<ManuallyReject>())
 				return false;
@@ -276,21 +248,22 @@
 
 			if (!this.currentState.EmailSendingBanned) {
 				FireToBackground(
-					"send 'rejected' email",
-					() => new RejectUser(this.decisionModel.customerID, bSendToCustomer).Execute(),
+					new RejectUser(this.decisionModel.customerID, bSendToCustomer),
 					e => Warning = "Failed to send 'reject user' email: " + e.Message
 				);
 			} // if
 
 			newDecision.DecisionNameID = (int)DecisionActions.Reject;
 
-			// this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	this.decisionModel.rejectionReasons.Select(x => new NL_DecisionRejectReasons{RejectReasonID = x}).ToArray()
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, nlRejectReasonsList);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
+			try {
+				nlAddDecision.Execute();
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+			}
 
 			UpdateSalesForceOpportunity(null, model => {
 				model.CloseDate = this.now;
@@ -301,7 +274,23 @@
 			return true;
 		} // RejectCustomer
 
+
 		private bool ApproveCustomer(NL_Decisions newDecision) {
+			LinkOfferToInvestor linkOfferToInvestor = new LinkOfferToInvestor(this.decisionToApply.Customer.ID, this.decisionToApply.CashRequest.ID, this.decisionModel.ForceInvestor, this.decisionModel.InvestorID, this.decisionModel.underwriterID);
+			linkOfferToInvestor.Execute();
+
+			Log.Info("ApproveCustomer Decision {0} for Customer {1} cr {2} OP {3} FoundInvestor {4}",
+				this.decisionToApply.CashRequest.UnderwriterDecision,
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID,
+				linkOfferToInvestor.IsForOpenPlatform, 
+				linkOfferToInvestor.FoundInvestor);
+
+			if (linkOfferToInvestor.IsForOpenPlatform && !linkOfferToInvestor.FoundInvestor) {
+				PendingInvestor(newDecision);
+				return false;
+			}
+
 			this.decisionToApply.Customer.DateApproved = this.now;
 			this.decisionToApply.Customer.ApprovedReason = this.decisionModel.reason;
 
@@ -325,60 +314,95 @@
 
 			if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' and force reset customer password",
-					() => {
-						var stra = new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						);
-						stra.SendToCustomer = false;
-						stra.Execute();
-					},
+					 new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					) { SendToCustomer = false, },
 					e => Warning = "Failed to force reset customer password and send 'approved user' email: " + e.Message
 				);
 			} else if (bSendApprovedUser) {
 				FireToBackground(
-					"send 'approved' email",
-					() =>
-						new ApprovedUser(
-							this.decisionModel.customerID,
-							this.currentState.OfferedCreditLine,
-							validForHours,
-							this.currentState.NumOfPrevApprovals == 0
-						).Execute(),
+					new ApprovedUser(
+						this.decisionModel.customerID,
+						this.currentState.OfferedCreditLine,
+						validForHours,
+						this.currentState.NumOfPrevApprovals == 0
+					),
 					e => Warning = "Failed to send 'approved user' email: " + e.Message
 				);
-			} else if (bSendBrokerForceResetCustomerPassword) {
-				FireToBackground(
-					"force reset customer password",
-					() => new BrokerForceResetCustomerPassword(this.decisionModel.customerID).Execute()
-				);
-			} // if
+			} else if (bSendBrokerForceResetCustomerPassword)
+				FireToBackground(new BrokerForceResetCustomerPassword(this.decisionModel.customerID));
 
 			newDecision.DecisionNameID = (int)DecisionActions.Approve;
 
-			// NL_Offers lastOffer = this.serviceClient.Instance.GetLastOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// );
+			AddDecision nlAddDecision = new AddDecision(newDecision, this.decisionToApply.CashRequest.ID, null);
+			nlAddDecision.Context.CustomerID = this.decisionModel.customerID;
+			nlAddDecision.Context.UserID = this.decisionModel.underwriterID;
 
-			// var decisionID = this.serviceClient.Instance.AddDecision(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	newDecision,
-			// 	this.decisionToApply.CashRequest.ID,
-			// 	null
-			// );
+			try {
+				try {
+					nlAddDecision.Execute();
+					Log.Debug("nl AddDecision {0}, Error: {1}", nlAddDecision.DecisionID, nlAddDecision.Error);
 
-			// lastOffer.DecisionID = decisionID.Value;
-			// lastOffer.CreatedTime = this.now;
-			// this.serviceClient.Instance.AddOffer(
-			// 	this.decisionToApply.CashRequest.UnderwriterID,
-			// 	this.decisionToApply.Customer.ID
-			// 	lastOffer
-			// );
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.Error("Failed to add NL_decision. Err: {0}", ex.Message);
+				}
+
+				NL_Offers nlOffer = new NL_Offers() {
+					DecisionID = nlAddDecision.DecisionID,
+					CreatedTime = this.currentState.CreationDate,
+					Amount = this.currentState.OfferedCreditLine,
+					BrokerSetupFeePercent = this.currentState.BrokerSetupFeePercent,
+					//IsAmountSelectionAllowed = this.currentState.
+					SendEmailNotification = !this.currentState.EmailSendingBanned,
+					StartTime = this.currentState.OfferStart,
+					EndTime = this.currentState.OfferValidUntil,
+					IsLoanTypeSelectionAllowed = this.currentState.IsLoanTypeSelectionAllowed == 1,
+					Notes = this.decisionToApply.CashRequest.UnderwriterComment + " old cr " + this.decisionToApply.CashRequest.ID,
+					MonthlyInterestRate = this.currentState.InterestRate,
+					LoanSourceID = this.currentState.LoanSourceID,
+					DiscountPlanID = this.currentState.DiscountPlanID,
+					LoanTypeID = this.currentState.LoanTypeID,
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
+					RepaymentCount = this.currentState.RepaymentPeriod, // ApprovedRepaymentPeriod???
+					IsRepaymentPeriodSelectionAllowed = this.currentState.IsCustomerRepaymentPeriodSelectionAllowed
+				};
+
+				Log.Debug("Adding nl offer: {0}", nlOffer);
+					
+				NL_OfferFees setupFee = new NL_OfferFees() { 
+					LoanFeeTypeID = (int)NLFeeTypes.SetupFee, 
+					Percent = this.currentState.ManualSetupFeePercent, 
+					OneTimePartPercent = 1, 
+					DistributedPartPercent = 0 
+				};
+
+				if (this.currentState.SpreadSetupFee) {
+					setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+					setupFee.OneTimePartPercent = 0;
+					setupFee.DistributedPartPercent = 1;
+				}
+				NL_OfferFees[] ofeerFees = { setupFee };
+
+				AddOffer sAddOffer = new AddOffer(nlOffer, ofeerFees); 
+				sAddOffer.Context.CustomerID = this.decisionToApply.Customer.ID;
+				sAddOffer.Context.UserID = this.decisionModel.underwriterID;
+
+				try {
+					sAddOffer.Execute();
+					Log.Debug("nl offer added: {0}, Error: {1}", sAddOffer.OfferID, sAddOffer.Error);
+					// ReSharper disable once CatchAllClause
+				} catch (Exception ex) {
+					Log.Error("Failed to AddOffer. Err: {0}", ex.Message);
+				}
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception nlException) {
+				Log.Error("Failed to run NL offer/decision Err: {0}", nlException.Message);
+			}
 
 			UpdateSalesForceOpportunity(OpportunityStage.s90, model => {
 				model.ApprovedAmount = (int)this.currentState.OfferedCreditLine;
@@ -386,7 +410,26 @@
 			});
 
 			return true;
-		} // ApproveCustomer
+		}// ApproveCustomer
+
+		private void PendingInvestor(NL_Decisions newDecision) {
+			Log.Info("Investor not found for customer {0} cr {1}, mark as pending investor",
+				this.decisionToApply.Customer.ID, 
+				this.decisionToApply.CashRequest.ID);
+
+			this.decisionToApply.Customer.CreditResult = CreditResultStatus.PendingInvestor.ToString();
+			this.decisionToApply.CashRequest.UnderwriterDecision = CreditResultStatus.PendingInvestor.ToString();
+			SaveDecision<ManuallySuspend>();
+
+			var notifyRiskPendingInvestorCustomer = new NotifyRiskPendingInvestorOffer(
+				this.decisionToApply.Customer.ID,
+				this.currentState.OfferedCreditLine,
+				this.currentState.OfferValidUntil
+			);
+			notifyRiskPendingInvestorCustomer.Execute();
+
+			//TODO newDecision PendingInvestor status
+		}
 
 		private bool SaveDecision<T>() where T : AApplyManualDecisionBase {
 			string result;
@@ -421,7 +464,7 @@
 		} // SaveDecision
 
 		private void UpdateSalesForceOpportunity(OpportunityStage? stage, Action<OpportunityModel> setMoreFields = null) {
-			var model = new OpportunityModel { Email = this.currentState.Email, };
+			var model = new OpportunityModel { Email = this.currentState.Email, Origin = this.currentState.Origin, };
 
 			if (stage != null)
 				model.Stage = stage.Value.DescriptionAttr();
@@ -429,10 +472,7 @@
 			if (setMoreFields != null)
 				setMoreFields(model);
 
-			FireToBackground(
-				"update Sales Force opportunity",
-				() => new UpdateOpportunity(this.decisionModel.customerID, model).Execute()
-			);
+			FireToBackground(new UpdateOpportunity(this.decisionModel.customerID, model));
 		} // UpdateSalesForceOpportunity
 
 		private DecisionToApply decisionToApply;

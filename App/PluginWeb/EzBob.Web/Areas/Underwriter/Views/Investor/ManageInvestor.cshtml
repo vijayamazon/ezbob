@@ -1,0 +1,218 @@
+﻿@using System.Collections.Generic
+@using Ezbob.Backend.ModelsWithDB.OpenPlatform
+@using EzBob.CommonLib
+@model dynamic
+
+@{
+	Dictionary<string, string> accountTypes = I_InvestorAccountTypeEnum.Funding.ToDictionaryInt<I_InvestorAccountTypeEnum>();
+    Dictionary<string, string> investorTypes = I_InvestorTypeEnum.Private.ToDictionaryInt<I_InvestorTypeEnum>();
+}
+
+<script type="text/template" id="manage-investor-template">
+
+	<div id="main-content">
+		<div class="col-md-12">
+			<div>
+				<div >
+                    <div class="col-md-12">
+                        <div>
+                            <div>
+                                <div class="row">
+                                    <h4 class="clearfix">Contacts</h4>
+                                    <table class="table  table-hover sub-investor-table">
+                                        <thead>
+                                            <tr>
+
+                                                <th>First name</th>
+                                                <th class="hide">Last name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Mobile</th>
+                                                <th>Office</th>
+                                                <th>Comment</th>
+                                                <th>TS</th>
+                                                <th>primary</th>
+                                                <th>active</th>
+                                                <th>Getting Alerts</th>
+                                                <th>Getting Reports</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%if (data.Contacts!=null){
+                                            _.each(data.Contacts, function(c){%>
+                                            <tr data-id="<%-c.InvestorContactID%>" class="contact-investor-row">
+
+                                                <td><%-c.ContactPersonalName+" "+c.ContactLastName %></td>
+                                                <td class="hide"><%-c.ContactLastName%></td>
+                                                <td><%-c.ContactEmail%></td>
+                                                <td><%-c.Role%></td>
+                                                <td><%-c.ContactMobile%></td>
+                                                <td><%-c.ContactOfficeNumber%></td>
+                                                <td><%-c.Comment%></td>
+                                                <td><%-EzBob.formatDateUK(c.TimeStamp)%></td>
+                                                <td>
+                                                    <div class="Investor-primary-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsPrimary ? 'checked':'')%> />
+                                                    </div>
+
+                                                <td>
+                                                    <div class="Investor-active-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsActive ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="Investor-IsGettingAlerts-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsGettingAlerts ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="Investor-IsGettingReports-contact make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(c.IsGettingReports ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            <%})};%>
+                                            <tr class="add-contact-row">
+                                                <td colspan="9"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
+                                                <td class="submition-buttons" colspan="2"><button id="CancelContactsEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitContactsEdit" class="btn btn-primary">Submit</button></td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row">
+                                    <h4>Bank accounts</h4>
+                                    <table class="table table-hover sub-investor-table">
+                                        <thead>
+                                            <tr>
+                                                
+                                                <th>Account type</th>
+                                                <th>Account number</th>
+                                                <th>Account name</th>
+                                                <th>Sort code</th>
+                                                <th>TS</th>
+                                                <th>active</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (data.Banks!=null){
+                                            
+                                            _.each(data.Banks, function(b){%>
+                                            <tr class="bank-investor-row" data-id="<%-b.InvestorBankAccountID%>">
+
+                                                <td><%-b.AccountTypeStr%></td>
+
+                                                <td><%-b.BankAccountNumber%></td>
+                                                <td><%-b.BankAccountName%></td>
+                                                <td><%-b.BankSortCode%></td>
+                                                <td><%-EzBob.formatDateUK(b.TimeStamp)%></td>
+                                                <td>
+                                                    <div class="Investor-active-bank Investor-active-bank-<%-b.AccountTypeStr%> make-switch switch-mini" data-on="success" data-off="default" data-animated="true" data-off-label="No" data-on-label="Yes">
+                                                        <input type="checkbox" <%-(b.IsActive ? 'checked':'')%> />
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            <%});}%>
+                                            <tr class="add-bank-row">
+                                                <td colspan="4"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
+                                                <td class="submition-buttons" colspan="2"><button id="CancelBanksEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitBanksEdit" class=" btn btn-primary">Submit</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="manage-investor-details-template">
+    <div class="col-md-12">
+        <div class="investor-box investor-box-borders">
+            <div class="">
+                <form id="addEditInvestorDetilasForm" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @EzForm.InputTextUnderwriter(this, "CompanyName", "Company name", null)
+                            @EzForm.SelectUnderwriter("InvestorType", "Type", investorTypes, "Investor type")
+                            @EzForm.InputTextUnderwriter(this, "FundingLimitForNotification", "Funding limit for notification", "", "cashInput")
+                            <div class="form-group control-group">
+                                <label class=" control-label"></label>
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input name="IsActive" id="IsActive" type="checkbox" value="true" checked="checked" />
+                                        Is active
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="investorDetailsSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
+                            <button id="investorDetailsCancel" class="btn btn-primary">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+                     
+</script>
+
+<script type="text/template" id="manage-investor-contact-template">
+	<div class="col-md-12">
+		<div class="investor-box">
+			<div>
+				<form id="addEditInvestorContactForm" class="form-horizontal">
+					<div class="row">
+						<div class="col-md-6">
+							@EzForm.InputTextUnderwriter(this, "ContactPersonalName", "personal name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactLastName", "Last name", null)
+							@EzForm.InputTextUnderwriter(this, "ContactEmail", "email", null)
+							@EzForm.InputTextUnderwriter(this, "Role", "Role", null)
+							@EzForm.InputTextUnderwriter(this, "ContactMobile", "Mobile number", null, "phone")
+							@EzForm.InputTextUnderwriter(this, "ContactOfficeNumber", "Office number", null, "phone")
+							@EzForm.InputTextUnderwriter(this, "Comment", "Comment", null)
+                                <input name="IsPrimary" id="IsPrimary" type="hidden" value="false" />
+                            <input name="IsActive" id="IsActive" type="hidden" value="true"/>
+						
+							<input type="hidden" id="InvestorContactID" name="InvestorContactID" />
+							<button id="investorContactSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
+							<button id="investorContactCancel" class="btn btn-primary">Cancel</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="manage-investor-bank-template">
+	<div class="col-md-12">
+        <div class="investor-box">
+            <div >
+                <form id="addEditInvestorBankAccountForm" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @EzForm.SelectUnderwriter("AccountType", "Bank account type", accountTypes, "Bank account type")
+                            @EzForm.InputTextUnderwriter(this, "BankSortCode", "Bank sort code", null, "numeric")
+                            @EzForm.InputTextUnderwriter(this, "BankAccountNumber", "Bank account number", null, "numeric")
+                            @EzForm.InputTextUnderwriter(this, "BankAccountName", "Bank account name", null)
+                            <input name="IsActive" id="IsActive" type="hidden" value="false" />
+                         
+                            <input type="hidden" id="InvestorBankAccountID" name="InvestorBankAccountID" />
+                            <button id="investorBankSubmit" class="btn btn-primary btn-investor-submit">Submit</button>
+                            <button id="investorBankBack" class="btn btn-primary">Back</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</div>
+</script>
+

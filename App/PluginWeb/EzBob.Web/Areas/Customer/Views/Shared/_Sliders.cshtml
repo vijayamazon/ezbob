@@ -1,19 +1,15 @@
-﻿@using EzBob.Web.Infrastructure
-@using EZBob.DatabaseLib.Model.Database
-@model dynamic
-@{
-	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
-}
+﻿@model dynamic
+
 <script type="text/template" id="sliders-template">
 	<section class="header-sliders sliders everline-sliders-processed" style="opacity: 1;">
 		<div class="blog-header">
 			<div class="overlay"></div>
 		</div>
 		<div class="sliders-main">
-            <div class="exit-calc">
+			<div class="exit-calc">
 
-                <a href="#" class="close fa fa-times" ui-event-control-id="requested-loan:close"></a>
-            </div>
+				<a href="#" class="close fa fa-times" ui-event-control-id="requested-loan:close"></a>
+			</div>
 			<div class="c_col c_spn16 validate form-element-type-form form">
 
 				<div class="form-markup-wrapper calc-header">
@@ -24,7 +20,8 @@
 					</p>
 				</div>
 				<div id="calc-slider" class="slider-wrapper clearfix"></div>
-				
+
+				<%if(type == 'wizardRequestLoan') { %>
 				<div class="wizard-request-loan-section">
 					<div class="form-markup-wrapper clearfix summary-wrap">
 						<div class="c_col c_spn_16 summary">
@@ -45,31 +42,61 @@
 						</div>
 					</div>
 					<div class="c_col c_spn_16 overview clearfix">
-                        <div class="payments-wrap">
-
-
-                            <div class="form-markup-wrapper">
-                                <div class="c_col c_spn_10 pad_1"><p><span class="total-repay">total repayment*:</span> <span class="org"><span class="total"></span></span></p></div>
-                            </div>
-                            <button id="changeLoanAmount" class="ui-widget button btn-green c_col c_spn_4 org-btn change-loan-details-btn" ui-event-control-id="requested-loan:change-loan-details">Change loan details</button>
-                        </div>
+						<div class="payments-wrap">
+							<div class="form-markup-wrapper">
+								<div class="c_col c_spn_10 pad_1"><p><span class="total-repay">total repayment*:</span> <span class="org"><span class="total"></span></span></p></div>
+							</div>
+							<button id="changeLoanAmount" class="ui-widget button btn-green c_col c_spn_4 org-btn change-loan-details-btn" ui-event-control-id="requested-loan:change-loan-details">Change loan details</button>
+						</div>
 					</div>
 					<div class="c_col c_spn_16 t-c bottom-text">
-                    <div class="bottom-text-inner">
-                        <div class="form-markup-wrapper small-text">
-
-
-                            *Actual loan amount is subject to status. Loan estimate based on <span class="interest-rate">2%</span>
-                            interest charge per month.
-
-                        </div>
-                        <a href="#" class="cancel" ui-event-control-id="requested-loan:cancel">Cancel</a>
-                    </div>
+						<div class="bottom-text-inner">
+							<div class="form-markup-wrapper small-text">
+								*Actual loan amount is subject to status. Loan estimate based on <span class="interest-rate">1.75%</span>
+								interest charge per month.
+							</div>
+							<a href="#" class="cancel" ui-event-control-id="requested-loan:cancel">Cancel</a>
+						</div>
 					</div>
 					<div class="form-markup-wrapper">
 						<div class="form-markup-wrapper"></div>
 					</div>
 				</div>
+				<% } %>
+				<%if(type == 'dashboardRequestLoan') { %>
+				<div class="total-wrapper">
+					<div class="total-caption">Total amount <i class="fa fa-info-circle total-repayment-tooltip" data-toggle="tooltip"></i></div>
+					<div><span class="total"></span></div>
+				</div>
+				<div class="dashboard-request-loan-section">
+					<div class="form-markup-wrapper clearfix summary-wrap">
+						<div class="c_col c_spn_16 summary">
+							<div class="c_col c_spn_3 ">
+								<h3>Borrowing</h3>
+								<p><span class="amount"></span></p>
+							</div>
+							<span class="c_col c_spn_1"><span class="calc-equal"> + </span><i class="fa icon-plus"></i></span>
+							<div class="c_col c_spn_3">
+								<h3>Interest cost</h3>
+								<p><span class="interest"></span></p>
+							</div>
+							<div class="c_col c_spn_7 summary_total">
+								<h3 class="c_col c_spn9"><span class="calc-equal"> = </span>Total to repay</h3>
+								<p class="c_col c_spn_7"><span class="total"></span></p>
+							</div>
+							<br class="clearfix">
+						</div>
+					</div>
+					<div class="c_col c_spn_16 t-c bottom-text">
+						<div class="bottom-text-inner">
+							<div class="form-markup-wrapper small-text">
+								*Actual loan amount is subject to status. Loan estimate based on <span class="interest-rate">1.75%</span> interest charge per month.
+								Interest rate varies between 1.75% - 2.25% per month and setup fee of 2% - 7% may be charged depending on your business risk rating.
+							</div>
+						</div>
+					</div>
+				</div>
+				<% } %>
 			</div>
 		</div>
 	</section>

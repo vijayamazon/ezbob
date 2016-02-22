@@ -42,6 +42,10 @@
 		[DataMember(EmitDefaultValue = true)]
 		public bool BlockAction { get; set; } // re-scheduling allowed or not
 
+		[DataMember]
+		public DateTime LastPaidItemDate { get; set; } // date of last paid or partially paid installment
+
+
 		private DateTime _firstItemDate;
 		// new schedule first payment date
 		public DateTime FirstItemDate {

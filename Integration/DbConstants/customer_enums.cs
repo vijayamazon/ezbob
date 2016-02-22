@@ -152,7 +152,7 @@
 
 		[EnumMember]
 		[Description("UW new credit line button and selected 'Update all and go auto' option")]
-		NewCreditLineUpdateAndGoAuto = 13,
+		NewCreditLineUpdateAndGoAuto = 13
 	} // enum CashRequestOriginator
 
 	public enum FraudStatus {
@@ -183,6 +183,7 @@
 		PaidOff,
 		WrittenOff,
 		Late,
+		PendingInvestor
 	} // enum CreditResultStatus
 
 	public static class CreditResultStatusExt {

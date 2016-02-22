@@ -9,16 +9,22 @@
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
-			return new Approval(
+			var a = new Approval(
 				oRow.CustomerId,
+				null,
 				null,
 				oRow.OfferedLoanAmount,
 				oRow.GetMedal(),
 				oRow.GetMedalType(),
 				oRow.GetTurnoverType(),
+				Tag,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision(Tag);
+			).Init();
+			
+			a.MakeAndVerifyDecision();
+
+			return !a.WasMismatch;
 		} // MakeAndVerifyDecision
 	} // class VerifyApproval
 } // namespace

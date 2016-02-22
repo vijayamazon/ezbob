@@ -4,6 +4,7 @@ GO
 
 ALTER PROCEDURE BrokerLoadLeadList
 @ContactEmail NVARCHAR(255),
+@Origin INT,
 @BrokerID INT
 AS
 BEGIN
@@ -12,7 +13,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @BrokerID IS NULL OR @BrokerID <= 0
-		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail AND OriginID = @Origin
 
 	------------------------------------------------------------------------------
 

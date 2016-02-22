@@ -11,8 +11,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
+	using log4net;
 	using StructureMap;
 
 	using ThisLibrary = Ezbob.Models.Library;
@@ -23,15 +25,36 @@ namespace EzBob.Models.Marketplaces.Builders {
 		} // constructor
 
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
-			var lastChecked = mp.UpdatingEnd.HasValue
-				? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value)
-				: "never/in progress";
-			var updatingStatus = mp.GetUpdatingStatus(history);
-			var updatingError = mp.GetUpdatingError(history);
-			DateTime? originationDate;
-			var age = GetAccountAge(mp, out originationDate);
-			var url = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id));
-			var lastTransactionDate = GetLastTransactionDate(mp);
+			string lastChecked = "";
+			string updatingStatus = "";
+			string updatingError = "";
+			string age = "";
+			string url = "";
+			DateTime? lastTransactionDate = null;
+			TimeCounter tc = new TimeCounter("MarketplaceModelBuilder building time for mp " + mp.Id);
+
+			using (tc.AddStep("lastChecked Time taken")) {
+				lastChecked = mp.UpdatingEnd.HasValue
+					? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value)
+					: "never/in progress";
+			}
+			using (tc.AddStep("GetUpdatingStatus Time taken")) {
+				updatingStatus = mp.GetUpdatingStatus(history);
+			}
+			using (tc.AddStep("GetUpdatingError Time taken")) {
+				updatingError = mp.GetUpdatingError(history);
+			}
+			using (tc.AddStep("GetAccountAge Time taken")) {
+				DateTime? originationDate;
+				age = GetAccountAge(mp, out originationDate);
+			}
+			using (tc.AddStep("GetUrl Time taken")) {
+				url = GetUrl(mp, mp.GetRetrieveDataHelper()
+					.RetrieveCustomerSecurityInfo(mp.Id));
+			}
+			using (tc.AddStep("GetLastTransactionDate Time taken")) {
+				lastTransactionDate = GetLastTransactionDate(mp);
+			}
 
 			var model = new MarketPlaceModel {
 				Id = mp.Id,
@@ -54,38 +77,51 @@ namespace EzBob.Models.Marketplaces.Builders {
 				History = history,
 				LastTransactionDate = lastTransactionDate,
 			};
+			List<IAnalysisDataParameterInfo> aggregations = new List<IAnalysisDataParameterInfo>();
 
-			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
-			SetAggregationData(model, aggregations);
+			using (tc.AddStep("SetAggregationData Time taken")) {
+				aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
+				SetAggregationData(model, aggregations);
+			}
 
-			var monthSales = aggregations.FirstOrDefault(x =>
-				x.TimePeriod.TimePeriodType == TimePeriodEnum.Month &&
-				x.ParameterName == AggregationFunction.Turnover.ToString()
-			);
-			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
+			using (tc.AddStep("monthSales Time taken")) {
+				var monthSales = aggregations.FirstOrDefault(x =>
+					x.TimePeriod.TimePeriodType == TimePeriodEnum.Month &&
+						x.ParameterName == AggregationFunction.Turnover.ToString()
+					);
+				model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
+			}
+			using (tc.AddStep("yearSales Time taken")) {
+				var yearSales = aggregations.FirstOrDefault(x =>
+					x.TimePeriod.TimePeriodType == TimePeriodEnum.Year &&
+						x.ParameterName == AggregationFunction.Turnover.ToString()
+					);
+				model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
+			}
 
-			var yearSales = aggregations.FirstOrDefault(x =>
-				x.TimePeriod.TimePeriodType == TimePeriodEnum.Year &&
-				x.ParameterName == AggregationFunction.Turnover.ToString()
-			);
-			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
+			using (tc.AddStep("InitializeSpecificData Time taken")) {
+				InitializeSpecificData(mp, model, history);
+			}
+			using (tc.AddStep("GetFeedbackData Time taken")) {
+				var feedbacks = GetFeedbackData(aggregations);
+				model.RaitingPercent = feedbacks.RaitingPercent;
+				model.PositiveFeedbacks = feedbacks.PositiveFeedbacks;
+				model.NegativeFeedbacks = feedbacks.NegativeFeedbacks;
+				model.NeutralFeedbacks = feedbacks.NeutralFeedbacks;
+				model.AmazonSelerRating = feedbacks.AmazonSelerRating;
+			}
 
-			InitializeSpecificData(mp, model, history);
-			var feedbacks = GetFeedbackData(aggregations);
-			model.RaitingPercent = feedbacks.RaitingPercent;
-			model.PositiveFeedbacks = feedbacks.PositiveFeedbacks;
-			model.NegativeFeedbacks = feedbacks.NegativeFeedbacks;
-			model.NeutralFeedbacks = feedbacks.NeutralFeedbacks;
-			model.AmazonSelerRating = feedbacks.AmazonSelerRating;
+			using (tc.AddStep("GetPaymentAccountModel Time taken")) {
+				if (model.IsPaymentAccount) {
+					var paymentModel = GetPaymentAccountModel(mp, history, aggregations);
+					model.TotalNetInPayments = paymentModel.TotalNetInPayments;
+					model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
+					model.TransactionsNumber = paymentModel.TransactionsNumber;
+					model.MonthInPayments = paymentModel.MonthInPayments;
+				} // if
+			}
 
-			if (model.IsPaymentAccount) {
-				var paymentModel = GetPaymentAccountModel(mp, history, aggregations);
-				model.TotalNetInPayments = paymentModel.TotalNetInPayments;
-				model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
-				model.TransactionsNumber = paymentModel.TransactionsNumber;
-				model.MonthInPayments = paymentModel.MonthInPayments;
-			} // if
-
+			Log.Info(tc.ToString());
 			return model;
 		} // Create
 

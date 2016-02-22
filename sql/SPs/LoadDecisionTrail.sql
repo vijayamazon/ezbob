@@ -7,10 +7,15 @@ GO
 
 ALTER PROCEDURE LoadDecisionTrail
 @DiffID UNIQUEIDENTIFIER,
-@TrailID BIGINT = NULL
+@TrailID BIGINT = NULL,
+@ShowOldFlow BIT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
+
+	SET @ShowOldFlow = ISNULL(@ShowOldFlow, 0)
 
 	------------------------------------------------------------------------------
 
@@ -30,7 +35,10 @@ BEGIN
 		RowType = 'Trail',
 		trl.TrailID,
 		trl.CustomerID,
+		trl.CashRequestID,
+		trl.NLCashRequestID,
 		trl.DecisionID,
+		trl.NLDecisionID,
 		d.DecisionName,
 		trl.DecisionTime,
 		trl.UniqueID,
@@ -44,13 +52,17 @@ BEGIN
 		INNER JOIN DecisionStatuses s ON trl.DecisionStatusID = s.DecisionStatusID
 	WHERE
 		trl.UniqueID = @DiffID
+		AND (
+			(@ShowOldFlow = 1 AND trl.IsPrimary IN (2, 3))
+			OR
+			(@ShowOldFlow = 0 AND trl.IsPrimary IN (0, 1))
+		)
 	ORDER BY
 		trl.IsPrimary DESC
 
 	------------------------------------------------------------------------------
 
-	;WITH
-	prim AS (
+	;WITH prim AS (
 		SELECT
 			trc.TraceID,
 			trc.Position,
@@ -64,12 +76,11 @@ BEGIN
 			DecisionTrace trc
 			INNER JOIN DecisionTrail trl
 				ON trc.TrailID = trl.TrailID
-				AND trl.IsPrimary = 1
+				AND trl.IsPrimary = 1 + (@ShowOldFlow * 2)
 				AND trl.UniqueID = @DiffID
 			INNER JOIN DecisionStatuses s ON trc.DecisionStatusID = s.DecisionStatusID
 			INNER JOIN DecisionTraceNames n ON trc.TraceNameID = n.TraceNameID
-	),
-	sec AS (
+	), sec AS (
 		SELECT
 			trc.TraceID,
 			trc.Position,
@@ -83,7 +94,7 @@ BEGIN
 			DecisionTrace trc
 			INNER JOIN DecisionTrail trl
 				ON trc.TrailID = trl.TrailID
-				AND trl.IsPrimary = 0
+				AND trl.IsPrimary = 0 + (@ShowOldFlow * 2)
 				AND trl.UniqueID = @DiffID
 			INNER JOIN DecisionStatuses s ON trc.DecisionStatusID = s.DecisionStatusID
 			INNER JOIN DecisionTraceNames n ON trc.TraceNameID = n.TraceNameID

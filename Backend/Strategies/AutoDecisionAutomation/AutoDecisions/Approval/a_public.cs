@@ -2,19 +2,16 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Linq;
 	using AutomationCalculator;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.Misc;
-	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
@@ -22,14 +19,16 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using StructureMap;
 
-	public partial class Approval : AAutoDecisionBase {
+	public partial class Approval : AAutoDecisionBase, ICreateOfferInputData {
 		public Approval(
 			int customerId,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			int offeredCreditLine,
 			Medal medalClassification,
 			AutomationCalculator.Common.MedalType medalType,
 			AutomationCalculator.Common.TurnoverType? turnoverType,
+			string tag,
 			AConnection db,
 			ASafeLog log
 		) {
@@ -38,22 +37,23 @@
 			this.trail = new ApprovalTrail(
 				customerId,
 				cashRequestID,
+				nlCashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
-				CurrentValues.Instance.MailSenderName
-			) {
+				CurrentValues.Instance.MailSenderName) {
 				Amount = offeredCreditLine,
 			};
 
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.Creation)) {
+				this.trail.SetTag(tag);
+
 				Now = DateTime.UtcNow;
 
 				this.db = db;
 				this.log = log.Safe();
 
 				this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
-				this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
 				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 				this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
@@ -73,6 +73,7 @@
 			this.m_oSecondaryImplementation = new Agent(
 				this.trail.CustomerID,
 				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
 				offeredCreditLine,
 				(AutomationCalculator.Common.Medal)medalClassification,
 				medalType,
@@ -89,13 +90,10 @@
 
 				this.experianConsumerData = stra.Result;
 
-				if (this.customer == null) {
+				if (this.customer == null)
 					this.isBrokerCustomer = false;
-					this.hasLoans = false;
-				} else {
+				else
 					this.isBrokerCustomer = this.customer.Broker != null;
-					this.hasLoans = this.customer.Loans.Any();
-				} // if
 
 				bool hasLtd =
 					(this.customer != null) &&
@@ -173,9 +171,37 @@
 			return this;
 		} // Init
 
-		public bool MakeAndVerifyDecision(string tag, bool quiet = false) {
-			this.trail.SetTag(tag);
+		public override void MakeAndVerifyDecision() {
+			try {
+				RunPrimaryOnly();
 
+				this.m_oSecondaryImplementation.MakeDecision();
+
+				WasMismatch = !this.trail.EqualsTo(this.m_oSecondaryImplementation.Trail);
+
+				if (!WasMismatch && this.trail.HasDecided) {
+					if (this.trail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
+						this.trail.Affirmative<SameAmount>(false)
+							.Init(this.trail.RoundedAmount);
+						this.m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false)
+							.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
+					} else {
+						this.trail.Negative<SameAmount>(false)
+							.Init(this.trail.RoundedAmount);
+						this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
+							.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
+						WasMismatch = true;
+					} // if
+				} // if
+			} catch (Exception e) {
+				this.log.Error(e, "Exception during auto approval.");
+				this.trail.Negative<ExceptionThrown>(true).Init(e);
+			} // try
+
+			this.trail.Save(this.db, this.m_oSecondaryImplementation.Trail);
+		} // MakeAndVerifyDecision
+
+		public void RunPrimaryOnly() {
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 
@@ -190,129 +216,36 @@
 				using (this.trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
 					CheckAutoApprovalConformance(availFunds.ReservedAmount);
 			} // using timer step
+		} // RunPrimaryOnly
 
-			this.m_oSecondaryImplementation.MakeDecision();
+		public override bool WasException {
+			get {
+				if (this.trail == null)
+					return false;
 
-			bool bSuccess = this.trail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
-			WasMismatch = !bSuccess;
+				return this.trail.FindTrace<ExceptionThrown>() != null;
+			} // get
+		} // WasException
 
-			if (bSuccess && this.trail.HasDecided) {
-				if (this.trail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
-					this.trail.Affirmative<SameAmount>(false).Init(this.trail.RoundedAmount);
-					this.m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false)
-						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
-				} else {
-					this.trail.Negative<SameAmount>(false).Init(this.trail.RoundedAmount);
-					this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
-						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
-					bSuccess = false;
-					WasMismatch = true;
-				} // if
-			} // if
-
-			this.trail.SetTag(tag).Save(this.db, this.m_oSecondaryImplementation.Trail);
-
-			return bSuccess;
-		} // MakeAndVerifyDecision
+		public override bool AffirmativeDecisionMade {
+			get { return this.trail.HasDecided; }
+		} // AffirmativeDecisionMade
 
 		public int ApprovedAmount {
 			get { return this.trail.RoundedAmount; }
 		} // ApprovedAmount
 
-		public void MakeDecision(AutoDecisionResponse response, string tag) {
-			try {
-				response.LoanOfferUnderwriterComment = "Checking auto approve...";
+		public ApprovalTrail Trail {
+			get { return this.trail; }
+		} // Trail
 
-				bool bSuccess = MakeAndVerifyDecision(tag);
+		public bool LogicalGlueFlowFollowed {
+			get {
+				if (this.trail == null)
+					return false;
 
-				if (bSuccess) {
-					this.log.Info(
-						"Both Auto Approval implementations have reached the same decision: {0}",
-						this.trail.HasDecided ? "approved" : "not approved"
-					);
-					response.AutoApproveAmount = this.trail.RoundedAmount;
-				} else {
-					this.log.Alert(
-						"Switching to manual decision: Auto Approval implementations " +
-						"have not reached the same decision for customer {0}, diff id is {1}.",
-						this.trail.CustomerID,
-						this.trail.UniqueID.ToString("N")
-					);
-
-					response.LoanOfferUnderwriterComment = "Mismatch - " + this.trail.UniqueID;
-
-					response.AutoApproveAmount = 0;
-
-					response.CreditResult = CreditResultStatus.WaitingForDecision;
-					response.UserStatus = Status.Manual;
-					response.SystemDecision = SystemDecision.Manual;
-				} // if
-
-				this.log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
-
-				if (response.AutoApproveAmount == 0)
-					return;
-
-				var source = this.loanSourceRepository.GetDefault();
-				var offerDualCalculator = new OfferDualCalculator(
-					this.trail.CustomerID,
-					Now,
-					response.AutoApproveAmount,
-					this.hasLoans,
-					this.medalClassification,
-					source.ID,
-					source.DefaultRepaymentPeriod ?? 15
-				);
-
-				OfferResult offerResult = offerDualCalculator.CalculateOffer();
-
-				if (offerResult == null || offerResult.IsError) {
-					this.log.Alert(
-						"Customer {1} - will use manual. Offer result: {0}",
-						offerResult != null ? offerResult.Description : "",
-						this.trail.CustomerID
-					);
-
-					response.CreditResult = CreditResultStatus.WaitingForDecision;
-					response.UserStatus = Status.Manual;
-					response.SystemDecision = SystemDecision.Manual;
-					response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
-				} else if (CurrentValues.Instance.AutoApproveIsSilent) {
-					response.HasApprovalChance = true;
-					response.CreditResult = CreditResultStatus.WaitingForDecision;
-					response.UserStatus = Status.Manual;
-					response.SystemDecision = SystemDecision.Manual;
-					response.LoanOfferUnderwriterComment = "Silent Approve - " + this.trail.UniqueID;
-
-					NotifyAutoApproveSilentMode(
-						response.AutoApproveAmount,
-						offerResult.Period,
-						offerResult.InterestRate / 100m,
-						offerResult.SetupFee / 100m
-					);
-				} else {
-					response.HasApprovalChance = true;
-					response.CreditResult = CreditResultStatus.Approved;
-					response.UserStatus = Status.Approved;
-					response.SystemDecision = SystemDecision.Approve;
-					response.LoanOfferUnderwriterComment = "Auto Approval";
-
-					response.DecisionName = "Approval";
-					response.AppValidFor = Now.AddDays(this.trail.MyInputData.MetaData.OfferLength);
-					response.Decision = DecisionActions.Approve;
-					response.LoanOfferEmailSendingBannedNew = this.trail.MyInputData.MetaData.IsEmailSendingBanned;
-
-					// Use offer calculated data
-					response.RepaymentPeriod = offerResult.Period;
-					response.LoanSourceID = (int)LoanSourceName.COSME; // TODO replace with Loan source and not IsEU
-					response.LoanTypeID = offerResult.LoanTypeId;
-					response.InterestRate = offerResult.InterestRate / 100;
-					response.SetupFee = offerResult.SetupFee / 100;
-				} // if
-			} catch (Exception e) {
-				this.log.Error(e, "Exception during auto approval.");
-				response.LoanOfferUnderwriterComment = "Exception - " + this.trail.UniqueID;
-			} // try
-		} // MakeDecision
+				return this.trail.FindTrace<LogicalGlueFlow>() != null;
+			} // get
+		} // LogicalGlueFlowFollowed
 	} // class Approval
 } // namespace

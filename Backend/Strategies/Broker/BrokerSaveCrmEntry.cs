@@ -1,16 +1,17 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerSaveCrmEntry : AStrategy {
-
 		public BrokerSaveCrmEntry(
 			string sType,
 			int nActionID,
 			int nStatusID,
 			string sComment,
 			string sCustomerRefNum,
-			string sContactEmail
+			string sContactEmail,
+			CustomerOriginEnum origin
 		) {
 			m_sType = sType;
 			m_nActionID = nActionID;
@@ -18,6 +19,7 @@
 			m_sComment = (sComment ?? string.Empty).Trim();
 			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = (sContactEmail ?? string.Empty).Trim();
+			this.origin = (int)origin;
 			ErrorMsg = null;
 
 			if (m_sComment.Length > 1000)
@@ -51,7 +53,8 @@
 					new QueryParameter("@Comment", m_sComment),
 					new QueryParameter("@RefNum", m_sCustomerRefNum),
 					new QueryParameter("@ContactEmail", m_sContactEmail),
-					new QueryParameter("@EntryTime", DateTime.UtcNow)
+					new QueryParameter("@EntryTime", DateTime.UtcNow),
+					new QueryParameter("@Origin", this.origin)
 				);
 			}
 			catch (Exception e) {
@@ -66,7 +69,7 @@
 		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 		private readonly string m_sType;
-
+		private readonly int origin;
 	} // class BrokerSaveCrmEntry
 
 } // namespace Ezbob.Backend.Strategies.Broker

@@ -1,13 +1,55 @@
-﻿<div class="page-section hide section-requestacceptterms">
+﻿@using EzBob.Web.Infrastructure.Html
+@{
+	var originModel = ViewBag.CustomerOrigin;
+	var origin = originModel.GetOrigin();
+}
+<div class="page-section hide section-requestacceptterms">
 	<h2>Our terms and conditions have been updated</h2>
 
-	Please accept new terms and conditions to continue.
+	We have recently amended the terms and conditions of our Broker and Intermediary Program. Please review the revised terms and conditions.
 
 	<div class="terms-and-conditions">@{ WriteLiteral(Model.Terms); }</div>
 
-	<div class="form_buttons_container">
-		<div class="attardi-button">
-			<button type="submit" id="AcceptTermsButton" data-terms-id="@Model.TermsID" class="button btn-green pull-right ev-btn-org" ui-event-control-id="broker:accept-terms">Accept</button>
-		</div>
-	</div>
+	<hr />
+	@{
+		EzInputBuilder checkbox2 = new EzInputBuilder(
+			"ReAgreeToTerms",
+			"I have read and agree to the revised broker and intermediary program terms and conditions.",
+			value: "accepted-terms",
+			type: "checkbox",
+			isRequired: true,
+			statusIcon: true,
+			tabIndex: 1,
+			name: "ReAgreeToTerms",
+			uiEventControlID: "broker:accept-terms-checkbox",
+			wrapperCls: "broker-terms"
+		);
+
+		List<EzInputBuilder> checkboxesList2 = new List<EzInputBuilder> { checkbox2, };
+
+		var checkboxes2 = new EzClickInputModel(
+			name: "ConsentToTermsAndPolicy",
+			caption: "",
+			errorImgClass: "",
+			inputWrapperClass: "controls",
+			containerClass: "form_read_and_accept",
+			isRequired: false,
+			statusIcon: false,
+			inputButtons: checkboxesList2
+		);
+
+		@EzForm.ClickableInputWizard(checkboxes2, origin: origin);
+	}
+
+	@EzForm.WizardButton(new EzButtonModel(
+		"AcceptTermsButton",
+		"Submit",
+		"button btn-green disabled pull-right ev-btn-org",
+		"broker:accept-terms",
+		2,
+		EzButtonType.submit),
+		origin: origin
+	)
+
+	<input type="hidden" class="TermsIDToAccept" data-terms-id="@Model.TermsID" />
 </div>

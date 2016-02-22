@@ -5,7 +5,8 @@ EzBob.Profile = EzBob.Profile || {};
 EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	template: '#apply-forloan-template',
 
-	initialize: function(options) {
+	initialize: function (options) {
+
 		this.customer = options.customer;
 
 		if (this.customer.get('CreditSum') < EzBob.Config.XMinLoan) {
@@ -39,12 +40,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.isAlibaba = this.customer.get('IsAlibaba');
 		this.isEverline = this.customer.get('Origin') === 'everline';
-		this.isEverlineRefinance = this.customer.get('IsEverlineRefinance');
 	}, // initialize
 
 	events: {
-		'click .submit': 'submit',
-		'change .preAgreementTermsRead': 'preAgreementTermsReadChange',
+	    'click .submit': 'submit',
+	    'change .DynamicAgreementTermsRead': 'DynamicAgreementTermsReadChange',
 		'change .agreementTermsRead': 'showSubmit',
 		'change .euAgreementTermsRead': 'showSubmit',
 		'change .cosmeAgreementTermsRead': 'showSubmit',
@@ -89,6 +89,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	ui: {
 		submit: '.submit',
 		agreement: '.agreement',
+		dynamicCheckboxes: '.dynamic-agreements-checkboxes',
 		form: 'form',
 		loanAmountInput: 'input#loanAmount',
 		repaymentPeriodInput: 'input#repaymentPeriod',
@@ -96,20 +97,21 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		cannotTakeUnderMinLoan: '.cannot-take-under-minloan'
 	}, // ui
 
-	preAgreementTermsReadChange: function() {
-		var readPreAgreement = $('.preAgreementTermsRead').is(':checked');
+	DynamicAgreementTermsReadChange: function (ev) {
+	    var curClicked = $(ev.currentTarget);
+	    debugger;
+	    var isClicked = curClicked.is(':checked');
+	    var index = $(ev.currentTarget).index();
 
-		$('.agreementTermsRead').attr('disabled', !readPreAgreement);
+	    var checkboxName = $(ev.currentTarget).attr("id").split("TermsRead")[0];
 
-		if (readPreAgreement)
-			this.$el.find('a[href="#tab4"]').tab('show');
-		else {
-			this.$el.find('a[href="#tab3"]').tab('show');
-			$('.agreementTermsRead').attr('checked', false);
-		} // if
+	    var tabSelector = "a[page-name=" + checkboxName + "]";
 
-		return this.showSubmit();
-	}, // preAgreementTermsReadChange
+        if (!isClicked) {
+            this.$el.find(tabSelector).tab('show');
+            }
+        
+	}, // DynamicAgreementTermsReadChange
 
 	loanSelectionChanged: function () {
 		this.currentRepaymentPeriod = this.$('#loan-sliders .period-slider').slider('value');
@@ -130,7 +132,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.ui.submit.toggleClass('disabled', !enabled);
 	}, // showSubmit
 
-	recalculateSchedule: function(args) {
+	recalculateSchedule: function (args) {
+
 		var self = this;
 		var val = args.value;
 
@@ -169,6 +172,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // recalculateSchedule
 
 	renderSchedule: function (schedule) {
+
 		if (!schedule || !schedule.Schedule) {
 			return false;
 		}
@@ -185,11 +189,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		});
 
 		scheduleView.render();
-
-		this.createAgreementView(schedule.Agreement);
+		this.createAgreementView(schedule.Agreement, schedule.Templates);
+		this.createCheckboxView(schedule.Templates);
 	}, // renderSchedule
-
-	neededCashChanged: function(reloadSelectedOnly) {
+    
+	neededCashChanged: function (reloadSelectedOnly) {
 		this.$el.find(
 			'.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead, .cosmeAgreementTermsRead, .notInBankruptcy'
 		).prop('checked', false);
@@ -208,7 +212,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // neededCashChanged
 
-	onRender: function() {
+	onRender: function () {
 		if (this.fixed)
 			this.$('.cash-question').hide();
 
@@ -264,7 +268,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		return this.$el.find('.offerValidFor').text(this.customer.offerValidFormatted());
 	}, // refreshTimer
 
-	submit: function(e) {
+	submit: function (e) {
 		e.preventDefault();
 
 		var creditSum = this.model.get('neededCash');
@@ -284,7 +288,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			this.showSubmit();
 			return false;
 		} // if
-
+        
 		this.trigger('submit');
 		return false;
 	}, // submit
@@ -306,30 +310,34 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var loanType = this.currentLoanTypeID;
 		var repaymentPeriod = this.currentRepaymentPeriod;
 		var view = this.getCurrentViewId();
-		this.agreementView.$el.find('.download').attr('href', '' + window.gRootPath + 'Customer/Agreement/Download?amount=' + amount + '&viewName=' + view + '&loanType=' + loanType + '&repaymentPeriod=' + repaymentPeriod + '&isAlibaba=' + this.isAlibaba + '&isEverline=' + this.isEverline);
+		this.agreementView.$el.find('.download').attr('href', '' + window.gRootPath + 'Customer/Agreement/Download?amount=' + amount + '&viewName=' + view + '&loanType=' + loanType + '&repaymentPeriod=' + repaymentPeriod);
 	}, // updateDownloadLink
 
-	createAgreementView: function(agreementdata) {
+	createAgreementView: function (agreementdata, templates) {
 		var oViewArgs = {
 			el: this.ui.agreement,
 			onTabSwitch: _.bind(this.updateDownloadLink, this),
-			isAlibaba: this.isAlibaba,
-			isEverline: this.isEverline,
-			isEverlineRefinance: this.isEverlineRefinance
+		    templates: templates
 		};
 
-		var typeOfBusinessReduced = this.customer.get('CustomerPersonalInfo').TypeOfBusinessReduced;
-	    if (typeOfBusinessReduced === 1)
-	        this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
-	    else
-			this.agreementView = new EzBob.Profile.ConsumersAgreementView(oViewArgs);
+		this.agreementView = new EzBob.Profile.AgreementView(oViewArgs);
 
+		
 		this.agreementView.render(agreementdata);
 
 		this.showSubmit();
 
 		this.updateDownloadLink();
 	}, // createAgreementView
+
+	createCheckboxView: function (templates) {
+	    console.log('el', this.ui.dynamicCheckboxes);
+        this.dynamicAgreementsCheckboxesView = new EzBob.Profile.AgreementsDynamicCheckboxes({
+            el: this.ui.dynamicCheckboxes,
+            templates: templates
+        });
+        this.dynamicAgreementsCheckboxesView.render();
+    },
 
 	close: function() {
 		clearInterval(this.timerId);

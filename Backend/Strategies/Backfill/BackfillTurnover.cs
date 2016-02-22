@@ -10,9 +10,10 @@
 	using EzBob.eBayServiceLib;
 	using EzBob.PayPalServiceLib;
 	using FreeAgent;
-	using Integration.ChannelGrabberConfig;
 	using Sage;
 	using YodleeLib.connector;
+
+	using ChaGraConfig = global::Integration.ChannelGrabberConfig.Configuration;
 
 	public class BackfillTurnover : AStrategy {
 		public override string Name {
@@ -24,14 +25,14 @@
 
 			Add(new AmazonServiceInfo(), "Amazon");
 
-			Configuration.Instance.ForEachVendor(
-				vi => Add(new Integration.ChannelGrabberFrontend.ServiceInfo(vi.Name), "ChaGra")
+			ChaGraConfig.Instance.ForEachVendor(
+				vi => Add(new global::Integration.ChannelGrabberFrontend.ServiceInfo(vi.Name), "ChaGra")
 			);
 
 			Add(new eBayServiceInfo(), "Ebay");
 			Add(new EkmServiceInfo(), "Ekm");
 			Add(new FreeAgentServiceInfo(), "FreeAgent");
-			Add(new Integration.ChannelGrabberFrontend.ServiceInfo("HMRC"), "Hmrc");
+			Add(new global::Integration.ChannelGrabberFrontend.ServiceInfo("HMRC"), "Hmrc");
 			Add(new PayPalServiceInfo(), "PayPal");
 			Add(new SageServiceInfo(), "Sage");
 			Add(new YodleeServiceInfo(), "Yodlee");

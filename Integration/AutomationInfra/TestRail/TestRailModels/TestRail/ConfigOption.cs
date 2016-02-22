@@ -2,8 +2,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about an option for a case field's configuration</summary>
-    public class ConfigOption
-    {
+    public class ConfigOption {
         #region Public Properties
         /// <summary>is this option required</summary>
         public bool? IsRequired { get; private set; }
@@ -21,8 +20,7 @@
         #region Public Methods
         /// <summary>parse a json object into a Config Option</summary>
         /// <param name="json">converts the json object to a ConfigOption</param>
-        public static ConfigOption Parse(JObject json)
-        {
+        public static ConfigOption Parse(JObject json) {
             ConfigOption co = new ConfigOption();
             co.IsRequired = (bool?)json["is_required"];
             co.DefaultValue = (string)json["default_value"];

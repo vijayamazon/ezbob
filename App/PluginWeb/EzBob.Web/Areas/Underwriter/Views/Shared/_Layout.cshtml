@@ -1,91 +1,64 @@
-﻿@using System
-@using System.Globalization
-@using System.Linq
-@using System.Web.Helpers
-@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Infrastructure
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
-@using StructureMap
 @{
 	UiCustomerOrigin.SetDefault(ViewBag);
+	var permRoles = PermissionsAndRoles.Fetch();
 }
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @{ Html.RenderPartial("_FavIcon"); }
-    @BundleHelper.RenderUnderwriterCss()
-    @BundleHelper.RenderPrintCss()
-	
+	<title>@ViewBag.Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	@{ Html.RenderPartial("_FavIcon"); }
+	@BundleHelper.RenderUnderwriterCss()
+	@BundleHelper.RenderPrintCss()
+
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWS782EipVp8SaRqMR9DWTpK1Cx6Bo_tQ"></script>
 </head>
 
-@{
-    string sBodyClasses = "";
-    string sBodyClassesException = "";
+<body class="@permRoles.BodyClassName">
+	@if (!string.IsNullOrWhiteSpace(permRoles.ErrorMessage)) {
+		<div class="red">@permRoles.ErrorMessage</div>
+	}
 
-    try
-    {
-        var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+	@AntiForgery.GetHtml()
+	<div class="container" id="main-container">
+		@RenderBody()
+	</div>
 
-        if (context != null && context.User != null)
-        {
-            string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
-            string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
-            sBodyClasses = sRoles + " " + sPermissions;
-        }
-    }
-    catch (Exception e)
-    {
-        sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
-    }
-}
+	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
 
-<body class="@sBodyClasses">
-    @if (!string.IsNullOrWhiteSpace(sBodyClassesException))
-    {
-        <div class="red">@sBodyClassesException</div>
-    }
+	<script type="text/javascript">
+		window.gRootPath = '@Url.Content("~/")';
+		var Drupal = Drupal || {};
+		Drupal.behaviors = Drupal.behaviors || {};
+	</script>
+	@BundleHelper.RenderCommonJs()
+	@BundleHelper.RenderUnderwriterJs()
+	<script type="text/javascript">
 
-    @AntiForgery.GetHtml()
-    <div class="container" id="main-container">
-        @RenderBody()
-    </div>
+		$('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
+		var EzBob = EzBob || {};
+		var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
+		var serverOffset = moment.utc(serverDate).diff(new Date());
+		EzBob.serverOffset = serverOffset;
 
-    <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
+		EzBob.CrmActions = [];
+		EzBob.CrmStatuses = [];
+		EzBob.CrmRanks = [];
+		EzBob.RejectReasons = [];
+		function EzBob_CgVendors_init() {
+			EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
+		} // EzBob_CgVendors_init
 
-    <script type="text/javascript">
-        window.gRootPath = '@Url.Content("~/")';
-        var Drupal = Drupal || {};
-        Drupal.behaviors = Drupal.behaviors || {};
-    </script>
-    @BundleHelper.RenderCommonJs()
-    @BundleHelper.RenderUnderwriterJs()
-    <script type="text/javascript">
+		$(document).ready(function () {
+			EzBob_CgVendors_init();
+		});
+	</script>
+	@RenderSection("Js", false)
 
-	$('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
-	var EzBob = EzBob || {};
-	var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
-	var serverOffset = moment.utc(serverDate).diff(new Date());
-	EzBob.serverOffset = serverOffset;
 
-	EzBob.CrmActions = [];
-	EzBob.CrmStatuses = [];
-	EzBob.CrmRanks = [];
-	EzBob.RejectReasons = [];
-	function EzBob_CgVendors_init() {
-		EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
-	} // EzBob_CgVendors_init
-
-	$(document).ready(function () {
-		EzBob_CgVendors_init();
-	});
-    </script>
-    @RenderSection("Js", false)
-    
-	
 	@AddDirectorInfoTemplate.Render(this, ViewBag, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 </body>
 </html>

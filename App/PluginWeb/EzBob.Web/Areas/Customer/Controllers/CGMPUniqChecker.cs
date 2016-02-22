@@ -21,7 +21,7 @@
 		} // constructor
 
 		public override void Check(Guid marketplaceType, Customer customer, string token) {
-			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
+			if (this.WhiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
 				return;
 
 			var oMp = this.mpTypes.Get(marketplaceType);
@@ -34,8 +34,11 @@
 				return;
 			} // if
 
-			var oMpList = _customerMarketPlaceRepository.GetAll()
-				.Where(mp => mp.Marketplace.Id == oMp.Id)
+			var oMpList = this.CustomerMarketPlaceRepository.GetAll()
+				.Where(mp =>
+					mp.Marketplace.Id == oMp.Id &&
+					mp.Customer.CustomerOrigin.CustomerOriginID == customer.CustomerOrigin.CustomerOriginID
+				)
 				.Select(mp => new { mp_id = mp.Id, customer_id = mp.Customer.Id, secdata = mp.SecurityData });
 
 			foreach (var m in oMpList) {
@@ -50,9 +53,13 @@
 		} // Check
 
 		private void CheckHmrc(int hmrcID, Customer customer, string token) {
-			MP_CustomerMarketPlace existing = this._customerMarketPlaceRepository
+			MP_CustomerMarketPlace existing = this.CustomerMarketPlaceRepository
 				.GetAll()
-				.FirstOrDefault(mp => mp.Marketplace.Id == hmrcID && mp.DisplayName == token);
+				.FirstOrDefault(mp =>
+					mp.Marketplace.Id == hmrcID &&
+					mp.Customer.CustomerOrigin.CustomerOriginID == customer.CustomerOrigin.CustomerOriginID &&
+					mp.DisplayName == token
+				);
 
 			if (existing == null)
 				return;

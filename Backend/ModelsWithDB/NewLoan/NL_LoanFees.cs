@@ -1,62 +1,66 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
-    using System.Runtime.Serialization;
-    using System.Text;
-    using Ezbob.Utils.dbutils;
+	using System;
+	using System.Runtime.Serialization;
+	using DbConstants;
+	using Ezbob.Utils;
+	using Ezbob.Utils.Attributes;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_LoanFees {
+	[DataContract(IsReference = true)]
+	public class NL_LoanFees : AStringable {
 		[PK(true)]
-        [DataMember]
-        public int LoanFeeID { get; set; }
-       
-        [FK("NL_Loans", "LoanID")]
-        [DataMember]
-        public int? LoanID { get; set; }
+		[DataMember]
+		public long LoanFeeID { get; set; }
+
+		[FK("NL_Loans", "LoanID")]
+		[DataMember]
+		[ExcludeFromToString]
+		public long LoanID { get; set; }
 
 		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
 		[DataMember]
+		[EnumName(typeof(NLFeeTypes))]
 		public int LoanFeeTypeID { get; set; }
 
-        [FK("Security_User", "UserId")]
-        [DataMember]
-        public int? AssignedByUserID { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int AssignedByUserID { get; set; } // Use 1 for automatically assigned fees. 
 
-        [DataMember]
-        public decimal Amount { get; set; }
+		[DataMember]
+		[DecimalFormat("C2")]
+		public decimal Amount { get; set; }
+		
+		[DataMember]
+		public DateTime CreatedTime { get; set; }
 
-        [DataMember]
-        public DateTime CreatedTime { get; set; }
+		[DataMember]
+		public DateTime AssignTime { get; set; }
 
-        [DataMember]
-        public DateTime AssignTime { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? DeletedByUserID { get; set; }
 
-        [FK("Security_User", "UserId")]
-        [DataMember]
-        public int? DeletedByUserID { get; set; }
+		[DataMember]
+		public DateTime? DisabledTime { get; set; }
 
-        [DataMember]
-        public DateTime? DisabledTime { get; set; }
+		[Length(LengthType.MAX)]
+		[DataMember]
+		public string Notes { get; set; }
 
-        [Length(LengthType.MAX)]
-        [DataMember]
-        public string Notes { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? UpdatedByUserID { get; set; }  
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name +  ": ");
-			Type t = typeof(NL_LoanFees);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
+		[DataMember]
+		public DateTime? UpdateTime { get; set; }
 
-    }//class NL_LoanFees
-}//ns
+		[FK("LoanCharges", "Id")]
+		[DataMember]
+		public int? OldFeeID { get; set; }
+
+		[DataMember]
+		[NonTraversable]
+		public decimal PaidAmount { get; set; }
+
+	} // class NL_LoanFees
+} // ns

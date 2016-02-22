@@ -30,14 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\Lib\3rdparty\MoreLinq\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.CompareNetObjects, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\NUnit.CompareNetObjects.0.1.0.0\lib\net45\NUnit.CompareNetObjects.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -54,6 +60,17 @@
     <Compile Include="Alibaba\AlibabaContractItem.cs" />
     <Compile Include="Alibaba\AlibabaSeller.cs" />
     <Compile Include="Alibaba\AlibabaSellerBank.cs" />
+    <Compile Include="ApplicationInfo\ApplicationInfoModel.cs" />
+    <Compile Include="ApplicationInfo\AutomationOfferModel.cs" />
+    <Compile Include="ApplicationInfo\DiscountPlanModel.cs" />
+    <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
+    <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
+    <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
+    <Compile Include="Authentication\RolePermissionRelation.cs" />
+    <Compile Include="Authentication\User.cs" />
+    <Compile Include="Authentication\UserRoleRelation.cs" />
+    <Compile Include="Authentication\Role.cs" />
+    <Compile Include="Authentication\Permission.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -105,6 +122,10 @@
     <Compile Include="CollectionSnailMailMetadataModel.cs" />
     <Compile Include="CollectionSnailMailTemplate.cs" />
     <Compile Include="CollectionSmsTemplate.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrder.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerAppointmentOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrderItem.cs" />
+    <Compile Include="CompaniesHouse\CompaniesHouseOfficerOrder.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
     <Compile Include="CreditSafe\CreditSafeBaseData.cs" />
@@ -178,10 +199,35 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="MultiBrandLoanModel.cs" />
+    <Compile Include="LegalDocs\LoanAgreementTemplate.cs" />
+    <Compile Include="MultiBrandLoanSummary.cs" />
+    <Compile Include="AStringable.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlans.cs" />
+    <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\NL_Log.cs" />
+    <Compile Include="NewLoan\NL_Model.cs" />
+    <Compile Include="OpenPlatform\I_InvestorBalance.cs" />
+    <Compile Include="OpenPlatform\I_OpenPlatformOffer.cs" />
+    <Compile Include="OpenPlatform\I_GradeOriginMap.cs" />
+    <Compile Include="OpenPlatform\I_CashRequestData.cs" />
+    <Compile Include="OpenPlatform\I_SubGrade.cs" />
+    <Compile Include="OpenPlatform\I_GradeRange.cs" />
+    <Compile Include="OpenPlatform\I_FundingType.cs" />
+    <Compile Include="OpenPlatform\I_Grade.cs" />
+    <Compile Include="OpenPlatform\I_InterestVariable.cs" />
+    <Compile Include="OpenPlatform\I_Instrument.cs" />
+    <Compile Include="OpenPlatform\I_Index.cs" />
+    <Compile Include="OpenPlatform\I_InvestorParams.cs" />
+    <Compile Include="OpenPlatform\I_Parameter.cs" />
+    <Compile Include="OpenPlatform\I_ProductSubType.cs" />
+    <Compile Include="OpenPlatform\I_ProductType.cs" />
+    <Compile Include="OpenPlatform\I_Product.cs" />
+    <Compile Include="OpenPlatform\LoanParameters.cs" />
+    <Compile Include="OpenPlatform\InvestorEnums.cs" />
+    <Compile Include="OpenPlatform\I_Portfolio.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
-    <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
     <Compile Include="NewLoan\NL_LoanRollovers.cs" />
     <Compile Include="NewLoan\NL_LoanOptions.cs" />
@@ -194,10 +240,10 @@
     <Compile Include="NewLoan\NL_LoanLegals.cs" />
     <Compile Include="NewLoan\NL_LoanHistory.cs" />
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
-    <Compile Include="NewLoan\NL_LoanStatuses.cs" />
-    <Compile Include="NewLoan\NL_OfferFees.cs" />
+    <Compile Include="NewLoan\NL_OfferFees.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
-    <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_Payments.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactions.cs" />
     <Compile Include="NewLoan\NL_LoanSchedulePayments.cs" />
@@ -207,23 +253,52 @@
     <Compile Include="NewLoan\NL_Offers.cs" />
     <Compile Include="NewLoan\NL_Decisions.cs" />
     <Compile Include="NewLoan\NL_CashRequests.cs" />
-    <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
     <Compile Include="NewLoan\OfferForLoan.cs" />
+    <Compile Include="NL_Log.cs" />
+    <Compile Include="DecisionHistoryDBModel.cs" />
+    <Compile Include="OpenPlatform\I_InvestorRule.cs" />
     <Compile Include="PostcodeNutsDBModel.cs" />
+    <Compile Include="OpenPlatform\I_InvestorOverallStatistics.cs" />
+    <Compile Include="OpenPlatform\I_InvestorSystemBalance.cs" />
+    <Compile Include="OpenPlatform\I_InvestorBankAccountTransaction.cs" />
+    <Compile Include="OpenPlatform\I_InvestorBankAccount.cs" />
+    <Compile Include="OpenPlatform\I_InvestorAccountType.cs" />
+    <Compile Include="OpenPlatform\I_InvestorContact.cs" />
+    <Compile Include="OpenPlatform\I_InvestorType.cs" />
+    <Compile Include="OpenPlatform\I_Investor.cs" />
+    <Compile Include="PricingModelModel.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EzbobSmsMessage.cs" />
+    <Compile Include="SignupCustomerMultiOriginModel.cs" />
+    <Compile Include="Wrappers\IntWrapper.cs" />
     <Compile Include="WriteToLogPackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
@@ -233,6 +308,13 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

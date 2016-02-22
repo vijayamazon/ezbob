@@ -38,15 +38,13 @@
 				"\n\tContact person mobile: {4}" +
 				"\n\tMobile code: {5}" +
 				"\n\tContact person other phone: {6}" +
-				"\n\tEstimated monthly amount: {7}" +
-				"\n\tFirm web site URL: {8}" +
-				"\n\tEstimated monthly application count: {9}" +
-				"\n\tCaptcha enabled: {10}" +
-				"\n\tTerms ID: {11}" +
-				"\n\tReferred by (source ref): {12}" +
-				"\n\tFCARegistered: {13}" +
-				"\n\tLicense Number: {14}" +
-				"\n\tUI origin: {15}",
+				"\n\tFirm web site URL: {7}" +
+				"\n\tCaptcha enabled: {8}" +
+				"\n\tTerms ID: {9}" +
+				"\n\tReferred by (source ref): {10}" +
+				"\n\tFCARegistered: {11}" +
+				"\n\tLicense Number: {12}" +
+				"\n\tUI origin: {13}",
 				model.FirmName,
 				model.FirmRegNum,
 				model.ContactName,
@@ -54,9 +52,7 @@
 				model.ContactMobile,
 				model.MobileCode,
 				model.ContactOtherPhone,
-				model.EstimatedMonthlyClientAmount,
 				model.FirmWebSite,
-				model.EstimatedMonthlyAppCount,
 				model.IsCaptchaEnabled == 0 ? "no" : "yes",
 				model.TermsID,
 				sReferredBy,
@@ -92,10 +88,9 @@
 					model.ContactMobile,
 					model.MobileCode,
 					model.ContactOtherPhone,
-					model.EstimatedMonthlyClientAmount,
-					new Password(model.Password, model.Password2),
+					new DasKennwort(model.Password), 
+					new DasKennwort(model.Password2), 
 					model.FirmWebSite,
-					model.EstimatedMonthlyAppCount,
 					model.IsCaptchaEnabled != 0,
 					model.TermsID,
 					sReferredBy,
@@ -154,20 +149,26 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Logoff(string sContactEmail) {
 			bool bGoodToLogOff =
-				string.IsNullOrWhiteSpace(sContactEmail) ||
-				(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
+				string.IsNullOrWhiteSpace(sContactEmail) || (
+				User.Identity.IsAuthenticated &&
+				(User.Identity.Name == sContactEmail) &&
+				(UiOrigin == SessionUiOrigin)
+			);
 
 			if (bGoodToLogOff) {
 				this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
+
 				return new BrokerForJsonResult {
-					antiforgery_token = AntiForgery.GetHtml().ToString()
+					antiforgery_token = AntiForgery.GetHtml().ToString(),
 				};
 			} // if
 
 			ms_oLog.Warn(
 				"Log off request with contact email {0} while {1} logged in.",
 				sContactEmail,
-				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
+				User.Identity.IsAuthenticated
+					? "broker " + User.Identity.Name + " with origin " + SessionUiOrigin + " is"
+					: "not"
 			);
 
 			return new BrokerForJsonResult(bExplicitSuccess: false);
@@ -209,9 +210,10 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
-			ms_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
+			ms_oLog.Debug("Broker update password request for contact email {0} with origin {1}", ContactEmail, UiOrigin);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
+
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
@@ -221,17 +223,29 @@
 				ReferenceEquals(NewPassword2, null);
 
 			if (passwordIsNull) {
-				ms_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: one of passwords not specified.",
+					ContactEmail,
+					UiOrigin
+				);
 				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
 			} // if
 
 			if (NewPassword != NewPassword2) {
-				ms_oLog.Warn("Cannot update password: passwords do not match.");
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: passwords do not match.",
+					ContactEmail,
+					UiOrigin
+				);
 				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
 			} // if
 
 			if (NewPassword == OldPassword) {
-				ms_oLog.Warn("Cannot update password: new password is equal to the old one.");
+				ms_oLog.Warn(
+					"Cannot update password for contact email {0} with origin {1}: new password is equal to the old one.",
+					ContactEmail,
+					UiOrigin
+				);
 				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
 			} // if
 
@@ -240,20 +254,26 @@
 			try {
 				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
 					ContactEmail,
-					new Password(OldPassword),
-					new Password(NewPassword, NewPassword2)
+					UiOrigin,
+					new DasKennwort(OldPassword),
+					new DasKennwort(NewPassword),
+					new DasKennwort(NewPassword2)
 				);
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Alert(e, "Failed to update password for contact email {0} with origin {1}.", ContactEmail, UiOrigin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // try
 
 			if (oResult == null) {
-				ms_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
+				ms_oLog.Warn("Failed to update password for contact email {0} with origin {1}.", ContactEmail, UiOrigin);
 				return new BrokerForJsonResult("Failed to update password.");
 			} // if
 
-			ms_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
+			ms_oLog.Debug(
+				"Broker update password request for contact email {0} with origin {1} complete.",
+				ContactEmail,
+				UiOrigin
+			);
 
 			return new BrokerForJsonResult();
 		} // UpdatePassword

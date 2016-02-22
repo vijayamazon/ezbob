@@ -5,7 +5,7 @@
 	[DataContract(IsReference = true)]
 	public class LoanScheduleItemModel {
 		[DataMember]
-		public int Id { get; set; }
+		public long Id { get; set; }
 
 		[DataMember]
 		public DateTime Date { get; set; }

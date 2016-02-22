@@ -37,14 +37,14 @@ EzBob.Underwriter.FraudModels = Backbone.Collection.extend({
 EzBob.Underwriter.simpleValueAddView = Backbone.Marionette.ItemView.extend({
 	initialize: function(options) {
 		this.template = options.template;
-		this.type = options.type;
+		this.type = options.type || '';
 	}, // initialize
 
 	jqoptions: function() {
 		return {
 			modal: true,
 			resizable: false,
-			title: 'Value Add',
+			title: 'Add fraud ' + this.type.toLowerCase(),
 			position: 'center',
 			draggable: false,
 			width: 530,
@@ -105,7 +105,7 @@ EzBob.Underwriter.AddEditFraudView = Backbone.Marionette.ItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: 'Fraud',
+			title: 'Add new fraud user',
 			position: 'center',
 			draggable: false,
 			dialogClass: 'fraud-popup',

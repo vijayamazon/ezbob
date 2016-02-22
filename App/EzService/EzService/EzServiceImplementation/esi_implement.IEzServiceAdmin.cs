@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.ServiceModel;
 	using System.Threading;
+	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Admin;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Exceptions;
@@ -206,7 +207,16 @@
 
 				lock (lockActiveActions) {
 					oResult.AddRange(activeActions.Select(
-						kv => kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState
+						kv => {
+							AStrategy stra = kv.Value.Strategy;
+
+							return string.Format(
+								"{0} {2}- thread state: {1}",
+								kv.Value,
+								kv.Value.UnderlyingThread.ThreadState,
+								stra == null ? string.Empty : "(" + stra.Context + ") "
+							);
+						}
 					));
 				} // lock
 

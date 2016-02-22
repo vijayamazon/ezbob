@@ -4,16 +4,25 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
 	public class BrokerAddCustomerLead : AStrategy {
-		public BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {
+		public BrokerAddCustomerLead(
+			string sLeadFirstName,
+			string sLeadLastName,
+			string sLeadEmail,
+			string sLeadAddMode,
+			string sContactEmail,
+			CustomerOriginEnum origin
+		) {
 			m_oSp = new SpBrokerAddCustomerLead(DB, Log) {
 				LeadFirstName = sLeadFirstName,
 				LeadLastName = sLeadLastName,
 				LeadEmail = sLeadEmail,
 				LeadAddMode = sLeadAddMode,
 				ContactEmail = (sContactEmail ?? string.Empty).Trim(),
+				Origin = (int)origin
 			};
 
 			m_oResultRow = null;
@@ -36,7 +45,7 @@
 				throw new StrategyWarning(this, "Failed to add a customer lead.");
 
 			if (SendEmail)
-				new BrokerLeadSendInvitation(m_oResultRow.LeadID, m_oSp.ContactEmail).Execute();
+				new BrokerLeadSendInvitation(m_oResultRow.LeadID, m_oSp.ContactEmail, m_oSp.Origin).Execute();
 		} // Execute
 
 		private readonly SpBrokerAddCustomerLead m_oSp;
@@ -46,7 +55,7 @@
 			get { return (m_oResultRow != null) && (m_oResultRow.SendEmail != 0); } // get
 		} // SendEmail
 
-		private class SpBrokerAddCustomerLead : AStoredProcedure {
+		private class SpBrokerAddCustomerLead : AStoredProc {
 			public SpBrokerAddCustomerLead(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
@@ -55,7 +64,8 @@
 					!string.IsNullOrWhiteSpace(LeadLastName) &&
 					!string.IsNullOrWhiteSpace(LeadEmail) &&
 					!string.IsNullOrWhiteSpace(LeadAddMode) &&
-					!string.IsNullOrWhiteSpace(ContactEmail);
+					!string.IsNullOrWhiteSpace(ContactEmail) &&
+					(Origin > 0);
 			} // HasValidParameters
 
 			[UsedImplicitly]
@@ -68,6 +78,8 @@
 			public string LeadAddMode { get; set; }
 			[UsedImplicitly]
 			public string ContactEmail { get; set; }
+			[UsedImplicitly]
+			public int Origin { get; set; }
 
 			[UsedImplicitly]
 			public DateTime DateCreated {
@@ -86,12 +98,6 @@
 				[FieldName("SendEmailOnCreate")]
 				public int SendEmail { get; [UsedImplicitly] set; }
 			} // ResultRow
-
-			protected override string GetName() {
-				return "BrokerAddCustomerLead";
-			} // GetName
-
 		} // SpBrokerAddCustomerLead
-
 	} // class BrokerAddCustomerLead
 } // namespace Ezbob.Backend.Strategies.Broker

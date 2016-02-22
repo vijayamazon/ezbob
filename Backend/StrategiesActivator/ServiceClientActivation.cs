@@ -6,8 +6,8 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
-	using System.Text;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Database;
@@ -15,6 +15,7 @@
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using EzServiceConfigurationLoader;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
 	using Newtonsoft.Json;
@@ -178,11 +179,10 @@
 			this.serviceClient.BackfillExperianLtd();
 		}
 
-        [Activation]
-        private void BackfillExperianLtdScoreText()
-        {
-	        this.serviceClient.BackfillExperianLtdScoreText();
-        }
+		[Activation]
+		private void BackfillExperianLtdScoreText() {
+			this.serviceClient.BackfillExperianLtdScoreText();
+		}
 
 		[Activation]
 		private void BackfillHmrcBusinessRelevance() {
@@ -235,7 +235,7 @@
 				this.serviceClient.PostcodeNuts(1, sr["Postcode"].ToString());
 				return Ezbob.Database.ActionResult.Continue;
 			}, "SELECT DISTINCT Postcode FROM CustomerAddress WHERE Postcode IS NOT NULL AND Postcode <> ''", CommandSpecies.Text);
-			
+
 		}
 
 		[Activation]
@@ -262,12 +262,19 @@
 
 		[Activation]
 		private void BrokerLoadCustomerList() {
-			if (this.cmdLineArgs.Length != 2) {
-				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email>");
+			if (this.cmdLineArgs.Length != 3) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
 				return;
 			} // if
 
-			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1]);
+			CustomerOriginEnum origin;
+
+			if (!Enum.TryParse(this.cmdLineArgs[2], true, out origin)) {
+				this.log.Msg("Usage: BrokerLoadCustomerList <Contact person email> <broker origin>");
+				return;
+			} // if
+
+			BrokerCustomersActionResult res = this.serviceClient.BrokerLoadCustomerList(this.cmdLineArgs[1], origin);
 
 			foreach (var oEntry in res.Customers)
 				this.log.Msg("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
@@ -341,16 +348,6 @@
 		}
 
 		[Activation]
-		private void ChangeBrokerEmail() {
-			if ((this.cmdLineArgs.Length != 4)) {
-				this.log.Msg("Usage: ChangeBrokerEmail <OldEmail> <NewEmail> <NewPassword>");
-				return;
-			}
-
-			this.serviceClient.ChangeBrokerEmail(this.cmdLineArgs[1], this.cmdLineArgs[2], this.cmdLineArgs[3]);
-		}
-
-		[Activation]
 		private void CreateUnderwriter() {
 			if (this.cmdLineArgs.Length != 4) {
 				this.log.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");
@@ -369,7 +366,11 @@
 				return;
 			}
 
-			this.serviceClient.UnderwriterSignup(this.cmdLineArgs[1], new Password(this.cmdLineArgs[2]), this.cmdLineArgs[3]);
+			this.serviceClient.SignupUnderwriterMultiOrigin(
+				this.cmdLineArgs[1],
+				new DasKennwort(this.cmdLineArgs[2]),
+				this.cmdLineArgs[3]
+			);
 		}
 
 		[Activation]
@@ -559,33 +560,92 @@
 
 		[Activation]
 		private void GeneratePassword() {
-			if (this.cmdLineArgs.Length < 2) {
-				this.log.Msg(@"Usage: GeneratePassword <arg 1> <arg 2> ... <arg N>
+			if (this.cmdLineArgs.Length != 3) {
+				this.log.Msg(@"Usage: GeneratePassword <user name> <new password>
 
-Generates password hash by concatenating all the arguments in the order of appearance.
+Generates new password hash from given user name and password.
+Neither user name nor password can contain a white space character!
 
-I.e. to generate broker password call
-GeneratePassword broker-contact-email@example.com password-itself
+I.e. to generate hash for underwriter 'manager' with password '123456' call
+GeneratePassword manager 123456
 
 ");
 				return;
 			} // if
 
-			var os = new StringBuilder();
-			for (int i = 1; i < this.cmdLineArgs.Length; i++)
-				os.Append(this.cmdLineArgs[i]);
+			string userName = this.cmdLineArgs[1];
+			string rawPassword = this.cmdLineArgs[2];
 
-			string sOriginalPassword = os.ToString();
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
 
-			string sHash = SecurityUtils.HashPassword(sOriginalPassword);
+			var pass = pu.Generate(userName, rawPassword);
 
-			this.log.Msg(
-				"\n\nOriginal string:\n\t{0}\n\ngenerated hash:\n\t{1}\n\nquery:\n" +
-					"\tUPDATE Broker SET Password = '{1}' WHERE ContactEmail = '{2}'\n" +
-					"\n\tUPDATE Security_User SET EzPassword = '{1}' WHERE UserName = '{2}'\n",
-				sOriginalPassword, sHash, this.cmdLineArgs[1]
-				);
-		}
+			this.log.Msg("\n\n" +
+				"Raw user name:password:\n" +
+				"\t{0}:{1}\n\n" +
+				"generated hash:\n" +
+				"\t{2}\n\n" +
+				"generated salt:\n" +
+				"\t{3}\n\n" +
+				"generated cycle count:\n" +
+				"\t{4}\n\n" +
+				"query:\n" +
+				"\tUPDATE Security_User SET\n" +
+					"\t\tEzPassword = '{2}',\n" +
+					"\t\tSalt = '{3}',\n" +
+					"\t\tCycleCount = '{4}'\n" +
+				"\tWHERE\n" +
+					"\t\tUserName = '{0}'\n",
+				userName,
+				rawPassword,
+				pass.Password,
+				pass.Salt,
+				pass.CycleCount
+			);
+		} // GeneratePassword
+
+		[Activation]
+		private void GenerateUwPasswords() {
+			var uwList = new List<string> {
+				"se", "vitasd", "tomerg", "sharonep", "farleyk", "alexbo", "rosb", "shirik", "stasd", "ezbobpartners",
+				"travism", "galitg", "clareh", "yarons", "sivanc", "assafb", "sarahd", "gadif", "songulo", "bateli",
+				"everline", "darrenh", "russellb", "lirang", "andrea", "sashaf", "mishas", "elinar", "shlomim", "masha",
+				"russell", "scotth", "sailishr", "hanryc", "marius", "stuartd", "tanyag", "nataliem", "jamiem", "guest",
+				"lauren", "hagayj", "dora", "romanp", "inie", "jackiew", "inas", "sofiad", "normanc", "igaell", "louip",
+				"amiyc",
+			};
+
+			int maxLen = uwList.Select(s => s.Length).Max();
+
+			var output = new List<string>();
+
+			var pu = new PasswordUtility(CurrentValues.Instance.PasswordHashCycleCount);
+
+			foreach (string userName in uwList) {
+				var pwd = new DasKennwort();
+				pwd.GenerateSimplePassword(16);
+
+				var pass = pu.Generate(userName, pwd.Data);
+
+				output.Add(string.Format(
+					"User name: '{0}' Password: '{1}' Query: " +
+					"UPDATE Security_User SET Password = NULL, " +
+						"EzPassword = '{2}', " +
+						"Salt = '{3}', " +
+						"CycleCount = '{4}' " +
+					"WHERE " +
+						"UserName = '{5}'",
+					userName.PadRight(maxLen),
+					pwd.Data,
+					pass.Password,
+					pass.Salt,
+					pass.CycleCount,
+					userName
+				));
+			} // for each user name
+
+			this.log.Debug("\n\n{0}\n\n", string.Join("\n", output));
+		} // GenerateUwPasswords
 
 		[Activation]
 		private void GetCashFailed() {
@@ -1044,33 +1104,32 @@ GeneratePassword broker-contact-email@example.com password-itself
 			this.serviceClient.QuickOfferWithPrerequisites(customerId, bSaveOfferToDB);
 		} // QuickOffer
 
-	    [Activation]
+		[Activation]
 		private void RescheduleLoan() {
-	        int loanId;
-	        int userId;
-	        int customerId;
-            if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
-	        {
+			int loanId;
+			int userId;
+			int customerId;
+			if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId)) {
 				this.log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
-	            return;
-	        }
-  
-		    Console.WriteLine("UserID {0}, CustomerID {1}, LoanID {2}", userId, customerId, loanId);
+				return;
+			}
 
-            ReschedulingArgument reModel = new ReschedulingArgument();
-            reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
-            reModel.LoanID = loanId;
-            reModel.SaveToDB = false;
-            reModel.ReschedulingDate = DateTime.UtcNow;
-            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-		    reModel.RescheduleIn = false; // true;
-		    reModel.PaymentPerInterval = 300;
-	
+			Console.WriteLine("UserID {0}, CustomerID {1}, LoanID {2}", userId, customerId, loanId);
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanId;
+			reModel.SaveToDB = false;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+			reModel.RescheduleIn = false; // true;
+			reModel.PaymentPerInterval = 300;
+
 			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
 			this.log.Msg(res.Value);
-	    }
-        
-        [Activation]
+		}
+
+		[Activation]
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
@@ -1276,13 +1335,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			string sDisplayName = this.cmdLineArgs[2];
 			string sPassword = this.cmdLineArgs[3];
-			string sHash = SecurityUtils.Hash(nCustomerID + sPassword + sDisplayName);
 
 			this.serviceClient.UpdateLinkedHmrcPassword(
 				new Encrypted(nCustomerID.ToString(CultureInfo.InvariantCulture)),
 				new Encrypted(sDisplayName),
-				new Encrypted(sPassword), sHash
-				);
+				new Encrypted(sPassword)
+			);
 		}
 
 		[Activation]
@@ -1336,16 +1394,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		}
 
 		[Activation]
-		private void MaamMedalAndPricing() {
-			var i = new VerificationInput("MaamMedalAndPricing", this.cmdLineArgs, this.log);
-
-			i.Init();
-
-			if (i.IsGood)
-				this.serviceClient.MaamMedalAndPricing(i.CustomerCount, i.LastCheckedCustomerID);
-		} // MaamMedalAndPricing
-
-		[Activation]
 		private void VerifyMedal() {
 			var i = new MedalVerificationInput("VerifyMedal", this.cmdLineArgs, this.log);
 
@@ -1377,16 +1425,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			this.serviceClient.XDaysDue();
 		}
-
-		[Activation]
-		private void TotalMaamMedalAndPricing() {
-			bool testMode = false;
-
-			if (this.cmdLineArgs.Length > 1)
-				testMode = this.cmdLineArgs[1].Equals("test", StringComparison.CurrentCultureIgnoreCase);
-
-			this.serviceClient.TotalMaamMedalAndPricing(testMode);
-		} // TotalMaamMedalAndPricing
 
 		/*
 		[Activation]
@@ -1430,22 +1468,9 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.log.Debug("activator: customerID: {0}", customerID);
 
 			// ActionMetaData result =
-			this.serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
+			this.serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null);
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
-
-		[Activation]
-		private void BravoAutomationReport() {
-			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
-
-			this.log.Debug(
-				"Start date is {0}, end date is {1}", 
-				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
-				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty
-			);
-
-			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
-		} // BravoAutomationReport
 
 		private Tuple<DateTime?, DateTime?> GetDatesForAutomationReports() {
 			bool hasStart = false;
@@ -1466,12 +1491,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			);
 		} // GetDatesForAutomationReports
 
-        [Activation]
-        private void BrokerTransferCommission()
-        {
-            ActionMetaData result = this.serviceClient.BrokerTransferCommission();
-            this.log.Debug("{0}", result.Status.ToString());
-        }
+		[Activation]
+		private void BrokerTransferCommission() {
+			ActionMetaData result = this.serviceClient.BrokerTransferCommission();
+			this.log.Debug("{0}", result.Status.ToString());
+		}
 
 		[Activation]
 		private void BackFillBrokerCommissionInvoice() {
@@ -1490,11 +1514,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		} // BackfillDailyLoanStats
 
 		[Activation]
-		private void RecalculateAutoRejectOnFirstDecision() {
-			this.serviceClient.RecalculateAutoRejectOnFirstDecision();
-		} // RecalculateAutoRejectOnFirstDecision
-
-		[Activation]
 		private void GetIncomeSms() {
 			DateTime? date = null;
 
@@ -1510,6 +1529,22 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			this.serviceClient.GetIncomeSms(date, false);
 		} // GetIncomeSms
+
+		[Activation]
+		private void ManualLegalDocsSyncTemplatesFiles() {
+
+			const string pathExample = @"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement";
+			string agreementsPath;
+
+			if (this.cmdLineArgs.Length == 2) {
+				agreementsPath = this.cmdLineArgs[1];
+			} else {
+				this.log.Msg("Usage: ManualLegalDocsSyncTemplatesFiles path to agreements folder like: {0}", pathExample);
+				return;
+			} // if
+			this.serviceClient.ManualLegalDocsSyncTemplatesFiles(string.IsNullOrEmpty(agreementsPath) ? pathExample : agreementsPath);
+		} // ManualLegalDocsSyncTemplatesFiles
+
 
 		//[Activation]
 		//private void ExampleMethod() {
@@ -1531,6 +1566,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		//		result.Value.ToString("MMM d yyyy H:mm:ss")
 		//	);
 		//}
+
 
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;

@@ -6,55 +6,67 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
-	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Database;
 
 	public class ReRejection : AAutoDecisionBase {
-		public ReRejection(int customerId, long? cashRequestID, AConnection db, ASafeLog log) {
+		public ReRejection(
+			int customerId,
+			long? cashRequestID,
+			long? nlCashRequestID,
+			string tag,
+			AConnection db,
+			ASafeLog log
+		) {
 			this.db = db;
 			this.log = log.Safe();
 
 			this.trail = new ReRejectionTrail(
 				customerId,
 				cashRequestID,
+				nlCashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
 			);
+
+			this.trail.SetTag(tag);
 		} // constructor
 
-		public bool MakeAndVerifyDecision(string tag) {
-			this.trail.SetTag(tag);
+		public override void MakeAndVerifyDecision() {
+			Agent oSecondary = null;
 
-			RunPrimary();
-
-			Agent oSecondary = RunSecondary();
-
-			WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
-
-			this.trail.Save(this.db, oSecondary.Trail);
-
-			return !WasMismatch;
-		} // MakeAndVerifyDecision
-
-		public void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
-				if (MakeAndVerifyDecision(tag) && this.trail.HasDecided) {
-					response.Decision = DecisionActions.ReReject;
-					response.AutoRejectReason = "Auto Re-Reject";
-					response.CreditResult = CreditResultStatus.Rejected;
-					response.UserStatus = Status.Rejected;
-					response.SystemDecision = SystemDecision.Reject;
-					response.DecisionName = "Re-rejection";
-				} // if
+				RunPrimary();
+
+				oSecondary = RunSecondary();
+
+				WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
 			} catch (Exception ex) {
 				StepNoReReject<ExceptionThrown>().Init(ex);
 				this.log.Error(ex, "Exception during re-rejection {0}", this.trail);
 			} // try
-		} // MakeDecision
+
+			this.trail.Save(this.db, oSecondary == null ? null : oSecondary.Trail);
+		} // MakeAndVerifyDecision
+
+		public override bool WasException {
+			get {
+				if (this.trail == null)
+					return false;
+
+				return this.trail.FindTrace<ExceptionThrown>() != null;
+			} // get
+		} // WasException
+
+		public override bool AffirmativeDecisionMade {
+			get {
+				return (this.trail != null) && this.trail.HasDecided;
+			} // get
+		} // AffirmativeDecisionMade
+
+		public ReRejectionTrail Trail { get { return this.trail; } }
 
 		private void RunPrimary() {
 			this.log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", this.trail.CustomerID);
@@ -101,7 +113,12 @@
 
 		private AutomationCalculator.AutoDecision.AutoReRejection.Agent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
-				this.trail.CustomerID, this.trail.CashRequestID, this.trail.InputData.DataAsOf, this.db, this.log
+				this.trail.CustomerID,
+				this.trail.CashRequestID,
+				this.trail.NLCashRequestID,
+				this.trail.InputData.DataAsOf,
+				this.db,
+				this.log
 			).Init();
 
 			oSecondary.MakeDecision();

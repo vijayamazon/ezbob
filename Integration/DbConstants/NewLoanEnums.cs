@@ -17,14 +17,14 @@
 
 	public enum NLLoanStatuses {
 		Pending = 1,// DB table id
-		Live = 2,
+		Live = 2, 
 		Late = 3,
 		PaidOff = 4,
 		WriteOff = 6,
 		//Default = 5,
 		//DebtManagement = 7
 	} // enum NLLoanStatuses
-
+	
 
 	public enum NLFeeTypes {
 		None = 0,
@@ -34,9 +34,11 @@
 		RolloverFee = 4,
 		AdminFee = 5,
 		LatePaymentFee = 6,
-		PartialPaymentFee = 7
+		PartialPaymentFee = 7,
+		OtherCharge = 8
 	} // enum FeeTypes
 
+	
 	public enum NLScheduleStatuses {
 		[Description("Open")]
 		StillToPay = 1, // db ID
@@ -47,7 +49,9 @@
 		[Description("Deleted on reschedule (nothing was repaid before reschedule)")]
 		DeletedOnReschedule = 4,
 		[Description("Closed on reschedule (was partially repaid before reschedule)")]
-		ClosedOnReschedule = 5
+		ClosedOnReschedule = 5,
+		[Description("Was late on reschedule")]
+		LateDeletedOnReschedule = 6
 	} // enum NLScheduleStatuses
 
 	public enum NLLoanTypes {
@@ -76,11 +80,11 @@
 
 	public enum NLPaypointTransactionStatuses {
 		InProgress = 1, // DB table id
-		Done = 2,
+		Done = 2, 
 		Error = 3,
 		Unknown = 4
 	} // enum NLPaypointTransactionStatuses
-
+	
 	public enum NLPaymentStatuses {
 		Error = 1,				// DB table id => Error, Unknown
 		Active = 2,				// => InProgress, Done
@@ -88,6 +92,9 @@
 		WrongPayment = 4		// cancel payment
 	} // enum NLPaymentStatuses
 
+	public enum NLPaymentDestinations {
+		Rollover
+	} // enum NLPaymentDestinations
 
 	public enum NLLoanTransactionMethods {
 		Unknown = 0, // DB table id
@@ -104,6 +111,8 @@
 		SetupFeeOffset = 11, // used to offsetting setup fee,
 		SystemRepay = 12,
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
+
+
 
 	/// <summary>
 	/// used in "pay loan" flows to indicate throuhg which payment system current transaction done
@@ -141,6 +150,8 @@
 		[Description("0")] // 
 		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
+
+
 
 
 } // namespace

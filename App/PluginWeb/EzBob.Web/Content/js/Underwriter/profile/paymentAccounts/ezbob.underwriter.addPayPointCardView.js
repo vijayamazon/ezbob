@@ -9,7 +9,7 @@ EzBob.Underwriter.AddPayPointCardView = Backbone.Marionette.ItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: "Add Paypoint",
+			title: "Add paypoint card",
 			position: "center",
 			draggable: false,
 			dialogClass: "add-paypoint-popup",

@@ -9,7 +9,8 @@ ALTER PROCEDURE BrokerSaveCrmEntry
 @Comment VARCHAR(1000),
 @RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
-@EntryTime DATETIME
+@EntryTime DATETIME,
+@Origin INT
 AS
 BEGIN
 	DECLARE @ErrorMsg AS NVARCHAR(1024) = ''
@@ -26,6 +27,8 @@ BEGIN
 			Broker
 		WHERE
 			ContactEmail = @ContactEmail
+			AND
+			OriginID = @Origin
 	
 		IF @BrokerID IS NULL
 			SET @ErrorMsg = 'Could not find broker by contact email ' + @ContactEmail

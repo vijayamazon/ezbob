@@ -37,7 +37,8 @@ ALTER PROCEDURE MainStrategyUpdateCrC
 @IsCustomerRepaymentPeriodSelectionAllowed BIT,
 @EmailSendingBanned BIT,
 @DiscountPlanID INT,
-@HasApprovalChance BIT
+@HasApprovalChance BIT,
+@ProductSubTypeID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -67,9 +68,11 @@ BEGIN
 	WHERE
 		Id = @CustomerID
 
-	UPDATE CashRequests SET
-		OfferStart = @Now,
-		OfferValidUntil = @OfferValidUntil,
+	UPDATE CashRequests SET		
+		--OfferStart = CASE WHEN @DecidedToApprove = 1 THEN @Now ELSE NULL END,
+		--OfferValidUntil = CASE WHEN @DecidedToApprove = 1 THEN @OfferValidUntil ELSE NULL END,	
+		OfferStart = @Now,	
+		OfferValidUntil = @OfferValidUntil,		
 		SystemDecision = @SystemDecision,
 		SystemCalculatedSum = @SystemCalculatedSum,
 		SystemDecisionDate = @Now,
@@ -94,7 +97,8 @@ BEGIN
 		EmailSendingBanned = @EmailSendingBanned,
 		DiscountPlanId = @DiscountPlanID,
 		HasApprovalChance = @HasApprovalChance,
-		SpreadSetupFee = @SpreadSetupFee
+		SpreadSetupFee = @SpreadSetupFee,
+		ProductSubTypeID = @ProductSubTypeID
 	WHERE
 		Id = @CashRequestID
 

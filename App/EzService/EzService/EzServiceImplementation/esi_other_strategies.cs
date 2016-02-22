@@ -140,10 +140,6 @@
 			};
 		} // CalculateModelsAndAffordability
 
-		public ActionMetaData SaveSourceRefHistory(int nUserID, string sSourceRefList, string sVisitTimeList, CampaignSourceRef campaignSourceRef) {
-			return Execute<SaveSourceRefHistory>(nUserID, null, nUserID, sSourceRefList, sVisitTimeList, campaignSourceRef);
-		} // SaveSourceRefHistory
-
 		public StringStringMapActionResult LoadCustomerLeadFieldNames() {
 			LoadCustomerLeadFieldNames oInstance;
 

@@ -8,6 +8,7 @@ GO
 ALTER PROCEDURE BrokerAcceptTerms
 @TermsID INT,
 @ContactEmail NVARCHAR(255),
+@OriginID INT,
 @Now DATETIME
 AS
 BEGIN
@@ -18,5 +19,7 @@ BEGIN
 		AgreedToTermsDate = @Now
 	WHERE
 		ContactEmail = @ContactEmail
+		AND
+		OriginID = @OriginID
 END
 GO

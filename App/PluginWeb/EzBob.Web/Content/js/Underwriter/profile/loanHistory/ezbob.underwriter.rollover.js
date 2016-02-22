@@ -26,7 +26,7 @@ EzBob.Underwriter.RolloverView = Backbone.View.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: "Rollover",
+			title: !this.model.hasActive ? "Add roll over" : "Edit roll over",
 			position: "center",
 			draggable: false,
 			dialogClass: "rollover-popup",
@@ -41,8 +41,6 @@ EzBob.Underwriter.RolloverView = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.model.title = !this.model.hasActive ? "Add roll over" : "Edit roll over";
-
 		this.$el.html(this.template({
 			model: this.model
 		}));

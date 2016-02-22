@@ -1,37 +1,72 @@
 ﻿namespace EzService {
+	using System;
 	using System.Collections.Generic;
-	using System.ServiceModel;
-	using Ezbob.Backend.Models.NewLoan;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using System.ServiceModel;
+    using Ezbob.Backend.Models.NewLoan;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using EzService.ActionResults;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzServiceNewLoan {
-		[OperationContract]
-		IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
+    public interface IEzServiceNewLoan {
+        [OperationContract]
+        NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
+
+        [OperationContract]
+        NLLongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
+
+        [OperationContract]
+        NLLongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null);
+
+        [OperationContract]
+        NL_Offers GetLastOffer(int userID, int customerID);
+
+        [OperationContract]
+        NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+
+        [OperationContract]
+		NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId, List<String> PropertiesUpdateList = null);
+
+        [OperationContract]
+        ActionMetaData AddLoan(int? userID, int? customerID, NL_Model model);
+
+        [OperationContract]
+        NLLongActionResult AddPayment(int customerID, NL_Payments payment, int userID);
+
+        [OperationContract]
+        ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
+
+        [OperationContract]
+        NLModelActionResult BuildLoanFromOffer(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
-		IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
+		NLLongActionResult DeactivateLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze);
 
 		[OperationContract]
-		IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);
+		NLLongActionResult AddLoanInterestFreeze(int userID, int customerID, NL_LoanInterestFreeze loanInterestFreeze);
 
 		[OperationContract]
-		NL_Offers GetLastOffer(int userID, int customerID);
+        ListNewLoanActionResult GetCustomerLoans(int customerID, int userID);
+
+	    [OperationContract]
+	    NLModelActionResult GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
 
 		[OperationContract]
-		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+		NLLongActionResult GetLoanByOldID(int oldId, int customerID = 1, int userID = 1);
+		
+		[OperationContract]
+		NLLongActionResult CancelPayment(int customerID, NL_Payments payment, int userID);
 
 		[OperationContract]
-		IntActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions);
+		StringActionResult SaveRollover(int userID, int customerID, NL_LoanRollovers rollover, long loanID);
 
 		[OperationContract]
-		IntActionResult AddLoan(NL_Model loanModel);
+		StringActionResult AcceptRollover(int customerID, long loanID);
 
 		[OperationContract]
-		NL_Model AddPayment(NL_Model loanModel);
+		StringActionResult SaveFee(int userID, int customerID, NL_LoanFees fee);
 
 		[OperationContract]
-		ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
+		StringActionResult CancelFee(int userID, int customerID, NL_LoanFees fee);
 
 	} // interface IEzServiceNewLoan
 

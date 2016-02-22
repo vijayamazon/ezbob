@@ -1,5 +1,6 @@
-﻿namespace Ezbob.Backend.Strategies.Misc {
+﻿namespace Ezbob.Backend.Strategies.Backfill {
 	using System.Collections.Generic;
+	using Ezbob.Backend.Strategies.LandRegistry;
 	using Ezbob.Database;
 
 	public class BackfillLandRegistry2PropertyLink : AStrategy {
@@ -17,7 +18,8 @@
 				if (linkedCustomers.Contains(customerId)) // Already found link for this customer
 					return;
 
-				LandRegistryRes.LinkLandRegistryAndAddress(customerId, xml, titleNumber, landRegistryId);
+				LandRegistryRes res = new LandRegistryRes(customerId, titleNumber);
+				res.LinkLandRegistryAndAddress(customerId, xml, landRegistryId);
 				linkedCustomers.Add(customerId);
 			}, "GetLandRegistryDataForBackfill", CommandSpecies.StoredProcedure);
 		}

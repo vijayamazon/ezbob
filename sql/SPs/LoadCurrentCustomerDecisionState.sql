@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE LoadCurrentCustomerDecisionState
+ALTER PROCEDURE [dbo].[LoadCurrentCustomerDecisionState]
 @UnderwriterID INT,
 @CustomerID INT,
 @CashRequestID BIGINT
@@ -34,9 +34,10 @@ BEGIN
 			LastWizardStep = (SELECT TheLastOne FROM WizardStepTypes WHERE WizardStepTypeID = c.WizardStep),
 			IsAlibaba = c.IsAlibaba,
 			Email = c.Name,
-			FilledByBroker = c.FilledByBroker
+			FilledByBroker = c.FilledByBroker,
+			Origin = o.Name
 		FROM
-			Customer c
+			Customer c LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 		WHERE
 			c.Id = @CustomerID
 	), r AS (
@@ -49,7 +50,18 @@ BEGIN
 			IsLoanTypeSelectionAllowed = r.IsLoanTypeSelectionAllowed,
 			EmailSendingBanned = r.EmailSendingBanned,
 			OfferValidUntil = r.OfferValidUntil,
-			OfferStart = r.OfferStart
+			OfferStart = r.OfferStart,
+			SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0),
+			ManualSetupFeePercent = ISNULL(r.ManualSetupFeePercent, 0),
+			BrokerSetupFeePercent= ISNULL(r.BrokerSetupFeePercent, 0),
+			r.InterestRate,
+			r.DiscountPlanId,
+			r.LoanSourceID,
+			r.LoanTypeId,
+			r.RepaymentPeriod,
+			r.ApprovedRepaymentPeriod,
+			r.IsCustomerRepaymentPeriodSelectionAllowed,
+			r.CreationDate
 		FROM
 			CashRequests r
 		WHERE
@@ -67,6 +79,7 @@ BEGIN
 		LastWizardStep = ISNULL(c.LastWizardStep, 0),
 		IsAlibaba = ISNULL(c.IsAlibaba, 0),
 		c.Email,
+		c.Origin,
 		FilledByBroker = ISNULL(c.FilledByBroker, 0),
 
 		r.CashRequestID,
@@ -77,10 +90,21 @@ BEGIN
 		IsLoanTypeSelectionAllowed = ISNULL(r.IsLoanTypeSelectionAllowed, 0),
 		EmailSendingBanned = ISNULL(r.EmailSendingBanned, 0),
 		r.OfferValidUntil,
-		r.OfferStart
+		r.OfferStart,
+		SpreadSetupFee = ISNULL(r.SpreadSetupFee, 0),
+		ManualSetupFeePercent = ISNULL(r.ManualSetupFeePercent, 0),
+		BrokerSetupFeePercent = ISNULL(r.BrokerSetupFeePercent, 0),
+		r.InterestRate,
+		r.DiscountPlanId as DiscountPlanID,
+		r.LoanSourceID,
+		r.LoanTypeId as LoanTypeID,
+		r.RepaymentPeriod,
+		r.ApprovedRepaymentPeriod,
+		r.IsCustomerRepaymentPeriodSelectionAllowed,
+		r.CreationDate
 	FROM
 		c
 		FULL OUTER JOIN r ON 1 = 1
 		FULL OUTER JOIN u ON 1 = 1
 END
-GO
+

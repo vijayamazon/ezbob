@@ -53,6 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=3.3.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\CompareNETObjects.3.03.0.0\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -85,6 +89,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -100,49 +105,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
+    <Compile Include="ASignupLoginBaseStrategy.cs" />
+    <Compile Include="Authentication\GetSecurityUserById.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\LogicalGlue\Agent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\IDecisionCheckAgent.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\AutoReapprovalOutput.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\LogicalGlue\Agent.cs" />
+    <Compile Include="AutoDecisionAutomation\ICreateOfferInputData.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\ApproveStatus.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\AutoDecision.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\Bar.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\LoadAndCategorizeDecisions.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\CustomerDecisions.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\ADecision.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\CaisAccount.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\CaisAccountList.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\DeepData.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\Digger.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\MarketplaceData.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\RawSource.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\ManualDecision.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\SpLoadCashRequests.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\SpSaveResults.cs" />
-    <Compile Include="AutomationVerification\KPMG\ADatumItem.cs" />
-    <Compile Include="AutomationVerification\KPMG\AutoDatumItem.cs" />
-    <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
-    <Compile Include="AutomationVerification\KPMG\Datum.cs" />
-    <Compile Include="AutomationVerification\KPMG\AutomationTrails.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\ExcelGenerator.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetApproveFailGroups.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetDDD.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetRawAutomation.cs" />
-    <Compile Include="AutomationVerification\KPMG\InterestRateSheetSectionConfiguration.cs" />
-    <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
-    <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
-    <Compile Include="AutomationVerification\KPMG\LoanSummaryData.cs" />
-    <EmbeddedResource Include="AutomationVerification\KPMG\MaamMedalAndPricing_MaxOffer.txt" />
-    <EmbeddedResource Include="AutomationVerification\KPMG\MaamMedalAndPricing_MinOffer.txt" />
-    <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />
-    <Compile Include="AutomationVerification\KPMG\ManualDatumItem.cs" />
-    <Compile Include="AutomationVerification\KPMG\Reference.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetAutomationTrails.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetInterestRate.cs" />
-    <Compile Include="AutomationVerification\KPMG\Excel\SheetVerification.cs" />
-    <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />
-    <Compile Include="AutomationVerification\Recalculate\RecalculateAutoRejectOnFirstDecision.cs" />
     <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
@@ -156,6 +130,12 @@
     <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="Broker\BrokerUpdateEmail.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
+    <Compile Include="CompaniesHouse\AppointmentListResult.cs" />
+    <Compile Include="CompaniesHouse\DictionariesTypes.cs" />
+    <Compile Include="CompaniesHouse\ErrorResult.cs" />
+    <Compile Include="CompaniesHouse\GetCompaniesHouseData.cs" />
+    <Compile Include="CompaniesHouse\JsonConverters.cs" />
+    <Compile Include="CompaniesHouse\OfficersListResult.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeLtd.cs" />
@@ -171,19 +151,113 @@
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
+    <Compile Include="Investor\AddInvestorBankAccountBalance.cs" />
+    <Compile Include="Investor\LoadInvestors.cs" />
+    <Compile Include="Investor\AddInvestorSystemBalance.cs" />
+    <Compile Include="Investor\AddManualTransaction.cs" />
+    <Compile Include="Investor\ForceInvestorForOffer.cs" />
+    <Compile Include="Investor\LinkRepaymentToInvestor.cs" />
+    <Compile Include="Investor\LinkLoanToInvestor.cs" />
+    <Compile Include="Investor\LinkOfferToInvestor.cs" />
+    <Compile Include="Investor\LoadSchedulerData.cs" />
+    <Compile Include="Investor\LoadTransactionsData.cs" />
+    <Compile Include="Investor\ManageInvestorDetails.cs" />
+    <Compile Include="Investor\NotifyInvestorUtilizedFunds.cs" />
+    <Compile Include="Investor\NotifyRiskPendingInvestorOffer.cs" />
+    <Compile Include="Investor\OfferExpiredChecker.cs" />
+    <Compile Include="Investor\FindInvestorForOffer.cs" />
+    <Compile Include="Investor\LoadAccountingData.cs" />
+    <Compile Include="Investor\ManageInvestorBankAccount.cs" />
+    <Compile Include="Investor\ManageInvestorContact.cs" />
+    <Compile Include="Investor\LoadInvestor.cs" />
+    <Compile Include="Investor\CreateInvestor.cs" />
+    <Compile Include="Investor\UpdateSchedulerData.cs" />
+    <Compile Include="Investor\SaveInvestorBanksList.cs" />
+    <Compile Include="Investor\SaveInvestorContactList.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="LandRegistry\LandRegistryDB.cs" />
+    <Compile Include="LandRegistry\LandRegistryOwnersDB.cs" />
+    <Compile Include="LandRegistry\LandRegistryLoad.cs" />
+    <Compile Include="LegalDocs\CMS\SaveLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\DeleteLegalDocById.cs" />
+    <Compile Include="LegalDocs\CMS\ReviewLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\GetLegalDocsPendingApproval.cs" />
+    <Compile Include="LegalDocs\CMS\AddLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\SyncLegalDocsEnviorments.cs" />
+    <Compile Include="LegalDocs\CMS\ApproveLegalDoc.cs" />
+    <Compile Include="LegalDocs\CMS\GetLatestLegalDocs.cs" />
+    <Compile Include="LegalDocs\GetLegalDocById.cs" />
+    <Compile Include="LegalDocs\ManualLegalDocsSyncTemplatesFiles.cs" />
+    <Compile Include="LegalDocs\GetLegalDocs.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="LogicalGlue\GetTryoutInference.cs" />
+    <Compile Include="LogicalGlue\GetHistoryInferences.cs" />
+    <Compile Include="LogicalGlue\GetLatestKnownInference.cs" />
+    <Compile Include="LogicalGlue\SetRequestIsTryOut.cs" />
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\CustomerBankAccountIsAlreadyAddedEmail.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
-    <Compile Include="MainStrategy\ABackdoorSimpleDetails.cs" />
-    <Compile Include="MainStrategy\BackdoorSimpleManual.cs" />
-    <Compile Include="MainStrategy\BackdoorSimpleReject.cs" />
-    <Compile Include="MainStrategy\BackdoorSimpleApprove.cs" />
-    <Compile Include="MainStrategy\ForceNhibernateResync.cs" />
-    <Compile Include="MainStrategy\InternalCashRequestID.cs" />
-    <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
-    <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
-    <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
+    <Compile Include="MainStrategy\Exceptions\CreateFindCashRequestException.cs" />
+    <Compile Include="MainStrategy\Exceptions\InvalidInputException.cs" />
+    <Compile Include="MainStrategy\Helpers\LoadOfferRanges.cs" />
+    <Compile Include="MainStrategy\Helpers\MainStrategySetApproved.cs" />
+    <Compile Include="MainStrategy\Helpers\OfferCalculator.cs" />
+    <Compile Include="MainStrategy\Helpers\WriteDecisionOutput.cs" />
+    <Compile Include="MainStrategy\StepHistoryItem.cs" />
+    <Compile Include="MainStrategy\StepResult.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownAfterCashRequestWasWritten.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownAfterHavingCashRequest.cs" />
+    <Compile Include="MainStrategy\Steps\AbnormalShutdownBeforeHavingCashRequest.cs" />
+    <Compile Include="MainStrategy\Steps\AMainStrategyStepBase.cs" />
+    <Compile Include="MainStrategy\Steps\AMainStrategyStep.cs" />
+    <Compile Include="MainStrategy\Steps\ASaveDecisionBase.cs" />
+    <Compile Include="MainStrategy\Steps\CalculateOfferIfPossible.cs" />
+    <Compile Include="MainStrategy\Steps\CheckAutoRulesRequested.cs" />
+    <Compile Include="MainStrategy\Steps\CheckUpdateDataRequested.cs" />
+    <Compile Include="MainStrategy\Steps\ApplyBackdoorLogic.cs" />
+    <Compile Include="MainStrategy\Steps\AOneExitStep.cs" />
+    <Compile Include="MainStrategy\MainStrategy.cs" />
+    <Compile Include="MainStrategy\MainStrategyArguments.cs" />
+    <Compile Include="MainStrategy\MainStrategyContextData.cs" />
+    <Compile Include="MainStrategy\Steps\CreateFindCashRequest.cs" />
+    <Compile Include="MainStrategy\Steps\DispatchNotifications.cs" />
+    <Compile Include="MainStrategy\Steps\FinishWizardIfRequested.cs" />
+    <Compile Include="MainStrategy\Steps\FraudCheck.cs" />
+    <Compile Include="MainStrategy\Steps\GatherData.cs" />
+    <Compile Include="MainStrategy\Steps\LockApproved.cs" />
+    <Compile Include="MainStrategy\Steps\LockReapproved.cs" />
+    <Compile Include="MainStrategy\Steps\LockRejected.cs" />
+    <Compile Include="MainStrategy\Steps\LockRerejected.cs" />
+    <Compile Include="MainStrategy\Steps\ALockManual.cs" />
+    <Compile Include="MainStrategy\Steps\ADecisionBaseStep.cs" />
+    <Compile Include="MainStrategy\Steps\lock_manual_steps.cs" />
+    <Compile Include="MainStrategy\Steps\AApprovalBaseStep.cs" />
+    <Compile Include="MainStrategy\Steps\Approval.cs" />
+    <Compile Include="MainStrategy\Steps\LookForInvestor.cs" />
+    <Compile Include="MainStrategy\Steps\ManualIfNotDecided.cs" />
+    <Compile Include="MainStrategy\Steps\Reject.cs" />
+    <Compile Include="MainStrategy\Steps\Reapproval.cs" />
+    <Compile Include="MainStrategy\Steps\Rereject.cs" />
+    <Compile Include="MainStrategy\Steps\WriteDecisionDown.cs" />
+    <Compile Include="MainStrategy\Steps\RestoreAndSaveApproved.cs" />
+    <Compile Include="MainStrategy\Steps\StepOutputAttribute.cs" />
+    <Compile Include="MainStrategy\Steps\StepResults.cs" />
+    <Compile Include="MainStrategy\Steps\TheFirstOne.cs" />
+    <Compile Include="MainStrategy\Steps\TheLastOne.cs" />
+    <Compile Include="MainStrategy\Steps\UpdateData.cs" />
+    <Compile Include="MainStrategy\Steps\UpdateLandRegistryData.cs" />
+    <Compile Include="MainStrategy\Steps\UpdateNHibernate.cs" />
+    <Compile Include="MainStrategy\Steps\ValidateInput.cs" />
+    <Compile Include="MainStrategy\Helpers\ABackdoorSimpleDetails.cs" />
+    <Compile Include="MainStrategy\AMainStrategyBase.cs" />
+    <Compile Include="MainStrategy\Helpers\BackdoorSimpleManual.cs" />
+    <Compile Include="MainStrategy\Helpers\BackdoorSimpleReject.cs" />
+    <Compile Include="MainStrategy\Helpers\BackdoorSimpleApprove.cs" />
+    <Compile Include="MainStrategy\Helpers\ForceNhibernateResync.cs" />
+    <Compile Include="MainStrategy\Helpers\GradeRangeSubproduct.cs" />
+    <Compile Include="MainStrategy\Helpers\CashRequestIDExt.cs" />
+    <Compile Include="MainStrategy\Helpers\MainStrategyUpdateCrC.cs" />
+    <Compile Include="MainStrategy\Helpers\MarketplaceUpdateStatus.cs" />
     <Compile Include="ManualDecision\ChangeDecisionOption.cs" />
     <Compile Include="ManualDecision\CurrentCustomerDecisionState.cs" />
     <Compile Include="ManualDecision\DecisionIsChangable.cs" />
@@ -195,10 +269,27 @@
     <Compile Include="ManualDecision\ManuallyReject.cs" />
     <Compile Include="ManualDecision\ManuallyApprove.cs" />
     <Compile Include="Misc\AddHistoryDirector.cs" />
+    <Compile Include="Misc\GetSlidersData.cs" />
+    <Compile Include="Misc\LoadMessagesSentToUser.cs" />
+    <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
+    <Compile Include="NewLoan\DAL\ILoanFees.cs" />
+    <Compile Include="NewLoan\DAL\LoanFees.cs" />
+    <Compile Include="SalesForce\ChangeEmail.cs" />
+    <Compile Include="NewLoan\Migration\MigrateLoan.cs" />
+    <Compile Include="NewLoan\Migration\MigrateCRDecisionOffer.cs" />
+    <Compile Include="NewLoan\SaveFee.cs" />
+    <Compile Include="NewLoan\SaveLoanStateToDB.cs" />
+    <Compile Include="StoredProcs\GetCurrencyRate.cs" />
+    <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />
+    <Compile Include="StoredProcs\LoadMatchingGradeRanges.cs" />
+    <Compile Include="Tasks\InvestorFinder.cs" />
+    <Compile Include="Tasks\Annual77ANotifier.cs" />
+    <Compile Include="Misc\BuildMultiBrandLoanSummary.cs" />
     <Compile Include="Misc\GetIncomeSms.cs" />
     <Compile Include="Misc\GetCollectionSnailMail.cs" />
     <Compile Include="Misc\GetLoanCommissionDefaults.cs" />
     <Compile Include="Misc\GetCustomerState.cs" />
+    <Compile Include="Misc\LoadDecisionHistory.cs" />
     <Compile Include="Misc\LoadApplicationInfo.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
@@ -207,17 +298,61 @@
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="ManualDecision\ApplyManualDecision.cs" />
+    <Compile Include="Misc\SetLateLoanStatus.cs" />
     <Compile Include="Misc\TopUpDelivery.cs" />
+    <Compile Include="NewLoan\AcceptRollover.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\AddLoan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\SaveRollover.cs" />
+    <Compile Include="NewLoan\CancelFee.cs" />
+    <Compile Include="NewLoan\CancelPayment.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanNotFound.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IGenericRulesBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IInvestorCashRequestBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorCashRequestBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IInvestorCashRequestDAL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\InvestorCashRequestDAL.cs" />
+    <Compile Include="OpenPlatform\Facade\Contracts\IInvestorService.cs" />
+    <Compile Include="OpenPlatform\Facade\Implement\InvestorService.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\GenericRulesBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IRulesEngineDAL.cs" />
+    <Compile Include="OpenPlatform\Models\InvestorParameters.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanForOldIDNotFound.cs" />
+    <Compile Include="NewLoan\GetLoanIDByOldID.cs" />
+    <Compile Include="NewLoan\GetCustomerLoans.cs" />
+    <Compile Include="NewLoan\UpdateLoanDBState.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanCured.cs" />
+    <Compile Include="NewLoan\Collection\LateCustomerStatusChange.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanNotification.cs" />
+    <Compile Include="NewLoan\Collection\AddCollectionLog.cs" />
+    <Compile Include="NewLoan\Collection\LateLoanJob.cs" />
+    <Compile Include="NewLoan\Collection\SetLateLoanStatus.cs" />
+    <Compile Include="NewLoan\DeactivateLoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\AddLoanInterestFreeze.cs" />
+    <Compile Include="NewLoan\BuildLoanFromOffer.cs" />
+    <Compile Include="NewLoan\DAL\ILoanDAL.cs" />
+    <Compile Include="NewLoan\DAL\LoanDAL.cs" />
     <Compile Include="Postcode\PostcodeNuts.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IInvestorParametersBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\InvestorParametersBLL.cs" />
+    <Compile Include="OpenPlatform\Registry\InvestorRegistry.cs" />
+    <Compile Include="OpenPlatform\DAL\Contract\IInvestorParametersDAL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\InvestorParametersDAL.cs" />
+    <Compile Include="OpenPlatform\Registry\IProvider.cs" />
+    <Compile Include="OpenPlatform\Registry\Provider.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\ExressionBuilderBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Implement\MatchBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IExressionBuilderBLL.cs" />
+    <Compile Include="OpenPlatform\BLL\Contracts\IMatchBLL.cs" />
+    <Compile Include="OpenPlatform\DAL\Implement\RulesEngineDAL.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
-    <Compile Include="NewLoan\AddLoan.cs" />
-    <Compile Include="NewLoan\AddFee.cs" />
     <Compile Include="NewLoan\AddLoanOptions.cs" />
     <Compile Include="NewLoan\AddLoanState.cs" />
-    <Compile Include="NewLoan\AddRollover.cs" />
     <Compile Include="NewLoan\AddDecision.cs" />
-    <Compile Include="NewLoan\AssignPaymentToLoan.cs" />
     <Compile Include="NewLoan\AddPayment.cs" />
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
@@ -226,39 +361,15 @@
     <Compile Include="NewLoan\ReschedulingSaveException.cs" />
     <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalException.cs" />
     <Compile Include="NewLoan\ReschedulingInPeriodException.cs" />
-    <Compile Include="NewLoan\LoanState.cs">
+    <Compile Include="NewLoan\GetLoanState.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NewLoan\NL_ExceptionCustomerNotFound.cs" />
-    <Compile Include="NewLoan\NL_ExceptionPaymentSave.cs" />
-    <Compile Include="NewLoan\NL_ExceptionInputDataInvalid.cs" />
-    <Compile Include="NewLoan\NL_ExceptionRequiredDataNotFound.cs" />
-    <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
-    <Compile Include="NewLoan\NL_Loader.cs" />
-    <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionCustomerNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionInputDataInvalid.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionRequiredDataNotFound.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionOfferNotValid.cs" />
+    <Compile Include="NewLoan\Exceptions\NL_ExceptionLoanExists.cs" />
     <Compile Include="Tasks\UpdateDailyLoanStats.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ADefaultLoans.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoRejected.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejected.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ARejectedCrossApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApprovedAutoNotApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejectedAutoApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\NoAutoRejectedAndAutoApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoReapproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoRerejected.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoRejected.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoProcessed.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\Stats.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\TitledValue.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\Total.cs" />
-    <Compile Include="Tasks\TotalMaamMedalAndPricing.cs" />
-    <Compile Include="Tasks\WeeklyMaamMedalAndPricing.cs" />
     <Compile Include="Esign\EsignSend.cs" />
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />
@@ -281,7 +392,6 @@
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />
     <Compile Include="ExternalAPI\Alibaba\RequalifyCustomer.cs" />
     <Compile Include="ExternalAPI\SaveApiCall.cs" />
-    <Compile Include="Library.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
     <Compile Include="Lottery\FitConditions\AAmount.cs" />
@@ -299,46 +409,44 @@
     <Compile Include="MailStrategies\Collection\LateBy14DaysMail.cs" />
     <Compile Include="MailStrategies\PayPointChargerMails.cs" />
     <Compile Include="MailStrategies\AutomationDecsionMails.cs" />
-    <Compile Include="MailStrategies\SendEverlineRefinanceMails.cs" />
     <Compile Include="MailStrategies\XDaysDueMails.cs" />
     <Compile Include="MailStrategies\Collection\CollectionMails.cs" />
     <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
     <Compile Include="AutoDecisionAutomation\SilentAutomation.cs" />
-    <Compile Include="MainStrategy\MainStrategyMails.cs" />
+    <Compile Include="MainStrategy\Helpers\ExternalNotifier.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private_calc-n-find.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private-check.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_private-other.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\Arguments.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\Checker.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\MpError.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\Configuration.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Reject\MetaData.cs" />
-    <Compile Include="MainStrategy\CustomerDetails.cs" />
-    <Compile Include="MainStrategy\PreliminaryData.cs" />
-    <Compile Include="MedalCalculations\MedalCalculator1.cs" />
+    <Compile Include="MainStrategy\Helpers\CustomerDetails.cs" />
+    <Compile Include="MainStrategy\Helpers\PreliminaryData.cs" />
+    <Compile Include="MedalCalculations\Primary\MedalCalculator.cs" />
     <Compile Include="MedalCalculations\MedalType.cs" />
-    <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\OnlineNonLimitedWithBusinessScoreMedalCalculator1.cs" />
+    <Compile Include="MedalCalculations\Primary\Online\NonLimited\NoBusinessScore.cs" />
+    <Compile Include="MedalCalculations\Primary\Online\NonLimited\WithBusinessScore.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Arguments.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Configuration.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Payment.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Marketplace.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\MetaData.cs" />
     <Compile Include="Backfill\Temp_BackFillMedals.cs" />
-    <Compile Include="MedalCalculations\NonLimitedMedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\SoleTraderMedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\OnlineLimitedMedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\LimitedMedalCalculator1.cs" />
-    <Compile Include="MedalCalculations\MedalCalculatorBase.cs" />
+    <Compile Include="MedalCalculations\Primary\Offline\NonLimited.cs" />
+    <Compile Include="MedalCalculations\Primary\Offline\SoleTrader.cs" />
+    <Compile Include="MedalCalculations\Primary\Online\Limited.cs" />
+    <Compile Include="MedalCalculations\Primary\Offline\Limited.cs" />
+    <Compile Include="MedalCalculations\Primary\MedalBase.cs" />
     <Compile Include="MailStrategies\Broker\BrokerPasswordChanged.cs" />
     <Compile Include="MailStrategies\AlibabaGreeting.cs" />
     <Compile Include="MailStrategies\SendInternalPendingMail.cs" />
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
-    <Compile Include="MainStrategy\Staller.cs" />
+    <Compile Include="MainStrategy\Helpers\Staller.cs" />
     <Compile Include="Backfill\BackfillHmrcBusinessRelevance.cs" />
     <Compile Include="Backfill\BackfillTurnover.cs" />
     <Compile Include="Misc\CalculateModelsAndAffordability.cs" />
@@ -347,16 +455,15 @@
     <Compile Include="Backfill\BackfillLandRegistry2PropertyLink.cs" />
     <Compile Include="Backfill\BackfillZooplaValue.cs" />
     <Compile Include="MedalCalculations\CalculateMedal.cs" />
-    <Compile Include="Misc\ChangeBrokerEmail.cs" />
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
-    <Compile Include="Misc\LandRegistryRes.cs" />
+    <Compile Include="LandRegistry\LandRegistryRes.cs" />
     <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />
     <Compile Include="Misc\SendSms.cs" />
-    <Compile Include="Misc\GetPropertyStatuses.cs" />
+    <Compile Include="LandRegistry\GetPropertyStatuses.cs" />
     <Compile Include="Experian\GetCompanyDataForCreditBureau.cs" />
     <Compile Include="Experian\GetCompanyDataForCompanyScore.cs" />
     <Compile Include="Misc\GetBankModel.cs" />
@@ -366,12 +473,8 @@
     <Compile Include="Esign\EsignProcessPending.cs" />
     <Compile Include="Misc\FindAccountsToUpdate.cs" />
     <Compile Include="Misc\LoadCustomerMarketplaceSecurityData.cs" />
-    <Compile Include="Misc\SaveSourceRefHistory.cs" />
     <Compile Include="Misc\ZooplaStub.cs" />
-    <Compile Include="OfferCalculation\CalculateOffer.cs" />
-    <Compile Include="OfferCalculation\OfferCalculator1.cs" />
-    <Compile Include="OfferCalculation\OfferDualCalculator.cs" />
-    <Compile Include="OfferCalculation\OfferResult.cs" />
+    <Compile Include="MainStrategy\Helpers\OfferResult.cs" />
     <Compile Include="PricingModel\PricingModelCalculator.cs" />
     <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="SalesForce\AddOpportunity.cs" />
@@ -387,7 +490,9 @@
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationCheckOne.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationGenerate.cs" />
-    <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationLoad.cs" />
+    <Compile Include="UserManagement\GetCustomerSecurityQuestion.cs" />
+    <Compile Include="UserManagement\LoadAllLoginRoles.cs" />
+    <Compile Include="UserManagement\LoginCustomerMutliOrigin.cs" />
     <Compile Include="UserManagement\ResetPassword123456.cs" />
     <Compile Include="Misc\VerifyEnoughAvailableFunds.cs" />
     <Compile Include="Misc\DisableCurrentManualPacnetDeposits.cs" />
@@ -399,13 +504,15 @@
     <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
+    <Compile Include="UserManagement\SignupCustomerMutliOrigin.cs" />
+    <Compile Include="UserManagement\SignupInvestorMultiOrigin.cs" />
     <Compile Include="UserManagement\UserDisable.cs" />
+    <Compile Include="UserManagement\ValidateSecurityAnswer.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\Approval\a_public.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\AutoDecisionResponse.cs" />
-    <Compile Include="AutoDecisionAutomation\AutoDecisions\BankBasedApproval.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\Agent.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />
@@ -441,9 +548,7 @@
     <Compile Include="VatReturn\LoadVatReturnSummary.cs" />
     <Compile Include="Misc\MarketplaceInstantUpdate.cs" />
     <Compile Include="PricingModel\GetPricingModelDefaultRate.cs" />
-    <Compile Include="PricingModel\PricingModelCalculate.cs" />
     <Compile Include="PricingModel\GetPricingModelModel.cs" />
-    <Compile Include="PricingModel\PricingModelModel.cs" />
     <Compile Include="Experian\GetExperianAccountsCurrentBalance.cs" />
     <Compile Include="MailStrategies\VipRequest.cs" />
     <Compile Include="Misc\UpdateConfigurationVariables.cs" />
@@ -463,7 +568,7 @@
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
     <Compile Include="Misc\CrmLoadLookups.cs" />
-    <Compile Include="Misc\LandRegistryEnquiry.cs" />
+    <Compile Include="LandRegistry\LandRegistryEnquiry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />
@@ -491,11 +596,10 @@
     <Compile Include="UserManagement\MarkSessionEnded.cs" />
     <Compile Include="UserManagement\UserChangeEmail.cs" />
     <Compile Include="UserManagement\CustomerChangePassword.cs" />
-    <Compile Include="UserManagement\UserChangePassword.cs" />
     <Compile Include="UserManagement\UserDataForLogin.cs" />
     <Compile Include="UserManagement\UserLogin.cs" />
     <Compile Include="UserManagement\UserResetPassword.cs" />
-    <Compile Include="UserManagement\UserSignup.cs" />
+    <Compile Include="UserManagement\SignupUnderwriterMultiOrigin.cs" />
     <Compile Include="UserManagement\UserManagementConfigs.cs" />
     <Compile Include="UserManagement\UserSecurityData.cs" />
     <Compile Include="UserManagement\UserUpdateSecurityQuestion.cs" />
@@ -506,8 +610,6 @@
     <Compile Include="Misc\PayPointCharger.cs" />
     <Compile Include="Misc\FraudChecker.cs" />
     <Compile Include="Exceptions\StrategyException.cs" />
-    <Compile Include="StrategyLog.cs" />
-    <Compile Include="Misc\SetLateLoanStatus.cs" />
     <Compile Include="Misc\LateBy14Days.cs" />
     <Compile Include="Misc\FirstOfMonthStatusNotifier.cs" />
     <Compile Include="Misc\XDaysDue.cs" />
@@ -536,7 +638,6 @@
     <Compile Include="MailStrategies\Greeting.cs" />
     <Compile Include="MailStrategies\MailRecipientData\CustomerData.cs" />
     <Compile Include="MailStrategies\AMailStrategyBase.cs" />
-    <Compile Include="MainStrategy\MainStrategy.cs" />
     <Compile Include="MailStrategies\API\StrategiesMailer.cs" />
     <Compile Include="Misc\CaisGenerate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -664,6 +765,10 @@
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>
       <Name>LandRegistryLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8d2c4b94-eb8f-470e-927e-f22b7beec42f}</Project>
+      <Name>LogicalGlue</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
@@ -756,6 +861,10 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
@@ -767,9 +876,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeLtdRequestTemplate.xml" />
@@ -780,6 +887,7 @@
   <ItemGroup>
     <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

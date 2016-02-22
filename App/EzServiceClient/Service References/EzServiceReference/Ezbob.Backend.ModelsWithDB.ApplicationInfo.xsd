@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.ApplicationInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
+  <xs:complexType name="ApplicationInfoModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AMLResult" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AllLoanSources" nillable="true" type="tns:ArrayOfLoanSourceModel" />
+      <xs:element minOccurs="0" name="AllowSendingEmail" type="xs:boolean" />
+      <xs:element minOccurs="0" name="AnnualTurnover" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Apr" type="xs:double" />
+      <xs:element minOccurs="0" name="AutomationOfferModel" nillable="true" type="tns:AutomationOfferModel" />
+      <xs:element minOccurs="0" name="AvailableAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BorrowedAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BrokerID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="BrokerSetupFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CashRequestId" type="xs:long" />
+      <xs:element minOccurs="0" name="CashRequestTimestamp" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="CreditResult" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CurrentFundingTypeID" type="xs:int" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentGradeRange" nillable="true" type="q1:I_GradeRange" />
+      <xs:element minOccurs="0" name="CurrentProductID" type="xs:int" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="CurrentProductSubType" nillable="true" type="q2:I_ProductSubType" />
+      <xs:element minOccurs="0" name="CurrentProductTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerId" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerReasonType" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerRefNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DiscountPlanId" type="xs:int" />
+      <xs:element minOccurs="0" name="DiscountPlans" nillable="true" type="tns:ArrayOfDiscountPlanModel" />
+      <xs:element minOccurs="0" name="Editable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EmployeeCount" type="xs:int" />
+      <xs:element minOccurs="0" name="FreeCashFlow" type="xs:decimal" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="FundingTypes" nillable="true" type="q3:ArrayOfI_FundingType" />
+      <xs:element minOccurs="0" name="GradeID" nillable="true" type="xs:int" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="GradeRanges" nillable="true" type="q4:ArrayOfI_GradeRange" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="Grades" nillable="true" type="q5:ArrayOfI_Grade" />
+      <xs:element minOccurs="0" name="HasYodlee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="IsAvoid" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCustomerInEnabledStatus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsCustomerRepaymentPeriodSelectionAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:int" />
+      <xs:element minOccurs="0" name="IsModified" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMultiBranded" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsOffline" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRegulated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsTest" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanTypeId" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanTypes" nillable="true" type="tns:ArrayOfLoanTypeModel" />
+      <xs:element minOccurs="0" name="LogicalGlueScore" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ManualSetupFeePercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Medal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumOfLoans" type="xs:int" />
+      <xs:element minOccurs="0" name="OfferExpired" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfferValidForHours" type="xs:int" />
+      <xs:element minOccurs="0" name="OfferValidateUntil" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OfferedCreditLine" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="ProductSubTypeID" nillable="true" type="xs:int" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="ProductSubTypes" nillable="true" type="q6:ArrayOfI_ProductSubType" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="ProductTypes" nillable="true" type="q7:ArrayOfI_ProductType" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="Products" nillable="true" type="q8:ArrayOfI_Product" />
+      <xs:element minOccurs="0" name="RealCost" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="RequestedLoanAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="RequestedLoanTerm" type="xs:int" />
+      <xs:element minOccurs="0" name="SkipPopupForApprovalWithoutAML" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SpreadSetupFee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StartingFromDate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SubGradeID" nillable="true" type="xs:int" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.OpenPlatform" minOccurs="0" name="SubGrades" nillable="true" type="q9:ArrayOfI_SubGrade" />
+      <xs:element minOccurs="0" name="SuggestedAmounts" nillable="true" type="tns:ArrayOfSuggestedAmountModel" />
+      <xs:element minOccurs="0" name="SystemCalculatedAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SystemDecision" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TotalSetupFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Turnover" type="xs:decimal" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="TypeOfBusiness" type="q10:TypeOfBusiness" />
+      <xs:element minOccurs="0" name="UwUpdatedFees" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ValueAdded" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ApplicationInfoModel" nillable="true" type="tns:ApplicationInfoModel" />
+  <xs:complexType name="ArrayOfLoanSourceModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanSourceModel" nillable="true" type="tns:LoanSourceModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLoanSourceModel" nillable="true" type="tns:ArrayOfLoanSourceModel" />
+  <xs:complexType name="LoanSourceModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AlertOnCustomerReasonType" type="xs:int" />
+      <xs:element minOccurs="0" name="DefaultRepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCustomerRepaymentPeriodSelectionAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MaxAnnualTurnover" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxEmployeeCount" type="xs:int" />
+      <xs:element minOccurs="0" name="MaxInterest" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoanSourceModel" nillable="true" type="tns:LoanSourceModel" />
+  <xs:complexType name="AutomationOfferModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:int" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="SetupFeeAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SetupFeePercent" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AutomationOfferModel" nillable="true" type="tns:AutomationOfferModel" />
+  <xs:complexType name="ArrayOfDiscountPlanModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DiscountPlanModel" nillable="true" type="tns:DiscountPlanModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDiscountPlanModel" nillable="true" type="tns:ArrayOfDiscountPlanModel" />
+  <xs:complexType name="DiscountPlanModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DiscountPlanPercents" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DiscountPlanModel" nillable="true" type="tns:DiscountPlanModel" />
+  <xs:complexType name="ArrayOfLoanTypeModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LoanTypeModel" nillable="true" type="tns:LoanTypeModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLoanTypeModel" nillable="true" type="tns:ArrayOfLoanTypeModel" />
+  <xs:complexType name="LoanTypeModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="text" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="value" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoanTypeModel" nillable="true" type="tns:LoanTypeModel" />
+  <xs:complexType name="ArrayOfSuggestedAmountModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SuggestedAmountModel" nillable="true" type="tns:SuggestedAmountModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSuggestedAmountModel" nillable="true" type="tns:ArrayOfSuggestedAmountModel" />
+  <xs:complexType name="SuggestedAmountModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Diamond" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Gold" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Method" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Platinum" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Silver" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Value" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SuggestedAmountModel" nillable="true" type="tns:SuggestedAmountModel" />
+</xs:schema>

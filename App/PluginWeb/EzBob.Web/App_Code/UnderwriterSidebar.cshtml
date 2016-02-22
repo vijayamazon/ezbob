@@ -1,4 +1,6 @@
-﻿@using System.Web.Mvc
+﻿@using System
+@using System.Linq
+@using System.Web.Mvc
 @using EzBob.Web.Infrastructure
 @using StructureMap
 
@@ -8,6 +10,7 @@
         Customers,
         Customer,
 		Broker,
+		Investor,
         Other
     }
 }
@@ -19,44 +22,46 @@
     var userName = "";
     var userId = 0;
     var userEmail = "";
+	var detectUserRolesError = "";
 
-    try
-    {
+    try {
         var context = ObjectFactory.GetInstance<IWorkplaceContext>();
 
-        if (context != null && context.User != null)
-        {
-            var user = context.User;
-            if (user != null)
-            {
-                userName = user.FullName ?? user.Name;
-                userId = user.Id;
-                userEmail = user.EMail;
+	    if (context != null) {
+		    var user = context.User;
+		    if (user != null) {
+			    userName = user.FullName ?? user.Name;
+			    userId = user.Id;
+			    userEmail = user.EMail;
 
+			    var roles = context.UserRoles;
 
-                if (user.Roles.Any(r => r.Name == "manager"))
-                {
-                    sRoleImageUrl = "manager.png";
-                    sRoleImageTitle = "Manager";
-                }
-                else if (user.Roles.Any(r => r.Name == "Underwriter"))
-                {
-                    sRoleImageUrl = "underwriter.png";
-                    sRoleImageTitle = "Underwriter";
-                }
+			    if (roles.Any(r => r == "manager")) {
+				    sRoleImageUrl = "manager.png";
+				    sRoleImageTitle = "Manager";
+			    } else if (roles.Any(r => r == "Underwriter")) {
+				    sRoleImageUrl = "underwriter.png";
+				    sRoleImageTitle = "Underwriter";
+			    }
 
-                sRoleImageTitle = user.Roles.Last().Name;
-            }
-        }
-    }
-    catch (Exception e)
-    {
-
+			    sRoleImageTitle = roles.Last();
+		    } else {
+				detectUserRolesError = "user is null";
+		    }
+	    } else {
+			detectUserRolesError = "context is null";
+	    }
+    } catch (Exception e) {
+	    detectUserRolesError = e.Message;
     }
 
     sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
 
     <div id="sidebar" class="bg">
+		@if (!string.IsNullOrWhiteSpace(detectUserRolesError)) {
+			<div class="hide exception-while-fetching-user-roles">@detectUserRolesError</div>
+		}
+
         <a href="#" id="reload-button-template" class="hide">Reload</a>
         <ul class="nav nav-list">
             <li>
@@ -85,6 +90,7 @@
                 <li><a href="#pending-grid" data-toggle="tab" title="Pending"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
                 <li><a href="#signature-grid" data-toggle="tab" title="Waiting for signature"><i class="fa fa-pencil-square-o"></i><span>Signature(<span id="signature-count"></span>)</span></a></li>
                 <li><a href="#approved-grid" data-toggle="tab" title="Approved"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
+				<li><a href="#pendingInvestor-grid" data-toggle="tab" title="Pending Investor"><i class="fa fa-hourglass-half"></i><span>Pending investor(<span id="pendinginvestor-count"></span>)</span></a></li>
                 <li><a href="#rejected-grid" data-toggle="tab" title="Rejected"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
                 <li><a href="#loans-grid" data-toggle="tab" title="Loans"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
                 <li><a href="#sales-grid" data-toggle="tab" title="Sales"><i class="fa fa-phone"></i><span>Sales</span></a></li>
@@ -92,6 +98,7 @@
                 <li><a href="#late-grid" data-toggle="tab" title="Late"><i class="fa fa-flag"></i><span>Late</span></a></li>
                 <li><a href="#all-grid" data-toggle="tab" title="All customers"><i class="fa fa-female"></i><span>All customers</span></a></li>
                 <li><a href="#registered-grid" data-toggle="tab" title="Registered"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
+				
                 <li class="test-customers" title="Check to include test customers">
                     <i class="fa fa-filter"></i>
                     <label class="checkbox-inline">
@@ -108,9 +115,21 @@
                 </li>
                 <li><a href="#logbook-grid" data-toggle="tab" title="Logbook"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
                 <li><a href="#brokers-grid" data-toggle="tab" title="Brokers"><i class="fa fa-male"></i><span>Brokers</span></a></li>
-                <li id="liClient"><a href='#' title="Find"><i class="fa fa-search"></i><span>Find</span></a></li>
-                    break;
-                case SideBarType.Customer:
+
+				<li id="liInvestors" class="dropdown">
+					<a href="#" class="dropdown-toggle" title="Investor">
+						<i class="fa fa-money"></i><span>&nbsp;Investors</span>
+						<b class="arrow fa fa-angle-right"></b>
+					</a>
+					<ul class="submenu">
+						@InvestorMenu(page)
+					</ul>
+				</li>
+
+				<li id="liClient"><a href='#' title="Find"><i class="fa fa-search"></i><span>Find</span></a></li>
+
+				break;
+				case SideBarType.Customer:
                 <li>
                     <a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
                     <a href="#" class="dropdown-toggle more-options-link" title="Sub Menu">
@@ -132,6 +151,7 @@
                 <li><a href="#payment-accounts" data-toggle="tab" class="customer-tab"><i class="fa fa-credit-card" title="Payment accounts"></i><span>Payment accounts</span></a></li>
                 <li><a href="#credit-bureau" data-toggle="tab" class="customer-tab"><i class="fa fa-building" title="Credit bureau"></i><span>Credit bureau</span></a></li>
                 <li><a href="#calculator" data-toggle="tab" class="customer-tab"><i class="fa fa-slack" title="Calculator"></i><span>Calculator</span></a></li>
+				<li><a href="#logical-glue-history" data-toggle="tab" class="customer-tab"><i class="fa fa-magic" title="Logical glue"></i><span>Logical glue</span></a></li>
                 <li><a href="#loanhistorys" data-toggle="tab" class="customer-tab"><i class="fa fa-history" title="Loan history"></i><span>Loan history</span></a></li>
                 <li><a href="#customer-info" class="customer-tab cross-check-tab" data-toggle="tab" title="Cross check"><i class="fa fa-pencil-square-o"></i><span>Cross check</span></a></li>
                 <li><a href="#company-score" class="customer-tab company-score-tab" data-toggle="tab" title="Company score"><i class="fa fa-university"></i><span>Company score</span></a></li>
@@ -152,12 +172,18 @@
 		        <li><a href="#broker-relations" data-toggle="tab" class="crm-tab" title="Broker relations"><i class="fa fa-users"></i><span>Broker relations</span></a></li>
 				<li><a href="#broker-whitelabel" data-toggle="tab" class="crm-tab" title="White Label"><i class="fa fa-tag"></i><span>White label</span></a></li>
 					break;
+				case SideBarType.Investor:
+					<li>
+						<a class="customers-link" href='@page.Url.Action("Index", "Customers")#' title="Customers"><i class="fa fa-angle-double-left"></i>Customers</a>
+					</li>
+					@InvestorMenu(page)
+					break;
 
-                case SideBarType.Other:
-                <li>
-                    <a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
-                </li>
-                @SubMenu(page)
+				case SideBarType.Other:
+					<li>
+						<a class="customers-link" href='@page.Url.Action("Index", "Customers")#'><i class="fa fa-angle-double-left"></i><span>Customers</span></a>
+					</li>
+					@SubMenu(page)
                     break;
             }
         </ul>
@@ -166,6 +192,22 @@
             <i class="fa fa-angle-double-left"></i>
         </div>
     </div>
+}
+
+@helper InvestorMenu(WebViewPage page) {
+	<li><a href="Customers#addInvestor" title="Create new">
+			<i class="fa-stack">
+				<i class="fa fa-file-o fa-stack-1x"></i>
+				<i class="fa fa-plus fa-stack-1x" style="font-size: 10px"></i>
+			</i>
+			<span class="create-new-investor">&nbsp;Create new</span>
+		</a>
+	</li>
+	<li><a href="Customers#manageInvestor" title="Manage"><i class="fa fa-cogs"></i><span>&nbsp;Manage</span></a></li>
+	<li><a href="Customers#configInvestor" title="Config"><i class="fa fa-cog"></i><span>&nbsp;Config</span></a></li>
+	<li><a href="Customers#accountingInvestor" title="Accounting"><i class="fa fa-book"></i><span>&nbsp;Accounting</span></a></li>
+	<li><a href="Customers#portfolioInvestor" title="Portfolio"><i class="fa fa-folder-open-o"></i><span>&nbsp;Portfolio</span></a></li>
+	<li><a href="Customers#statisticsInvestor" title="Statistics"><i class="fa fa-bar-chart"></i><span>&nbsp;Statistics</span></a></li>
 }
 
 @helper SubMenu(WebViewPage page)

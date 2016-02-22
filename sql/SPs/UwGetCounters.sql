@@ -37,7 +37,7 @@ BEGIN
 		(
 			(c.CreditResult IS NULL AND wiz.TheLastOne = 1)
 			OR
-			c.CreditResult IN ('Escalated', 'WaitingForDecision', 'ApprovedPending')
+			c.CreditResult IN ('Escalated', 'WaitingForDecision', 'ApprovedPending', 'PendingInvestor')
 		)
 	GROUP BY
 		CASE

@@ -7,8 +7,7 @@
     using System.Text.RegularExpressions;
 
     internal class TestRailDependencies {
-        public static Stream GetDependenciesReport()
-        {
+        public static Stream GetDependenciesReport() {
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             var log = new StringBuilder();
             if (ezbobProject != null) {
@@ -70,7 +69,7 @@
             var dependencies = new List<ulong>();
 
             foreach (var key in TestRailManager.CasesRepository.Keys) {
-                foreach (var caseItem in  TestRailManager.CasesRepository[key]) {
+                foreach (var caseItem in TestRailManager.CasesRepository[key]) {
                     if (caseItem.CustomPreConds != null) {
                         var caseDependencies = GetDependencies(caseItem.CustomPreConds);
                         if (caseDependencies != null) {

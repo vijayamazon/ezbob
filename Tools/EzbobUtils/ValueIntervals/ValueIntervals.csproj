@@ -46,6 +46,8 @@
     <Compile Include="DecimalIntervalEdge.cs" />
     <Compile Include="FreezeInterval.cs" />
     <Compile Include="DateIntervalEdge.cs" />
+    <Compile Include="IntInterval.cs" />
+    <Compile Include="IntIntervalEdge.cs" />
     <Compile Include="IOrdinal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">

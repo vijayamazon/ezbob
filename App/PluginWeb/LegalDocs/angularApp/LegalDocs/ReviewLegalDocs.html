@@ -1,0 +1,44 @@
+﻿<div id="ReviewLegalDocs" style="margin-top: 20px;">
+    <table class="table table-responsive table-bordered table-striped table-hover">
+        <td class="col-md-1">Id</td>
+        <td class="col-md-3">Template Name</td>
+        <td class="col-md-1">Origin</td>
+        <td class="col-md-1">Product</td>
+        <td class="col-md-1">IsApproved</td>
+        <td class="col-md-1">IsReviewed</td>
+        <td class="col-md-1">ReleaseDate</td>
+        <td class="col-md-1">Action</td>
+        <td class="col-md-1">Download</td>
+        <tr ng-repeat="loanAgreementTemplate in GetRepository() track by $index " repeat-done="OnRepeatDone()">
+            <td>{{ loanAgreementTemplate.Id }}</td>
+            <td class="templatenametd col-md-3">{{ GetTemplateName(loanAgreementTemplate.TemplateTypeID) }}</td>
+            <td>{{ GetOrigin(loanAgreementTemplate.OriginID) }}</td>
+            <td>{{ GetProductName(loanAgreementTemplate.ProductID) }}</td>
+            <td>{{ GetBoolString(loanAgreementTemplate.IsApproved) }}</td>
+            <td>{{ GetBoolString(loanAgreementTemplate.IsReviewed) }}</td>
+            <td>{{ GetDate(loanAgreementTemplate.ReleaseDate) }}</td>
+            <td>
+                <div ng-if="loanAgreementTemplate.IsReviewed == true">
+                    <div ng-if="loanAgreementTemplate.IsApproved == true">
+                        <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnEdit($event)" data-toggle="tooltip" data-title="Edit" class="LegalDocsIcon cursor-pointer fa fa-pencil"></span>
+                    </div>
+                    <div ng-if="loanAgreementTemplate.IsApproved == false">
+                        <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnEdit($event)" data-toggle="tooltip" data-title="Edit" class="LegalDocsIcon cursor-pointer fa fa-pencil"></span>
+                        <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDelete($event)" data-toggle="tooltip" data-title="Remove" style="margin-left:10px;" class="LegalDocsIcon cursor-pointer fa fa-times"></span>
+                    </div>
+                </div>
+                <div ng-if="loanAgreementTemplate.IsApproved == false && loanAgreementTemplate.IsReviewed == false">
+                    <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnEdit($event)" data-toggle="tooltip" data-title="Edit" class="LegalDocsIcon cursor-pointer fa fa-pencil"></span>
+                    <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDelete($event)" data-toggle="tooltip" data-title="Remove" class="LegalDocsIcon cursor-pointer fa fa-times"></span>
+                    <span data-id="{{loanAgreementTemplate.Id}}" ng-click="OnReview($event)" data-toggle="tooltip" data-title="Review" style="margin-left:10px;" class="LegalDocsIcon cursor-pointer fa fa-eye"></span>
+                </div>
+            </td>
+            <td><a data-toggle="tooltip" data-title="Download" class="fa fa-download" data-id="{{loanAgreementTemplate.Id}}" ng-click="OnDownload($event)" ng-href="{{GetDownloadURl()}}"></a></td>
+    </table>
+    <div style="margin-top: 20px;margin-bottom: 20px;">
+        <span><button ng-click="OnAddDraft($event)" class="btn btn-primary AddTemplate disabled">Add Draft</button></span>
+        <span><button data-trigger="focus" data-toggle="popover" data-content="Draft Changes Saved..." ng-click="OnSave($event)" class="btn btn-primary SaveTemplate disabled">Save</button></span>
+    </div>
+    <textarea style="height: 500px; margin-top: 20px;"></textarea>
+</div>
+

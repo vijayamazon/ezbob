@@ -66,16 +66,35 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
+    <Compile Include="ActionResults\DecisionHistoryResult.cs" />
     <Compile Include="ActionResults\ApplicationInfoResult.cs" />
+    <Compile Include="ActionResults\Investor\LegalDocActionResult.cs" />
+    <Compile Include="ActionResults\LandRegistryActionResult.cs" />
+    <Compile Include="ActionResults\SecurityUserActionResult.cs" />
+    <Compile Include="ActionResults\MessagesListActionResult.cs" />
     <Compile Include="ActionResults\CollectionSnailMailActionResult.cs" />
+    <Compile Include="ActionResults\Investor\LegalDocsActionResult.cs" />
+    <Compile Include="ActionResults\MultiBrandLoanSummaryActionResult.cs" />
+    <Compile Include="ActionResults\PricingScenarioNameListActionResult.cs" />
+    <Compile Include="ActionResults\SetPasswordActionResult.cs" />
+    <Compile Include="ActionResults\Investor\LogicalGlueResult.cs" />
+    <Compile Include="ActionResults\Investor\AccountingDataResult.cs" />
+    <Compile Include="ActionResults\Investor\InvestorActionResult.cs" />
+    <Compile Include="ActionResults\Investor\SchedulerDataResult.cs" />
+    <Compile Include="ActionResults\Investor\TransactionsDataResult.cs" />
+    <Compile Include="ActionResults\Investor\ListInvestorsResult.cs" />
+    <Compile Include="ActionResults\Investor\LoadInvestorContactDetailsResult.cs" />
     <Compile Include="ActionResults\LoanCommissionDefaultsActionResult.cs" />
-    <Compile Include="ActionResults\NewLoanModelActionResult.cs" />
+    <Compile Include="ActionResults\ListNewLoanActionResult.cs" />
+    <Compile Include="ActionResults\NLModelActionResult.cs" />
+    <Compile Include="ActionResults\NLLongActionResult.cs" />
     <Compile Include="ActionResults\ReschedulingActionResult.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
     <Compile Include="ActionResults\AlibabaSaleContractActionResult.cs" />
@@ -111,7 +130,9 @@
     <Compile Include="ActionResults\EsignatureListActionResult.cs" />
     <Compile Include="ActionResults\MarketplacesActionResult.cs" />
     <Compile Include="ActionResults\ElapsedTimeInfoActionResult.cs" />
+    <Compile Include="ActionResults\SlidersDataActionResults.cs" />
     <Compile Include="ActionResults\StringStringMapActionResult.cs" />
+    <Compile Include="ActionResults\UserSignupActionResult.cs" />
     <Compile Include="ActionResults\VatReturnDataActionResult.cs" />
     <Compile Include="ActionResults\VatReturnPeriodsActionResult.cs" />
     <Compile Include="ActionResults\UserLoginActionResult.cs" />
@@ -125,7 +146,11 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
+    <Compile Include="EzServiceImplementation\esi_security.cs" />
+    <Compile Include="EzServiceImplementation\esi_legal_docs.cs" />
     <Compile Include="ExecuteArguments.cs" />
+    <Compile Include="EzServiceImplementation\esi_logicalglue.cs" />
+    <Compile Include="EzServiceImplementation\esi_investor.cs" />
     <Compile Include="EzServiceImplementation\esi_agreement.cs" />
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
@@ -157,11 +182,18 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceLandRegistry.cs" />
+    <Compile Include="IEzServiceSecurity.cs" />
+    <Compile Include="IEzServiceUserManagement.cs" />
+    <Compile Include="IEzServiceInvestor.cs" />
+    <Compile Include="IEzServiceLogicalGlue.cs" />
+    <Compile Include="IEzServiceLegalDocs.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="IEzServiceVatReturn.cs" />
+    <Compile Include="IEzServicePricing.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />
@@ -180,6 +212,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
+      <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
+      <Name>LoanCalculator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
@@ -204,13 +240,13 @@
       <Project>{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC}</Project>
       <Name>EchoSignLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
-      <Name>EzBob.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
       <Name>FraudChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\LogicalGlue\LogicalGlue.csproj">
+      <Project>{8D2C4B94-EB8F-470E-927E-F22B7BEEC42F}</Project>
+      <Name>LogicalGlue</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
@@ -219,6 +255,10 @@
     <ProjectReference Include="..\..\..\Integration\SalesForceLib\SalesForceLib.csproj">
       <Project>{198579CB-CD05-46F6-AFAC-75A982B3216A}</Project>
       <Name>SalesForceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\AutomationVerification\AutomationVerification\AutomationCalculator.csproj">
+      <Project>{D7B3530E-4038-446D-A25A-45D6DF5B6D45}</Project>
+      <Name>AutomationCalculator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

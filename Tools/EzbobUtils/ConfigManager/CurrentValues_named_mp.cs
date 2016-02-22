@@ -92,6 +92,10 @@ namespace ConfigManager {
 			get { return this[Variables.MedalMinOffer]; }
 		}
 
+		public virtual VariableValue MediumLoanAmount {
+			get { return this[Variables.MediumLoanAmount]; }
+		} // MediumLoanAmount
+
 		public virtual VariableValue MinAuthenticationIndexToPassAml {
 			get { return this[Variables.MinAuthenticationIndexToPassAml]; }
 		}
@@ -110,6 +114,14 @@ namespace ConfigManager {
 
 		public virtual VariableValue MinLoanLifetimeMonths {
 			get { return this[Variables.MinLoanLifetimeMonths]; }
+		}
+
+		public virtual VariableValue MonthsSinceFirstLoan {
+			get { return this[Variables.MonthsSinceFirstLoan]; }
+		} // MonthsSinceFirstLoan
+
+		public virtual VariableValue NewLoanRun {
+			get { return this[Variables.NewLoanRun]; }
 		}
 
 		public virtual VariableValue NHibernateEnableProfiler {
@@ -135,7 +147,7 @@ namespace ConfigManager {
 		public virtual VariableValue NumOfInvalidPasswordAttempts {
 			get { return this[Variables.NumOfInvalidPasswordAttempts]; }
 		}
-
+		
 		public virtual VariableValue OfferValidForHours {
 			get { return this[Variables.OfferValidForHours]; }
 		}
@@ -194,6 +206,10 @@ namespace ConfigManager {
 
 		public virtual VariableValue PartialPaymentCharge {
 			get { return this[Variables.PartialPaymentCharge]; }
+		}
+
+		public virtual VariableValue PasswordHashCycleCount {
+			get { return this[Variables.PasswordHashCycleCount]; }
 		}
 
 		public virtual VariableValue PasswordPolicyType {
@@ -324,6 +340,10 @@ namespace ConfigManager {
 			get { return this[Variables.PayPointValidateName]; }
 		}
 
+		public virtual VariableValue PendingInvestorNoficationReciever {
+			get { return this[Variables.PendingInvestorNoficationReciever]; }
+		}
+		
 		public virtual VariableValue PostcodeAnywhereEnabled {
 			get { return this[Variables.PostcodeAnywhereEnabled]; }
 		}

@@ -1,14 +1,10 @@
-﻿@using System
-@using System.Web.Helpers
-@using EZBob.DatabaseLib
-@using EzBob.CommonLib
-@using EzBob.Web.Infrastructure
-@using EZBob.DatabaseLib.Model.Database
+﻿@using EzBob.Web.Infrastructure
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
 @using ServiceClientProxy
 @using ServiceClientProxy.EzServiceReference
 @using StructureMap
+@using CustomerOriginEnum = EZBob.DatabaseLib.Model.Database.CustomerOriginEnum
 @{
 	var controller = (string)ViewContext.RouteData.Values["controller"];
 	var authCookie = Request.IsAuthenticated ? "auth" : "";

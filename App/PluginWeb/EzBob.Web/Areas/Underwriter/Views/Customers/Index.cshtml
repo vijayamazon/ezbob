@@ -148,6 +148,30 @@
                     </table>
                 </div>
             </div>
+			<div class="tab-pane" id="pendingInvestor-grid">
+				<div class="table-responsive table-ezbig">
+					<table class="table grid-data">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Grade</th>
+								<th>Applicant score</th>
+								<th>Approved amount</th>
+								<th>Term</th>
+								<th>Request approved at</th>
+								<th>Time limit until autoreject</th>
+								<th></th>
+								<th></th>
+								<th>Choose investor</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						@Tds(13)
+					</table>
+				</div>
+			</div>
             <div class="tab-pane" id="loans-grid">
                 <div class="table-responsive table-ezbig">
                     <table class="table grid-data">
@@ -371,6 +395,21 @@
                     </table>
                 </div>
             </div>
+			<div class="tab-pane" id="investors-grid">
+				<div class="table-responsive table-ezbig">
+					<table class="table grid-data">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Investor type</th>
+								<th>Company name</th>
+								<th>Reg date</th>
+							</tr>
+						</thead>
+						@Tds(4)
+					</table>
+				</div>
+			</div>
         </div>
     </div>
 </div>
@@ -386,7 +425,6 @@
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
-    Html.RenderPartial("_CustomersPopupTemplate");
     Html.RenderPartial("AutomationSettings/StrategySettings");
     Html.RenderPartial("AutomationSettings/StrategyAutomation");
     Html.RenderPartial("Support/_Support");
@@ -397,6 +435,7 @@
     Html.RenderPartial("../CrossCheck/Zoopla");
     Html.RenderPartial("../CrossCheck/LandRegistryEnquiry");
     Html.RenderPartial("../CrossCheck/LandRegistryEnquiryResults");
+	Html.RenderPartial("../Investor/InvestorMain");
 }
 
 @ChangeAddress.Render(this, Url.Action("ChangeAddress", "CrossCheck", new { Area = "Underwriter"}))

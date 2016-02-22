@@ -2,11 +2,11 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 
 	public class BrokerLeadCheckToken : BrokerLeadCanFillWizard {
-
-		public BrokerLeadCheckToken(string sToken) : base(0, "", "") {
-			m_sToken = sToken;
+		public BrokerLeadCheckToken(string sToken) {
+			this.token = sToken;
 		} // constructor
 
 		public override string Name {
@@ -17,33 +17,28 @@
 			ResultRow = null;
 
 			StoredProc = new SpBrokerLeadCheckToken(DB, Log) {
-				Token = new Guid(m_sToken),
+				Token = new Guid(this.token),
 			};
 		} // Init
 
-		private readonly string m_sToken;
+		private readonly string token;
 
-		private class SpBrokerLeadCheckToken : AStoredProcedure {
-
-			public SpBrokerLeadCheckToken(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+		private class SpBrokerLeadCheckToken : AStoredProc {
+			public SpBrokerLeadCheckToken(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {}
 
 			public override bool HasValidParameters() {
-				return (Token != null) && (Token != Guid.Empty);
+				return (Token != Guid.Empty);
 			} // HasValidParameters
 
-			public Guid Token { get; set; } // Token
+			[UsedImplicitly]
+			public Guid Token { get; set; }
 
-			public DateTime DateDeleted //don't delete
-			{
+			[UsedImplicitly]
+			public DateTime DateDeleted {
 				get { return DateTime.UtcNow; }
-				set { } // keep it here
+				// ReSharper disable once ValueParameterNotUsed
+				set { }
 			} // DateDeleted
-
-			protected override string GetName() {
-				return "BrokerLeadCheckToken";
-			} // GetName
-
 		} // class SpBrokerLeadCheckToken
-
 	} // class BrokerLeadCheckToken
 } // namespace Ezbob.Backend.Strategies.Broker

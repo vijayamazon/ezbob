@@ -169,7 +169,7 @@ EzBob.LoanModel = Backbone.Model.extend({
 
 	toJSON: function() {
 		var r = EzBob.LoanModel.__super__.toJSON.call(this);
-		r.Items = r.Items.toJSON();
+		//r.Items = r.Items.toJSON();
 		return r;
 	}, // toJSON
 

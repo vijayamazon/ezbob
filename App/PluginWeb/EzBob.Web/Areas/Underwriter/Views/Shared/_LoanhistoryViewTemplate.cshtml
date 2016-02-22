@@ -1,5 +1,6 @@
-﻿@using EZBob.DatabaseLib.Model.Database.Loans
-@using StructureMap
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
 @model dynamic
 
 <script id="loanhistory-view-template" type="text/template">
@@ -21,19 +22,18 @@
     </div>
 </script>
 
-
 <script id="loanhistory-template" type="text/template">
-            @Loans()
-            <div>
-                <label class="checkbox">
-                    <input type="checkbox" class="show-rejections" checked="checked">
-                    Show rejections
-                </label>
-            </div>
-            <div id="offers-conteiner">
-            </div>
+    @Loans()
+    <div>
+        <label class="checkbox">
+            <input type="checkbox" class="show-all-decisions" checked="checked">
+            Show all decisions
+        </label>
+    </div>
+    <div id="offers-container">
+    </div>
 
-            @{Html.RenderPartial("_ExportToExcel");}
+    @{Html.RenderPartial("_ExportToExcel");}
 </script>
 
 @helper Loans()
@@ -47,12 +47,12 @@
                 <th>Date Applied</th>
                 <th>Date closed</th>
                 <th>Outstanding</th>
-                <th>Outstanding<br />
-                    Principal</th>
-                <th>Type</th>
-                <th>DiscountPlan</th>
+                <th>Outstanding<br />principal</th>
+                <th>Loan type</th>
+                <th>Discount plan</th>
                 <th>Status</th>
-                <th>Source</th>
+                <th>Loan source</th>
+				<th>OP</th>
             </tr>
         </thead>
         <%if(typeof loans !== "undefined" && loans !== null && loans.length > 0){
@@ -77,6 +77,7 @@
                 <td><%- loan.DiscountPlan %></td>
                 <td><%- loan.StatusDescription %></td>
                 <td><%- loan.LoanSourceName %></td>
+				<td><%- loan.IsOpenPlatform %></td>
             </tr>
             <%
             sumLoanAmount +=!isNaN(loan.LoanAmount)?loan.LoanAmount:0 ;
@@ -91,49 +92,51 @@
                 <td colspan="2"></td>
                 <td><%- EzBob.formatPounds(sumBalance) %></td>
                 <td><%- EzBob.formatPounds(sumPrincipal) %></td>
-                <td colspan="4"></td>
+                <td colspan="5"></td>
             </tr>
         </tbody>
         <%}%>
     </table>
 }
 
-<script id="offrers-template" type="text/template">
+<script id="offers-history-template" type="text/template">
     <table class="table centered box">
         <thead class="box">
             <tr class="box-title">
+				<th>Id</th>
                 <th>Action</th>
-                <th>Offer</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+				<th>Offer</th>
+                <th>Start date</th>
+                <th>End date</th>
                 <th>Amount</th>
-                <th>Interest Rate</th>
-                <th>Setup Fee</th>
-                <th>Discount Plan</th>
-                <th>Repayment Period</th>
-                <th>Type</th>
-                <th>Source</th>
+                <th>Interest rate</th>
+                <th>Setup fee</th>
+                <th>Discount plan</th>
+                <th>Repayment period</th>
+                <th>Loan type</th>
+                <th>Loan source</th>
+				<th>OP</th>
                 <th>Originator</th>
                 <th>Comments</th>
             </tr>
         </thead>
         <tbody class="box-content">
             <%_.each(offers, function(offer){%>   
-                <% if (offer.UnderwriterDecision === "Approved") {%>
+                <% if (offer.Action === "Approve") {%>
                     @TableRowsOfferApproved()
-            <%} else if (offer.UnderwriterDecision === "Rejected") {%>
-                    @TableRowsOfferReject()
-            <%}%>
+				<%} else {%>
+                    @TableRowsOfferNotApproved()
+				<%}%>
             <%});%>
         </tbody>
     </table>
 </script>
 
 
-@helper TableRowsOfferApproved()
-{
+@helper TableRowsOfferApproved() {
     <tr>
-        <td><%- offer.UnderwriterDecision %></td>
+	    <td><%- offer.Id %></td>
+        <td><%- offer.Action %></td>
         <td class="centered">
             <button data-id="<%=offer.Id%>" class="btn btn-primary btn-mini show-schedule"><i class="fa fa-calendar"></i></button>
         </td>
@@ -146,58 +149,19 @@
         <td><%- offer.RepaymentPeriod %></td>
         <td><%- offer.LoanType %></td>
         <td><%- offer.LoanSourceName %></td>
+		<td><%- offer.IsOpenPlatform %></td>
         <td><%- offer.Originator %></td>
         <td><%- offer.Comments %></td>
     </tr>
 }
 
-@helper TableRowsOfferReject()
-{
+@helper TableRowsOfferNotApproved() {
     <tr>
-        <td><%- offer.UnderwriterDecision %></td>
+		<td><%- offer.Id %></td>
+        <td><%- offer.Action %></td>
         <td class="centered"></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
-        <td colspan="8"></td>
         <td><%- offer.Originator %></td>
-        <td><%- offer.Comments %></td>
+		<td colspan="9"><%- offer.Comments %></td>
     </tr>
-}
-<script id="manualPayment-template" type="text/template">
-    @ManualPayment()
-</script>
-
-@helper ManualPayment()
-{
-    List<string> paymentMethods = ObjectFactory.GetInstance<LoanTransactionMethodRepository>()
-        .GetAll()
-        .Where(x => x.DisplaySort > 0)
-        .OrderBy(x => x.DisplaySort)
-        .Select(x => x.Name)
-        .ToList();
-
-    <input type="hidden" name="loanId" value="<%-loanId%>" />
-    <div class="modal-header">
-        <h3 id="myModalLabel">Manual Payment</h3>
-    </div>
-
-    <div class="modal-body">
-
-        <form id="payment-form" class="form-horizontal" action="/" method="POST">
-            @EzForm.Select("paymentMethod", "Payment method", paymentMethods, "form-control")
-            @EzForm.InputTextUnderwriter(this, "totalSumPaid", "Total sum paid", "")
-            @EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[] { DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
-            @EzForm.InputTextUnderwriter(this, "fees", "Fees", "", "text", isDisabled: true)
-            @EzForm.InputTextUnderwriter(this, "interest", "Interest", "", "text", isDisabled: true)
-            @EzForm.InputTextUnderwriter(this, "principal", "Principal", "", "text", isDisabled: true)
-            @EzForm.CheckBox("sendemail", "Send confirmation email")
-            @EzForm.TextAreaSmall("description", "Description", "", "form-control")
-        </form>
-
-
-    </div>
-    
-    <div class="pull-right">
-        <a href="#" class="btn btn-primary uploadFiles">Upload files</a>
-        <button class="btn btn-primary confirm">OK</button>
-    </div>
 }

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Web;
 	using ConfigManager;
 	using MailApi;
 
@@ -39,7 +40,10 @@
 			var vars = new Dictionary<string, string>
 				{
 					{"CurrentFunds", currentFunds.ToString("N2", CultureInfo.InvariantCulture)},
-					{"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} 
+					{"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} ,
+					{"MachineName", System.Environment.MachineName},
+					{"ServerName", HttpContext.Current != null && HttpContext.Current.Server != null ? HttpContext.Current.Server.MachineName : "" },
+					{"HostName", System.Net.Dns.GetHostName() },
 				};
 
 			var result = mail.Send(vars, CurrentValues.Instance.NotEnoughFundsToAddress, CurrentValues.Instance.NotEnoughFundsTemplateName);

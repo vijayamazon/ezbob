@@ -10,7 +10,6 @@
 	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
@@ -147,7 +146,7 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-			this.cashRequestBuilder.CreateQuickOfferCashRequest(customer);
+			this.cashRequestBuilder.CreateQuickOfferCashRequest(customer, this.context.UserId);
 
 			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
@@ -176,7 +175,7 @@
 			var customer = this.context.Customer;
 			customer.PromoCode = promoCode;
 
-			TypeOfBusiness nBusinessType;
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
 
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
@@ -211,7 +210,7 @@
 			
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 
-			if (nBusinessType != TypeOfBusiness.Entrepreneur && customer.Company != null) {
+			if (nBusinessType != EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur && customer.Company != null) {
 				var directors = customer.Company.Directors.Where(x => !x.IsDeleted);
 				foreach (var director in directors) {
 					try {
@@ -243,7 +242,7 @@
 
             // Data Sharing with Alibaba 0001 - end of step 3
 		    if (customer.IsAlibaba) {
-		        this.serviceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
+		        this.serviceClient.Instance.DataSharing(customer.Id, AlibabaBusinessType.APPLICATION_WS_3, null);
 		    }
 
 		    return Json(new { });
@@ -594,7 +593,7 @@
 		} // UpdateAddresses
 
 		private string ProcessCompanyInfoTemporary(
-			TypeOfBusiness businessType,
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness businessType,
 			bool vatRegistered,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
@@ -605,7 +604,7 @@
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCount,
 			CompanyInfo experianInfo, Customer customer,
-			TypeOfBusiness nBusinessType,
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness nBusinessType,
 			IndustryType eIndustryType
 		) {
 			if (customer.PersonalInfo == null)

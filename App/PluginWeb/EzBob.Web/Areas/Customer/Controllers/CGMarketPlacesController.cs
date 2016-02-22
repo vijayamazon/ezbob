@@ -84,8 +84,7 @@
 				StringActionResult ar = m_oServiceClient.Instance.ValidateAndUpdateLinkedHmrcPassword(
 					new Encrypted(_context.Customer.Id.ToString()),
 					new Encrypted(name),
-					new Encrypted(password),
-					SecurityUtils.Hash(_context.Customer.Id + password + name)
+					new Encrypted(password)
 				);
 
 				return Json(new { success = string.IsNullOrWhiteSpace(ar.Value), error = ar.Value, }, JsonRequestBehavior.AllowGet);

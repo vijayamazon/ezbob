@@ -7,7 +7,6 @@
 	using System.IO;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models.Agreements;
 	using Ezbob.Backend.Models;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -27,7 +26,6 @@
 
 	public class ConcentAgreementHelper : IConcentAgreementHelper
 	{
-		private readonly AgreementsTemplatesProvider _templatesProvider = new AgreementsTemplatesProvider();
 		private readonly AgreementRenderer _agreementRenderer = new AgreementRenderer();
 		private readonly IExperianConsentAgreementRepository _repository;
 		private const string TemlatePath = "\\Areas\\Customer\\Views\\Consent\\";
@@ -71,11 +69,15 @@
 
 		public string GetTemplate()
 		{
-			var templateCommercial = _templatesProvider.GetTemplate(TemlatePath, "Commercial");
-			var templateAgreed = _templatesProvider.GetTemplate(TemlatePath, "Agreed");
+			var templateCommercial = this.GetTemplate(TemlatePath, "Commercial");
+			var templateAgreed = this.GetTemplate(TemlatePath, "Agreed");
 			var template = templateCommercial + templateAgreed;
 			return template;
 		}
+
+        public string GetTemplate(string path, string name) {
+            return File.ReadAllText(string.Format("{0}{1}{2}.cshtml", AppDomain.CurrentDomain.BaseDirectory, path, name));
+        } // GetTemplate
 
 		public void Save(Customer customer, DateTime date)
 		{

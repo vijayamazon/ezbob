@@ -87,6 +87,63 @@ EzBob.DataTables.Helper = {
 			} // switch
 		} // renderDateTime
 
+		function renderTimeFromNow(oData, sAction, oFullSource) {
+			switch (sAction) {
+				case 'display':
+					return EzBob.formatTimeFromNow(oData);
+
+				case 'filter':
+					return oData;
+
+				case 'type':
+					return oData;
+
+				case 'sort':
+					return oData;
+
+				default:
+					return oData;
+			} // switch
+		} // renderTimeSpanToAutoReject
+		
+		function renderDateTimeDelimited(oData, sAction, oFullSource) {
+			switch (sAction) {
+				case 'display':
+					return EzBob.formatDateTimeDelimitedUK(oData);
+
+				case 'filter':
+					return oData + ' ' + EzBob.formatDateTimeUK(oData);
+
+				case 'type':
+					return oData;
+
+				case 'sort':
+					return oData;
+
+				default:
+					return oData;
+			} // switch
+		} // renderDateTimeDelimited
+
+		function renderMonth(oData, sAction, oFullSource) {
+			switch (sAction) {
+				case 'display':
+					return EzBob.formatMonths(oData);
+
+				case 'filter':
+					return oData;
+
+				case 'type':
+					return oData;
+
+				case 'sort':
+					return oData;
+
+				default:
+					return oData;
+			} // switch
+		} // renderMonth
+
 		for (var i = 0; i < aryNames.length; i++) {
 			var sName = aryNames[i];
 
@@ -102,7 +159,7 @@ EzBob.DataTables.Helper = {
 				sName = sName.substr(1);
 			}
 			else if (sName[0] === '$') {
-				sClass = 'numeric';
+				sClass = 'numeric grid-money';
 				sName = sName.substr(1);
 				oRenderFunc = renderMoney;
 			}
@@ -113,13 +170,27 @@ EzBob.DataTables.Helper = {
 			else if (sName[0] === '@') {
 			    sName = sName.substr(1);
 			    oRenderFunc = renderDateTime;
-			} else if (sName[0] === '~') {
+			}
+			else if (sName[0] === '~') {
 			    sName = sName.substr(1);
 			    bVisible = false;
-			} else if (sName[0] === '%') {
+			}
+			else if (sName[0] === '%') {
 			    sClass = 'numeric';
 			    sName = sName.substr(1);
 			    oRenderFunc = renderPercent;
+			}
+			else if (sName[0] === '&') {
+				sName = sName.substr(1);
+				oRenderFunc = renderTimeFromNow;
+			}
+			else if (sName[0] === '*') {
+				sName = sName.substr(1);
+				oRenderFunc = renderDateTimeDelimited;
+			}
+			else if (sName[0] === '!') {
+				sName = sName.substr(1);
+				oRenderFunc = renderMonth;
 			}
 
 			aryResult.push({

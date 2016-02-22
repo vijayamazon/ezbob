@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.LandRegistry" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.LandRegistry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfLandRegistryDB">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LandRegistryDB" nillable="true" type="tns:LandRegistryDB" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLandRegistryDB" nillable="true" type="tns:ArrayOfLandRegistryDB" />
+  <xs:complexType name="LandRegistryDB">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AddressID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="AttachmentPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Owners" nillable="true" type="tns:ArrayOfLandRegistryOwnerDB" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Request" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Response" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResponseType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TitleNumber" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="LandRegistryDB" nillable="true" type="tns:LandRegistryDB" />
+  <xs:complexType name="ArrayOfLandRegistryOwnerDB">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LandRegistryOwnerDB" nillable="true" type="tns:LandRegistryOwnerDB" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLandRegistryOwnerDB" nillable="true" type="tns:ArrayOfLandRegistryOwnerDB" />
+  <xs:complexType name="LandRegistryOwnerDB">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompanyRegistrationNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="LandRegistryId" type="xs:int" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="LandRegistryOwnerDB" nillable="true" type="tns:LandRegistryOwnerDB" />
+</xs:schema>

@@ -445,6 +445,7 @@ string formFieldID = "")
 {
     var val = new HtmlString(inputProp.Value);
     var name = new HtmlString(inputProp.Name);
+    var uiEvent = new HtmlString(inputProp.UiEventControlID);
     <input type="@inputProp.Type"
            @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) { @: name="@name"
                                                        } else { if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
@@ -467,7 +468,7 @@ string formFieldID = "")
                                                                                                                                                                                                                     }
            @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
                                                                                                                                                                                                                     }
-           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
                                                                                                                                                                                                                     }
            @if (inputProp.SpecialAttributes != null)  { 
                foreach (KeyValuePair<string, string> pair in inputProp.SpecialAttributes) {
@@ -822,6 +823,26 @@ string formFieldID = "")
 				<input id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator" />
 			</div>
 		</div>
+}
+
+@helper SelectUnderwriter(string id, string caption, Dictionary<string, string> values, string placeHolder = "", string css = "", int defVal = 0, string defStrVal = "") {
+	var identificator = new HtmlString(id);
+	var i = 0;
+	<div class="form-group">
+		<label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
+		<div class="controls">
+			<select id="@identificator" name="@identificator" class="form-control @css" data-placeholder="@placeHolder">
+				@foreach (var v in values) {
+					if (i == defVal || v.Key == defStrVal) {
+						<option selected="selected" value="@v.Key">@v.Value</option>
+					} else {
+						<option value="@v.Key">@v.Value</option>
+					}
+					i++;
+				}
+			</select>
+		</div>
+	</div>
 }
 
 @helper SelectAdvanced(string id, string caption, Dictionary<string, string> values, string placeHolder = "", string css = "", int defVal = 0, string defStrVal = "")

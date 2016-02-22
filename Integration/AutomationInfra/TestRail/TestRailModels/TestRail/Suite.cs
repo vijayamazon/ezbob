@@ -2,8 +2,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a suite</summary>
-    public class Suite
-    {
+    public class Suite {
         #region Public Properties
         /// <summary>id of the suite</summary>
         public ulong? ID { get; set; }
@@ -24,16 +23,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a suite</summary>
         /// <param name="json">json to parse</param>
         /// <returns>suite corresponding to the json</returns>
-        public static Suite Parse(JObject json)
-        {
+        public static Suite Parse(JObject json) {
             Suite s = new Suite();
             s.ID = (ulong?)json["id"];
             s.Name = (string)json["name"];
@@ -45,8 +42,7 @@
 
         /// <summary>Creates a json object for this class</summary>
         /// <returns>json object that represents this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
             if (!string.IsNullOrWhiteSpace(Description)) { jsonParams.description = Description; }

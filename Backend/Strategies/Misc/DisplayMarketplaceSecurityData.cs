@@ -2,8 +2,10 @@
 	using System;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
-	using Integration.ChannelGrabberConfig;
+	using global::Integration.ChannelGrabberConfig;
 	using YodleeLib.connector;
+
+	using ChaGraConfig = global::Integration.ChannelGrabberConfig.Configuration;
 
 	public class DisplayMarketplaceSecurityData : AStrategy {
 
@@ -16,7 +18,7 @@
 		} // Name
 
 		public override void Execute() {
-			Integration.ChannelGrabberConfig.Configuration oCgCfg = Integration.ChannelGrabberConfig.Configuration.GetInstance(Log);
+			ChaGraConfig oCgCfg = ChaGraConfig.GetInstance(Log);
 
 			m_oStra.Execute();
 

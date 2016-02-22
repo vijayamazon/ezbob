@@ -2,11 +2,12 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 	using JetBrains.Annotations;
 
 	public class BrokerAcceptTerms : AStrategy {
-		public BrokerAcceptTerms(int nTermsID, string sContactEmail) {
-			m_oSp = new SpBrokerAcceptTerms(nTermsID, sContactEmail, DB, Log);
+		public BrokerAcceptTerms(int nTermsID, string sContactEmail, CustomerOriginEnum origin) {
+			m_oSp = new SpBrokerAcceptTerms(nTermsID, sContactEmail, origin, DB, Log);
 		} // constructor
 
 		public override string Name {
@@ -20,8 +21,15 @@
 		private readonly SpBrokerAcceptTerms m_oSp;
 
 		private class SpBrokerAcceptTerms : AStoredProc {
-			public SpBrokerAcceptTerms(int nTermsID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			public SpBrokerAcceptTerms(
+				int nTermsID,
+				string sContactEmail,
+				CustomerOriginEnum origin,
+				AConnection oDB,
+				ASafeLog oLog
+			) : base(oDB, oLog) {
 				TermsID = nTermsID;
+				OriginID = (int)origin;
 				ContactEmail = sContactEmail;
 			} // constructor
 
@@ -36,6 +44,9 @@
 			public string ContactEmail { get; set; }
 
 			[UsedImplicitly]
+			public int OriginID { get; set; }
+
+			[UsedImplicitly]
 			public DateTime Now {
 				get { return DateTime.UtcNow; }
 				// ReSharper disable ValueParameterNotUsed
@@ -43,6 +54,5 @@
 				// ReSharper restore ValueParameterNotUsed
 			} // Now
 		} // class SpBrokerAcceptTerms
-
 	} // class BrokerAcceptTerms
 } // namespace

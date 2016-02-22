@@ -66,6 +66,35 @@
 					view: new EzBob.Underwriter.BrokerProfileView({ el: $('#broker-profile-view'), }),
 					isRendered: false,
 				},
+				addInvestor: {
+					view: new EzBob.Underwriter.AddInvestorView({ el: $('#add-investor-view'), }),
+					isRendered: false,
+				},
+			
+				manageInvestors: {
+				    view: new EzBob.Underwriter.ManageInvestorsView({ el: $('#investors-view'), }),
+				    isRendered: false,
+				},
+				configInvestor: {
+					view: new EzBob.Underwriter.ConfigInvestorView({ el: $('#config-investor-view'), }),
+					isRendered: false,
+				},
+
+				accountingInvestor: {
+					view: new EzBob.Underwriter.AccountingInvestorView({ el: $('#accounting-investor-view'), model: new EzBob.Underwriter.AccountingInvestorModel() }),
+					isRendered: false,
+				},
+
+				portfolioInvestor: {
+					view: new EzBob.Underwriter.PortfolioInvestorView({ el: $('#portfolio-investor-view'), }),
+					isRendered: false,
+				},
+
+				statisticsInvestor: {
+					view: new EzBob.Underwriter.StatisticsInvestorView({ el: $('#statistics-investor-view'), }),
+					isRendered: false,
+				},
+				
 			}; // views
 		}, // initialize
 
@@ -86,13 +115,21 @@
 			'broker/:id/': 'broker',
 			'broker/:id/:section': 'broker',
 			'broker/:id/:section/': 'broker',
+			'addInvestor': 'addInvestor',
+			'manageInvestor': 'manageInvestors',
+	
+			'configInvestor': 'configInvestor',
+			'configInvestor/:id': 'configInvestor',
+			'configInvestor/:id/': 'configInvestor',
+			'accountingInvestor': 'accountingInvestor',
+			'portfolioInvestor': 'portfolioInvestor',
+			'statisticsInvestor': 'statisticsInvestor',
 			'*z': 'customers',
 		}, // routes
 
-		handleRoute: function(sViewName, id, type) {
+		handleRoute: function(sViewName, id, type, forceRender) {
 			var oView = this.views[sViewName];
-
-			if (!oView.isRendered) {
+			if (!oView.isRendered || forceRender) {
 				oView.isRendered = true;
 				oView.view.render();
 				EzBob.handleUserLayoutSetting();
@@ -118,7 +155,6 @@
 			});
 
 			$('[id="liClient"] > a').unbind("click").on('click', function() {
-				console.log('render click customers');
 				a.render();
 				return false;
 			});
@@ -164,6 +200,31 @@
 			this.handleRoute('broker', id, section);
 		}, // broker
 
+		addInvestor: function () {
+			this.handleRoute('addInvestor');
+		},
+
+	
+		manageInvestors: function () {
+		    this.handleRoute('manageInvestors');
+		},
+
+		configInvestor: function (id) {
+			this.handleRoute('configInvestor', id);
+		},
+
+		accountingInvestor: function() {
+			this.handleRoute('accountingInvestor');
+		},
+
+		portfolioInvestor: function() {
+			this.handleRoute('portfolioInvestor');
+		},
+
+		statisticsInvestor: function() {
+			this.handleRoute('statisticsInvestor');
+		},
+
 		hideAll: function() {
 			for (var i in this.views)
 				this.views[i].view.hide();
@@ -174,11 +235,8 @@
 
 	var oRouter = new TUnderwriterRouter();
 
-	oRouter.views.grids.view.router = oRouter;
-
-	oRouter.views.profile.view.router = oRouter;
-
-	oRouter.views.broker.view.router = oRouter;
+	for (var i in oRouter.views)
+		oRouter.views[i].view.router = oRouter;
 
 	Backbone.history.start();
 

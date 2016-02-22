@@ -2,16 +2,8 @@
 	using System;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
-	using Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport;
-	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
-	using Ezbob.Backend.Strategies.AutomationVerification.Recalculate;
-	using Ezbob.Backend.Strategies.Tasks;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
-			return Execute<MaamMedalAndPricing>(null, null, nCustomerCount, nLastCheckedCashRequestID);
-		} // MaamMedalAndPricing
-
 		public ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
 			return Execute<VerifyReapproval>(null, null, nCustomerCount, nLastCheckedCustomerID);
 		} // VerifyReapproval
@@ -35,17 +27,5 @@
 		public ActionMetaData SilentAutomation(int customerID, int underwriterID) {
 			return Execute<SilentAutomation>(customerID, underwriterID, customerID);
 		} // SilentAutomation
-
-		public ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
-			return Execute<TotalMaamMedalAndPricing>(null, null, testMode);
-		} // TotalMaamMedalAndPricing
-
-		public ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime) {
-			return Execute<Bar>(null, null, startTime, endTime);
-		} // BravoAutomationReport
-
-		public ActionMetaData RecalculateAutoRejectOnFirstDecision() {
-			return Execute<RecalculateAutoRejectOnFirstDecision>(null, null);
-		} // RecalculateAutoRejectOnFirstDecision
 	} // class EzServiceImplementation
 } // namespace

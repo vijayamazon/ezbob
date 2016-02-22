@@ -118,6 +118,7 @@
 		public virtual string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
 		public virtual string TypeOfBusinessDescription { get { return TypeOfBusiness.DescriptionAttr(); } }
         public virtual TypeOfBusinessReduced TypeOfBusinessReduced { get { return TypeOfBusiness.Reduce(); } }
+		public virtual bool IsRegulated { get { return TypeOfBusiness.IsRegulated(); } }
 		public virtual IndustryType? IndustryType { get; set; }
 		public virtual string IndustryTypeDescription { get { return IndustryType == null ? null : IndustryType.Value.ToString(); }}
 		public virtual string DaytimePhone { get; set; }
@@ -549,8 +550,7 @@
 		public virtual bool DefaultCardSelectionAllowed { get; set; }
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
-		public virtual IList<LandRegistry> LandRegistries { get; set; }
-
+		
 		public virtual IList<MP_CompanyFilesMetaData> CompanyFiles { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }

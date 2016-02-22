@@ -4,7 +4,9 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 	using EzBob.Web.Areas.Customer.Models;
 	using EzBob.Web.Infrastructure;
@@ -36,10 +38,12 @@
 			this.serviceClient = new ServiceClient();
 		} // constructor
 
+		/// <exception cref="OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue" />.</exception>
+		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[HttpGet]
 		[NoCache]
 		[Transactional]
-		public System.Web.Mvc.ActionResult Callback(
+		public ActionResult Callback(
 			bool valid,
 			string trans_id,
 			string code,
@@ -152,9 +156,18 @@
 
 				return View(TempData.Get<PaymentConfirmationModel>());
 			} // if
+			
+			NL_Payments nlPayment = new NL_Payments() {
+				CreatedByUserID = this.context.UserId,
+				Amount = amount.Value,
+				PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+				PaymentSystemType = NLPaymentSystemTypes.Paypoint
+			};
+
+			log.Debug("Callback: Sending nlPayment: {0} for customer {1}, oldloanId {2}", nlPayment, this.context.UserId, loanId);
 
 			LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
-			PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
+			PaymentResult res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext, null, "payment from customer", null, null, nlPayment);
 
 			SendEmails(loanId, amount.Value, customerContext);
 
@@ -219,7 +232,7 @@
 		} // Callback
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult Error() {
+		public ActionResult Error() {
 			var code = (string)TempData["code"];
 			var message = (string)TempData["message"];
 
@@ -239,13 +252,13 @@
 		} // Error
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult ErrorOfferDate() {
+		public ActionResult ErrorOfferDate() {
 			ViewData["Message"] = "Unfortunately, time of the offer expired! Please apply for a new offer.";
 			return View("ErrorOfferDate");
 		} // ErrorOfferDate
 
 		[NoCache]
-		public System.Web.Mvc.ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
+		public ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
 			try {
 				log.Msg("Payment request for customer id {0}, amount {1}", this.context.Customer.Id, amount);
 
@@ -298,6 +311,7 @@
 			} // try
 		} // Pay
 
+
 		[Transactional]
 		[HttpPost]
 		[Ajax]
@@ -310,6 +324,7 @@
 
 				log.Msg("Payment request for customer id {0}, amount {1}", customer.Id, realAmount);
 
+				// TotalEarlyPayment
 				realAmount = CalculateRealAmount(type, loanId, realAmount);
 
 				if (realAmount < 0)
@@ -324,6 +339,15 @@
 
 				this.paypointApi.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
 
+				NL_Payments nlPayment = new NL_Payments() {
+					CreatedByUserID = this.context.UserId,
+					Amount = realAmount,
+					PaymentMethodID = (int)NLLoanTransactionMethods.CustomerAuto,
+					PaymentSystemType = NLPaymentSystemTypes.Paypoint
+				};
+
+				log.Debug("PayFast: Sending nlPayment: {0} for customer {1}", nlPayment, customer.Id);
+
 				LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
 
 				PaymentResult payFastModel = loanRepaymentFacade.MakePayment(
@@ -336,7 +360,8 @@
 					DateTime.UtcNow,
 					"manual payment from customer",
 					paymentType,
-					"CustomerAuto"
+					"CustomerAuto",
+				   nlPayment
 				);
 
 				payFastModel.CardNo = card.CardNo;
@@ -401,9 +426,9 @@
 				customer.Name,
 				loanId,
 				realAmount,
+				loanOptions == null || loanOptions.EmailSendingAllowed,
 				loan.Balance,
-				loan.Status == LoanStatus.PaidOff,
-				loanOptions == null || loanOptions.EmailSendingAllowed
+				loan.Status == LoanStatus.PaidOff
 			);
 		} // SendEmails
 

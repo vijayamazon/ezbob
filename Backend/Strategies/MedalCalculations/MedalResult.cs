@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text;
 	using AutomationCalculator.Common;
@@ -16,9 +17,29 @@
 		HMRC,
 		Bank,
 		Online,
-	}
+	} // enum TurnoverType
 
 	public class MedalResult {
+		public MedalResult(int customerID, ASafeLog log) {
+			MedalClassification = Medal.NoClassification;
+			MedalType = MedalType.NoMedal;
+			OfferedLoanAmount = 0;
+			TotalScoreNormalized = 0;
+			CustomerId = customerID;
+			this.log = log.Safe();
+			ExceptionDuringCalculation = null;
+			this.wasMismatch = false;
+			this.errors = new List<string>();
+		} // constructor
+
+		public MedalResult(int customerID, ASafeLog log, Exception ex) : this(customerID, log) {
+			ExceptionDuringCalculation = ex;
+		} // constructor
+
+		public MedalResult(int customerID, ASafeLog log, string errorMsg) : this(customerID, log) {
+			AddError(errorMsg);
+		} // constructor
+
 		// Inputs
 		public int CustomerId { get; set; }
 		public DateTime CalculationTime { get; set; }
@@ -174,17 +195,15 @@
 		public decimal TotalScore { get; set; }
 		public decimal TotalScoreNormalized { get; set; }
 		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
-		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 		public int MaxOfferedLoanAmount { get; set; }
+		public Exception ExceptionDuringCalculation { get; set; }
 
-		public MedalResult(int customerID, ASafeLog log) {
-			MedalClassification = Medal.NoClassification;
-			OfferedLoanAmount = 0;
-			TotalScoreNormalized = 0;
-			CustomerId = customerID;
-			this.log = log;
-		} // constructor
+		public string Error { get { return string.Join(" ", FullErrorList); } }
+
+		public bool HasError {
+			get { return (ExceptionDuringCalculation != null) || (this.errors.Count > 0) || this.wasMismatch; }
+		} // HasError
 
 		public static int RoundOfferedAmount(decimal amount) {
 			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
@@ -211,121 +230,130 @@
 			return (NumOfHmrcMps > 0) && (TurnoverType == Ezbob.Backend.Strategies.MedalCalculations.TurnoverType.HMRC);
 		} // UseHmrc
 
-		public bool IsLike(MedalOutputModel other) {
-			return other == null || IsIdentical(other);
-		} // IsLike
+		public void CheckForMatch(MedalOutputModel other) {
+			// Other is null, i.e. it was not calculated, so it is a match.
+			if (other == null) {
+				this.wasMismatch = false;
+				return;
+			} // if
 
-		public bool IsIdentical(MedalOutputModel other) {
-			if (other == null)
-				return false;
+			if (!string.IsNullOrWhiteSpace(other.Error)) {
+				AddError("Error in verification calculation: " + other.Error);
+				return;
+			} // if
 
-			// if NoMedal no need to compare any other field
-			if (MedalType == MedalType.NoMedal && other.MedalType == AutomationCalculator.Common.MedalType.NoMedal)
-				return true;
+			// At this point both are not null and no error reported.
 
-			bool notIdentical =
+			// if NoMedal in both, no need to compare any other field.
+			if ((MedalType == MedalType.NoMedal) && (other.MedalType == AutomationCalculator.Common.MedalType.NoMedal)) {
+				this.wasMismatch = false;
+				return;
+			} // if
+
+			this.wasMismatch =
 				MedalType.ToString() != other.MedalType.ToString() ||
 				Math.Abs(ValueAdded - other.ValueAdded) > 0.001M ||
 				Math.Abs(TotalScore - other.Score * 100) > 0.001M ||
 				Math.Abs(TotalScoreNormalized - other.NormalizedScore) > 0.001M ||
 				MedalClassification.ToString() != other.Medal.ToString() ||
 				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 100; // TODO understand the difference in yodlee calculation and change the allowed diff to 0.01M
+		} // CheckForMatch
 
-			return !notIdentical;
-		} // IsIdentical
-
-		public void SaveToDb(long? cashRequestID, string tag, AConnection db) {
-			try {
-				db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", CustomerId),
-					new QueryParameter("CalculationTime", CalculationTime),
-					new QueryParameter("MedalType", MedalType.ToString()),
-					new QueryParameter("FirstRepaymentDatePassed", FirstRepaymentDatePassed),
-					new QueryParameter("BusinessScore", BusinessScore),
-					new QueryParameter("BusinessScoreWeight", BusinessScoreWeight),
-					new QueryParameter("BusinessScoreGrade", BusinessScoreGrade),
-					new QueryParameter("BusinessScoreScore", BusinessScoreScore),
-					new QueryParameter("FreeCashFlowValue", FreeCashFlowValue),
-					new QueryParameter("FreeCashFlow", FreeCashFlow),
-					new QueryParameter("FreeCashFlowWeight", FreeCashFlowWeight),
-					new QueryParameter("FreeCashFlowGrade", FreeCashFlowGrade),
-					new QueryParameter("FreeCashFlowScore", FreeCashFlowScore),
-					new QueryParameter("HmrcAnnualTurnover", HmrcAnnualTurnover),
-					new QueryParameter("BankAnnualTurnover", BankAnnualTurnover),
-					new QueryParameter("OnlineAnnualTurnover", OnlineAnnualTurnover),
-					new QueryParameter("AnnualTurnover", AnnualTurnover),
-					new QueryParameter("AnnualTurnoverWeight", AnnualTurnoverWeight),
-					new QueryParameter("AnnualTurnoverGrade", AnnualTurnoverGrade),
-					new QueryParameter("AnnualTurnoverScore", AnnualTurnoverScore),
-					new QueryParameter("TangibleEquityValue", TangibleEquityValue),
-					new QueryParameter("TangibleEquity", TangibleEquity),
-					new QueryParameter("TangibleEquityWeight", TangibleEquityWeight),
-					new QueryParameter("TangibleEquityGrade", TangibleEquityGrade),
-					new QueryParameter("TangibleEquityScore", TangibleEquityScore),
-					new QueryParameter("BusinessSeniority", BusinessSeniority.HasValue && BusinessSeniority.Value.Year > 1800 ? BusinessSeniority : null),
-					new QueryParameter("BusinessSeniorityWeight", BusinessSeniorityWeight),
-					new QueryParameter("BusinessSeniorityGrade", BusinessSeniorityGrade),
-					new QueryParameter("BusinessSeniorityScore", BusinessSeniorityScore),
-					new QueryParameter("ConsumerScore", ConsumerScore),
-					new QueryParameter("ConsumerScoreWeight", ConsumerScoreWeight),
-					new QueryParameter("ConsumerScoreGrade", ConsumerScoreGrade),
-					new QueryParameter("ConsumerScoreScore", ConsumerScoreScore),
-					new QueryParameter("NetWorth", NetWorth),
-					new QueryParameter("NetWorthWeight", NetWorthWeight),
-					new QueryParameter("NetWorthGrade", NetWorthGrade),
-					new QueryParameter("NetWorthScore", NetWorthScore),
-					new QueryParameter("MaritalStatus", MaritalStatus.ToString()),
-					new QueryParameter("MaritalStatusWeight", MaritalStatusWeight),
-					new QueryParameter("MaritalStatusGrade", MaritalStatusGrade),
-					new QueryParameter("MaritalStatusScore", MaritalStatusScore),
-					new QueryParameter("NumberOfStores", NumberOfStores),
-					new QueryParameter("NumberOfStoresWeight", NumberOfStoresWeight),
-					new QueryParameter("NumberOfStoresGrade", NumberOfStoresGrade),
-					new QueryParameter("NumberOfStoresScore", NumberOfStoresScore),
-					new QueryParameter("PositiveFeedbacks", PositiveFeedbacks),
-					new QueryParameter("PositiveFeedbacksWeight", PositiveFeedbacksWeight),
-					new QueryParameter("PositiveFeedbacksGrade", PositiveFeedbacksGrade),
-					new QueryParameter("PositiveFeedbacksScore", PositiveFeedbacksScore),
-					new QueryParameter("EzbobSeniority", EzbobSeniority),
-					new QueryParameter("EzbobSeniorityWeight", EzbobSeniorityWeight),
-					new QueryParameter("EzbobSeniorityGrade", EzbobSeniorityGrade),
-					new QueryParameter("EzbobSeniorityScore", EzbobSeniorityScore),
-					new QueryParameter("NumOfLoans", NumOfLoans),
-					new QueryParameter("NumOfLoansWeight", NumOfLoansWeight),
-					new QueryParameter("NumOfLoansGrade", NumOfLoansGrade),
-					new QueryParameter("NumOfLoansScore", NumOfLoansScore),
-					new QueryParameter("NumOfLateRepayments", NumOfLateRepayments),
-					new QueryParameter("NumOfLateRepaymentsWeight", NumOfLateRepaymentsWeight),
-					new QueryParameter("NumOfLateRepaymentsGrade", NumOfLateRepaymentsGrade),
-					new QueryParameter("NumOfLateRepaymentsScore", NumOfLateRepaymentsScore),
-					new QueryParameter("NumOfEarlyRepayments", NumOfEarlyRepayments),
-					new QueryParameter("NumOfEarlyRepaymentsWeight", NumOfEarlyRepaymentsWeight),
-					new QueryParameter("NumOfEarlyRepaymentsGrade", NumOfEarlyRepaymentsGrade),
-					new QueryParameter("NumOfEarlyRepaymentsScore", NumOfEarlyRepaymentsScore),
-					new QueryParameter("ValueAdded", ValueAdded),
-					new QueryParameter("InnerFlowName", TurnoverType == null ? null : TurnoverType.ToString()),
-					new QueryParameter("TotalScore", TotalScore),
-					new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
-					new QueryParameter("Medal", MedalClassification.ToString()),
-					new QueryParameter("Error", Error),
-					new QueryParameter("OfferedLoanAmount", OfferedLoanAmount),
-					new QueryParameter("NumOfHmrcMps", NumOfHmrcMps),
-					new QueryParameter("ZooplaValue", ZooplaValue),
-					new QueryParameter("EarliestHmrcLastUpdateDate", EarliestHmrcLastUpdateDate),
-					new QueryParameter("EarliestYodleeLastUpdateDate", EarliestYodleeLastUpdateDate),
-					new QueryParameter("AmazonPositiveFeedbacks", AmazonPositiveFeedbacks),
-					new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
-					new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
-					new QueryParameter("MortgageBalance", MortgageBalance),
-					new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
-					new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.SafeToFormattedString()),
-					new QueryParameter("Tag", tag),
-					new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount),
-					new QueryParameter("CashRequestID", cashRequestID)
-				);
-			} catch (Exception e) {
-				this.log.Alert(e, "Failed to save primary medal result to DB.");
-			} // try
+		public void SaveToDb(long? cashRequestID, long? nlCashRequestID, string tag, AConnection db) {
+			db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", CustomerId),
+				new QueryParameter("CalculationTime", CalculationTime),
+				new QueryParameter("MedalType", MedalType.ToString()),
+				new QueryParameter("FirstRepaymentDatePassed", FirstRepaymentDatePassed),
+				new QueryParameter("BusinessScore", BusinessScore),
+				new QueryParameter("BusinessScoreWeight", BusinessScoreWeight),
+				new QueryParameter("BusinessScoreGrade", BusinessScoreGrade),
+				new QueryParameter("BusinessScoreScore", BusinessScoreScore),
+				new QueryParameter("FreeCashFlowValue", FreeCashFlowValue),
+				new QueryParameter("FreeCashFlow", FreeCashFlow),
+				new QueryParameter("FreeCashFlowWeight", FreeCashFlowWeight),
+				new QueryParameter("FreeCashFlowGrade", FreeCashFlowGrade),
+				new QueryParameter("FreeCashFlowScore", FreeCashFlowScore),
+				new QueryParameter("HmrcAnnualTurnover", HmrcAnnualTurnover),
+				new QueryParameter("BankAnnualTurnover", BankAnnualTurnover),
+				new QueryParameter("OnlineAnnualTurnover", OnlineAnnualTurnover),
+				new QueryParameter("AnnualTurnover", AnnualTurnover),
+				new QueryParameter("AnnualTurnoverWeight", AnnualTurnoverWeight),
+				new QueryParameter("AnnualTurnoverGrade", AnnualTurnoverGrade),
+				new QueryParameter("AnnualTurnoverScore", AnnualTurnoverScore),
+				new QueryParameter("TangibleEquityValue", TangibleEquityValue),
+				new QueryParameter("TangibleEquity", TangibleEquity),
+				new QueryParameter("TangibleEquityWeight", TangibleEquityWeight),
+				new QueryParameter("TangibleEquityGrade", TangibleEquityGrade),
+				new QueryParameter("TangibleEquityScore", TangibleEquityScore),
+				new QueryParameter(
+					"BusinessSeniority",
+					BusinessSeniority.HasValue && BusinessSeniority.Value.Year > 1800 ? BusinessSeniority : null
+				),
+				new QueryParameter("BusinessSeniorityWeight", BusinessSeniorityWeight),
+				new QueryParameter("BusinessSeniorityGrade", BusinessSeniorityGrade),
+				new QueryParameter("BusinessSeniorityScore", BusinessSeniorityScore),
+				new QueryParameter("ConsumerScore", ConsumerScore),
+				new QueryParameter("ConsumerScoreWeight", ConsumerScoreWeight),
+				new QueryParameter("ConsumerScoreGrade", ConsumerScoreGrade),
+				new QueryParameter("ConsumerScoreScore", ConsumerScoreScore),
+				new QueryParameter("NetWorth", NetWorth),
+				new QueryParameter("NetWorthWeight", NetWorthWeight),
+				new QueryParameter("NetWorthGrade", NetWorthGrade),
+				new QueryParameter("NetWorthScore", NetWorthScore),
+				new QueryParameter("MaritalStatus", MaritalStatus.ToString()),
+				new QueryParameter("MaritalStatusWeight", MaritalStatusWeight),
+				new QueryParameter("MaritalStatusGrade", MaritalStatusGrade),
+				new QueryParameter("MaritalStatusScore", MaritalStatusScore),
+				new QueryParameter("NumberOfStores", NumberOfStores),
+				new QueryParameter("NumberOfStoresWeight", NumberOfStoresWeight),
+				new QueryParameter("NumberOfStoresGrade", NumberOfStoresGrade),
+				new QueryParameter("NumberOfStoresScore", NumberOfStoresScore),
+				new QueryParameter("PositiveFeedbacks", PositiveFeedbacks),
+				new QueryParameter("PositiveFeedbacksWeight", PositiveFeedbacksWeight),
+				new QueryParameter("PositiveFeedbacksGrade", PositiveFeedbacksGrade),
+				new QueryParameter("PositiveFeedbacksScore", PositiveFeedbacksScore),
+				new QueryParameter("EzbobSeniority", EzbobSeniority),
+				new QueryParameter("EzbobSeniorityWeight", EzbobSeniorityWeight),
+				new QueryParameter("EzbobSeniorityGrade", EzbobSeniorityGrade),
+				new QueryParameter("EzbobSeniorityScore", EzbobSeniorityScore),
+				new QueryParameter("NumOfLoans", NumOfLoans),
+				new QueryParameter("NumOfLoansWeight", NumOfLoansWeight),
+				new QueryParameter("NumOfLoansGrade", NumOfLoansGrade),
+				new QueryParameter("NumOfLoansScore", NumOfLoansScore),
+				new QueryParameter("NumOfLateRepayments", NumOfLateRepayments),
+				new QueryParameter("NumOfLateRepaymentsWeight", NumOfLateRepaymentsWeight),
+				new QueryParameter("NumOfLateRepaymentsGrade", NumOfLateRepaymentsGrade),
+				new QueryParameter("NumOfLateRepaymentsScore", NumOfLateRepaymentsScore),
+				new QueryParameter("NumOfEarlyRepayments", NumOfEarlyRepayments),
+				new QueryParameter("NumOfEarlyRepaymentsWeight", NumOfEarlyRepaymentsWeight),
+				new QueryParameter("NumOfEarlyRepaymentsGrade", NumOfEarlyRepaymentsGrade),
+				new QueryParameter("NumOfEarlyRepaymentsScore", NumOfEarlyRepaymentsScore),
+				new QueryParameter("ValueAdded", ValueAdded),
+				new QueryParameter("InnerFlowName", TurnoverType == null ? null : TurnoverType.ToString()),
+				new QueryParameter("TotalScore", TotalScore),
+				new QueryParameter("TotalScoreNormalized", TotalScoreNormalized),
+				new QueryParameter("Medal", MedalClassification.ToString()),
+				new QueryParameter("Error", Error),
+				new QueryParameter("OfferedLoanAmount", OfferedLoanAmount),
+				new QueryParameter("NumOfHmrcMps", NumOfHmrcMps),
+				new QueryParameter("ZooplaValue", ZooplaValue),
+				new QueryParameter("EarliestHmrcLastUpdateDate", EarliestHmrcLastUpdateDate),
+				new QueryParameter("EarliestYodleeLastUpdateDate", EarliestYodleeLastUpdateDate),
+				new QueryParameter("AmazonPositiveFeedbacks", AmazonPositiveFeedbacks),
+				new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
+				new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
+				new QueryParameter("MortgageBalance", MortgageBalance),
+				new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
+				new QueryParameter(
+					"CapOfferByCustomerScoresTable",
+					CapOfferByCustomerScoresTable.SafeToFormattedString()
+				),
+				new QueryParameter("Tag", tag),
+				new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount),
+				new QueryParameter("CashRequestID", cashRequestID),
+				new QueryParameter("NLCashRequestID", nlCashRequestID)
+			);
 		} // SaveToDb
 
 		public override string ToString() {
@@ -508,7 +536,27 @@
 			return sb.ToString();
 		} // ToString
 
+		private void AddError(string errorMsg) {
+			if (!string.IsNullOrWhiteSpace(errorMsg))
+				this.errors.Add(errorMsg.Trim());
+		} // AddError
+
+		private IEnumerable<string> FullErrorList {
+			get {
+				if (ExceptionDuringCalculation != null)
+					yield return "Exception during calculation: " + ExceptionDuringCalculation.Message;
+
+				if (this.wasMismatch)
+					yield return "Mismatch detected.";
+
+				foreach (string s in this.errors)
+					yield return s;
+			} // get
+		} // FullErrorList
+
 		private readonly ASafeLog log;
+		private readonly List<string> errors;
+		private bool wasMismatch;
 	} // class MedalResult
 
 	internal static class StringBuilderExtention {

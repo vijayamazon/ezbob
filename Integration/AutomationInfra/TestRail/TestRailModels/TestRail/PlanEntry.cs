@@ -4,8 +4,7 @@
     using TestRailCore;
 
     /// <summary>stores information about a plan entry</summary>
-    public class PlanEntry
-    {
+    public class PlanEntry {
         #region Public Properties
         /// <summary>Guid of the plan entry</summary>
         public string ID { get; set; }
@@ -35,45 +34,36 @@
         #region Public Methods
         /// <summary>Returns a json Object that represents this class</summary>
         /// <returns>Json object that corresponds to this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (null != SuiteID) { jsonParams.suite_id = SuiteID; }
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
             if (null != AssignedToID) { jsonParams.assignedto_id = AssignedToID.Value; }
 
-            if (null != CaseIDs && 0 < CaseIDs.Count)
-            {
+            if (null != CaseIDs && 0 < CaseIDs.Count) {
                 JArray jarray = new JArray();
-                foreach (ulong caseID in CaseIDs)
-                {
+                foreach (ulong caseID in CaseIDs) {
                     jarray.Add(caseID);
                 }
 
                 jsonParams.include_all = false;
                 jsonParams.case_ids = jarray;
-            }
-            else
-            {
+            } else {
                 jsonParams.include_all = true;
             }
 
-            if (null != ConfigIDs && 0 < ConfigIDs.Count)
-            {
+            if (null != ConfigIDs && 0 < ConfigIDs.Count) {
                 JArray jarray = new JArray();
-                foreach (ulong configID in ConfigIDs)
-                {
+                foreach (ulong configID in ConfigIDs) {
                     jarray.Add(configID);
                 }
 
                 jsonParams.config_ids = jarray;
             }
 
-            if (null != RunList && 0 < RunList.Count)
-            {
+            if (null != RunList && 0 < RunList.Count) {
                 JArray jarray = new JArray();
-                foreach (Run run in RunList)
-                {
+                foreach (Run run in RunList) {
                     jarray.Add(run.GetJson());
                 }
 
@@ -86,8 +76,7 @@
         /// <summary>Parse a json object to a PlanEntry</summary>
         /// <param name="json">json object to parse</param>
         /// <returns>PlanEntry corresponding to a json object</returns>
-        public static PlanEntry Parse(JObject json)
-        {
+        public static PlanEntry Parse(JObject json) {
             PlanEntry pe = new PlanEntry();
             pe.ID = (string)json["id"];
             pe.SuiteID = (ulong?)json["suite_id"];
@@ -99,8 +88,7 @@
             pe.CaseIDs = _ConvertToCaseIDs(json["case_ids"] as JArray);
 
             JArray jarray = json["runs"] as JArray;
-            if (null != jarray)
-            {
+            if (null != jarray) {
                 pe.RunList = JsonUtility.ConvertJArrayToList<Run>(jarray, Run.Parse);
             }
             return pe;
@@ -113,15 +101,11 @@
         /// </summary>
         /// <param name="jarray">json to parse</param>
         /// <returns>a list of run IDs, list of size 0 if none exist</returns>
-        private static List<ulong> _ConvertToRunIDs(JArray jarray)
-        {
+        private static List<ulong> _ConvertToRunIDs(JArray jarray) {
             List<ulong> list = new List<ulong>();
-            if (null != jarray)
-            {
-                foreach (JToken jt in jarray)
-                {
-                    if (null != (ulong?)jt["id"])
-                    {
+            if (null != jarray) {
+                foreach (JToken jt in jarray) {
+                    if (null != (ulong?)jt["id"]) {
                         list.Add((ulong)jt["id"]);
                     }
                 }
@@ -134,13 +118,10 @@
         /// </summary>
         /// <param name="jarray">json to parse</param>
         /// <returns>a list of case IDs, list of size 0 if none exist</returns>
-        private static List<ulong> _ConvertToCaseIDs(JArray jarray)
-        {
+        private static List<ulong> _ConvertToCaseIDs(JArray jarray) {
             List<ulong> list = new List<ulong>();
-            if (null != jarray)
-            {
-                foreach (JValue jsonItem in jarray)
-                {
+            if (null != jarray) {
+                foreach (JValue jsonItem in jarray) {
                     list.Add((ulong)jsonItem);
                 }
             }

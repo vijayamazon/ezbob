@@ -17,7 +17,7 @@
 					Log.Info("Will calculate medal for customer:{0}", customerId);
 
 					try {
-						var instance = new CalculateMedal(customerId, null, DateTime.UtcNow, false, true);
+						var instance = new CalculateMedal(customerId, null, null, DateTime.UtcNow, false, true);
 						instance.Execute();
 					} catch (Exception e) {
 						Log.Error("Exception during medal calculation for customer:{0} The exception:{1}", customerId, e);

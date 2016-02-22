@@ -55,6 +55,8 @@
 			if (this.customers.Any()) {
 				log.Debug("# of potential fraud customers: {0}", this.customers.Count());
 
+				Origin();
+
 				switch (this.mode) {
 				case FraudMode.PersonalDetaisCheck:
 					Personal();
@@ -83,6 +85,54 @@
 
 			return this.fraudDetections;
 		} // Decide
+
+		private class SameCustomer : IEqualityComparer<Customer> {
+			/// <summary>
+			/// Determines whether the specified objects are equal.
+			/// </summary>
+			/// <returns>
+			/// true if the specified objects are equal; otherwise, false.
+			/// </returns>
+			/// <param name="x">The first object of type <paramref name="T"/> to compare.</param>
+			/// <param name="y">The second object of type <paramref name="T"/> to compare.</param>
+			public bool Equals(Customer x, Customer y) {
+				if (x == y)
+					return true;
+
+				return x.Id == y.Id;
+			} // Equals
+
+			/// <summary>
+			/// Returns a hash code for the specified object.
+			/// </summary>
+			/// <returns>
+			/// A hash code for the specified object.
+			/// </returns>
+			/// <param name="obj">The <see cref="T:System.Object"/> for which a hash code is to be returned.</param>
+			/// <exception cref="T:System.ArgumentNullException">The type of <paramref name="obj"/> is a reference type
+			/// and <paramref name="obj"/> is null.</exception>
+			public int GetHashCode(Customer obj) {
+				return obj.Id.GetHashCode();
+			} // GetHashCode
+		} // class SameCustomer
+
+		private void Origin() {
+			string email = this.customer.Name;
+			int originID = this.customer.CustomerOrigin.CustomerOriginID;
+
+			this.fraudDetections.AddRange(this.customers
+				.Where(c => c.Name == email && c.CustomerOrigin.CustomerOriginID != originID)
+				.Distinct(new SameCustomer())
+				.Select(c => Helper.CreateDetection(
+					"Same email, different origins",
+					this.customer,
+					c,
+					"Same email, different origins",
+					null,
+					string.Format("{0}; this {1}, other {2}", email, originID, c.CustomerOrigin.CustomerOriginID)
+				))
+			);
+		} // Origin
 
 		private void Personal() {
 			FirstMiddleLastName();

@@ -19,12 +19,21 @@ BEGIN
 
 	SELECT
 		MpID = m.Id,
-		m.UpdatingEnd
+		m.UpdatingStart,
+		m.UpdatingEnd,
+		mt.Name,
+		LongUpdateTime = CONVERT(BIT, CASE -- eBay, Amazon, Pay Pal
+			WHEN mt.InternalId IN ('A7120CB7-4C93-459B-9901-0E95E7281B59','A4920125-411F-4BB9-A52D-27E8A00D0A3B','3FA5E327-FCFD-483B-BA5A-DC1815747A28')
+				THEN 1
+				ELSE 0
+			END
+		)
 	FROM
 		MP_CustomerMarketplace m
+		INNER JOIN MP_MarketplaceType mt ON m.MarketPlaceId = mt.Id
 	WHERE
 		m.CustomerId = @CustomerID
 		AND
-		m.UpdatingEnd IS NOT NULL
+		m.Disabled = 0
 END
 GO

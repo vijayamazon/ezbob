@@ -31,7 +31,8 @@ BEGIN
 		@ConsumerScore INT,
 		@EarliestHmrcLastUpdateDate DATETIME,
 		@EarliestYodleeLastUpdateDate DATETIME,
-		@LastCashRequestID BIGINT
+		@LastCashRequestID BIGINT,
+		@NLLastCashRequestID BIGINT
 		
 	------------------------------------------------------------------------------
 
@@ -129,16 +130,17 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		@LastCashRequestID = Id
+		@LastCashRequestID = Id,
+		@NLLastCashRequestID = nlcr.CashRequestID
 	FROM
-		CashRequests
+		CashRequests c left join NL_CashRequests nlcr on nlcr.OldCashRequestID = c.Id
 	WHERE
 		IdCustomer = @CustomerId
 		AND
 		CreationDate < @Now
 	ORDER BY
 		CreationDate DESC,
-		Id DESC
+		Id DESC		
 
 	------------------------------------------------------------------------------
 
@@ -151,6 +153,7 @@ BEGIN
 		@ConsumerScore AS ConsumerScore,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
-		@LastCashRequestID AS LastCashRequestID
+		@LastCashRequestID AS LastCashRequestID,
+		@NLLastCashRequestID as NLLastCashRequestID
 END
 GO

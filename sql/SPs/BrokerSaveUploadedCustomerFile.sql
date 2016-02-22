@@ -7,7 +7,8 @@ ALTER PROCEDURE BrokerSaveUploadedCustomerFile
 @RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
 @FileContents VARBINARY(MAX),
-@UploadedTime DATETIME
+@UploadedTime DATETIME,
+@Origin INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -24,6 +25,8 @@ BEGIN
 			Broker b
 		WHERE
 			b.ContactEmail = @ContactEmail
+			AND
+			b.OriginID = @Origin
 
 		IF @BrokerID IS NULL
 			SET @ErrorMsg = 'BrokerID not found by contact email ' + @ContactEmail

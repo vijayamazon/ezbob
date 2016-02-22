@@ -59,11 +59,11 @@
 					ms_oLog.Debug("File {0}: has unsupported content type, ignoring.", i);
 					continue;
 				} // if
-
-				SaveToDisc(CustomerID, oFile.FileName, oFileContents);
+				
+				SaveToDisc(CustomerID, OneUploadLimitation.FixFileName(oFile.FileName), oFileContents);
 
 				var smd = new SheafMetaData {
-					BaseFileName = oFile.FileName,
+					BaseFileName = OneUploadLimitation.FixFileName(oFile.FileName),
 					DataType = DataType.VatReturn,
 					FileType = FileType.Pdf,
 					Thrasher = null

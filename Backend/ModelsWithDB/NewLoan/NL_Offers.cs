@@ -1,17 +1,18 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
+	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using System.Text;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_Offers {
+	public class NL_Offers : AStringable {
 		[PK(true)]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 
 		[FK("NL_Decisions", "DecisionID")]
 		[DataMember]
-		public int DecisionID { get; set; }
+		public long DecisionID { get; set; }
 
 		[FK("LoanType", "Id")]
 		[DataMember]
@@ -54,7 +55,7 @@
 		public string Notes { get; set; }
 
 		[DataMember]
-		public int? InterestOnlyRepaymentCount { get; set; }
+		public int InterestOnlyRepaymentCount { get; set; }
 
 		[FK("NL_DiscountPlans", "DiscountPlanID")]
 		[DataMember]
@@ -62,24 +63,41 @@
 
 		[DataMember]
 		public bool IsLoanTypeSelectionAllowed { get; set; }
-		
+
+		[DataMember]
+		public bool SendEmailNotification { get; set; }
+
 		[DataMember]
 		public bool IsRepaymentPeriodSelectionAllowed { get; set; }
 
 		[DataMember]
 		public bool IsAmountSelectionAllowed { get; set; }
 
+		[FK("I_ProductSubType", "ProductSubTypeID")]
 		[DataMember]
-		public bool SendEmailNotification { get; set; }
+		public int? ProductSubTypeID { get; set; }
 
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(NL_Offers);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
+		// additions 
+		private List<NL_OfferFees> _offerFees = new List<NL_OfferFees>();
+		private List<decimal> _discountPlan =  new List<decimal>();
+	
+		[DataMember]
+		[NonTraversable]
+		public List<NL_OfferFees> OfferFees {
+			get { return this._offerFees; }
+			set { this._offerFees = value; }
 		}
-	}//class NL_Offers
-}//ns
+
+		[DataMember]
+		[NonTraversable]
+		public List<decimal> DiscountPlan {
+			get { return this._discountPlan; }
+			set { this._discountPlan = value; }
+		}
+
+		[DataMember]
+		[NonTraversable]
+		public long LoanLegalID { get; set; }
+	
+	} // class NL_Offers
+} // ns

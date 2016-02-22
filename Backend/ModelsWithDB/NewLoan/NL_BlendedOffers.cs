@@ -1,15 +1,15 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_BlendedOffers {
-        [PK(true)]
-        [DataMember]
-        public int BlendedOfferID { get; set; }
+	[DataContract(IsReference = true)]
+	public class NL_BlendedOffers : AStringable {
+		[PK(true)]
+		[DataMember]
+		public long BlendedOfferID { get; set; }
 
-        [FK("NL_Offers", "OfferID")]
-        [DataMember]
-        public int OfferID { get; set; }
-    }//class NL_BlendedOffers
-}//ns
+		[FK("NL_Offers", "OfferID")]
+		[DataMember]
+		public long OfferID { get; set; }
+	} // class NL_BlendedOffers
+} // ns

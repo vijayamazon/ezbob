@@ -2,7 +2,6 @@
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Models;
-	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
 		public WizardConfigsActionResult GetWizardConfigs() {
@@ -22,13 +21,15 @@
 				return Execute<MainStrategy>(
 					oArgs.CustomerID,
 					underwriterId,
-					underwriterId,
-					oArgs.CustomerID,
-					oArgs.NewCreditLineOption,
-					oArgs.AvoidAutoDecision,
-					oArgs,
-					null,
-					oArgs.CashRequestOriginator
+					new MainStrategyArguments{
+						UnderwriterID = underwriterId,
+						CustomerID = oArgs.CustomerID,
+						NewCreditLine = oArgs.NewCreditLineOption,
+						AvoidAutoDecision = oArgs.AvoidAutoDecision,
+						FinishWizardArgs = oArgs,
+						CashRequestID = null,
+						CashRequestOriginator = oArgs.CashRequestOriginator,
+					}
 				);
 			} // if
 

@@ -2,63 +2,61 @@
 	using Ezbob.Database;
 
 	public class ValidateMobileCode : AStrategy {
-
 		public ValidateMobileCode(string sMobilePhone, string sMobileCode) {
-			m_sMobilePhone = sMobilePhone;
-			m_sMobileCode = sMobileCode;
-
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					m_sSkipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
-					m_sSkipCodeGenerationNumberCode = sr["SkipCodeGenerationNumberCode"];
-
-					return ActionResult.SkipAll;
-				},
-				"GetTwilioConfigs",
-				CommandSpecies.StoredProcedure
-			);
+			this.mobilePhone = sMobilePhone;
+			this.mobileCode = sMobileCode;
+			Transaction = null;
 		} // constructor
 
 		public override string Name {
 			get { return "Validate mobile code"; }
 		} // Name
 
+		public ConnectionWrapper Transaction { get; set; }
+
 		public override void Execute() {
-			if (m_sSkipCodeGenerationNumber == m_sMobilePhone) {
-				m_bIsValidatedSuccessfully = (m_sSkipCodeGenerationNumberCode == m_sMobileCode);
+			var sr = DB.GetFirst(Transaction, "GetTwilioConfigs", CommandSpecies.StoredProcedure);
+
+			if (!sr.IsEmpty) {
+				this.skipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
+				this.skipCodeGenerationNumberCode = sr["SkipCodeGenerationNumberCode"];
+			} // if
+
+			if (this.skipCodeGenerationNumber == this.mobilePhone) {
+				this.isValidatedSuccessfully = (this.skipCodeGenerationNumberCode == this.mobileCode);
 				Log.Info(
 					"'Skip code generation' number detected ({0}), code {1} is {2}.",
-					m_sMobilePhone,
-					m_sMobileCode,
+					this.mobilePhone,
+					this.mobileCode,
 					IsValidatedSuccessfully() ? "valid" : "invalid"
 				);
 				return;
 			} // if
 
-			m_bIsValidatedSuccessfully = DB.ExecuteScalar<bool>(
+			this.isValidatedSuccessfully = DB.ExecuteScalar<bool>(
+				Transaction,
 				"ValidateMobileCode",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("Phone", m_sMobilePhone),
-				new QueryParameter("Code", m_sMobileCode)
+				new QueryParameter("Phone", this.mobilePhone),
+				new QueryParameter("Code", this.mobileCode)
 			);
 
 			Log.Info(
 				"For number {0} the code {1} is {2}.",
-				m_sMobilePhone,
-				m_sMobileCode,
+				this.mobilePhone,
+				this.mobileCode,
 				IsValidatedSuccessfully() ? "valid" : "invalid"
 			);
 		} // Execute
 
 		public bool IsValidatedSuccessfully() {
-			return m_bIsValidatedSuccessfully;
+			return this.isValidatedSuccessfully;
 		} // IsValidatedSuccessfully
 
-		private readonly string m_sMobilePhone;
-		private readonly string m_sMobileCode;
-		private bool m_bIsValidatedSuccessfully;
-		private string m_sSkipCodeGenerationNumber;
-		private string m_sSkipCodeGenerationNumberCode;
-
+		private readonly string mobilePhone;
+		private readonly string mobileCode;
+		private bool isValidatedSuccessfully;
+		private string skipCodeGenerationNumber;
+		private string skipCodeGenerationNumberCode;
 	} // class ValidateMobileCode
 } // namespace

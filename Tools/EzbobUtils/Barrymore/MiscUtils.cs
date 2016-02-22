@@ -1,12 +1,39 @@
 ﻿namespace Ezbob.Utils {
 	using System;
 	using System.Globalization;
+	using Ezbob.Utils.Security;
+	using Newtonsoft.Json;
 
 	public static class MiscUtils {
 
+		public static Tuple<DateTime?, DateTime?> NL_GetLateFeeDates(bool AutoLateFees,
+														   DateTime? StopLateFeeFromDate,
+														   DateTime? StopLateFeeToDate) {
+			if (StopLateFeeFromDate != null)
+				return new Tuple<DateTime?, DateTime?>(StopLateFeeFromDate, StopLateFeeToDate);
+			if (AutoLateFees)
+				return new Tuple<DateTime?, DateTime?>(DateTime.Now, null);
+			return new Tuple<DateTime?, DateTime?>(null, null);
+		}
+
+		public static DateTime? NL_GetStopAutoChargeDate(bool AutoCharge, DateTime? StopAutoChargeDate) {
+			if (StopAutoChargeDate != null)
+				return StopAutoChargeDate;
+			if (AutoCharge)
+				return DateTime.Now;
+			return null;
+		}
+
+		public static JsonSerializerSettings GetJsonDBFormat() {
+			return new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+		}
+
+
 		public static string MD5(string input) {
-			return Security.SecurityUtils.MD5(input);
+			return SecurityUtils.MD5(input);
 		} // MD5
+
+
 
 		public static string ValidateStringArg(
 			string sValue,
@@ -203,7 +230,7 @@
 			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
 
 			bool inTheSameTail =
-				((daysInMonth - calculationDate.Date.Day) < tailLength) &&
+                ((daysInMonth - calculationDate.Date.Day) < tailLength) &&
 				((daysInMonth - lastUpdate.Date.Day) < tailLength) &&
 				(calculationDate.Month == lastUpdate.Month) &&
 				(calculationDate.Year == lastUpdate.Year);
@@ -260,7 +287,6 @@
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
 		} // DateDiffInMonths
 
-	
 
 		/// <summary>
 		/// Calculates difference between to DateTime dates in weeks
@@ -271,5 +297,10 @@
 		public static int DateDiffInWeeks(DateTime start, DateTime end) {
 			return (int)Math.Ceiling(end.Subtract(start).Days / 7d);
 		} // DateDiffInWeeks
+
+		public static int DaysInMonth(DateTime date) {
+			return DateTime.DaysInMonth(date.Year, date.Month);
+		}
+
 	} // class MiscUtils
 } // namespace

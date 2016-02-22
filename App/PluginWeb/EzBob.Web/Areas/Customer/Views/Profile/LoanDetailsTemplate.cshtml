@@ -149,7 +149,7 @@
 			%>
 			<tr>
 				<td>
-					<img style="width: 24px; height: 24px" src='@Url.Content("~/Content/img/payment-to-customer.png")' alt="" />
+					<img style="width: 24px; height: 24px" src='@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/draw-down-icon.svg" : "img/payment-to-customer.png"))' alt="" />
 				</td>
 				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate)  %></td>
 				<td><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
@@ -165,7 +165,7 @@
 			if (transaction.StatusDescription != 'Error') {
 			%>
 			<tr>
-				<td><img height="31" src='@Url.Content("~/Content/img/wizard-mark-completed.png")' alt="" /></td>
+				<td><img height="31" src='@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/repay-complete-icon.svg" : "img/wizard-mark-completed.png"))' alt="" /></td>
 				<td><%- EzBob.formatDateHumanFullUK(transaction.PostDate) %></td>
 				<td><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
 				<td><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
@@ -180,7 +180,7 @@
 			_.each(rollovers, function(rollover, i) {
 			%>
 			<tr>
-				<td><img height="31" src='@Url.Content("~/Content/img/two_arrows.png")' alt="" /></td>
+				<td><img height="31" src='@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/rollover-icon.svg" : "img/two_arrows.png"))' alt="" /></td>
 				<td><%- EzBob.formatDateHumanFullUK(rollover.ExperyDate)  %></td>
 				<td></td>
 				<td></td>
@@ -195,7 +195,7 @@
 			if ( charge.State !== 'Paid' && charge.State !== 'Expired' && charge.IsServiceFee != 'yes' ) {
 			%>
 			<tr>
-				<td><img height="31" src='@Url.Content("~/Content/img/calendarx32.png")' alt="" /></td>
+				<td><img height="31" src='@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/repay-icon.svg" : "img/calendarx32.png"))' alt="" /></td>
 				<td><%- EzBob.formatDateHumanFullUK(charge.Date) %></td>
 				<td></td>
 				<td></td>
@@ -211,7 +211,7 @@
 			if ((item.Status !== 'PaidEarly') && (item.Status !== 'PaidOnTime') && (item.Status !== 'Paid')) {
 			var late = item.Status === 'Late';
 			var styleForLate = late ? "hm_red" : "";
-			var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")";
+			var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/repay-error-icon.svg" : "img/calendar-late.png"))" : "@Url.Content("~/Content/" + (origin == CustomerOriginEnum.everline ? "everline/repay-icon.svg" : "img/calendarx32.png"))";
 
 			%>
 			<tr data-scheduleid="<%- item.Id %>">

@@ -5,37 +5,38 @@
 	using Misc;
 
 	public class BrokerRestorePassword : AStrategy {
-
 		public BrokerRestorePassword(string sMobile, string sCode) {
-			m_sMobile = sMobile;
-			m_sCode = sCode;
+			this.mobilePhoneNumber = sMobile;
+			this.confirmationCode = sCode;
 		} // constructor
 
 		public override string Name { get { return "Broker restore password"; } } // Name
 
 		public override void Execute() {
-			var oValidator = new ValidateMobileCode(m_sMobile, m_sCode);
+			var oValidator = new ValidateMobileCode(this.mobilePhoneNumber, this.confirmationCode);
 			oValidator.Execute();
 			if (!oValidator.IsValidatedSuccessfully())
 				throw new StrategyWarning(this, "Failed to validate mobile code.");
 
 			var sp = new SpBrokerLoadOwnProperties(DB, Log) {
-				ContactMobile = m_sMobile,
+				ContactMobile = this.mobilePhoneNumber,
 			};
 
-			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
+			BrokerProperties props = sp.FillFirst<BrokerProperties>();
 
-			if (oProperties == null || oProperties.BrokerID == 0) {
-				throw new StrategyWarning(this, string.Format("No broker found with this phone number {0}.", m_sMobile));
-			}
+			if ((props == null) || (props.BrokerID == 0)) {
+				throw new StrategyWarning(this, string.Format(
+					"No broker found with this phone number {0}.",
+					this.mobilePhoneNumber
+				));
+			} // if
 
-			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", m_sMobile, oProperties);
+			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", this.mobilePhoneNumber, props);
 
-			new BrokerPasswordRestored(oProperties.BrokerID).Execute();
+			new BrokerPasswordRestored(props.BrokerID).Execute();
 		} // Execute
 
-		private readonly string m_sMobile;
-		private readonly string m_sCode;
-
+		private readonly string mobilePhoneNumber;
+		private readonly string confirmationCode;
 	} // class BrokerRestorePassword
 } // namespace Ezbob.Backend.Strategies.Broker

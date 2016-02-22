@@ -16,18 +16,33 @@ EzBob.Broker.RequestAcceptTermsView = EzBob.Broker.BaseView.extend({
 		var evt = {};
 
 		evt['click #AcceptTermsButton'] = 'submit';
+		evt['click #ReAgreeToTerms'] = 'validate';
 
 		return evt;
 	}, // events
+
+	validate: function() {
+		this.setSomethingEnabled(
+			this.$el.find('#AcceptTermsButton'),
+			!!this.$el.find('#ReAgreeToTerms:checked').length
+		);
+	}, // validate
 
 	render: function() {
 		if (this.terms)
 			this.$el.find('.terms-and-conditions').html(this.terms);
 
+		this.$el.find('#AcceptTermsButton').data(
+			'terms-id',
+			this.$el.find('.TermsIDToAccept').data('terms-id')
+		);
+
 		if (this.termsID)
 			this.$el.find('#AcceptTermsButton').data('terms-id', this.termsID);
 
 		this.$el.find('.subsection-saving').hide().removeClass('hide');
+
+		this.validate();
 
 		EzBob.UiAction.registerView(this);
 	}, // render

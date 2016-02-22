@@ -1,11 +1,22 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions {
-	public abstract class AAutoDecisionBase {
-		public bool WasMismatch { get; protected set; }
+	public abstract class AAutoDecisionBase : IDecisionCheckAgent {
+		public virtual bool WasMismatch {
+			get { return this.wasMismatch; }
+			protected set { this.wasMismatch = value; }
+		} // WasMismatch
+
+		public abstract void MakeAndVerifyDecision();
+
+		public abstract bool WasException { get; }
+
+		public abstract bool AffirmativeDecisionMade { get; }
 
 		protected AAutoDecisionBase() {
 			// To be on the safe side.
 			// In case of mismatch automation is aborted and manual decision should be made.
-			WasMismatch = true;
+			this.wasMismatch = true;
 		} // constructor
+
+		private bool wasMismatch;
 	} // class AAutoDecisionBase
 } // namespace

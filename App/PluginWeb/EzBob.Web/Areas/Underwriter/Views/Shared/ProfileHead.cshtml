@@ -1,125 +1,200 @@
 ﻿@model dynamic
-
-<script id="profile-head-template" type="text/template">
-    <div class="row">
-        <%if(loan){ loan.AutomationOfferModel = loan.AutomationOfferModel || {}; %>
-        <div class="col-md-12 col-lg-6">
-            <div class="box">
-                <div class="box-title">
-                    <h3>Offer</h3>
-                    <div id="controlButtons" class="controlButtons"></div>
-                    <button class="btn btn-mini btn-dashboard" id="OfferEditBtn">Edit <i class="fa fa-pencil"></i></button>
-                    @BoxTools("Offer")
-                </div>
-                <div class="box-content">
-                    <div class="col-md-12 col-lg-12">
-                        <div class="col-md-3 col-lg-3 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%> <span class="ez-automation-offer">(A <%-EzBob.formatPoundsNoDecimals(loan.AutomationOfferModel.Amount)%>)</span></div>
-                            <div class="offer-donut-div">
-                                <canvas id="offer-donut" width="100" height="100"></canvas>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-lg-3 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-EzBob.formatPercents(loan.InterestRate)%> <span class="ez-automation-offer">(A <%-EzBob.formatPercents(loan.AutomationOfferModel.InterestRate)%>)</span></div>
-                            <div class="">APR: <%-loan.Apr%>%</div>
-							<div class="">AIR: <%-EzBob.formatPercents(loan.Air)%></div>
-                            <div class="">Average annual cost: <%-EzBob.formatPercents(loan.RealCost / (loan.RepaymentPeriod / 12))%></div>
-                        </div>
-                        <div class="col-md-2 col-lg-2 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-loan.RepaymentPeriod%> <span class="ez-automation-offer">(A <%-loan.AutomationOfferModel.RepaymentPeriod%>)</span></div>
-                            <div style="text-align: center; margin-top: -10px;">Months</div>
-                            <div class="period-canvas-div">
-                                <canvas id="period-di" width="50" height="70"></canvas>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-lg-4 offer-box">
-                            <div class="ez-bigtext">&nbsp;</div>
-                            <div>Setup fee: <%-EzBob.formatPoundsAsInt(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeeActualPercent)%>)</div>
-                            <div>Broker fee: <%-EzBob.formatPoundsAsInt(loan.BrokerSetupFee)%> (<%-EzBob.formatPercents(loan.BrokerSetupFeeActualPercent)%>)</div>
-                            <div>Total fee: <%-EzBob.formatPoundsAsInt(loan.TotalSetupFee)%> (<%-EzBob.formatPercents(loan.TotalSetupFeePercent)%>)</div>
-                            <div><span class="ez-automation-offer">(A <%-EzBob.formatPoundsAsInt(loan.AutomationOfferModel.SetupFeeAmount)%> (<%-EzBob.formatPercents(loan.AutomationOfferModel.SetupFeePercent)%>))</span></div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-12">
-                        <div class="editOfferDiv hide"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-        <%if(medal){%>
-        <div class="col-lg-3 col-md-6">
-            <div class="box">
-                <div class="box-title">
-                    <h3>Medal</h3>
-                    <h3 class="box-title-collapse" style="display: none;">
-                        <%-medal.MedalType%> <%-medal.Medal%> <%-EzBob.formatPercents(medal.Result)%>
-                    </h3>
-                    <button class="btn btn-mini btn-dashboard" id="RecalculateMedalBtn">Recalculate</button>
-                    @BoxTools("Medal", "#calculator")
-                </div>
-                <div class="box-content">
-                    <div id="medalBar" style="width: 10%; height: 70%; position: absolute"></div>
-                    <div id="medalHistory" style="width: 60%; height: 70%; position: absolute; left: 30px;"></div>
-                    <div style="position: absolute; right: 10px; top: 30%;">
-                        <div style="position: relative;">
-                            <div class="medal-div">
-                                <div><%-medal.MedalType%></div>
-                                <div><%-medal.Medal%></div>
-                                <div><%-EzBob.formatPercents(medal.Result)%></div>
-                            </div>
-                            <canvas id="medalCanvas" width="100" height="100"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-            <%if(m.Alerts){%>
-        <div class="col-lg-3 col-md-6">
-            <div class="box">
-                <div class="box-title">
-                    <h3>Alerts</h3>
-                    <h3 class="box-title-collapse" style="display: none;"><%-m.Alerts.Errors.length%> Error<%-m.Alerts.Errors.length == 1 ? '' : 's'%>, <%-m.Alerts.Warnings.length%> Warning<%-m.Alerts.Warnings.length == 1 ? '' : 's'%>, <%-m.Alerts.Infos.length%> Info<%-m.Alerts.Infos.length == 1 ? '' : 's'%></h3>
-                    @BoxTools("Alerts")
-                </div>
-                <div class="box-content">
-                    <div class="row">
-                        <%_.each(m.Alerts.Errors, function(item) {%>
-                            <div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-                                <span><%-item.Abbreviation%></span>
-                            </div>
-                        <%});%>
-                    </div>
-                    <div class="row">
-                        <%_.each(m.Alerts.Warnings, function(item) {%>
-                            <div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-                                <span><%-item.Abbreviation%></span>
-                            </div>
-                        <%});%>
-                    </div>
-                    <div class="row">
-                        <%_.each(m.Alerts.Infos, function(item) {%>
-                            <div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
-                                <span><%-item.Abbreviation%></span>
-                            </div>
-                        <%});%>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%}%>
-    </div>
+<script id="profile-head-medal-template" type="text/template">
+	<div class="col-lg-3 col-md-6">
+		<div class="box medal-box">
+			<div class="box-title">
+				<ul class="btn-group active">
+					<li class="active"><a href="#medal" class="btn btn-dashboard" data-toggle="tab">Medal</a></li>
+					<li ><a href="#logical-glue" class="btn btn-dashboard" data-toggle="tab">Grade</a></li>
+				</ul>
+				<button class="btn btn-mini btn-dashboard" id="RecalculateMedalBtn">Recalculate</button>
+				@BoxTools("Medal", "#calculator")
+			</div>
+			<div class="box-content">
+				<div class="tab-content">
+					<div class="tab-pane fade active in" id="medal">
+						<div class="">
+							<div id="medalBar" style="width: 10%; height: 70%; position: absolute"></div>
+							<div id="medalHistory" style="width: 60%; height: 70%; position: absolute; left: 30px;"></div>
+							<div style="position: absolute; right: 10px; top: 30%;">
+								<div style="position: relative;">
+									<div class="medal-div">
+										<div><%-medal.MedalType%></div>
+										<div><%-medal.Medal%></div>
+										<div><%-EzBob.formatPercents(medal.Result)%></div>
+									</div>
+									<canvas id="medalCanvas" width="100" height="100"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade in logical-glue" id="logical-glue">
+						@LogicalGlue()
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
-@helper BoxTools(string bugType, string gotoTab = null)
-{
-    <div class="box-tool">
-        @if (!string.IsNullOrEmpty(gotoTab))
-        {
-            <a href="#" data-toggle="tab" class="btn btn-mini btn-primary" onclick="$('a[href=@gotoTab]').click()"><i class="fa fa-ellipsis-h"></i></a>
-        }
-        <a href="#" class="btn btn-mini btn-primary" data-bug-type="@bugType" data-bug-customer="<%-m.Id%>" data-placement="bottom" data-original-title="" title=""><i class="fa fa-bug"></i></a>
-        <a class="collapseall" href="#"><i class="fa fa-chevron-up"></i></a>
-    </div>
+<script id="logical-glue-template" type="text/template">
+	<div class="logical-glue">
+		@LogicalGlue()
+	</div>
+	<div><button id="logical-glue-set-current-btn" class="btn btn-primary">Set as current</button></div>
+</script> 
+
+@helper LogicalGlue() {  
+	<div class="logical-glue-bucket">
+		<span>
+			Bucket
+			<span class="logical-glue-bucket-value"><%-logicalGlue.BucketStr%></span>
+			<%if(!logicalGlue.ScoreIsReliable){%>
+			<span class="logical-glue-error red_cell">The score is not reliable</span>
+			<%}%>
+			<%if(logicalGlue.IsHardReject){%>
+			<span class="logical-glue-error red_cell">Hard reject</span>
+			<%}%>
+			<%if(logicalGlue.Error){%>
+			<span class="logical-glue-error" data-toggle="tooltip" data-title="<%-logicalGlue.Error%>"><i class="fa fa-info-circle"></i></span>
+			<%}%>
+		</span>
+		<div class="logical-glue-bucket-progress progress progress-striped">
+			<div class="bar" style="width: <%- logicalGlue.BucketPercent*100 %>%;"></div>
+		</div>
+	</div>
+	<div>
+		<div class="logical-glue-score">
+			<div>
+				<span>Monthly payment</span>
+			</div>
+			<div>
+				<span><%- EzBob.formatPoundsAsInt(logicalGlue.MonthlyRepayment) %></span>
+			</div>
+		</div>
+		<div class="logical-glue-score">
+			<div>
+				<span>Date</span>
+			</div>
+			<div>
+				<span><%=EzBob.formatDateUK(logicalGlue.Date) || '&nbsp;'%></span>
+			</div>
+		</div>
+		<div class="logical-glue-score alert alert-info">
+			<div>
+				<span>NN</span>
+			</div>
+			<div>
+				<span><%-logicalGlue.NNScore%></span>
+			</div>
+		</div>
+		<div class="logical-glue-score alert alert-info">
+			<div>
+				<span>FL</span>
+			</div>
+			<div>
+				<span><%-logicalGlue.FLScore%></span>
+			</div>
+		</div>
+	</div>
+}
+
+	<script id="profile-head-template" type="text/template">
+		<div class="row">
+			<%if(loan){ loan.AutomationOfferModel = loan.AutomationOfferModel || {}; %>
+			<div class="col-md-12 col-lg-6">
+				<div class="box">
+					<div class="box-title">
+						<h3>Offer</h3>
+						<div id="controlButtons" class="controlButtons"></div>
+						<button class="btn btn-mini btn-dashboard" id="OfferEditBtn">Edit <i class="fa fa-pencil"></i></button>
+						@BoxTools("Offer")
+					</div>
+					<div class="box-content">
+						<div class="col-md-12 col-lg-12">
+							<div class="col-md-3 col-lg-3 right-seperator offer-box">
+								<div class="ez-bigtext"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%> <span class="ez-automation-offer">(A <%-EzBob.formatPoundsNoDecimals(loan.AutomationOfferModel.Amount)%>)</span></div>
+								<div class="offer-donut-div">
+									<canvas id="offer-donut" width="100" height="100"></canvas>
+								</div>
+							</div>
+							<div class="col-md-3 col-lg-3 right-seperator offer-box">
+								<div class="ez-bigtext"><%-EzBob.formatPercents(loan.InterestRate)%> <span class="ez-automation-offer">(A <%-EzBob.formatPercents(loan.AutomationOfferModel.InterestRate)%>)</span></div>
+								<div class="">APR: <%-loan.Apr%>%</div>
+								<div class="">AIR: <%-EzBob.formatPercents(loan.Air)%></div>
+								<div class="">Average annual cost: <%-EzBob.formatPercents(loan.RealCost / (loan.RepaymentPeriod / 12))%></div>
+							</div>
+							<div class="col-md-2 col-lg-2 right-seperator offer-box">
+								<div class="ez-bigtext"><%-loan.RepaymentPeriod%> <span class="ez-automation-offer">(A <%-loan.AutomationOfferModel.RepaymentPeriod%>)</span></div>
+								<div style="text-align: center; margin-top: -10px;">Months</div>
+								<div class="period-canvas-div">
+									<canvas id="period-di" width="50" height="70"></canvas>
+								</div>
+							</div>
+							<div class="col-md-4 col-lg-4 offer-box">
+								<div class="ez-bigtext">&nbsp;</div>
+								<div>Setup fee: <%-EzBob.formatPoundsAsInt(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeeActualPercent)%>)</div>
+								<div>Broker fee: <%-EzBob.formatPoundsAsInt(loan.BrokerSetupFee)%> (<%-EzBob.formatPercents(loan.BrokerSetupFeeActualPercent)%>)</div>
+								<div>Total fee: <%-EzBob.formatPoundsAsInt(loan.TotalSetupFee)%> (<%-EzBob.formatPercents(loan.TotalSetupFeePercent)%>)</div>
+								<div><span class="ez-automation-offer">(A <%-EzBob.formatPoundsAsInt(loan.AutomationOfferModel.SetupFeeAmount)%> (<%-EzBob.formatPercents(loan.AutomationOfferModel.SetupFeePercent)%>))</span></div>
+							</div>
+						</div>
+						<div class="col-md-12 col-lg-12">
+							<div class="editOfferDiv hide"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%}%>
+
+			<div id="medal-wrapper"></div>
+
+			<%if(m.Alerts){%>
+			<div class="col-lg-3 col-md-6">
+				<div class="box">
+					<div class="box-title">
+						<h3>Alerts</h3>
+						<h3 class="box-title-collapse" style="display: none;"><%-m.Alerts.Errors.length%> Error<%-m.Alerts.Errors.length == 1 ? '' : 's'%>, <%-m.Alerts.Warnings.length%> Warning<%-m.Alerts.Warnings.length == 1 ? '' : 's'%>, <%-m.Alerts.Infos.length%> Info<%-m.Alerts.Infos.length == 1 ? '' : 's'%></h3>
+						@BoxTools("Alerts")
+					</div>
+					<div class="box-content">
+						<div class="row">
+							<%_.each(m.Alerts.Errors, function(item) {%>
+							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
+							</div>
+							<%});%>
+						</div>
+						<div class="row">
+							<%_.each(m.Alerts.Warnings, function(item) {%>
+							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
+							</div>
+							<%});%>
+						</div>
+						<div class="row">
+							<%_.each(m.Alerts.Infos, function(item) {%>
+							<div class="col-md-2 alert alert-<%-item.AlertType%> hidden-xs" data-toggle="tooltip" data-title="<%-item.Alert%> <%-item.Tooltip%>">
+								<span><a href="#" data-toggle="tab" class="alert-<%-item.AlertType%>" onclick="$('a[href=#<%- item.Tab%>]').click()"><%-item.Abbreviation%></a></span>
+							</div>
+							<%});%>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%}%>
+		</div>
+
+</script>
+
+	@helper BoxTools(string bugType, string gotoTab = null, bool showBug = true) {
+		<div class="box-tool">
+			@if (!string.IsNullOrEmpty(gotoTab)) {
+				<a href="#" data-toggle="tab" class="btn btn-mini btn-primary" onclick="$('a[href=@gotoTab]').click()"><i class="fa fa-ellipsis-h"></i></a>
+			}
+			@if (showBug) {
+				<a href="#" class="btn btn-mini btn-primary btn-bug" data-bug-type="@bugType" data-bug-customer="<%-m.Id%>" data-placement="bottom" data-original-title="" title=""><i class="fa fa-bug"></i></a>
+			}
+			<a class="collapseall" href="#"><i class="fa fa-chevron-up"></i></a>
+		</div>
 }

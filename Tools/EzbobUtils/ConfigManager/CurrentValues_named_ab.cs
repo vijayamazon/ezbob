@@ -1,5 +1,11 @@
 ﻿namespace ConfigManager {
 	public partial class CurrentValues {
+
+		public virtual VariableValue AccountingBrokersEmail {
+			get { return this[Variables.AccountingBrokersEmail]; }
+		}
+
+
 		public virtual VariableValue AddSageIntervalMinutes {
 			get { return this[Variables.AddSageIntervalMinutes]; }
 		}
@@ -400,9 +406,33 @@
 			get { return this[Variables.BankBasedApprovalSilentToAddress]; }
 		}
 
+		public virtual VariableValue BigLoanAmount {
+			get { return this[Variables.BigLoanAmount]; }
+		} // BigLoanAmount
+
 		public virtual VariableValue BrokerCommissionEnabled {
 			get { return this[Variables.BrokerCommissionEnabled]; }
 		}
+
+		public virtual VariableValue BrokerCommissionBigLoan {
+			get { return this[Variables.BrokerCommissionBigLoan]; }
+		} // BrokerCommissionBigLoan
+
+		public virtual VariableValue BrokerCommissionBigLoanRest {
+			get { return this[Variables.BrokerCommissionBigLoanRest]; }
+		} // BrokerCommissionBigLoanRest
+
+		public virtual VariableValue BrokerCommissionHasLoan {
+			get { return this[Variables.BrokerCommissionHasLoan]; }
+		} // BrokerCommissionHasLoan
+
+		public virtual VariableValue BrokerCommissionMediumLoan {
+			get { return this[Variables.BrokerCommissionMediumLoan]; }
+		} // BrokerCommissionMediumLoan
+
+		public virtual VariableValue BrokerCommissionSmallLoan {
+			get { return this[Variables.BrokerCommissionSmallLoan]; }
+		} // BrokerCommissionSmallLoan
 
 		public virtual VariableValue BrokerForceCaptcha {
 			get { return this[Variables.BrokerForceCaptcha]; }
@@ -463,6 +493,22 @@
 			get { return this[Variables.EzbobTechMailTo]; }
 		}
 		
+
+		public virtual VariableValue NL_AgreementPdfLoanPath1 {
+			get { return this[Variables.NL_AgreementPdfLoanPath1]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfLoanPath2 {
+			get { return this[Variables.NL_AgreementPdfLoanPath2]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfConsentPath1 {
+			get { return this[Variables.NL_AgreementPdfConsentPath1]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfConsentPath2 {
+			get { return this[Variables.NL_AgreementPdfConsentPath2]; }
+		}
 
 	} // class CurrentValues
 } // namespace

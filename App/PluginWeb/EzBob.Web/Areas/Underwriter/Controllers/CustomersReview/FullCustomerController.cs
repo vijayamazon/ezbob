@@ -11,6 +11,8 @@
 	using NHibernate;
 	using System;
 	using Ezbob.Logger;
+	using EzBob.Web.Infrastructure;
+	using ServiceClientProxy;
 
 	public class FullCustomerController : Controller {
 		public FullCustomerController(
@@ -21,8 +23,9 @@
 			CustomerRelationsRepository customerRelationsRepo,
 			IBugRepository bugRepo,
 			LoanRepository loanRepo,
-			PropertiesModelBuilder propertiesModelBuilder
-		) {
+			PropertiesModelBuilder propertiesModelBuilder, 
+			IEzbobWorkplaceContext context, 
+			ServiceClient serviceClient) {
 			this.customerRepo = customerRepo;
 			this.session = session;
 			this.creditBureauModelBuilder = creditBureauModelBuilder;
@@ -31,6 +34,8 @@
 			this.bugRepo = bugRepo;
 			this.loanRepo = loanRepo;
 			this.propertiesModelBuilder = propertiesModelBuilder;
+			this.context = context;
+			this.serviceClient = serviceClient;
 		} // constructor
 
 		[HttpGet]
@@ -58,44 +63,22 @@
 				} // using
 
 				using (tc.AddStep("ApplicationInfoModel Time taken")) {
-					var aiar = new ServiceClientProxy.ServiceClient().Instance.LoadApplicationInfo(
-						0,
-						customer.Id,
-						cr == null ? (long?)null : cr.Id,
-						DateTime.UtcNow
-					);
+					try {
+						var aiar = this.serviceClient.Instance.LoadApplicationInfo(
+							this.context.UserId,
+							customer.Id,
+							cr == null ? (long?)null : cr.Id,
+							DateTime.UtcNow
+							);
 
-					model.ApplicationInfoModel = aiar.Model;
+						model.ApplicationInfoModel = aiar.Model;
+					} catch (Exception ex) {
+						log.Error(ex, "Failed to load application info model for customer {0} cr {1}", customer.Id, cr == null ? (long?)null : cr.Id);
+					}
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))
 					model.CreditBureauModel = this.creditBureauModelBuilder.Create(customer);
-
-				using (tc.AddStep("SummaryModel Time taken"))
-					model.SummaryModel = this.summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
-
-				using (tc.AddStep("MedalCalculations Time taken"))
-					model.MedalCalculations = new MedalCalculators(customer);
-
-				using (tc.AddStep("PropertiesModel Time taken"))
-					model.Properties = this.propertiesModelBuilder.Create(customer);
-
-				using (tc.AddStep("CustomerRelations Time taken")) {
-					var crm = new CustomerRelationsModelBuilder(
-						this.loanRepo,
-						this.customerRelationsRepo,
-						this.session
-					);
-					model.CustomerRelations = crm.Create(customer.Id);
-				} // using
-
-				using (tc.AddStep("Bugs Time taken")) {
-					model.Bugs = this.bugRepo
-						.GetAll()
-						.Where(x => x.Customer.Id == customer.Id)
-						.Select(x => BugModel.ToModel(x))
-						.ToList();
-				} // using
 
 				using (tc.AddStep("CompanyScore Time taken")) {
 					var builder = new CompanyScoreModelBuilder();
@@ -126,6 +109,34 @@
 						);
 				} // using
 
+				using (tc.AddStep("SummaryModel Time taken"))
+					model.SummaryModel = this.summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel, model.CompanyScore);
+
+				using (tc.AddStep("MedalCalculations Time taken"))
+					model.MedalCalculations = new MedalCalculators(customer);
+
+				using (tc.AddStep("PropertiesModel Time taken"))
+					model.Properties = this.propertiesModelBuilder.Create(customer);
+
+				using (tc.AddStep("CustomerRelations Time taken")) {
+					var crm = new CustomerRelationsModelBuilder(
+						this.loanRepo,
+						this.customerRelationsRepo,
+						this.session
+					);
+					model.CustomerRelations = crm.Create(customer.Id);
+				} // using
+
+				using (tc.AddStep("Bugs Time taken")) {
+					model.Bugs = this.bugRepo
+						.GetAll()
+						.Where(x => x.Customer.Id == customer.Id)
+						.Select(x => BugModel.ToModel(x))
+						.ToList();
+				} // using
+
+
+
 				using (tc.AddStep("ExperianDirectors Time taken")) {
 					var expDirModel = CrossCheckModel.GetExperianDirectors(customer);
 					model.ExperianDirectors = expDirModel.DirectorNames;
@@ -151,7 +162,8 @@
 		private readonly PropertiesModelBuilder propertiesModelBuilder;
 		private readonly LoanRepository loanRepo;
 		private readonly IBugRepository bugRepo;
-
+		private readonly IEzbobWorkplaceContext context;
+		private readonly ServiceClientProxy.ServiceClient serviceClient;
 		private static readonly ASafeLog log = new SafeILog(typeof(FullCustomerController));
 	} // class FullCustomerController
 } // namespace

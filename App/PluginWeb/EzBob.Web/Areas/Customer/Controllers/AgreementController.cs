@@ -1,70 +1,68 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-	using System;
-	using System.Web.Mvc;
-	using StructureMap;
-	using EZBob.DatabaseLib;
-	using CommonLib;
-	using Code;
-	using Infrastructure;
-	using EzBob.Models.Agreements;
-	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Loans;
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using Ezbob.Backend.ModelsWithDB.LegalDocs;
+    using Ezbob.Logger;
+    using EzBob.CommonLib;
+    using EzBob.Web.Code;
+    using EzBob.Web.Infrastructure;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Model.Database;
+    using log4net;
+    using ServiceClientProxy;
+    using StructureMap;
 
     public class AgreementController : Controller {
 		public AgreementController(
 			AgreementRenderer agreementRenderer,
 			IEzbobWorkplaceContext context,
 			AgreementsModelBuilder builder,
-			AgreementsTemplatesProvider templates,
 			LoanBuilder loanBuilder
 		) {
-			_agreementRenderer = agreementRenderer;
-			_context = context;
-			_builder = builder;
-			_templates = templates;
-			_customer = _context.Customer;
-			_loanBuilder = loanBuilder;
-		} // constructor
+			this.agreementRenderer = agreementRenderer;
+			this.context = context;
+			this.builder = builder;
+			this.customer = this.context.Customer;
+			this.loanBuilder = loanBuilder;
+            this.serviceClient = new ServiceClient();
+		}// constructor
 
-		public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod, bool isAlibaba, bool isEverline) {
-			var oLog = new SafeILog(log4net.LogManager.GetLogger(GetType()));
+		public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod) {
+			var oLog = new SafeILog(LogManager.GetLogger(GetType()));
 
-			oLog.Info("Download agreement: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}, isAlibaba = {4}, isEverline = {5}", amount, viewName, loanType, repaymentPeriod, isAlibaba, isEverline);
+			oLog.Info("Download agreement: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);
 
-			string file;
+			var lastCashRequest = this.customer.LastCashRequest;
 
-			
-
-			var lastCashRequest = _customer.LastCashRequest;
-
-			if (_customer.IsLoanTypeSelectionAllowed == 1) {
+			if (this.customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				lastCashRequest.RepaymentPeriod = repaymentPeriod;
 				lastCashRequest.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
 			} // if
 
-			var loan = _loanBuilder.CreateLoan(lastCashRequest, amount, DateTime.UtcNow);
+			var loan = this.loanBuilder.CreateLoan(lastCashRequest, amount, DateTime.UtcNow);
 
-			var model = _builder.Build(_customer, amount, loan);
+			var model = this.builder.Build(this.customer, amount, loan);
 
-            try {
-                LoanAgreementTemplateType loanAgreementTemplateType = (LoanAgreementTemplateType)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Loans.LoanAgreementTemplateType), viewName);
-                var path = _templates.GetTemplatePath(loanAgreementTemplateType, isEverline, isAlibaba, model.IsEverlineRefinanceLoan);
-                file = _templates.GetTemplateByName(path);
-            } catch (Exception e) {
-                oLog.Debug(e, "Agreement template not found: amount = {0}, view = {1}, loan type = {2}, repayment period = {3}", amount, viewName, loanType, repaymentPeriod);
-                return RedirectToAction("NotFound", "Error", new { Area = "" });
-            } // try
+            var productSubTypeID = loan.CashRequest.ProductSubTypeID;
+            var originId = loan.CashRequest.Customer.CustomerOrigin.CustomerOriginID;
+		    var isRegulated = this.customer.PersonalInfo.TypeOfBusiness.IsRegulated();
 
-			var pdf = _agreementRenderer.RenderAgreementToPdf(file, model);
-			return File(pdf, "application/pdf", viewName + " Summary_" + DateTime.Now + ".pdf");
+            LoanAgreementTemplate loanAgreementTemplate = this.serviceClient.Instance.GetLegalDocs(this.customer.Id, this.context.UserId, originId, isRegulated, productSubTypeID ?? 0).LoanAgreementTemplates.FirstOrDefault(x => x.TemplateTypeName == viewName);
+		    if (loanAgreementTemplate != null) {
+		        var template = loanAgreementTemplate.Template;
+                var pdf = this.agreementRenderer.RenderAgreementToPdf(template, model);
+                return File(pdf, "application/pdf", viewName + " Summary_" + DateTime.Now + ".pdf");
+		    }
+		    return null;
 		} // Download
 
-		private readonly AgreementRenderer _agreementRenderer;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly AgreementsModelBuilder _builder;
-		private readonly AgreementsTemplatesProvider _templates;
-		private readonly LoanBuilder _loanBuilder;
-		private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
-	} // class AgreementController
+		private readonly AgreementRenderer agreementRenderer;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly AgreementsModelBuilder builder;
+        private readonly LoanBuilder loanBuilder;
+		private readonly Customer customer;
+        private readonly ServiceClient serviceClient;
+    } // class AgreementController
 } // namespace

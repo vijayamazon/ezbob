@@ -792,3 +792,42 @@ blockquote {
   padding-top:3px;
   vertical-align: top;   
  }
+ /*broker fill wizard*/
+
+ .broker-finish-wizard-later {
+    text-align: left;
+    background-image: url(../img/service-portfolio.png);
+    background-size: 64px 52px;
+    background-position: 20px center;
+    background-repeat: no-repeat;
+    padding: 30px 0;
+    border: 1px solid #E2E3E5;
+    max-width: 1000px;
+    margin: 10px auto;
+}
+
+.broker-finish-inner {
+    padding-left: 100px;
+    padding-right: 30px;
+}
+
+.broker-finish-wizard-later .button-container {
+    position: relative;
+}
+
+.broker-finish-wizard-later .button-container button {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+ .broker-finish-wizard-later .broker-finish-inner {
+     width:80%;
+ }
+
+
+ /*confirmation dialog*/
+ .confirmationDialog.ui-dialog .ui-dialog-content {
+     padding:20px;
+     font-size:16px;
+ }

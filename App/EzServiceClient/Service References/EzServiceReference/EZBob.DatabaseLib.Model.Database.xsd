@@ -1,6 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:simpleType name="CustomerOriginEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ezbob">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="everline">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="alibaba">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CustomerOriginEnum" nillable="true" type="tns:CustomerOriginEnum" />
   <xs:simpleType name="CashRequestOriginator">
     <xs:restriction base="xs:string">
       <xs:enumeration value="FinishedWizard">
@@ -113,6 +139,17 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ExperianServiceType" nillable="true" type="tns:ExperianServiceType" />
+  <xs:simpleType name="TypeOfBusiness">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Entrepreneur" />
+      <xs:enumeration value="LLP" />
+      <xs:enumeration value="PShip3P" />
+      <xs:enumeration value="PShip" />
+      <xs:enumeration value="SoleTrader" />
+      <xs:enumeration value="Limited" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TypeOfBusiness" nillable="true" type="tns:TypeOfBusiness" />
   <xs:simpleType name="CreditResultStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="WaitingForDecision" />
@@ -127,17 +164,8 @@
       <xs:enumeration value="PaidOff" />
       <xs:enumeration value="WrittenOff" />
       <xs:enumeration value="Late" />
+      <xs:enumeration value="PendingInvestor" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="CreditResultStatus" nillable="true" type="tns:CreditResultStatus" />
-  <xs:simpleType name="Medal">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="NoClassification" />
-      <xs:enumeration value="Silver" />
-      <xs:enumeration value="Gold" />
-      <xs:enumeration value="Platinum" />
-      <xs:enumeration value="Diamond" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="Medal" nillable="true" type="tns:Medal" />
 </xs:schema>

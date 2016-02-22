@@ -93,6 +93,7 @@
 			var addActivityStrategy = new AddActivity(message.UserId, new ActivityModel {
 				Description = string.Format("Received SMS: {0}", message.Body),
 				Email = customerData.Mail,
+				Origin = customerData.Origin,
 				StartDate = DateTime.UtcNow,
 				EndDate = DateTime.UtcNow,
 				IsOpportunity = false,

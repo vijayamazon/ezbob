@@ -8,7 +8,7 @@ EzBob.Underwriter.BankAccountDetailsView = Backbone.Marionette.ItemView.extend({
 		return {
 			modal: true,
 			resizable: false,
-			title: "Bank Account Details",
+			title: "Bank account details",
 			position: "center",
 			draggable: false,
 			dialogClass: "bank-account-details-popup",

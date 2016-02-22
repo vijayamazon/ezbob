@@ -2,9 +2,9 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
-
 		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst) {
 			return Execute<ApprovedUser>(customerId, userId, customerId, loanAmount, nValidHours, isFirst);
 		} // ApprovedUser
@@ -74,7 +74,7 @@
 		} // TransferCashFailed
 
 		public ActionMetaData VipRequest(int customerId, string fullname, string email, string phone) {
-			return Execute<VipRequest>(customerId, null, customerId, fullname, email, phone);
+			return Execute<Ezbob.Backend.Strategies.MailStrategies.VipRequest>(customerId, null, customerId, fullname, email, phone);
 		} // TransferCashFailed
 
 		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID) {
@@ -89,17 +89,12 @@
 			return Execute<EmailHmrcParsingErrors>(nCustomerID, null, nCustomerID, nCustomerMarketplaceID, oErrorsToEmail);
 		} // EmailHmrcParsingErrors
 
-		public ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) {
-			return ExecuteSync<BrokerLeadSendInvitation>(null, null, nLeadID, sBrokerContactEmail);
+		public ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail, CustomerOriginEnum origin) {
+			return ExecuteSync<BrokerLeadSendInvitation>(null, null, nLeadID, sBrokerContactEmail, origin);
 		} // BrokerLeadSendInvitation
-
-
-		public ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount) {
-			return Execute<SendEverlineRefinanceMails>(customerId, customerId, customerId, customerName, now, loanAmount, transferedAmount);
-		}
 
 		public ActionMetaData CustomerBankAccountIsAlreadyAddedEmail(int customerID) {
 			return Execute<CustomerBankAccountIsAlreadyAddedEmail>(customerID, customerID, customerID);
-		}
+		} // CustomerBankAccountIsAlreadyAddedEmail
 	} // class EzServiceImplementation
 } // namespace EzService

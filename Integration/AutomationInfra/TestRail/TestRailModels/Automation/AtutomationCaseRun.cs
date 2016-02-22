@@ -5,11 +5,10 @@
 
     /// <summary>stores information about a case</summary>
     [Serializable]
-    public class AtutomationCaseRun 
-    {
+    public class AtutomationCaseRun {
         public ulong RunId { get; set; }
         public Case CaseBase { get; set; }
-        public ulong SuiteId { get; set; }        
+        public ulong SuiteId { get; set; }
         public AutomationModels.Browser Browser { get; set; }
         public AutomationModels.Brand Brand { get; set; }
         public AutomationModels.Environment Environment { get; set; }
@@ -17,5 +16,5 @@
         public List<ulong> IncludedIn { get; set; }
     }
 
-    }
+}
 

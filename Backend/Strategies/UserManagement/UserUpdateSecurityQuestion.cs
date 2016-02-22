@@ -1,32 +1,35 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
+	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class UserUpdateSecurityQuestion : AStrategy {
-
 		public UserUpdateSecurityQuestion(
-			string sEmail,
-			Password oPassword,
-			int nQuestionID,
-			string sAnswer
+			string email,
+			CustomerOriginEnum? origin,
+			DasKennwort password,
+			int questionID,
+			string answer
 		) {
 			ErrorMessage = null;
 
-			m_oData = new UserSecurityData(this) {
-				Email = sEmail,
-				OldPassword = oPassword.Primary,
-				PasswordQuestion = nQuestionID,
-				PasswordAnswer = sAnswer,
+			this.securityData = new UserSecurityData(this) {
+				Email = email,
+				OldPassword = password.Decrypt(),
+				PasswordQuestion = questionID,
+				PasswordAnswer = answer,
 			};
 
-			m_oSpLoad = new UserDataForLogin(DB, Log) {
-				Email = sEmail,
+			this.spLoad = new UserDataForLogin(DB, Log) {
+				Email = email,
+				OriginID = (origin == null) ? (int?)null : (int)origin.Value,
 			};
 
-			m_oSpUpdate = new SpUserUpdateSecurityQuestion(DB, Log) {
-				QuestionID = nQuestionID,
-				Answer = sAnswer,
+			this.spUpdate = new SpUserUpdateSecurityQuestion(DB, Log) {
+				QuestionID = questionID,
+				Answer = answer,
 			};
 		} // constructor
 
@@ -39,43 +42,74 @@
 		public override void Execute() {
 			ErrorMessage = null;
 
-			Log.Debug("User '{0}' tries to change security question...", m_oData.Email);
+			string userDisplay = string.Format("{0} with origin {1}", this.securityData.Email, this.spLoad.OriginID);
 
-			m_oData.ValidateEmail();
-			m_oData.ValidateOldPassword();
+			Log.Debug("User '{0}' tries to change security question...", userDisplay);
 
-			var oUser = m_oSpLoad.FillFirst<UserDataForLogin.Result>();
+			this.securityData.ValidateEmail();
+			this.securityData.ValidateOldPassword();
 
-			Log.Debug("User '{0}': data for check is {1}.", m_oData.Email, oUser);
+			var oUser = this.spLoad.FillFirst<UserDataForLogin.Result>();
 
-			if (oUser.Email != m_oData.Email) {
-				Log.Debug("User '{0}' not found.", m_oData.Email);
+			Log.Debug("User '{0}': data for check is {1}.", userDisplay, oUser);
+
+			if (oUser.Email != this.securityData.Email) {
+				Log.Debug("User '{0}' not found.", userDisplay);
 				ErrorMessage = "User not found.";
 				return;
 			} // if
 
-			m_oSpUpdate.UserID = oUser.UserID;
+			this.spUpdate.UserID = oUser.UserID;
 
-			if (!oUser.IsPasswordValid(m_oData.OldPassword)) {
-				Log.Debug("User '{0}' has supplied incorrect password.", m_oData.Email);
+			if (!oUser.IsPasswordValid(this.securityData.OldPassword)) {
+				Log.Debug("User '{0}' has supplied incorrect password.", userDisplay);
 				ErrorMessage = "Incorrect password.";
 				return;
 			} // if
 
-			ErrorMessage = m_oSpUpdate.ExecuteScalar<string>();
+			if (oUser.RenewStoredPassword == null) {
+				this.spUpdate.EzPassword = null;
+				this.spUpdate.Salt = null;
+				this.spUpdate.CycleCount = null;
+			} else {
+				this.spUpdate.EzPassword = oUser.RenewStoredPassword.Password;
+				this.spUpdate.Salt = oUser.RenewStoredPassword.Salt;
+				this.spUpdate.CycleCount = oUser.RenewStoredPassword.CycleCount;
+			} // if
 
-			Log.Debug("User '{0}' security question has{1} been changed.", m_oData.Email, string.IsNullOrWhiteSpace(ErrorMessage) ? "" : " NOT");
+			ErrorMessage = this.spUpdate.ExecuteScalar<string>();
+
+			Log.Debug(
+				"User '{0}' security question has{1} been changed.",
+				userDisplay,
+				string.IsNullOrWhiteSpace(ErrorMessage) ? "" : " NOT"
+			);
 		} // Execute
 
-		private readonly UserSecurityData m_oData;
-		private readonly UserDataForLogin m_oSpLoad;
-		private readonly SpUserUpdateSecurityQuestion m_oSpUpdate;
+		private readonly UserSecurityData securityData;
+		private readonly UserDataForLogin spLoad;
+		private readonly SpUserUpdateSecurityQuestion spUpdate;
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		private class SpUserUpdateSecurityQuestion : AStoredProc {
 			public SpUserUpdateSecurityQuestion(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
-				return (UserID > 0) && (QuestionID > 0) && !string.IsNullOrEmpty(Answer);
+				if ((UserID <= 0) || (QuestionID <= 0) || string.IsNullOrEmpty(Answer))
+					return false;
+
+				bool hasPassword =
+					!string.IsNullOrWhiteSpace(EzPassword) &&
+					!string.IsNullOrWhiteSpace(Salt) &&
+					!string.IsNullOrWhiteSpace(CycleCount);
+
+				bool noPassword =
+					string.IsNullOrWhiteSpace(EzPassword) &&
+					string.IsNullOrWhiteSpace(Salt) &&
+					string.IsNullOrWhiteSpace(CycleCount);
+
+				return hasPassword || noPassword;
 			} // HasValidParameters
 
 			public int UserID { get; set; }
@@ -83,7 +117,10 @@
 			public long QuestionID { get; set; }
 
 			public string Answer { get; set; }
-		} // class SpUserUpdateSecurityQuestion
 
+			public string EzPassword { get; set; }
+			public string Salt { get; set; }
+			public string CycleCount { get; set; }
+		} // class SpUserUpdateSecurityQuestion
 	} // class UserUpdateSecurityQuestion
 } // namespace Ezbob.Backend.Strategies.UserManagement

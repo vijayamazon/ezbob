@@ -21,7 +21,11 @@
 			}
 		}
 
-		public static byte[] ConvertToPdf(byte[] file, LoadFormat loadFormat = LoadFormat.Auto, SaveFormat saveFormat = SaveFormat.Pdf) {
+		public static byte[] ConvertToPdf(
+			byte[] file,
+			LoadFormat loadFormat = LoadFormat.Auto,
+			SaveFormat saveFormat = SaveFormat.Pdf
+		) {
 			try {
 				var stream = new MemoryStream(file);
 				var doc = new Document(stream, null, loadFormat, null);

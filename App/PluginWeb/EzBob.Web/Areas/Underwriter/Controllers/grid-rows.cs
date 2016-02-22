@@ -1,6 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
+	using System.Collections.Generic;
+	using ExperianLib.Web_References.IDHubService;
 	using Ezbob.Database;
+	using Ezbob.Utils;
+	using EzBob.Web.Areas.Underwriter.Models;
 
 	internal abstract class AGridRow {
 		public abstract string RowIDFieldName();
@@ -392,4 +396,63 @@
 			BrokerID = nRowID;
 		} // Init
 	} // GridBroker
+
+	internal class GridInvestor : AGridRow {
+	
+		public override string RowIDFieldName() {
+			return "InvestorID";
+		} // RowIDFieldName
+
+		public virtual long InvestorID { get; set; }
+		public virtual string CompanyName { get; set; }
+		public virtual string InvestorType { get; set; }
+		public virtual DateTime Timestamp { get; set; }
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			oRow.Fill(this);
+			InvestorID = nRowID;
+		} // Init
+	} // GridInvestor
+	
+	internal class GridPendingInvestorRow : AGridRow {
+
+		public GridPendingInvestorRow(IEnumerable<PendingInvestorModel> investors = null) {
+			if (investors != null) {
+				allinvestors = new List<PendingInvestorModel>(investors);
+			}
+		}
+		
+		public override string RowIDFieldName() {
+			return "CustomerID";
+		} // RowIDFieldName
+
+		public virtual long Id { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string Grade { get; set; }
+		public virtual string ApplicantScore { get; set; }
+		public virtual decimal ApprovedAmount { get; set; }
+		public virtual string Term { get; set; }
+		public virtual DateTime RequestApprovedAt { get; set; }
+		public virtual string TimeLimitUntilAutoreject { get; set; }
+		public virtual string FindInvestor { get; set; }
+		public virtual string EditOffer { get; set; }
+		public virtual string SubmitChosenInvestor { get; set; }
+		public virtual string ManageChosenInvestor { get; set; }
+		public virtual long CashRequestID { get; set; }
+		private readonly List<PendingInvestorModel> allinvestors;
+		[NonTraversable]
+		public virtual List<PendingInvestorModel> ChooseInvestor { get; set; }
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			oRow.Fill(this);
+			Id = nRowID;
+			ChooseInvestor = new List<PendingInvestorModel>();
+
+			foreach (var investor in allinvestors) {
+				if (investor.InvestorFunds >= ApprovedAmount)
+					ChooseInvestor.Add(investor);
+			}
+		} // Init
+		
+	} // GridPendingInvestor
 } // namespace

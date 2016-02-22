@@ -1,13 +1,26 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetPricingModelScenarios]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetPricingModelScenarios]
+IF OBJECT_ID('GetPricingModelScenarios') IS NULL
+	EXECUTE('CREATE PROCEDURE GetPricingModelScenarios AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetPricingModelScenarios]
+
+ALTER PROCEDURE GetPricingModelScenarios
 AS
 BEGIN
-	SELECT DISTINCT ScenarioName FROM PricingModelScenarios 
+	SELECT DISTINCT
+		p.ScenarioID,
+		p.ScenarioName,
+		p.OriginID,
+		Origin = o.Name
+	FROM
+		PricingCalculatorScenarios p
+		INNER JOIN CustomerOrigin o ON p.OriginID = o.CustomerOriginID
+	ORDER BY
+		o.Name,
+		p.ScenarioName
 END
 GO

@@ -1,9 +1,13 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
 	using System.Globalization;
+	using AutomationCalculator.AutoDecision.AutoApproval;
+	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Common;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
+	using Ezbob.Backend.Strategies.MainStrategy.Helpers;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
@@ -18,7 +22,7 @@
 	/// <para>After adding new marketplace (and only in this case) if approve decision is "approved"
 	/// Main strategy is executed in "skip all apply auto rules" mode to auto approve customer if possible.</para>
 	/// </summary>
-	public class SilentAutomation : AStrategy {
+	public class SilentAutomation : AMainStrategyBase {
 		public enum Callers {
 			Unknown,
 			AddMarketplace,
@@ -53,6 +57,8 @@
 		} // SetMedal
 
 		public override string Name { get { return "SilentAutomation"; } }
+
+		public override int CustomerID { get { return this.customerID; } }
 
 		public virtual string Tag {
 			get {
@@ -96,59 +102,88 @@
 
 			this.cashRequestID = sr["CashRequestID"];
 
+			this.nlCashRequestID = sr["NLCashRequestID"];
+
 			ForceNhibernateResync.ForCustomer(this.customerID);
 
 			Log.Debug(
-				"Executing silent reject for customer '{0}' using cash request '{1}'...",
-				this.customerID,
-				this.cashRequestID
-			);
-
-			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
+				"Executing silent reject for customer '{0}' using cash request 'o {1}/n {2}'...",
 				this.customerID,
 				this.cashRequestID,
-				DB,
-				Log
-			).Init();
+				this.nlCashRequestID
+			);
 
-			rejectAgent.MakeAndVerifyDecision(Tag, true);
+			LoadCompanyAndMonthlyPayment(DateTime.UtcNow);
+
+			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.LogicalGlue.Agent(
+				new AutoRejectionArguments(
+					this.customerID,
+					CompanyID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
+			) { CompareTrailsQuietly = true, };
+
+			rejectAgent.MakeAndVerifyDecision();
 
 			MedalResult medal = CalculateMedal();
 
 			int offeredCreditLine = CapOffer(medal);
 
 			Log.Debug(
-				"Executing silent approve for customer '{0}' using cash request '{1}'...",
-				this.customerID,
-				this.cashRequestID
-			);
-
-			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
+				"Executing silent approve for customer '{0}' using cash request '{1}', nlCashRequest '{2}'...",
 				this.customerID,
 				this.cashRequestID,
-				offeredCreditLine,
-				medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
-				DB,
-				Log
-			).Init();
+				this.nlCashRequestID
+			);
 
-			approveAgent.MakeAndVerifyDecision(Tag, true);
+			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.LogicalGlue.Agent(
+				new AutoApprovalArguments(
+					this.customerID,
+					this.cashRequestID,
+					this.nlCashRequestID,
+					offeredCreditLine,
+					(AutomationCalculator.Common.Medal)medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+					rejectAgent.Output.FlowType,
+					rejectAgent.Output.ErrorInLGData,
+					Tag,
+					DateTime.UtcNow,
+					DB,
+					Log
+				)
+			) { CompareTrailsQuietly = true, }.Init();
+
+			approveAgent.MakeAndVerifyDecision();
 
 			if (this.caller == Callers.AddMarketplace) {
 				bool isRejected = !rejectAgent.WasMismatch && rejectAgent.Trail.HasDecided;
-				bool isApproved = !approveAgent.WasMismatch && (approveAgent.ApprovedAmount > 0);
+				bool isApproved = !approveAgent.WasMismatch && (
+					(
+						(rejectAgent.Output.FlowType == AutoDecisionFlowTypes.LogicalGlue) &&
+						approveAgent.Trail.HasDecided
+					) || (
+						(rejectAgent.Output.FlowType != AutoDecisionFlowTypes.LogicalGlue) &&
+						(approveAgent.Trail.RoundedAmount > 0)
+					)
+				);
 
 				if (!isRejected && isApproved)
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0} using cash request {3}: no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request 'o {3}/n {4}': " +
+						"no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
 						isApproved ? "approved" : "not approved",
-						this.cashRequestID
+						this.cashRequestID,
+						this.nlCashRequestID
 					);
 				} // if
 			} // if
@@ -175,10 +210,11 @@
 			} // if
 
 			Log.Debug(
-				"Silent decision for customer {0} using cash request {1} is 'approve', " +
+				"Silent decision for customer {0} using cash request 'o {1}/n {2}' is 'approve', " +
 				"checking whether cash request is intact...",
 				this.customerID,
-				this.cashRequestID
+				this.cashRequestID,
+				this.nlCashRequestID
 			);
 
 			SafeReader sr = DB.GetFirst(
@@ -200,6 +236,7 @@
 			long currentCashRequestID = sr["CashRequestID"];
 			string uwDecision = (sr["UnderwriterDecision"] ?? string.Empty).Trim();
 
+			// TODO: when removing old cash request: it should be nlCashRequestID.
 			bool suitableCashRequest = this.cashRequestID == currentCashRequestID;
 
 			bool suitableDecision =
@@ -228,15 +265,15 @@
 				uwDecision
 			);
 
-			new MainStrategy(
-				1, // this is an underwriter ID that is used for auto decisions
-				this.customerID,
-				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-				0,
-				null,
-				this.cashRequestID,
-				null
-			).Execute();
+			new MainStrategy(new MainStrategyArguments{
+				UnderwriterID = 1, // this is an underwriter ID that is used for auto decisions
+				CustomerID = this.customerID,
+				NewCreditLine = NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+				AvoidAutoDecision = 0,
+				FinishWizardArgs = null,
+				CashRequestID = this.cashRequestID,
+				CashRequestOriginator = null
+			}).Execute();
 
 			Log.Debug(
 				"Running auto decision for customer {0}, last cash request (id: {1}) complete.",
@@ -294,9 +331,8 @@
 
 			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
 
-			var instance = new CalculateMedal(this.customerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+			var instance = new CalculateMedal(this.customerID, this.cashRequestID, this.nlCashRequestID, DateTime.UtcNow, false, true ) {
 				Tag = Tag,
-				QuietMode = true,
 			};
 			instance.Execute();
 
@@ -313,5 +349,6 @@
 		private bool mainStrategyExecutedBefore;
 		private bool doMainStrategy;
 		private MedalResult medalToUse;
+		private long nlCashRequestID;
 	} // class SilentAutomation
 } // namespace

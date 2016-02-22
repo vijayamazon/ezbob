@@ -1,5 +1,395 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ExperianLtd">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AgeOfMostRecentCCJDecreeMonths" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="BankAddress1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankAddress2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankAddress3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankAddress4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankAddressPostcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BankSortcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CommercialDelphiBandText" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CommercialDelphiCreditLimit" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="CompanyAverageDBT12Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyAverageDBT3Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyAverageDBT6Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CompanyNumberOfDbt1000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyNumberOfDbt10000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyNumberOfDbt100000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyNumberOfDbt100000Plus" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CompanyPaymentPattern" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ConclusionText" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreditText1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreditText2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreditText3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreditText4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreditText5" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DissolutionDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="First1980SICCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First1980SICCodeDescription" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First1992SICCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="First1992SICCodeDescription" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IncorporationDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="IndustryAverageDBT12Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryAverageDBT3Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryAverageDBT6Months" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryNumberOfDbt1000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryNumberOfDbt10000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryNumberOfDbt100000" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryNumberOfDbt100000Plus" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="IndustryPaymentPattern" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LegalStatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LengthOf1992SICArea" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfAppointmentsInTheLast12Months" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfCCJsBetween13And24MonthsAgo" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfCCJsDuringLast12Months" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfCurrentDirectorshipsLessThan12Months" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfResignationsInTheLast12Months" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="OfficeAddress1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddressPostcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReceivedTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="RegisteredNameOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RegisteredNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RegisteredNumberOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SameTradingAddressG" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StabilityOdds" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SupplierPaymentPattern" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TotalNumberOfCurrentDirectors" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="TradingPhoneNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ValueOfCCJsBetween13And24MonthsAgo" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ValueOfCCJsDuringLast12Months" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtd" nillable="true" type="tns:ExperianLtd" />
+  <xs:complexType name="AExperianLtdDataRow">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Children" nillable="true" type="tns:ArrayOfAExperianLtdDataRow" />
+      <xs:element minOccurs="0" name="ExperianLtdID" type="xs:long" />
+      <xs:element minOccurs="0" name="ID" type="xs:long" />
+      <xs:element minOccurs="0" name="ParentID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AExperianLtdDataRow" nillable="true" type="tns:AExperianLtdDataRow" />
+  <xs:complexType name="ArrayOfAExperianLtdDataRow">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AExperianLtdDataRow" nillable="true" type="tns:AExperianLtdDataRow" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAExperianLtdDataRow" nillable="true" type="tns:ArrayOfAExperianLtdDataRow" />
+<<<<<<< HEAD
+  <xs:complexType name="ExperianLtdShareholders">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DescriptionOfShareholder" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DescriptionOfShareholding" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RegisteredNumberOfALimitedCompanyWhichIsAShareholder" nillable="true" type="xs:string" />
+=======
+  <xs:complexType name="ExperianLtdDL65">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AlterationsToTheOrder" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AmountChargeIncreased" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AmountSecured" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ChargeNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ChargeType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ChargeeText" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CreationDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="CurrencyIndicator" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DateFullySatisfied" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="ExperianLtdDL65ID" type="xs:long" />
+          <xs:element minOccurs="0" name="FormNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FullySatisfiedIndicator" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NumberOfPartialSatisfactionDataItems" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="NumberOfPartialSatisfactionDates" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="PropertyDetails" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PropertyReleasedFromTheCharge" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RegulatingProvisions" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RestrictingProvisions" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TotalAmountOfDebentureSecured" nillable="true" type="xs:string" />
+>>>>>>> LonaRestructuringFeb2016
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<<<<<<< HEAD
+  <xs:element name="ExperianLtdShareholders" nillable="true" type="tns:ExperianLtdShareholders" />
+  <xs:complexType name="ExperianLtdCaisMonthly">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="NumberOfActiveAccounts" nillable="true" type="xs:decimal" />
+=======
+  <xs:element name="ExperianLtdDL65" nillable="true" type="tns:ExperianLtdDL65" />
+  <xs:complexType name="ExperianLtdDL68">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SubsidiaryLegalStatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SubsidiaryName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SubsidiaryRegisteredNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SubsidiaryStatus" nillable="true" type="xs:string" />
+>>>>>>> LonaRestructuringFeb2016
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<<<<<<< HEAD
+  <xs:element name="ExperianLtdCaisMonthly" nillable="true" type="tns:ExperianLtdCaisMonthly" />
+  <xs:complexType name="ExperianLtdCreditSummary">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CreditEventType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DateOfMostRecentRecordForType" nillable="true" type="xs:dateTime" />
+=======
+  <xs:element name="ExperianLtdDL68" nillable="true" type="tns:ExperianLtdDL68" />
+  <xs:complexType name="ExperianLtdPrevCompanyNames">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DateChanged" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="OfficeAddress1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddress4" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="OfficeAddressPostcode" nillable="true" type="xs:string" />
+>>>>>>> LonaRestructuringFeb2016
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<<<<<<< HEAD
+=======
+  <xs:element name="ExperianLtdPrevCompanyNames" nillable="true" type="tns:ExperianLtdPrevCompanyNames" />
+  <xs:complexType name="ExperianLtdCaisMonthly">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="NumberOfActiveAccounts" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdCaisMonthly" nillable="true" type="tns:ExperianLtdCaisMonthly" />
+  <xs:complexType name="ExperianLtdCreditSummary">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CreditEventType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DateOfMostRecentRecordForType" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+>>>>>>> LonaRestructuringFeb2016
+  <xs:element name="ExperianLtdCreditSummary" nillable="true" type="tns:ExperianLtdCreditSummary" />
+  <xs:complexType name="ExperianLtdErrors">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdErrors" nillable="true" type="tns:ExperianLtdErrors" />
+  <xs:complexType name="ExperianLtdDL48">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="FraudCategory" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL48" nillable="true" type="tns:ExperianLtdDL48" />
+  <xs:complexType name="ExperianLtdDL52">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DateOfNotice" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="NoticeType" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL52" nillable="true" type="tns:ExperianLtdDL52" />
+  <xs:complexType name="ExperianLtdShareholders">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DescriptionOfShareholder" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DescriptionOfShareholding" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RegisteredNumberOfALimitedCompanyWhichIsAShareholder" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<<<<<<< HEAD
+  <xs:element name="ExperianLtdDL68" nillable="true" type="tns:ExperianLtdDL68" />
+=======
+  <xs:element name="ExperianLtdShareholders" nillable="true" type="tns:ExperianLtdShareholders" />
+>>>>>>> LonaRestructuringFeb2016
+  <xs:complexType name="ExperianLtdDL72">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BirthDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CompanyNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DirectorsAgeYears" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ForeignAddressFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="HouseName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="HouseNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsCompany" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LengthOfDirectorship" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="MidName1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MidName2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Number" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NumberOfConvictions" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Prefix" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Qualifications" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareInfo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Street" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL72" nillable="true" type="tns:ExperianLtdDL72" />
+  <xs:complexType name="ExperianLtdDL97">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AccountState" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountStatusLast12AccountStatuses" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="AgreementNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CAISLastUpdatedDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="CompanyType" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="CurrentBalance" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DefaultBalance" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DefaultDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="MonthsData" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="SettlementDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Status12" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Status39" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL97" nillable="true" type="tns:ExperianLtdDL97" />
+  <xs:complexType name="ExperianLtdDL99">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CredDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CurrDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Debtors" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DebtorsDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DebtorsGroupLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FinDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="FinLbltsDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InTngblAssets" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Inventories" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="OnClDirLoans" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="OtherDebtors" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="PrepayAccRuals" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="RetainedEarnings" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TngblAssets" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalCash" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalCurrAssets" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalCurrLblts" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalNonCurr" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="TotalShareFund" nillable="true" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDL99" nillable="true" type="tns:ExperianLtdDL99" />
+  <xs:complexType name="ExperianLtdDLA2">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="NumberOfEmployees" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDLA2" nillable="true" type="tns:ExperianLtdDLA2" />
+  <xs:complexType name="ExperianLtdDLB5">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AddressLine3" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CurrentpreviousIndicator" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EffectiveDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IssueCompany" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="KgenName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="MidName1" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NOCRefNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Prefix" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RecordType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareClassNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderCompanyName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderPunaPcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderQualifications" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderRMC" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderRegisteredNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholderType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShareholdingNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SuppressionFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdDLB5" nillable="true" type="tns:ExperianLtdDLB5" />
+  <xs:complexType name="ExperianLtdLenderDetails">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AExperianLtdDataRow">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DL65ID" type="xs:long" />
+          <xs:element minOccurs="0" name="LenderName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianLtdLenderDetails" nillable="true" type="tns:ExperianLtdLenderDetails" />
   <xs:complexType name="ExperianConsumerData">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActiveCaisBalanceExcMortgages" nillable="true" type="xs:int" />
@@ -207,360 +597,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ExperianConsumerDataResidency" nillable="true" type="tns:ExperianConsumerDataResidency" />
-  <xs:complexType name="ExperianLtd">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AgeOfMostRecentCCJDecreeMonths" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="BankAddress1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankAddress2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankAddress3" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankAddress4" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankAddressPostcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="BankSortcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CommercialDelphiBandText" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CommercialDelphiCreditLimit" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="CompanyAverageDBT12Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyAverageDBT3Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyAverageDBT6Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CompanyNumberOfDbt1000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyNumberOfDbt10000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyNumberOfDbt100000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyNumberOfDbt100000Plus" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CompanyPaymentPattern" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ConclusionText" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreditText1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreditText2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreditText3" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreditText4" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreditText5" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DissolutionDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="First1980SICCode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="First1980SICCodeDescription" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="First1992SICCode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="First1992SICCodeDescription" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="IncorporationDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="IndustryAverageDBT12Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryAverageDBT3Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryAverageDBT6Months" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryNumberOfDbt1000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryNumberOfDbt10000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryNumberOfDbt100000" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryNumberOfDbt100000Plus" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IndustryPaymentPattern" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LegalStatus" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LengthOf1992SICArea" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfAppointmentsInTheLast12Months" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfCCJsBetween13And24MonthsAgo" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfCCJsDuringLast12Months" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfCurrentDirectorshipsLessThan12Months" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfResignationsInTheLast12Months" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="OfficeAddress1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress3" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress4" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddressPostcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ReceivedTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="RegisteredNameOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RegisteredNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RegisteredNumberOfTheCurrentUltimateParentCompany" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SameTradingAddressG" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="StabilityOdds" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SupplierPaymentPattern" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="TotalNumberOfCurrentDirectors" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="TradingPhoneNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ValueOfCCJsBetween13And24MonthsAgo" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="ValueOfCCJsDuringLast12Months" nillable="true" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtd" nillable="true" type="tns:ExperianLtd" />
-  <xs:complexType name="AExperianLtdDataRow">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Children" nillable="true" type="tns:ArrayOfAExperianLtdDataRow" />
-      <xs:element minOccurs="0" name="ExperianLtdID" type="xs:long" />
-      <xs:element minOccurs="0" name="ID" type="xs:long" />
-      <xs:element minOccurs="0" name="ParentID" type="xs:long" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="AExperianLtdDataRow" nillable="true" type="tns:AExperianLtdDataRow" />
-  <xs:complexType name="ArrayOfAExperianLtdDataRow">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AExperianLtdDataRow" nillable="true" type="tns:AExperianLtdDataRow" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfAExperianLtdDataRow" nillable="true" type="tns:ArrayOfAExperianLtdDataRow" />
-  <xs:complexType name="ExperianLtdDL72">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="BirthDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CompanyNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DirectorsAgeYears" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ForeignAddressFlag" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="HouseName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="HouseNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="IsCompany" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LengthOfDirectorship" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="MidName1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="MidName2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Number" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="NumberOfConvictions" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Prefix" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Qualifications" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareInfo" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Street" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL72" nillable="true" type="tns:ExperianLtdDL72" />
-  <xs:complexType name="ExperianLtdShareholders">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DescriptionOfShareholder" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DescriptionOfShareholding" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RegisteredNumberOfALimitedCompanyWhichIsAShareholder" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdShareholders" nillable="true" type="tns:ExperianLtdShareholders" />
-  <xs:complexType name="ExperianLtdDL65">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AlterationsToTheOrder" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AmountChargeIncreased" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AmountSecured" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ChargeNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ChargeType" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ChargeeText" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CreationDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="CurrencyIndicator" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DateFullySatisfied" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="ExperianLtdDL65ID" type="xs:long" />
-          <xs:element minOccurs="0" name="FormNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="FullySatisfiedIndicator" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="NumberOfPartialSatisfactionDataItems" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="NumberOfPartialSatisfactionDates" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="PropertyDetails" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="PropertyReleasedFromTheCharge" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RegulatingProvisions" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RestrictingProvisions" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="TotalAmountOfDebentureSecured" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL65" nillable="true" type="tns:ExperianLtdDL65" />
-  <xs:complexType name="ExperianLtdPrevCompanyNames">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DateChanged" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="OfficeAddress1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress3" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddress4" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="OfficeAddressPostcode" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdPrevCompanyNames" nillable="true" type="tns:ExperianLtdPrevCompanyNames" />
-  <xs:complexType name="ExperianLtdCaisMonthly">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="NumberOfActiveAccounts" nillable="true" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdCaisMonthly" nillable="true" type="tns:ExperianLtdCaisMonthly" />
-  <xs:complexType name="ExperianLtdCreditSummary">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CreditEventType" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="DateOfMostRecentRecordForType" nillable="true" type="xs:dateTime" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdCreditSummary" nillable="true" type="tns:ExperianLtdCreditSummary" />
-  <xs:complexType name="ExperianLtdErrors">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdErrors" nillable="true" type="tns:ExperianLtdErrors" />
-  <xs:complexType name="ExperianLtdDL48">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="FraudCategory" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL48" nillable="true" type="tns:ExperianLtdDL48" />
-  <xs:complexType name="ExperianLtdDL52">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DateOfNotice" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="NoticeType" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL52" nillable="true" type="tns:ExperianLtdDL52" />
-  <xs:complexType name="ExperianLtdDL68">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="SubsidiaryLegalStatus" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SubsidiaryName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SubsidiaryRegisteredNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SubsidiaryStatus" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL68" nillable="true" type="tns:ExperianLtdDL68" />
-  <xs:complexType name="ExperianLtdDL97">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AccountState" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AccountStatusLast12AccountStatuses" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="AgreementNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CAISLastUpdatedDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="CompanyType" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="CurrentBalance" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DefaultBalance" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DefaultDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="MonthsData" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="SettlementDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="Status12" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="Status39" nillable="true" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL97" nillable="true" type="tns:ExperianLtdDL97" />
-  <xs:complexType name="ExperianLtdDL99">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="CredDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CurrDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="Date" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="Debtors" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DebtorsDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DebtorsGroupLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="FinDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="FinLbltsDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="InTngblAssets" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="Inventories" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="OnClDirLoans" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="OtherDebtors" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="PrepayAccRuals" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="RetainedEarnings" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TngblAssets" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TotalCash" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TotalCurrAssets" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TotalCurrLblts" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TotalNonCurr" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="TotalShareFund" nillable="true" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDL99" nillable="true" type="tns:ExperianLtdDL99" />
-  <xs:complexType name="ExperianLtdDLA2">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Date" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="NumberOfEmployees" nillable="true" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDLA2" nillable="true" type="tns:ExperianLtdDLA2" />
-  <xs:complexType name="ExperianLtdDLB5">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AddressLine1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="AddressLine3" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="County" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="CurrentpreviousIndicator" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="EffectiveDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="IssueCompany" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="KgenName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LastUpdated" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="MidName1" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="NOCRefNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Prefix" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RecordType" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareClassNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderCompanyName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderPunaPcode" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderQualifications" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderRMC" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderRegisteredNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholderType" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ShareholdingNumber" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Suffix" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="SuppressionFlag" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Town" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdDLB5" nillable="true" type="tns:ExperianLtdDLB5" />
-  <xs:complexType name="ExperianLtdLenderDetails">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AExperianLtdDataRow">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DL65ID" type="xs:long" />
-          <xs:element minOccurs="0" name="LenderName" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExperianLtdLenderDetails" nillable="true" type="tns:ExperianLtdLenderDetails" />
   <xs:complexType name="ExperianConsumerMortgagesData">
     <xs:sequence>
       <xs:element minOccurs="0" name="MortgageBalance" type="xs:int" />

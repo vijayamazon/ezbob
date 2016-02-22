@@ -1,12 +1,14 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
 	using System;
 	using System.Globalization;
+	using DbConstants;
 	using Ezbob.Backend.Extensions;
 
 	public class Fee {
-		public Fee(DateTime assignTime, decimal amount) {
+		public Fee(DateTime assignTime, decimal amount, FeeTypes feeType) {
 			AssignTime = assignTime;
 			Amount = amount;
+			FeeType = feeType;
 		} // constructor
 
 		public DateTime AssignDate { get { return AssignTime.Date; } }
@@ -14,8 +16,10 @@
 		public DateTime AssignTime { get; private set; }
 		public decimal Amount { get; private set; }
 
+		public FeeTypes FeeType{ get; private set; }
+
 		public Fee DeepClone() {
-			return new Fee(AssignTime, Amount);
+			return new Fee(AssignTime, Amount, FeeType);
 		} // DeepClone
 
 		public override string ToString() {

@@ -1,8 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
+	using System;
 	using ApplicationMng.Repository;
 	using NHibernate;
-	using System;
-	using EZBob.DatabaseLib.Model.Loans;
 
 	public class LoanLegal {
 		public virtual int Id { get; set; }
@@ -16,7 +15,9 @@
 		public virtual bool COSMEAgreementAgreed { get; set; }
 		public virtual string SignedName { get; set; }
 		public virtual bool? NotInBankruptcy { get; set; }
-		public virtual LoanAgreementTemplate AlibabaCreditFacilityTemplate { get; set; }
+		public virtual string SignedLegalDocs { get; set; }
+		public virtual decimal? ManualSetupFeePercent { get; set; }
+		public virtual decimal? BrokerSetupFeePercent { get; set; }
 	} // class LoanLegal
 
 	public interface ILoanLegalRepository : IRepository<LoanLegal> {
@@ -48,7 +49,10 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.COSMEAgreementAgreed);
 			Map(x => x.SignedName).Length(250);
 			Map(x => x.NotInBankruptcy);
-			References(x => x.AlibabaCreditFacilityTemplate, "AlibabaCreditFacilityTemplateID");
+			Map(x => x.SignedLegalDocs);
+			Map(x => x.ManualSetupFeePercent);
+			Map(x => x.BrokerSetupFeePercent);
+
 		} // constructor
 	} // class LoanLegalMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

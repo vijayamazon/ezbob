@@ -1,40 +1,51 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Strategies.UserManagement.EmailConfirmation;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
+	using EzService.ActionResults;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
-		public UserLoginActionResult CustomerSignup(
-			string sEmail,
-			Password oPassword,
-			int nPasswordQuestion,
-			string sPasswordAnswer,
-			string sRemoteIp
-		) {
-			UserSignup oInstance;
+		public UserLoginActionResult SignupCustomerMultiOrigin(SignupCustomerMultiOriginModel model) {
+			SignupCustomerMultiOrigin instance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null,
-				sEmail, oPassword, nPasswordQuestion, sPasswordAnswer, sRemoteIp
-			);
+			ActionMetaData amd = ExecuteSync(out instance, null, null, model);
 
 			return new UserLoginActionResult {
-				MetaData = oMetaData,
-				Status = oInstance.Result,
-				SessionID = oInstance.SessionID,
-				OriginID = oInstance.OriginID,
-
+				MetaData = amd,
+				Status = instance.Status.ToString(),
+				SessionID = instance.SessionID,
+				ErrorMessage = instance.ErrorMsg,
+				RefNumber = instance.RefNumber,
 			};
-		} // CustomerSignup
+		} // SignupCustomerMultiOrigin
 
-		public ActionMetaData UnderwriterSignup(string name, Password password, string roleName) {
-			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
-		} // UnderwriterSignup
+		public UserLoginActionResult LoginCustomerMutliOrigin(LoginCustomerMultiOriginModel model) {
+			LoginCustomerMutliOrigin instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, model);
+
+			return new UserLoginActionResult {
+				MetaData = amd,
+				Status = instance.Status.ToString(),
+				SessionID = instance.SessionID,
+				ErrorMessage = instance.ErrorMsg,
+				RefNumber = instance.RefNumber,
+			};
+		} // LoginCustomerMutliOrigin
+
+		public ActionMetaData SignupUnderwriterMultiOrigin(string name, DasKennwort password, string roleName) {
+			return ExecuteSync<SignupUnderwriterMultiOrigin>(null, null, name, password, roleName);
+		} // SignupUnderwriterMultiOrigin
 
 		public UserLoginActionResult UserLogin(
+			CustomerOriginEnum? originID,
 			string sEmail,
-			Password oPassword,
+			DasKennwort sPassword,
 			string sRemoteIp,
 			string promotionName,
 			DateTime? promotionPageVisitTime
@@ -45,8 +56,9 @@
 				out oInstance,
 				null,
 				null,
+				originID,
 				sEmail,
-				oPassword,
+				sPassword,
 				sRemoteIp,
 				promotionName,
 				promotionPageVisitTime
@@ -60,59 +72,64 @@
 			};
 		} // UserLogin
 
-        public StringActionResult UserDisable(
-            int userID,
-            int customerID,
-            string email,
-            bool unsubscribeFromMailChimp,
-            bool changeEmail
-        ) {
-            UserDisable udInstance;
+		public StringActionResult UserDisable(
+			int userID,
+			int customerID,
+			string email,
+			bool unsubscribeFromMailChimp,
+			bool changeEmail
+		) {
+			UserDisable udInstance;
 
-            ActionMetaData udMetaData = ExecuteSync(out udInstance, customerID, userID, customerID, email, unsubscribeFromMailChimp);
+			ActionMetaData udMetaData = ExecuteSync(
+				out udInstance,
+				customerID,
+				userID,
+				customerID,
+				email,
+				unsubscribeFromMailChimp
+			);
 
-            if (changeEmail) {
-                UserChangeEmail uceInstance;
+			if (changeEmail) {
+				UserChangeEmail uceInstance;
 
-                ActionMetaData oMetaData = ExecuteSync(out uceInstance, customerID, userID, customerID, string.Format("{0}frozen", email));
+				ActionMetaData oMetaData = ExecuteSync(
+					out uceInstance,
+					customerID,
+					userID,
+					userID,
+					customerID,
+					string.Format("{0}frozen", email)
+				);
 
-                return new StringActionResult {
-                    MetaData = oMetaData,
-                    Value = uceInstance.ErrorMessage,
-                };
-            }
-
-            return new StringActionResult {
-                MetaData = udMetaData
-            };
-        }
-
-		public StringActionResult UserResetPassword(string sEmail) {
-			UserResetPassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail);
-
-			return new StringActionResult {
-				MetaData = oMetaData,
-				Value = oInstance.Success ? oInstance.Password.Encrypted : string.Empty,
-			};
-		} // UserResetPassword
-
-		public StringActionResult UserChangePassword(string sEmail, Password oOldPassword, Password oNewPassword, bool bForceChangePassword) {
-			UserChangePassword oInstance;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword, bForceChangePassword);
+				return new StringActionResult {
+					MetaData = oMetaData,
+					Value = uceInstance.ErrorMessage,
+				};
+			}
 
 			return new StringActionResult {
-				MetaData = oMetaData,
-				Value = oInstance.ErrorMessage,
+				MetaData = udMetaData
 			};
-		} // UserChangePassword
+		}
 
-		public StringActionResult CustomerChangePassword(string sEmail, Password oOldPassword, Password oNewPassword) {
+		public StringActionResult CustomerChangePassword(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort oldPassword,
+			DasKennwort newPassword
+		) {
 			CustomerChangePassword oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oOldPassword, oNewPassword);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				email,
+				origin,
+				oldPassword,
+				newPassword
+			);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -120,10 +137,25 @@
 			};
 		} // CustomerChangePassword
 
-		public StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer) {
+		public StringActionResult UserUpdateSecurityQuestion(
+			string email,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			int questionID,
+			string answer
+		) {
 			UserUpdateSecurityQuestion oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, nQuestionID, sAnswer);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				email,
+				origin,
+				password,
+				questionID,
+				answer
+			);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -134,7 +166,7 @@
 		public StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
 			UserChangeEmail oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID, sNewEmail);
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, underwriterId, nUserID, sNewEmail);
 
 			return new StringActionResult {
 				MetaData = oMetaData,
@@ -142,9 +174,8 @@
 			};
 		} // UserChangeEmail
 
-		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? nCustomerId)
-		{
-			return Execute<MarkSessionEnded>(nCustomerId, null, nSessionID, sComment);
+		public ActionMetaData MarkSessionEnded(int nSessionID, string sComment, int? userID, int? nCustomerId) {
+			return Execute<MarkSessionEnded>(nCustomerId, userID, nSessionID, sComment);
 		} // MarkSessionEnded
 
 		public CustomerDetailsActionResult LoadCustomerByCreatePasswordToken(Guid oToken) {
@@ -158,14 +189,36 @@
 			};
 		} // LoadCustomerByCreatePasswordToken
 
-		public IntActionResult SetCustomerPasswordByToken(string sEmail, Password oPassword, Guid oToken, bool bIsBrokerLead) {
-			SetCustomerPasswordByToken oInstance;
+		public SetPasswordActionResult SetCustomerPasswordByToken(
+			Guid token,
+			CustomerOriginEnum origin,
+			DasKennwort password,
+			DasKennwort passwordAgain,
+			bool isBrokerLead,
+			string remoteIP
+		) {
+			SetCustomerPasswordByToken instance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, oToken, bIsBrokerLead);
+			ActionMetaData oMetaData = ExecuteSync(
+				out instance,
+				null,
+				null,
+				token,
+				origin,
+				password,
+				passwordAgain,
+				isBrokerLead,
+				remoteIP
+			);
 
-			return new IntActionResult {
+			return new SetPasswordActionResult {
 				MetaData = oMetaData,
-				Value = oInstance.CustomerID,
+				ErrorMsg = instance.ErrorMsg,
+				UserID = instance.UserID,
+				IsBroker = instance.IsBroker,
+				Email = instance.Email,
+				SessionID = instance.SessionID,
+				IsDisabled = instance.IsDisabled,
 			};
 		} // SetCustomerPasswordByToken
 
@@ -213,5 +266,37 @@
 			return Execute<AddCciHistory>(nCustomerID, nUnderwriterID, nCustomerID, nUnderwriterID, bCciMark);
 		} // AddCciHistory
 
+		public StringListActionResult LoadAllLoginRoles(string login, CustomerOriginEnum? origin, bool ignoreOrigin) {
+			LoadAllLoginRoles instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, login, origin, ignoreOrigin);
+
+			return new StringListActionResult {
+				MetaData = amd,
+				Records = new List<string>(instance.Roles),
+			};
+		} // LoadAllLoginRoles
+
+		public StringActionResult GetCustomerSecurityQuestion(string email, CustomerOriginEnum origin) {
+			GetCustomerSecurityQuestion instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin);
+
+			return new StringActionResult {
+				MetaData = amd,
+				Value = instance.SecurityQuestion,
+			};
+		} // GetCustomerSecurityQuestion
+
+		public StringActionResult ValidateSecurityAnswer(string email, CustomerOriginEnum origin, string answer) {
+			ValidateSecurityAnswer instance;
+
+			ActionMetaData amd = ExecuteSync(out instance, null, null, email, origin, answer);
+
+			return new StringActionResult {
+				MetaData = amd,
+				Value = instance.ErrorMsg,
+			};
+		} // ValidateSecurityAnswer
 	} // class EzServiceImplementation
 } // namespace EzService

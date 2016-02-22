@@ -5,19 +5,17 @@
 	using API;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Misc;
-	using EZBob.DatabaseLib.Repository;
+	using Ezbob.Backend.Strategies.StoredProcs;
 	using Ezbob.Database;
 	using Ezbob.Utils;
-	using StructureMap;
+	using PaymentServices.Calculators;
 
 	public class ApprovedUser : ABrokerMailToo {
-
-		public ApprovedUser(int customerId, decimal loanAmount, int validHours, bool isFirst)
-			: base(customerId, true) {
-				this.loanAmount = loanAmount;
-				this.validHours = validHours;
-				this.isFirst = isFirst;
-				this.amountInUsd = CalculateLoanAmountInUsd();
+		public ApprovedUser(int customerId, decimal loanAmount, int validHours, bool isFirst) : base(customerId, true) {
+			this.loanAmount = loanAmount;
+			this.validHours = validHours;
+			this.isFirst = isFirst;
+			this.amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
 		public override string Name { get { return "Approved User"; } } // Name
@@ -25,34 +23,28 @@
 		protected override void LoadRecipientData() {
 			base.LoadRecipientData();
 
-			if (CustomerData.IsFilledByBroker) {
+			if (CustomerData.IsFilledByBroker)
 				SendToCustomer = false;
-			}
-		}
+		} // LoadRecipientData
 
 		public class CashRequestRelevantData : AResultRow {
 			public decimal InterestRate { get; set; }
-			public int ManualSetupFeeAmount { get; set; }
+			public decimal ManualSetupFeePercent { get; set; }
+			public decimal BrokerSetupFeePercent { get; set; }
 			public int SystemCalculatedSum { get; set; }
 			public int ManagerApprovedSum { get; set; }
-		}
+		} // class CashRequestRelevantData
 
 		protected override void SetTemplateAndVariables() {
 			var cashRequestRelevantData = DB.FillFirst<CashRequestRelevantData>(
 				"GetCashRequestData",
-				new QueryParameter("@CustomerId", CustomerData.Id));
+				new QueryParameter("@CustomerId", CustomerData.Id)
+			);
 
-			
-			if (cashRequestRelevantData.ManagerApprovedSum != 0) {
-				this.setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum;
-			}
-			else if (cashRequestRelevantData.SystemCalculatedSum != 0) {
-				this.setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum;
-			}
-			else {
-				this.setupFeePercents = 0;
-			}
 
+			SetupFeeCalculator sfCalculator = new SetupFeeCalculator(cashRequestRelevantData.ManualSetupFeePercent, cashRequestRelevantData.BrokerSetupFeePercent);
+			var setupFeeAmount = sfCalculator.Calculate(cashRequestRelevantData.ManagerApprovedSum);
+			this.setupFeePercents = (cashRequestRelevantData.ManualSetupFeePercent + cashRequestRelevantData.BrokerSetupFeePercent) * 100;
 			this.interestRatePercents = cashRequestRelevantData.InterestRate * 100;
 			this.setupFeePercents = MathUtils.Round2DecimalDown(this.setupFeePercents);
 			decimal remainingPercentsAfterSetupFee = 100 - this.setupFeePercents;
@@ -90,9 +82,14 @@
 				var address = new Addressee(CurrentValues.Instance.AlibabaMailTo, CurrentValues.Instance.AlibabaMailCc);
 				Log.Info("Sending Alibaba internal approval mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal approval email", Variables, new[] { address });
-			}
+			} // if
 
-			if (CurrentValues.Instance.SmsApprovedUserEnabled && !CustomerData.IsTest && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
+			bool sendSms = 
+				CurrentValues.Instance.SmsApprovedUserEnabled &&
+				!CustomerData.IsTest &&
+				!ConfigManager.CurrentValues.Instance.SmsTestModeEnabled;
+
+			if (sendSms) {
 				string smsTemplate = CurrentValues.Instance.SmsApprovedUserTemplate;
 
 				smsTemplate = smsTemplate
@@ -105,24 +102,39 @@
 					.Replace("*OriginLogin*", CustomerData.OriginSite + "/Customer/Profile")
 					.Replace("*OriginPhone*", CustomerData.OriginPhone);
 				
-				SendSms sendSms = new SendSms(CustomerId, 1, CustomerData.MobilePhone, smsTemplate);
-				sendSms.Execute();
+				new SendSms(CustomerId, 1, CustomerData.MobilePhone, smsTemplate).Execute();
 			} else {
-				Log.Info("Not sending approved user sms to customer {3}, SmsApprovedUserEnabled {0}, is test {1}, SmsTestModeEnabled {2}", 
+				Log.Info(
+					"Not sending approved user sms to customer {3}, " +
+					"SmsApprovedUserEnabled {0}, is test {1}, SmsTestModeEnabled {2}", 
 					(bool)CurrentValues.Instance.SmsApprovedUserEnabled, 
 					CustomerData.IsTest, 
 					(bool)ConfigManager.CurrentValues.Instance.SmsTestModeEnabled,
-					CustomerId);
-			}
-		}
+					CustomerId
+				);
+			} // if
+		} // ActionAtEnd
 
 		private double CalculateLoanAmountInUsd() {
-			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
-			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
-			double convertedLoanAmount = (double)this.loanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
-			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, this.loanAmount, convertedLoanAmount);
+			decimal currencyRate = new CurrencyRate(CurrencyCode.USD, DateTime.UtcNow, DB, Log).Load();
+
+			if (currencyRate == 0)
+				currencyRate = 1;
+
+			double convertedLoanAmount =
+				(double)this.loanAmount / (double)currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
+
+			Log.Info(
+				"Calculating Alibaba loan amount in USD. " +
+				"CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}",
+				currencyRate,
+				CurrentValues.Instance.AlibabaCurrencyConversionCoefficient,
+				this.loanAmount,
+				convertedLoanAmount
+			);
+
 			return convertedLoanAmount;
-		}
+		} // CalculateLoanAmountInUsd
 
 		private readonly decimal loanAmount;
 		private readonly double amountInUsd;

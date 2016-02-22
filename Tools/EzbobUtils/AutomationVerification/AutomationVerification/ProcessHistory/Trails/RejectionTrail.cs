@@ -1,5 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory.Trails {
-	using AutoDecision.AutoRejection;
+	using AutomationCalculator.AutoDecision.AutoRejection.Models;
 	using DbConstants;
 	using Ezbob.Logger;
 
@@ -15,6 +15,7 @@
 		public RejectionTrail(
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			ASafeLog oLog,
 			string toExplanationMailAddress = null,
 			string fromEmailAddress = null,
@@ -22,17 +23,17 @@
 		) : base(
 			nCustomerID,
 			cashRequestID,
+			nlCashRequestID,
 			DecisionStatus.Dunno,
 			oLog,
 			toExplanationMailAddress,
 			fromEmailAddress,
 			fromEmailName
 		) {
-			MyInputData = new RejectionInputData();
 		} // constructor
 
 		public void Init(RejectionInputData data) {
-			MyInputData = data;
+			MyInputData.Init(data.DataAsOf, data, data);
 		} // Init
 
 		public override string PositiveDecisionName {
@@ -58,7 +59,14 @@
 			get { return MyInputData; }
 		} // InputData
 
-		public virtual RejectionInputData MyInputData { get; private set; }
+		public virtual RejectionInputData MyInputData {
+			get {
+				if (this.myInputData == null)
+					this.myInputData = CreateMyInputData();
+
+				return this.myInputData;
+			} // get
+		} // MyInputData
 
 		public virtual void DecideIfNotDecided() {
 			if (DecisionStatus == DecisionStatus.Dunno)
@@ -71,5 +79,11 @@
 
 			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
-	} // class ApprovalTrail
+
+		protected virtual RejectionInputData CreateMyInputData() {
+			return new RejectionInputData();
+		} // CreateMyInputData
+
+		private RejectionInputData myInputData;
+	} // class RejectionTrail
 } // namespace

@@ -1,60 +1,63 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
+	using EzService.ActionResults;
 
-	partial class EzServiceImplementation 
-	{
-		public PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName)
-		{
+	partial class EzServiceImplementation {
+		public PricingModelModelActionResult GetPricingModelModel(
+			int customerId,
+			int underwriterId,
+			PricingCalcuatorScenarioNames scenarioName
+		) {
 			GetPricingModelModel instance;
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, scenarioName);
 
-			return new PricingModelModelActionResult
-			{
+			return new PricingModelModelActionResult {
 				MetaData = result,
-				Value = instance.Model
+				Value = instance.Model,
 			};
-		}
+		} // GetPricingModelModel
 
-		public StringListActionResult GetPricingModelScenarios(int underwriterId)
-		{
+		public PricingScenarioNameListActionResult GetPricingModelScenarios(int underwriterId) {
 			GetPricingModelScenarios instance;
-			ActionMetaData result = ExecuteSync(out instance, 0, underwriterId);
 
-			return new StringListActionResult
-			{
+			ActionMetaData result = ExecuteSync(out instance, null, underwriterId);
+
+			return new PricingScenarioNameListActionResult {
 				MetaData = result,
-				Records = instance.Scenarios
+				Names = instance.Scenarios,
 			};
-		}
+		} // GetPricingModelScenarios
 
-		public PricingModelModelActionResult PricingModelCalculate(int customerId, int underwriterId, PricingModelModel model)
-		{
-			PricingModelCalculate instance;
+		public PricingModelModelActionResult PricingModelCalculate(
+			int customerId,
+			int underwriterId,
+			PricingModelModel model
+		) {
+			PricingModelCalculator instance;
+
 			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, model);
 
-			return new PricingModelModelActionResult
-			{
+			return new PricingModelModelActionResult {
 				MetaData = result,
-				Value = instance.Model
+				Value = instance.Model,
 			};
-		}
+		} // PricingModelCalculate
 
-		public DecimalActionResult GetPricingModelDefaultRate(int customerId, int underwriterId, decimal companyShare)
-		{
-			GetPricingModelDefaultRate instance;
-			ActionMetaData result = ExecuteSync(out instance, customerId, underwriterId, customerId, companyShare);
-
-			return new DecimalActionResult
-			{
-				MetaData = result,
-				Value = instance.DefaultRate
-			};
-		}
-
-		public ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model)
-		{
+		public ActionMetaData SavePricingModelSettings(int underwriterId, long scenarioID, PricingModelModel model) {
 			SavePricingModelSettings instance;
-			return ExecuteSync(out instance, 0, underwriterId, scenarioName, model);
-		}
+			return ExecuteSync(out instance, null, underwriterId, scenarioID, model);
+		} // SavePricingModelSettings
+
+		public PricingModelModelActionResult GetPricingScenarioDetails(int underwriterId, long scenarioID) {
+			GetPricingModelScenarios instance;
+			ActionMetaData result = ExecuteSync(out instance, null, underwriterId, scenarioID);
+
+			return new PricingModelModelActionResult {
+				MetaData = result,
+				//Value = instance.Model,
+			};
+		} // GetPricingScenarioDetails
 	} // class EzServiceImplementation
 } // namespace EzService

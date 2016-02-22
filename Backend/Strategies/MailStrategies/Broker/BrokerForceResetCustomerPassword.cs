@@ -6,29 +6,6 @@
 	using Ezbob.Backend.Strategies.UserManagement;
 
 	public class BrokerForceResetCustomerPassword : AMailStrategyBase {
-		public static string GetFromDB(AMailStrategyBase oStrategy) {
-			var oNewPassGenerator = new UserResetPassword(oStrategy.CustomerData.Mail);
-			oNewPassGenerator.Execute();
-
-			if (!oNewPassGenerator.Success) {
-				throw new StrategyAlert(
-					oStrategy,
-					"Failed to generate a new password for customer " + oStrategy.CustomerData
-				);
-			} // if
-
-			Guid oToken = InitCreatePasswordToken.Execute(oStrategy.DB, oStrategy.CustomerData.Mail);
-
-			if (oToken == Guid.Empty) {
-				throw new StrategyAlert(
-					oStrategy,
-					"Failed to generate a change password token for customer " + oStrategy.CustomerData
-				);
-			} // if
-
-			return oStrategy.CustomerData.OriginSite + "/Account/CreatePassword?token=" + oToken.ToString("N");
-		} // GetFromDB
-
 		public BrokerForceResetCustomerPassword(int nCustomerID) : base(nCustomerID, true) {
 		} // constructor
 
@@ -36,11 +13,35 @@
 
 		protected override void SetTemplateAndVariables() {
 			Variables = new Dictionary<string, string> {
-				{ "Link", GetFromDB(this) },
+				{ "Link", GetFromDB() },
 				{ "FirstName", CustomerData.FirstName },
 			};
 
 			TemplateName = "Broker force reset customer password";
 		} // SetTemplateAndVariables
+
+		private string GetFromDB() {
+			var oNewPassGenerator = new UserResetPassword(CustomerId);
+			oNewPassGenerator.Execute();
+
+			if (!oNewPassGenerator.Success) {
+				throw new StrategyAlert(
+					this,
+					"Failed to generate a new password for customer " + CustomerId
+				);
+			} // if
+
+			var sp = new InitCreatePasswordTokenByUserID(CustomerId, DB, Log);
+			sp.Execute();
+
+			if (sp.Token == Guid.Empty) {
+				throw new StrategyAlert(
+					this,
+					"Failed to generate a change password token for customer " + CustomerId
+				);
+			} // if
+
+			return CustomerData.OriginSite + "/Account/CreatePassword?token=" + sp.Token.ToString("N");
+		} // GetFromDB
 	} // class BrokerForceResetCustomerPassword
 } // namespace Ezbob.Backend.Strategies.Broker

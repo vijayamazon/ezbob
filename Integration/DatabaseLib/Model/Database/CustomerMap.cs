@@ -10,7 +10,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-			Id(x => x.Id).GeneratedBy.Assigned().Column("Id");
+			Id(x => x.Id);
 			Map(x => x.Name).Not.Nullable();
 
 			HasMany(x => x.CustomerMarketPlaces)
@@ -217,13 +217,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.KeyColumn("CustomerId")
 				.Cascade.All()
 				.Inverse();
-
-			HasMany(x => x.LandRegistries)
-				.AsBag()
-				.KeyColumn("CustomerId")
-				.Cascade.All()
-				.Inverse();
-
+			
 			HasMany(x => x.CompanyFiles)
 				.AsBag()
 				.KeyColumn("CustomerId")

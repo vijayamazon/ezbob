@@ -159,6 +159,14 @@
 		public virtual VariableValue SalesForceFakeMode {
 			get { return this[Variables.SalesForceFakeMode]; }
 		}
+
+		public virtual VariableValue SalesForceConsumerKey {
+			get { return this[Variables.SalesForceConsumerKey]; }
+		}
+
+		public virtual VariableValue SalesForceConsumerSecret {
+			get { return this[Variables.SalesForceConsumerSecret]; }
+		}
 		
 		public virtual VariableValue SalesForceUserName {
 			get { return this[Variables.SalesForceUserName]; }
@@ -182,6 +190,10 @@
 
 		public virtual VariableValue SalesForceRetryWaitSeconds {
 			get { return this[Variables.SalesForceRetryWaitSeconds]; }
+		}
+
+		public virtual VariableValue SendCollectionMailOnNewLoan {
+			get { return this[Variables.SendCollectionMailOnNewLoan]; }
 		}
 		
 		public virtual VariableValue SessionTimeout {

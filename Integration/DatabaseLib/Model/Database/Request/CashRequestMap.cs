@@ -51,14 +51,12 @@
 			Map(x => x.ExpirianRating);
 			Map(x => x.ScorePoints);
 			Map(x => x.Originator).CustomType<CashRequestOriginatorType>();
-
 			HasMany(x => x.DecisionHistories).KeyColumn("CashRequestId").Cascade.All().Inverse();
-
 			Map(x => x.AutoDecisionID);
-
 			Map(x => x.SpreadSetupFee);
-
+			Map(x => x.ProductSubTypeID);
 			Map(x => x.HasApprovalChance);
+			Map(x => x.UwUpdatedFees);
 		} // constructor
 	} // class CashRequestMap
 } // namespace

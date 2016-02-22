@@ -131,59 +131,37 @@
 							uiEventControlID: "broker:signup-contact-other-phone"),
 						origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyAppCount",
-							"Number of applications per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 6,
-							uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
-						origin: origin)
+					@{
+					EzInputBuilder radio1 = new EzInputBuilder("FCARegistered", "FCA Registered",
+						value: "true",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:fca-registered");
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyClientAmount",
-							"Value of credit per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
-						origin: origin)
+					EzInputBuilder radio2 = new EzInputBuilder("NonFCARegistered", "Non FCA Registered",
+						value: "false",
+						type: "radio",
+						wrapperCls: "fca-radio",
+						labelClass: "for-radio",
+						isRequired: true,
+						statusIcon: true,
+						name: "FCARegistered",
+						uiEventControlID: "broker:non-fca-registered",
+						specialAttributes: new Dictionary<string, string> { { "checked", "checked" } });
 
-					<div class="control-group form_read_and_accept">
-						<div class="controls">
+					List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
+					var buttonsmodel = new EzClickInputModel(
+						name: "FCARegistered",
+						inputWrapperClass: "FormRadioCtrl",
+						containerClass: "form_fca",
+						inputButtons: radios);
 
-							@{ EzInputBuilder checkbox1 = new EzInputBuilder(
-								"FCARegistered",
-								"FCA Registered",
-								value: "false",
-								type: "checkbox",
-								tabIndex: nSignupTabIdx++,
-								name: "FCARegistered",
-								uiEventControlID: "broker:fca-registered");
-
-							 List<EzInputBuilder> checkboxesList1 = new List<EzInputBuilder> {checkbox1};
-
-							 var checkboxes1 = new EzClickInputModel(
-												name: "FCARegistered",
-												caption: "",
-												errorImgClass: "",
-												inputWrapperClass: "controls",
-												containerClass: "form_read_and_accept",
-												isRequired: false,
-												statusIcon: false,
-												inputButtons: checkboxesList1);
-												
-							@EzForm.ClickableInputWizard(checkboxes1, origin: origin)
-							}
-						</div>
-					</div>
+					@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+					}
 
 					@EzForm.InputTextWizard(
 						new EzInputBuilder(
@@ -208,6 +186,7 @@
 							cls: "form_field",
 							isRequired: true,
 							statusIcon: true,
+							formFieldID: "strength-password-view",
 							tabIndex: nSignupTabIdx++,
 							uiEventControlID: "broker:signup-password"),
 						origin: origin)
@@ -231,7 +210,7 @@
 
 					@{ EzInputBuilder checkbox2 = new EzInputBuilder(
 							"AgreeToTerms",
-							String.Format("I have read and accept the {0} <a href='#' class='show-terms-and-conditions'>Terms &amp; Conditions</a>", origin),
+							"I have read and agree to the <a href='#' class='show-terms-and-conditions'>Broker and Intermediary Program Terms &amp; Conditions</a>",
 							value: "accepted-terms",
 							type: "checkbox",
 							isRequired: true,
@@ -240,10 +219,10 @@
 							name: "AgreeToTerms",
 							uiEventControlID: "broker:signup-agree-to-terms",
 							wrapperCls: "broker-terms"); 
-							
+
 						EzInputBuilder checkbox3 = new EzInputBuilder(
 							"AgreeToPrivacyPolicy",
-							String.Format("I have read and accept the {0} <a target='_blank' href='{1}'>Privacy Policy</a>", origin, privacyUrl),
+							string.Format("I have read and agree to the <a target='_blank' href='{0}'>Privacy Policy</a>", privacyUrl),
 							value: "accepted-privacy-policy",
 							type: "checkbox",
 							isRequired: true,
@@ -252,8 +231,6 @@
 							name: "AgreeToPrivacyPolicy",
 							uiEventControlID: "broker:signup-agree-to-privacy-policy",
 							wrapperCls: "broker-terms"); 
-
-							
 
 						List<EzInputBuilder> checkboxesList2 = new List<EzInputBuilder> { checkbox2, checkbox3 };
 

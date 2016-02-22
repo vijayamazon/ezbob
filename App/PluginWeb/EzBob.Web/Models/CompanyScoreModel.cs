@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.CompaniesHouse;
 	using Ezbob.Backend.ModelsWithDB.CompanyScore;
 
 	public class CompanyHistory {
@@ -18,6 +19,8 @@
 		public string CompanyRefNum { get; set; }
 		public string CompanyName { get; set; }
 		public List<CustomerAddress> CompanyAddress { get; set; }
+		public string CustomerFirstName { get; set; }
+		public string CustomerSurname { get; set; }
 	}
 
 	public class FinDataModel {
@@ -44,6 +47,7 @@
 		public ComapanyDashboardModel DashboardModel { get; set; }
 
 		public CompanyScoreModel[] Owners { get { return ReferenceEquals(m_oOwners, null) ? null : m_oOwners.ToArray(); } }
+		public CompaniesHouseOfficerOrder CompaniesHouseModel { get; set; }
 
 		public void AddOwner(CompanyScoreModel oOwner) {
 			if (ReferenceEquals(m_oSavedOwners, null)) {

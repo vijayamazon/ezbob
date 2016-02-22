@@ -1,28 +1,29 @@
 ﻿namespace EzBob.Web.Areas.Customer.Models {
 	using System;
 	using System.Linq;
+	using System.Web;
 	using ConfigManager;
+	using Ezbob.Backend.Models;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using EzBob.Models;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Email;
+	using EzBob.Web.Models;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models;
-	using Infrastructure.Email;
-	using Underwriter.Models;
-	using PaymentServices.Calculators;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using Ezbob.Backend.Models;
-	using Infrastructure;
-	using System.Web;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using EzBob.Web.Code;
 	using log4net;
-	using Web.Models;
+	using PaymentServices.Calculators;
+	using ServiceClientProxy;
 
 	public class CustomerModelBuilder {
 		public CustomerModelBuilder(
@@ -101,7 +102,7 @@
 			} // if
 
 			customerModel.Id = customer.Id;
-		    customerModel.RefNumber = customer.RefNumber;
+			customerModel.RefNumber = customer.RefNumber;
 			customerModel.userName = user.Name;
 			customerModel.Email = customer.Name;
 			customerModel.EmailState = EmailConfirmationState.Get(customer);
@@ -240,19 +241,14 @@
 
 				customerModel.SignedLegalID = (lastll == null) ? 0 : lastll.Id;
 
-				customerModel.AlibabaCreditFacilityTemplate =
-					((lastll != null) && (lastll.AlibabaCreditFacilityTemplate != null))
-						? lastll.AlibabaCreditFacilityTemplate.Template
-						: string.Empty;
-
-				customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+			    customerModel.IsCustomerRepaymentPeriodSelectionAllowed = customer.LastCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
 			} // if
 
 			customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 
 			customerModel.OfferStart = customer.OfferStart;
 			customerModel.OfferValidUntil = customer.OfferValidUntil;
-			
+
 
 			customerModel.Loans = customer.Loans
 				.OrderBy(l => l.Status)
@@ -360,12 +356,6 @@
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			customerModel.LotteryCode = sr["LotteryCode"];
-
-			if (customerModel.Origin == "everline" && !customerModel.Loans.Any()) {
-				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
-				var status = checker.GetLoginStatus(customerModel.Email);
-				customerModel.IsEverlineRefinance = (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
-			}
 		} // BuildProfileModel
 
 		private QuickOfferModel BuildQuickOfferModel(Customer c) {
@@ -399,6 +389,18 @@
 				CurrentValues.Instance.AmountToChargeFrom
 			);
 			var state = payEarlyCalc.GetState();
+
+			try {
+				ServiceClient service = new ServiceClient();
+				long nlLoanId = service.Instance.GetLoanByOldID(loan.Id, loan.Customer.Id, 1).Value;
+				if (nlLoanId > 0) {
+					var nlModel = service.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
+					this.Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				this.Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
 
 			return state.Fees + state.Interest;
 		} // GetRolloverPayValue

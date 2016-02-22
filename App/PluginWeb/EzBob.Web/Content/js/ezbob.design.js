@@ -623,6 +623,69 @@ EzBob.UpdateBugsIcons = function(data) {
 	});
 };
 
+EzBob.drawDonut = function(canvasId, fillColor, fillPercent, isClock) {
+	var canvas = document.getElementById(canvasId);
+	if (!canvas) return false;
+	var context = canvas.getContext('2d');
+	var x = canvas.width / 2;
+	var y = canvas.height / 2;
+	var radius = isClock ? 35 : 40;
+	var startAngle = 1 * Math.PI;
+	var endAngle = (isClock ? 2 : 3) * Math.PI;
+	var lineWidth = isClock ? 25 : 15;
+	var endEngleData = Math.PI * (1 + fillPercent * (isClock ? 1 : 2));
+	context.beginPath();
+	context.arc(x, y, radius, startAngle, endAngle, false);
+	context.lineWidth = lineWidth;
+	context.strokeStyle = '#ebebeb';
+	context.stroke();
+	context.beginPath();
+	context.arc(x, y, radius, startAngle, endEngleData, false);
+	context.strokeStyle = fillColor;
+	context.lineWidth = lineWidth;
+	context.stroke();
+
+	if (isClock) {
+		context.beginPath();
+		context.moveTo(
+			x - (radius + lineWidth / 2) * Math.cos(endEngleData - Math.PI),
+			y - (radius + lineWidth / 2) * Math.sin(endEngleData - Math.PI)
+		);
+		context.lineTo(x, y);
+		context.strokeStyle = '#000000';
+		context.lineWidth = 2;
+		context.stroke();
+		context.beginPath();
+		context.arc(x, y, 5, startAngle, 3 * Math.PI, false);
+		context.lineWidth = 5;
+		context.strokeStyle = '#ebebeb';
+		context.stroke();
+	}
+
+	return true;
+},
+EzBob.drawDi = function(canvasId, fillColor, fillPercent) {
+	var canvas = document.getElementById(canvasId);
+	if (!canvas) return false;
+	var context = canvas.getContext('2d');
+	var x = canvas.width / 2;
+	var y = canvas.height;
+	context.beginPath();
+	context.moveTo(x, y);
+	context.lineTo(x, 0);
+	context.strokeStyle = '#ebebeb';
+	context.lineWidth = 15;
+	context.stroke();
+
+	context.beginPath();
+	context.moveTo(x, y - y * fillPercent);
+	context.lineTo(x, y);
+	context.strokeStyle = fillColor;
+	context.lineWidth = 15;
+	context.stroke();
+	return true;
+}
+
 EzBob.currentServerDate = function() {
 	return moment().utc().add('milliseconds', EzBob.serverOffset || 0);
 };
@@ -775,7 +838,7 @@ EzBob.ShowMessageEx = function(args) {
 	} // if
 
 	var isUW = document.location.href.indexOf("Underwriter") > -1;
-	modalpopup.dialog({
+	var dialog = modalpopup.dialog({
 		title: args.title,
 		width: args.dialogWidth || 350,
 		modal: true,
@@ -799,7 +862,7 @@ EzBob.ShowMessageEx = function(args) {
 	} else {
 		modalpopup.parents('.ui-dialog').find("button").addClass('button btn-green ev-btn-org');
 	}
-	return modalpopup;
+	return dialog;
 }; // EzBob.ShowMessageEx
 
 EzBob.formatIntWithCommas = function(val) {
@@ -1042,7 +1105,7 @@ EzBob.formatDateHumanFull = function(date) {
 	return moment.utc(date).format("MMM D YYYY");
 };
 
-EzBob.formatDateHumanFullUK = function(date) {
+EzBob.formatDateHumanFullSuffix = function(date) {
 	if (!date)
 		return '';
 
@@ -1080,8 +1143,16 @@ EzBob.formatDateHumanFullUK = function(date) {
 		break;
 	} // switch
 
-	return dayOfMonth + suffix + normalDate.format(' MMM YYYY');
-}; // EzBob.formatDateHumanFullUK
+	return dayOfMonth + suffix;
+}; // EzBob.formatDateHumanFulSuffix
+
+EzBob.formatDateHumanFullUK = function(date) {
+	return EzBob.formatDateHumanFullSuffix(date) + moment.utc(date).format(' MMM YYYY');
+}
+
+EzBob.formatDateTimeDelimitedUK = function(date) {
+	return EzBob.formatDateHumanFullSuffix(date) + moment.utc(date).format(' MMM | HH:mm');
+}
 
 EzBob.formatDateShortCard = function(date) {
 	if (!date) return "";
@@ -1118,6 +1189,29 @@ EzBob.formatTimeSpan = function(val) {
 	if (hours > 1) return hours + " hours";
 
 	return "less than hour";
+};
+
+EzBob.formatTimeFromNow = function(val) {
+	if (!val) return "";
+
+	var registered = moment.utc(val, 'DD/MM/YYYY HH:mm:ss');
+
+	if (!registered.isValid()) {
+		console.log.apply(console, 'Invalid offer expiration date');
+		return "";
+	}
+
+	var hours = registered.diff(moment().utc(), 'hours');
+	var minutes = registered.diff(moment().utc(), 'minutes');
+	
+	minutes = minutes - hours * 60;
+	
+	return (hours > 9 ? '' : '0') + hours + ':' + (minutes > 9 ? '' : '0') + minutes;
+};
+
+EzBob.formatMonths = function(num) {
+	if (!num) return '';
+	return num + ' month' + (num>1 ? 's' : '');
 };
 
 EzBob.isDarkColor = function(c) {
@@ -1189,16 +1283,11 @@ EzBob.validateSignUpForm = function(el) {
 		rules: {
 			signupPass1: $.extend({}, passPolicy),
 			signupPass2: passPolicy2,
-			promoCode: { required: false, maxlength: 30 },
 			Email: { required: true, email: true, maxlength: 128 },
 			securityQuestion: { required: true },
 			SecurityAnswer: { required: true, maxlength: 199 },
 			CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },
 			amount: { required: true, defaultInvalidPounds: true, regex: "^(?!£0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
-			customerReason: { required: true },
-			customerSourceOfRepayment: { required: true },
-			otherCustomerReason: { required: true },
-			otherCustomerSourceOfRepayment: { required: true },
 			mobilePhone: { required: true, regex: "^0[0-9]{10}$" },
 			mobileCode: { required: true, minlength: 6, maxlength: 6 }
 		},
@@ -1206,7 +1295,6 @@ EzBob.validateSignUpForm = function(el) {
 			"Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
 			"signupPass1": { required: passPolicyText, regex: passPolicyText, minlength: EzBob.Config.Origin == 'everline' ? '' : $.validator.format("Please enter at least {0} characters.") },
 			"signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
-			"promoCode": { maxlength: "Maximum promo code length is 30 characters" },
 			"securityQuestion": { required: "This field is required" },
 			"SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" },
 			"CaptchaInputText": { required: "This field is required" },
@@ -1564,6 +1652,13 @@ EzBob.validateCGShopForm = function(el, accountType) {
 EzBob.escapeRegExp = function(str) {
 	return str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';
 }; // EzBob.escapeRegExp
+
+$.validator.addMethod('notEqual', function (value, element, param) {
+	if(!$(param).is(':visible')) {
+		return true;
+	}
+	return this.optional(element) || value != $(param).val();
+}, 'This has to be different...');
 
 $.validator.addMethod('validateSignerName', function(value, element, params) {
 	function innerLog() {

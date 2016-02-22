@@ -6,6 +6,8 @@
 	public class ContactModel {
 		[DataMember]
 		public string Email { get; set; } // account unique identifier
+		[DataMember]
+		public string Origin { get; set; } // lead/account/opportunity unique identifier
 		//----------------------------------------//
 		[DataMember]
 		public string ContactEmail { get; set; } 

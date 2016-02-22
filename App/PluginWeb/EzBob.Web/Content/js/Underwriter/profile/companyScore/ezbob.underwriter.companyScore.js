@@ -56,6 +56,12 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		this.redisplayAccordion();
 
+		this.companiesHouseView = new EzBob.Underwriter.CompaniesHouseView({
+			el: this.$el.find('#companies-house-data'),
+			model: this.model
+		});
+		this.companiesHouseView.render();
+
 	}, // render
 
 	redisplayAccordion: function () {
@@ -131,6 +137,21 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 	}
 });
 
+EzBob.Underwriter.CompaniesHouseView = Backbone.Marionette.ItemView.extend({
+	template: '#companies-house-template',
+	initialize: function () {
+		return this;
+	},
+	onRender: function () {
+		return this;
+	},
+
+	serializeData: function () {
+		return {
+			data: this.model.get('CompaniesHouseModel')
+		};
+	}
+});
 
 EzBob.Underwriter.ChangeCompanyView = Backbone.Marionette.ItemView.extend({
 	template: "#change-company-template",

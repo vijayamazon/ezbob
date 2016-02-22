@@ -8,17 +8,20 @@ namespace Ezbob.Backend.Strategies.Broker {
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLoadCustomerList : AStrategy {
-		public BrokerLoadCustomerList(string sContactEmail, int nBrokerID) {
+		public BrokerLoadCustomerList(string sContactEmail, int brokerID, CustomerOriginEnum? origin) {
 			m_oSpCustomers = new SpBrokerLoadCustomerList(DB, Log) {
 				ContactEmail = sContactEmail,
-				BrokerID = nBrokerID,
+				BrokerID = brokerID,
+				Origin = origin == null ? 0 : (int)origin,
 			};
 
 			m_oSpLeads = new SpBrokerLoadLeadList(DB, Log) {
 				ContactEmail = sContactEmail,
-				BrokerID = nBrokerID,
+				BrokerID = brokerID,
+				Origin = origin == null ? 0 : (int)origin,
 			};
 
 			m_oCustomers = new SortedDictionary<int, BrokerCustomerEntry>();
@@ -37,11 +40,11 @@ namespace Ezbob.Backend.Strategies.Broker {
 					FirstName = row.FirstName,
 					LastName = row.LastName,
 					Email = row.Email,
-                    IsWaitingForSignature = row.Signature,
+					IsWaitingForSignature = row.Signature,
 					WizardStep = row.WizardStep,
 					Status = row.Status,
 					ApplyDate = row.ApplyDate,
-                   
+
 					ApprovedAmount = row.ApprovedAmount,
 					CommissionAmount = row.CommissionAmount,
 					Marketplaces = row.Marketplaces,
@@ -72,7 +75,7 @@ namespace Ezbob.Backend.Strategies.Broker {
 						CustomerID = 0,
 						RefNumber = "",
 						FirstName = row.FirstName,
-                       
+
 						LastName = row.LastName,
 						Email = row.Email,
 						WizardStep = "",
@@ -105,10 +108,12 @@ namespace Ezbob.Backend.Strategies.Broker {
 			public SpBrokerLoadCustomerList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
-				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
+				return (!string.IsNullOrWhiteSpace(ContactEmail) && (Origin > 0)) || (BrokerID > 0);
 			} // HasValidParameters
 
 			public string ContactEmail { get; set; }
+
+			public int Origin { get; set; }
 
 			public int BrokerID { get; set; }
 
@@ -117,7 +122,7 @@ namespace Ezbob.Backend.Strategies.Broker {
 				public string FirstName { get; set; }
 				public string LastName { get; set; }
 				public string Email { get; set; }
-                public bool Signature { get; set; }
+				public bool Signature { get; set; }
 				public string RefNumber { get; set; }
 				public string WizardStep { get; set; }
 				public string Status { get; set; } // need to change
@@ -136,10 +141,12 @@ namespace Ezbob.Backend.Strategies.Broker {
 			public SpBrokerLoadLeadList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
-				return !string.IsNullOrWhiteSpace(ContactEmail) || (BrokerID > 0);
+				return (!string.IsNullOrWhiteSpace(ContactEmail) && (Origin > 0)) || (BrokerID > 0);
 			} // HasValidParameters
 
 			public string ContactEmail { get; set; }
+
+			public int Origin { get; set; }
 
 			public int BrokerID { get; set; }
 

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Dummy" xml:space="preserve">
+    <value>{"Term":6,"FormattedSchedules":[{"AmountDue":"£ 230.00","Principal":"£ 170.00","Interest":"£ 60.00","Fees":"0","Date":"15/02/2014","StringNumber":"First ","Iterration":1,"InterestRate":"6.0"},{"AmountDue":"£ 215.80","Principal":"£ 166.00","Interest":"£ 49.80","Fees":"0","Date":"15/03/2014","StringNumber":"Second ","Iterration":2,"InterestRate":"6.0"},{"AmountDue":"£ 205.84","Principal":"£ 166.00","Interest":"£ 39.84","Fees":"0","Date":"15/04/2014","StringNumber":"Third ","Iterration":3,"InterestRate":"6.0"},{"AmountDue":"£ 195.88","Principal":"£ 166.00","Interest":"£ 29.88","Fees":"0","Date":"15/05/2014","StringNumber":"Fourth ","Iterration":4,"InterestRate":"6.0"},{"AmountDue":"£ 185.92","Principal":"£ 166.00","Interest":"£ 19.92","Fees":"0","Date":"15/06/2014","StringNumber":"Fifth ","Iterration":5,"InterestRate":"6.0"},{"AmountDue":"£ 175.96","Principal":"£ 166.00","Interest":"£ 9.96","Fees":"0","Date":"15/07/2014","StringNumber":"Sixth ","Iterration":6,"InterestRate":"6.0"}],"Schedule":[{"Id":0,"Date":"\/Date(1392470463347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":60.00,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":230.00,"LoanRepayment":170.0,"StatusDescription":"Open","Balance":830.0,"BalanceBeforeRepayment":1000.0,"Fees":0.0,"InterestRate":0.0600},{"Id":0,"Date":"\/Date(1394889663347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":49.80,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":215.80,"LoanRepayment":166.0,"StatusDescription":"Open","Balance":664.0,"BalanceBeforeRepayment":830.0,"Fees":0.0,"InterestRate":0.0600},{"Id":0,"Date":"\/Date(1397568063347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":39.84,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":205.84,"LoanRepayment":166.0,"StatusDescription":"Open","Balance":498.0,"BalanceBeforeRepayment":664.0,"Fees":0.0,"InterestRate":0.0600},{"Id":0,"Date":"\/Date(1400160063347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":29.88,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":195.88,"LoanRepayment":166.0,"StatusDescription":"Open","Balance":332.0,"BalanceBeforeRepayment":498.0,"Fees":0.0,"InterestRate":0.0600},{"Id":0,"Date":"\/Date(1402838463347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":19.92,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":185.92,"LoanRepayment":166.0,"StatusDescription":"Open","Balance":166.0,"BalanceBeforeRepayment":332.0,"Fees":0.0,"InterestRate":0.0600},{"Id":0,"Date":"\/Date(1405430463347)\/","PrevInstallmentDate":"\/Date(-62135596800000+0200)\/","RepaymentAmount":0.0,"Interest":9.96,"InterestPaid":0.0,"Status":"StillToPay","LateCharges":0.0,"AmountDue":175.96,"LoanRepayment":166.0,"StatusDescription":"Open","Balance":0.0,"BalanceBeforeRepayment":166.0,"Fees":0.0,"InterestRate":0.0600}],"TotalAmount":"£ 1,209.40","TotalPrincipal":"£ 1,000.00","TotalInterest":"£ 209.40","TotalFees":"£ 0.00","TotalAmoutOfCredit":"£ 1,000.00","CompanyAdress":"","CompanyNumber":null,"CompanyName":null,"Address":null,"CustomerAddress":{"AddressId":40,"AddressType":1,"Id":"MANUAL_Wed Jan 08 2014 12:59:17 GMT+0200 (Jerusale","Organisation":null,"Line1":"Some Street 22","Line2":null,"Line3":null,"Town":"Hobbiton","County":null,"Postcode":"AB101BA","Country":"Shire","Rawpostcode":"AB101BA","Deliverypointsuffix":null,"Nohouseholds":"1","Smallorg":"N","Pobox":null,"Mailsortcode":null,"Udprn":"0","ZooplaEstimate":null,"ZooplaAverage":null,"ZooplaValue":0,"ZooplaUpdateDate":null,"FormattedAddress":"Some Street 22  , Hobbiton, Shire, AB101BA","ZooplaAddress":"Some Street 22 Hobbiton AB101BA"},"TypeOfBusinessName":"Limited","CurentDate":"15/01/2014 13:21","PersonAddress":"Some Street 22  , Hobbiton, Shire, AB101BA","InterestRate":6.0000,"APR":102.75,"SetupFee":"£ 0.00","IsBrokerFee":false,"SetupFeeAmount":"£ 30.00","SetupFeePercent":"0.8","Customer":{"Id":47,"loggedIn":true,"bankAccountAdded":true,"userName":"alexbo+on15@ezbob.com","accountType":null,"CustomerPersonalInfo":{"FirstName":"Jane","MiddleInitial":"Elsa","Surname":"TestSurnameDebugMode_c:\\ezbob\\test-data\\experian\\3256.xml","Fullname":"Jane Lis Elsa","DateOfBirth":"\/Date(389743200000+0200)\/","TimeAtAddress":3,"ResidentialStatus":"Home owner","Gender":1,"MaritalStatus":0,"TypeOfBusiness":5,"TypeOfBusinessName":"Limited","DaytimePhone":"03213212123","MobilePhone":"03213212312","OverallTurnOver":23232323.0,"WebSiteTurnOver":2333223.0},"BirthDateYMD":"1982-5-9","BusinessTypeReduced":"Limited","mpAccounts":[{"MpName":"EKM","MpId":4,"displayName":"ezbob"}],"LastApprovedLoanTypeID":1,"LastApprovedRepaymentPeriod":6,"CreditSum":0.0,"CreditResult":"Approved","OfferStart":"\/Date(1389188802000)\/","OfferValidUntil":"\/Date(1391188320000)\/","Status":"Approved","Loans":[{"Id":0,"Position":1,"Date":"\/Date(1389792063347)\/","DateClosed":null,"LoanAmount":1000.0,"Status":"Live","StatusDescription":"Active","Balance":1000.0,"TotalBalance":1209.40,"NextRepayment":230.00,"Fees":0.0,"Interest":209.40,"RefNumber":"01411001001","InterestRate":0.0600,"NextEarlyPayment":170.00,"TotalEarlyPayment":1000.0,"APR":102.75,"SetupFee":0.0,"Repayments":0.0,"Principal":1000.0,"AmountDue":0.00,"NextInterestPayment":0.0,"Agreements":[],"Schedule":null,"Charge":null,"Late":0.00,"LastReportedCaisStatus":null,"LastReportedCaisStatusDate":null,"LoanType":"Standard Loan","Modified":false,"DiscountPlan":"No Discount","InterestDue":null,"InterestFreeze":[],"IsEarly":true,"LoanSourceName":"Standard"}],"AccountSettings":{"SecurityQuestionModel":{"Question":1,"Answer":"mmm"},"SecurityQuestions":[{"Id":1,"Name":"What is your mother's maiden name?"},{"Id":2,"Name":"What was your childhood nickname?"},{"Id":3,"Name":"What was the name of your closest childhood friend?"}]},"TotalBalance":1000.0,"PrincipalBalance":1000.0,"NextPayment":230.00,"NextPaymentDate":"\/Date(1392470463347)\/","GreetingMailSentDate":"\/Date(1389101210000+0200)\/","LastPaymentTotal":0.0,"LastPaymentPrincipal":0.0,"LastPaymentInterest":0.0,"LastPaymentFees":0.0,"BankAccountNumber":"23080153","SortCode":"204735","PayPointCards":[{"Id":0,"DateAdded":"\/Date(1389792063351)\/","TransactionId":"081855d8-8c0d-472b-aca6-5d112dc0723d","CardNo":"3347","ExpireDate":"\/Date(1451606400000+0200)\/","IsDefault":false}],"Medal":"","CompanyInfo":{"TypeOfBusiness":5,"CompanyNumber":null,"CompanyName":"Horns and Hooves","TimeAtAddress":3,"TimeInBusiness":"101","BusinessPhone":"05646545646","PropertyOwnedByCompany":null,"YearsInCompany":null,"RentMonthLeft":null,"CapitalExpenditure":null,"ExperianRefNum":null,"ExperianCompanyName":null,"Directors":[]},"PersonalAddress":[{"AddressId":40,"AddressType":1,"Id":"MANUAL_Wed Jan 08 2014 12:59:17 GMT+0200 (Jerusale","Organisation":null,"Line1":"Some Street 22","Line2":null,"Line3":null,"Town":"Hobbiton","County":null,"Postcode":"AB101BA","Country":"Shire","Rawpostcode":"AB101BA","Deliverypointsuffix":null,"Nohouseholds":"1","Smallorg":"N","Pobox":null,"Mailsortcode":null,"Udprn":"0","ZooplaEstimate":null,"ZooplaAverage":null,"ZooplaValue":0,"ZooplaUpdateDate":null,"FormattedAddress":"Some Street 22  , Hobbiton, Shire, AB101BA","ZooplaAddress":"Some Street 22 Hobbiton AB101BA"}],"PrevPersonAddresses":[],"OtherPropertyAddress":[],"CompanyAddress":[{"AddressId":41,"AddressType":5,"Id":"31763875_0S_F","Organisation":null,"Line1":"Flat 1","Line2":"14 Upperkirkgate","Line3":null,"Town":"Aberdeen","County":null,"Postcode":"AB10 1BA","Country":"Scotland","Rawpostcode":"AB101BA","Deliverypointsuffix":null,"Nohouseholds":"1","Smallorg":"N","Pobox":null,"Mailsortcode":null,"Udprn":"58","ZooplaEstimate":null,"ZooplaAverage":null,"ZooplaValue":0,"ZooplaUpdateDate":null,"FormattedAddress":"Flat 1 14 Upperkirkgate , Aberdeen, Scotland, AB10 1BA","ZooplaAddress":"Flat 1 14 Upperkirkgate Aberdeen AB10 1BA"}],"ApplyCount":0,"CreditCardNo":null,"Email":"alexbo+on15@ezbob.com","TotalEarlyPayment":1000.0,"TotalPayEarlySavings":209.40,"EmailState":"Pending","ActiveRollovers":[],"CustomerStatusName":"Enabled","IsDisabled":false,"HasRollovers":false,"TotalLatePayment":0.0,"IsLoanDetailsFixed":false,"IsLoanTypeSelectionAllowed":1,"LoyaltyPoints":15500,"IsOffline":false,"IsProfile":false,"IsEarly":true,"CompanyEmployeeCountInfo":{"EmployeeCount":0,"TopEarningEmployeeCount":null,"BottomEarningEmployeeCount":null,"EmployeeCountChange":null,"TotalMonthlySalary":0.0,"Created":"\/Date(205061400000)\/","HasData":true},"InviteFriendSource":"dN8aBMnkNkiLaXjIFEov9w","InvitedFriends":[],"IsLastApprovedLoanSourceEu":false,"LastSavedWizardStep":"","Perks":null},"FullName":null,"InterestRatePerDayFormatted":"0.00","InterestRatePerYearFormatted":"72.00","InterestRatePerDay":0.0020,"CurrentDate":"\/Date(1389792063347)\/","LoanType":"Standard","TermOnlyInterest":0,"TermOnlyInterestWords":"  ","TermInterestAndPrincipal":6,"TermInterestAndPrincipalWords":"six  ","isHalwayLoan":false,"CountRepayment":6,"TotalPrincipalWithSetupFee":"£ 1,000.00"}</value>
+  </data>
+</root>

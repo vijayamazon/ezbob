@@ -5,6 +5,8 @@ GO
 ALTER PROCEDURE UserLoginCheckResult
 @UserID INT,
 @EzPassword VARCHAR(255),
+@Salt VARCHAR(255),
+@CycleCount VARCHAR(255),
 @IsDeleted INT,
 @LastBadLogin DATETIME,
 @LoginFailedCount INT,
@@ -23,6 +25,8 @@ BEGIN
 
 	UPDATE Security_User SET
 		EzPassword = ISNULL(@EzPassword, EzPassword),
+		Salt = ISNULL(@Salt, Salt),
+		CycleCount = ISNULL(@CycleCount, CycleCount),
 		IsDeleted = ISNULL(@IsDeleted, IsDeleted),
 		LastBadLogin = @LastBadLogin,
 		LoginFailedCount = ISNULL(@LoginFailedCount, LoginFailedCount)

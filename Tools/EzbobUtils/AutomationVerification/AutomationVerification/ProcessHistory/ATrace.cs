@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.ProcessHistory {
 	public abstract class ATrace {
-
 		public virtual bool AllowMismatch {
 			get { return false; }
 		} // AllowMismatch
@@ -42,6 +41,5 @@
 			m_bHasLockedDecision = false;
 			DecisionStatus = nDecisionStatus;
 		} // constructor
-
 	} // class ATrace
 } // namespace

@@ -15,7 +15,7 @@
 			CGMPUniqChecker mpChecker,
 			CustomerRepository customers
 		) {
-			m_oAccountManager = new HmrcManualAccountManager(
+			this.accountManager = new HmrcManualAccountManager(
 				true,
 				customers,
 				helper,
@@ -24,7 +24,7 @@
 				context
 			);
 
-			m_oContext = context;
+			this.context = context;
 		} // constructor
 
 		[HttpPost]
@@ -34,31 +34,31 @@
 			if (nCustomerID <= 0)
 				return HmrcManualAccountManager.CreateJsonError("Please log out and log in again.");
 
-			return m_oAccountManager.SaveUploadedFiles(Request.Files, nCustomerID, "HmrcController", "SaveFile");
+			return this.accountManager.SaveUploadedFiles(Request.Files, nCustomerID, "HmrcController", "SaveFile");
 		} // SaveFile
 
 		[HttpGet]
 		public JsonResult LoadPeriods() {
-			return m_oAccountManager.LoadPeriods(DetectCustomer());
+			return this.accountManager.LoadPeriods(DetectCustomer());
 		} // LoadPeriods
 
 		private int DetectCustomer() {
 			int nCustomerID;
 
 			try {
-				nCustomerID = m_oContext.Customer.Id;
+				nCustomerID = this.context.Customer.Id;
 			}
 			catch (Exception e) {
-				ms_oLog.Warn(e, "Failed to fetch current customer.");
+				log.Warn(e, "Failed to fetch current customer.");
 				nCustomerID = 0;
 			} // try
 
 			return nCustomerID;
 		} // DetectCustomer
 
-		private readonly HmrcManualAccountManager m_oAccountManager;
-		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly HmrcManualAccountManager accountManager;
+		private readonly IEzbobWorkplaceContext context;
 
-		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(HmrcController));
+		private static readonly ASafeLog log = new SafeILog(typeof(HmrcController));
 	} // class HmrcController
 } // namespace

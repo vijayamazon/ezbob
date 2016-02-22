@@ -3,8 +3,7 @@
     using Newtonsoft.Json.Linq;
 
     /// <summary>stores information about a project</summary>
-    public class Project
-    {
+    public class Project {
         #region Public Properties
         /// <summary>id of the project</summary>
         public ulong ID { get; private set; }
@@ -34,16 +33,14 @@
         #region Public Methods
         /// <summary>string representation of the object</summary>
         /// <returns>string representation of the object</returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return Name;
         }
 
         /// <summary>parses json into a project</summary>
         /// <param name="json">json to parse</param>
         /// <returns>project corresponding to the json</returns>
-        public static Project Parse(JObject json)
-        {
+        public static Project Parse(JObject json) {
             Project p = new Project();
             p.ID = (ulong)json["id"];
             p.Name = (string)json["name"];
@@ -57,8 +54,7 @@
 
         /// <summary>Creates a json object for this class</summary>
         /// <returns>json object that represents this class</returns>
-        public JObject GetJson()
-        {
+        public JObject GetJson() {
             dynamic jsonParams = new JObject();
             if (!string.IsNullOrWhiteSpace(Name)) { jsonParams.name = Name; }
             if (!string.IsNullOrWhiteSpace(Announcement)) { jsonParams.announcement = Announcement; }

@@ -27,6 +27,7 @@
 		public Agent(
 			int nCustomerID,
 			long? cashRequestID,
+			long? nlCashRequestID,
 			decimal nSystemCalculatedAmount,
 			AutomationCalculator.Common.Medal nMedal,
 			AutomationCalculator.Common.MedalType medalType,
@@ -36,12 +37,22 @@
 		) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID, cashRequestID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
+			Args = new Arguments(
+				nCustomerID,
+				cashRequestID,
+				nlCashRequestID,
+				nSystemCalculatedAmount,
+				nMedal,
+				medalType,
+				turnoverType
+			);
 			this.caisAccounts = new List<ExperianConsumerDataCaisAccounts>();
 		} // constructor
 
 		public virtual Agent Init() {
-			Trail = new ApprovalTrail(Args.CustomerID, Args.CashRequestID, Log) { Amount = Args.SystemCalculatedAmount, };
+			Trail = new ApprovalTrail(Args.CustomerID, Args.CashRequestID, Args.NlCashRequestID, Log) {
+				Amount = Args.SystemCalculatedAmount,
+			};
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
 				Now = DateTime.UtcNow;
@@ -90,8 +101,8 @@
 					logMsg = string.Format(
 						"Approved amount {0} for {1}, email banned: {2}",
 						Trail.RoundedAmount,
-						Grammar.Number((int)MetaData.OfferLength, "day"),
-						MetaData.IsEmailSendingBanned ? "yes" : "no"
+						Grammar.Number(MetaData.OfferLength, "day"),
+						MetaData.EmailSendingBanned ? "yes" : "no"
 					);
 				} // if
 

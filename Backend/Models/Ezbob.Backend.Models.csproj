@@ -50,12 +50,6 @@
     <Compile Include="AffordabilityDataModel.cs" />
     <Compile Include="AgreementModel.cs" />
     <Compile Include="Alibaba\CustomerDataSharing.cs" />
-    <Compile Include="ApplicationInfo\ApplicationInfoModel.cs" />
-    <Compile Include="ApplicationInfo\AutomationOfferModel.cs" />
-    <Compile Include="ApplicationInfo\DiscountPlanModel.cs" />
-    <Compile Include="ApplicationInfo\LoanSourceModel.cs" />
-    <Compile Include="ApplicationInfo\LoanTypeModel.cs" />
-    <Compile Include="ApplicationInfo\SuggestedAmountModel.cs" />
     <Compile Include="BankStatementDataModel.cs" />
     <Compile Include="BrokerAddBankModel.cs" />
     <Compile Include="BrokerInvoiceCommissionModel.cs" />
@@ -67,6 +61,7 @@
     <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="Coin.cs" />
+    <Compile Include="CollectionModels.cs" />
     <Compile Include="CompanyDataForCreditBureau.cs" />
     <Compile Include="CompanyInfo.cs" />
     <Compile Include="ConfigTable.cs" />
@@ -75,19 +70,31 @@
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
     <Compile Include="CustomerStatusTransition.cs" />
     <Compile Include="DecisionModel.cs" />
+    <Compile Include="DefaultCommissions.cs" />
     <Compile Include="ExperianTargetingRequest.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
     <Compile Include="ExternalAPI\AlibabaContractDto.cs" />
     <Compile Include="ExternalAPI\AlibabaSaleContractResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="FilteredAggregationResult.cs" />
+    <Compile Include="Investor\AccountingDataModel.cs" />
+    <Compile Include="Investor\InvestorBankAccountModel.cs" />
+    <Compile Include="Investor\InvestorCashRequest.cs" />
+    <Compile Include="Investor\InvestorContactModel.cs" />
+    <Compile Include="Investor\InvestorModel.cs" />
+    <Compile Include="Investor\SchedulerDataModel.cs" />
+    <Compile Include="Investor\TransactionsDataModel.cs" />
+    <Compile Include="LegalDocs\LegalDocsEnums.cs" />
+    <Compile Include="Investor\OneInvestorModel.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MarketplaceTurnoverModel.cs" />
+    <Compile Include="MessagesModel.cs" />
     <Compile Include="MpModel.cs" />
-    <Compile Include="NewLoan\NL_Model.cs" />
+    <Compile Include="PricingScenarioName.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
+    <Compile Include="DasKennwort.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />
     <Compile Include="CrmStatusGroup.cs" />
@@ -96,10 +103,11 @@
     <Compile Include="EsignerModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="IdNameModel.cs" />
-    <Compile Include="Password.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
     <Compile Include="IovationCheckModel.cs" />
+    <Compile Include="LoginCustomerMultiOriginModel.cs" />
+    <Compile Include="SlidersDataModel.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />
@@ -119,10 +127,6 @@
     <Compile Include="VatReturnUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
-      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
-      <Name>DatabaseLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
       <Name>DbConstants</Name>
@@ -131,15 +135,16 @@
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
       <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
-      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
-      <Name>Ezbob.Backend.ModelsWithDB</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

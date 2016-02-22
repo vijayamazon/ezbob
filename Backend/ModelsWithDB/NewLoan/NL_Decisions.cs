@@ -1,47 +1,34 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
-    using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using System;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_Decisions {
-        [PK(true)]
-        [DataMember]
-        public int DecisionID { get; set; }
+	[DataContract(IsReference = true)]
+	public class NL_Decisions : AStringable {
+		[PK(true)]
+		[DataMember]
+		public long DecisionID { get; set; }
 
-        [FK("NL_CashRequests", "CashRequestID")]
-        [DataMember]
-        public int CashRequestID { get; set; }
+		[FK("NL_CashRequests", "CashRequestID")]
+		[DataMember]
+		public long CashRequestID { get; set; }
 
-        [FK("Security_User", "UserId")]
-        [DataMember]
-        public int UserID { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int UserID { get; set; }
 
-        [FK("Decisions", "DecisionID")]
-        [DataMember]
-        public int DecisionNameID { get; set; }
+		[FK("Decisions", "DecisionID")]
+		[DataMember]
+		public int DecisionNameID { get; set; }
 
-        [DataMember]
-        public DateTime DecisionTime { get; set; }
+		[DataMember]
+		public DateTime DecisionTime { get; set; }
 
-        [DataMember]
-        public int Position { get; set; }
+		[DataMember]
+		public int Position { get; set; }
 
-        [Length(LengthType.MAX)]
-        [DataMember]
-        public string Notes { get; set; }
-
-        [DataMember]
-        public bool? IsRepaymentPeriodSelectionAllowed { get; set; }
-
-        [DataMember]
-        public bool? IsAmountSelectionAllowed { get; set; }
-
-        [DataMember]
-        public int? InterestOnlyRepaymentCount { get; set; }
-
-        [DataMember]
-        public bool? SendEmailNotification { get; set; }
-    }//class NL_Decisions
-}//ns
-
+		[Length(LengthType.MAX)]
+		[DataMember]
+		public string Notes { get; set; }
+	} // class NL_Decisions
+} // ns

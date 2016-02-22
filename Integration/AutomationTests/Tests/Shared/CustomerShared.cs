@@ -7,42 +7,42 @@ namespace UIAutomationTests.Tests.Shared {
 
     class CustomerShared : WebTestBase {
 
-        public CustomerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig) {
+        public CustomerShared(IWebDriver Driver, ResourceManager EnvironmentConfig, ResourceManager BrandConfig, ActionBot actionBot) {
             this.Driver = Driver;
             this.EnvironmentConfig = EnvironmentConfig;
             this.BrandConfig = BrandConfig;
-            this.actionBot = new ActionBot(Driver);
+            this.actionBot = actionBot;
         }
 
-        public void CustomerLogIn(string logHeader, bool isFirstTime, string brokerMail) {
+        public void CustomerLogIn(
+            string logHeader,
+            bool isFirstTime,
+            string brokerMail
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
             SharedServiceClass.WaitForAjaxReady(Driver);
-            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("CustomerLogIn"));
+            string url = String.Concat(EnvironmentConfig.GetString("ENV_address"), BrandConfig.GetString("Brand_url"), IsRunLocal, BrandConfig.GetString("CustomerLogIn"));
             Driver.Navigate().GoToUrl(url);
-            actionBot.WriteToLog(logHeader + " - " + "Nevigate to url: " + url);
+            actionBot.WriteToLog("Nevigate to url: " + url);
 
-            //IWebElement userName = SharedServiceClass.ElementIsVisible(Driver, By.Id("UserName"));
-            //userName.SendKeys(brokerMail);
-            actionBot.SendKeys(By.Id("UserName"), brokerMail, logHeader);
+            //Insert register customer's e-mail to the user name field.
+            actionBot.SendKeys(By.Id("UserName"), brokerMail, "(user name field)");
 
-            //IWebElement password = Driver.FindElement(By.Id("Password"));
-            //password.SendKeys("123123");
-            actionBot.SendKeys(By.Id("Password"), "123123", logHeader);
+            //Insert password to the password field. Default: '123456'
+            actionBot.SendKeys(By.Id("Password"), "123123", "(password field)");
 
-            //IWebElement loginBrokerButton = SharedServiceClass.ElementToBeClickable(Driver, By.Id("loginSubmit"));
-            //loginBrokerButton.Click();
-            actionBot.Click(By.Id("loginSubmit"), logHeader);
+            //Click on submit button.
+            actionBot.Click(By.Id("loginSubmit"), "(login button)");
 
-            if (isFirstTime) {
-                //IWebElement continueButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"));//By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button.btn-green.pull-right.automation-button.ev-btn-org")
-                //continueButton.Click();
-                actionBot.Click(By.CssSelector("div.automation-popup > div.automation-popup-content > div.alignright > button.button"), logHeader);
-            }
+            if (isFirstTime)
+                actionBot.Click(By.CssSelector("div.automation-popup-content > div.alignright > button.button"), "(automation - accept terms button)");
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
 
         //Precondition: be loggedin to customer.
-        public void CustomerTakeLoan(string logHeader,
+        public void CustomerTakeLoan(
+            string logHeader,
             string fName,
             string lName,
             string accountNum,
@@ -55,125 +55,109 @@ namespace UIAutomationTests.Tests.Shared {
             string cardNumber,
             string expDate,
             string securityCode,
-            double? loanFraction = null) {
+            double? loanFraction = null
+            ) {
             actionBot.WriteToLog("Begin method: " + logHeader);
+
             SharedServiceClass.WaitForAjaxReady(Driver);
-            //IWebElement chooseAmountBtn = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"));
-            //chooseAmountBtn.Click();
-            //SharedServiceClass.TryElementClick(Driver, By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"));
-            //actionBot.WriteToLog(logHeader + " - " + By.CssSelector("button.button.btn-green.get-cash.ev-btn-org").ToString() + " - TryElementClick.");
 
-            actionBot.ClickAssert(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), By.XPath("//label[@for='preAgreementTermsRead']"), logHeader);
-
-
-            //IWebElement preAgreementTermsRead = Driver.FindElement(By.XPath("//label[@for='preAgreementTermsRead']"));
-            //preAgreementTermsRead.Click();
-            actionBot.Click(By.XPath("//label[@for='preAgreementTermsRead']"), logHeader);
+            //Click on the take loan button.
+            //actionBot.ClickAssert(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), By.XPath("//label[@for='preAgreementTermsRead']"), "(take loan button)");
+            actionBot.Click(By.CssSelector("button.button.btn-green.get-cash.ev-btn-org"), "(take loan button)");
 
             if (loanFraction != null) {
-                IWebElement rangeSelector = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min"));//Driver.FindElement(By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min")));
+                //Click on slider to vary the loan ammount.
+                IWebElement rangeSelector = SharedServiceClass.ElementIsClickable(Driver, By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min"));//Driver.FindElement(By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min")));
                 int clickCoordinate = (int)(rangeSelector.Size.Width * loanFraction);
                 Actions moveAction = new Actions(Driver);
                 moveAction.MoveToElement(rangeSelector, clickCoordinate, 0).Click().Build().Perform();
-                actionBot.WriteToLog(logHeader + " - " + By.CssSelector("div.ui-slider-range.ui-widget-header.ui-slider-range-min").ToString() + " - Click was performed at " + loanFraction.ToString() + "fraction of the element.");
+                actionBot.WriteToLog("Click was performed on loan ammount slider at " + (loanFraction*100).ToString() + "%.");
             }
 
-            //IWebElement agreementTermsRead = Driver.FindElement(By.XPath("//label[@for='agreementTermsRead']"));
-            //agreementTermsRead.Click();
-            actionBot.Click(By.XPath("//label[@for='agreementTermsRead']"), logHeader);
+            //Click on the accept pre-agreement terms button.
+            //actionBot.Click(By.XPath("//label[@for='preAgreementTermsRead']"), "(pre-agreement terms button)");
 
-            //IWebElement notInBankruptcy = Driver.FindElement(By.XPath("//label[@for='notInBankruptcy']"));
-            //notInBankruptcy.Click();
-            actionBot.Click(By.XPath("//label[@for='notInBankruptcy']"), logHeader);
+            //Click on the contract terms read check box.
+            //actionBot.Click(By.XPath("//label[@for='agreementTermsRead']"), "(contract terms read checkBox)");
+
+            //Click on confirm the solvency representations and warranties.
+            actionBot.Click(By.XPath("//label[@for='notInBankruptcy']"), "(solvency representations and warranties checkBox)");
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
-            //IWebElement confirmButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"));
-            //confirmButton.Click();
-            actionBot.Click(By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"), logHeader);
+            //Confirn disclosures.
+            actionBot.Click(By.CssSelector("button.ok-button.button.btn-green.ev-btn-org"), "(confirn disclosures button)");
 
-            //IWebElement signedName = Driver.FindElement(By.Id("signedName"));
-            //signedName.SendKeys(fName + " " + lName);
-            actionBot.SendKeys(By.Id("signedName"), fName + " " + lName, logHeader);
+            //Signe the agreement.
+            actionBot.SendKeys(By.Id("signedName"), fName + " " + lName, "(signature field)");
 
-            //IWebElement nextButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"));
-            //nextButton.Click();
-            actionBot.Click(By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"), logHeader);
+            //Click next to accept the agreements.
+            actionBot.Click(By.CssSelector("form.LoanLegal a.btn-continue.button.btn-green.ev-btn-org.submit"), "(accept agreement button)");
 
-            //End of Step 1 - Choosing loas terms
-            //IWebElement accountNumber = SharedServiceClass.ElementIsVisible(Driver, By.Id("AccountNumber"));
-            //accountNumber.SendKeys(accountNum);
-            actionBot.SendKeys(By.Id("AccountNumber"), accountNum, logHeader);
+            //Insert account number sort codes.
+            actionBot.SendKeys(By.Id("AccountNumber"), accountNum, "(account number field)");
 
-            //IWebElement sortCode1 = Driver.FindElement(By.Id("SortCode1"));
-            //sortCode1.SendKeys(sort1);
-            actionBot.SendKeys(By.Id("SortCode1"), sort1, logHeader);
+            actionBot.SendKeys(By.Id("SortCode1"), sort1, "(sort code - part 1)");
 
-            //IWebElement sortCode2 = Driver.FindElement(By.Id("SortCode2"));
-            //sortCode2.SendKeys(sort2);
-            actionBot.SendKeys(By.Id("SortCode2"), sort2, logHeader);
+            actionBot.SendKeys(By.Id("SortCode2"), sort2, "(sort code - part 2)");
 
-            //IWebElement sortCode3 = Driver.FindElement(By.Id("SortCode3"));
-            //sortCode3.SendKeys(sort3);
-            actionBot.SendKeys(By.Id("SortCode3"), sort3, logHeader);
+            actionBot.SendKeys(By.Id("SortCode3"), sort3, "(sort code - part 3)");
 
             By accTypeRadio;
+            string accTypeComment;
             switch (char.ToUpper(accType)) {
                 case 'B':
-                    accTypeRadio = By.XPath("//label[@for='baBusiness']");//Driver.FindElement(By.XPath("//label[@for='baBusiness']")));
+                    accTypeRadio = By.XPath("//label[@for='baBusiness']");
+                    accTypeComment = "(account type radioButton set to Bussines)";
                     break;
                 default:
-                    accTypeRadio = By.XPath("//label[@for='baPersonal']");//Driver.FindElement(By.XPath("//label[@for='baPersonal']"));
+                    accTypeRadio = By.XPath("//label[@for='baPersonal']");
+                    accTypeComment = "(account type radioButton set to Personal)";
                     break;
             }
-            actionBot.Click(accTypeRadio, logHeader);
+            actionBot.Click(accTypeRadio, accTypeComment);
 
-            //IWebElement continueButton = SharedServiceClass.ElementToBeClickable(Driver, By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"));
-            //continueButton.Click();
-            actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), logHeader);
-            //Thread.Sleep(2000);
+            //Click on connect bank continue button.
+            actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), "(connect bank continue button - first click)");
+
             SharedServiceClass.WaitForBlockUiOff(Driver);
-            //continueButton.Click();
-            //actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), "");
-            //End of step 2 - Entering bank details
-            //SharedServiceClass.TryElementClick(Driver, By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"));
-            //actionBot.WriteToLog(logHeader + " - " + By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org").ToString() + " - TryElementClick.");
-            actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), logHeader);
 
-            //IWebElement customer = SharedServiceClass.ElementIsVisible(Driver, By.Id("customer"));
-            //customer.SendKeys(cardHolderName);
-            actionBot.SendKeys(By.Id("customer"), cardHolderName, logHeader);
+            //Click on connect bank continue button. Second click. - Second click is to activate the backdoor.
+            actionBot.Click(By.CssSelector("a.button.btn-green.connect-bank.ev-btn-org"), "(connect bank continue button - second click)");
 
-            //SelectElement cardTypeSelect = new SelectElement(Driver.FindElement(By.CssSelector("select.selectheight.form_field")));
-            //cardTypeSelect.SelectByValue(cardType);
-            actionBot.SelectByValue(By.CssSelector("select.selectheight.form_field"), cardType, logHeader);
+            //Name of card holder.
+            actionBot.SendKeys(By.Id("customer"), cardHolderName, "(card holder name field)");
 
-            //IWebElement cardNo = Driver.FindElement(By.Id("card_no"));
-            //cardNo.SendKeys(cardNumber);
-            actionBot.SendKeys(By.Id("card_no"), cardNumber, logHeader);
+            //Card type.
+            actionBot.SelectByValue(By.CssSelector("select.selectheight.form_field"), cardType, "(card type select)");
 
-            //IWebElement expiry = Driver.FindElement(By.Id("expiry"));
-            //expiry.SendKeys(expDate);
-            actionBot.SendKeys(By.Id("expiry"), expDate, logHeader);
+            //Card number.
+            actionBot.SendKeys(By.Id("card_no"), cardNumber, "(card number field)");
 
-            //IWebElement cv2 = Driver.FindElement(By.Id("cv2"));
-            //cv2.SendKeys(securityCode);
-            actionBot.SendKeys(By.Id("cv2"), securityCode, logHeader);
+            //Card expire date.
+            actionBot.SendKeys(By.Id("expiry"), expDate, "(card expire date field)");
 
-            //IWebElement confirmStep3Button = SharedServiceClass.ElementToBeClickable(Driver, By.Id("paypoint-submit"));
-            //confirmStep3Button.Click();
-            actionBot.Click(By.Id("paypoint-submit"), logHeader);
+            //Card CV2 code
+            actionBot.SendKeys(By.Id("cv2"), securityCode, "(card CV2 code field)");
 
-            //IWebElement myAccountButton = SharedServiceClass.ElementToBeClickable(Driver, By.Id("pacnet-status-back-to-profile"));
-            //myAccountButton.Click();
-            actionBot.Click(By.Id("pacnet-status-back-to-profile"), logHeader);
-            //End of step 3 - Get cash
+            //Submit debit card details
+            actionBot.Click(By.Id("paypoint-submit"), "(submit debit card details button)");
+
+            //Continue to customer's profile
+            actionBot.Click(By.Id("pacnet-status-back-to-profile"), "(continue to customer's profile button)");
+
             actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
 
         public void CustomerLogOff(string logHeader) {
+            actionBot.WriteToLog("Begin method: " + logHeader);
+
             SharedServiceClass.WaitForBlockUiOff(Driver);
-            actionBot.Click(By.CssSelector("li.login > a"), logHeader);
+
+            //Click log-off
+            actionBot.Click(By.CssSelector("li.login > a"), "(customer log-off button)");
+
+            actionBot.WriteToLog("End method: " + logHeader + Environment.NewLine);
         }
     }
 }

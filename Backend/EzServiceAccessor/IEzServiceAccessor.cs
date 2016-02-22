@@ -1,12 +1,14 @@
 ﻿namespace EzServiceAccessor {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 
 	public interface IEzServiceAccessor {
+
 		ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
@@ -50,13 +52,16 @@
 
 		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="nlModel"></param>
-		/// <returns></returns>
-		NL_Model AddPayment(NL_Model nlModel);
+		void AddPayment(int customerID, NL_Payments payment, int userID = 1);
 
+		long GetLoanByOldID(int loanId, int customerID = 1, int userID = 1);
+		void LinkPaymentToInvestor(int userID, int loanTransactionID, int loanID, int customerID, decimal amount, DateTime transactionDate);
+
+		List<NL_Loans> GetCustomerLoans(int customerID, int userID = 1);
+
+		NL_Model GetLoanState(int customerID, long loanID, DateTime utcNow, int userID, bool getCalculatorState = true);
+
+		void AcceptRollover(int customerID, long loanID);
 
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

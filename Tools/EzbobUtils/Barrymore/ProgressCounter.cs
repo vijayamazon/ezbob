@@ -12,14 +12,15 @@
 		} // constructor
 
 		public static ProgressCounter operator ++(ProgressCounter pc) {
-			return pc.Increment();
+			return pc.Next();
 		} // operator ++
 
 		public ProgressCounter Next() {
-			return Increment();
+			Increment();
+			return this;
 		} // Next
 
-		public ProgressCounter Increment() {
+		public bool Increment() {
 			bool say = false;
 			ulong sayWhat = 0;
 
@@ -38,7 +39,7 @@
 			if (say)
 				this.log.Say(this.severity, this.format, sayWhat);
 
-			return this;
+			return say;
 		} // Increment
 
 		public void Log() {
@@ -49,6 +50,10 @@
 			else
 				this.log.Say(this.severity, this.format, this.thousands + this.counter);
 		} // Log
+
+		public ulong CurrentPosition {
+			get { return this.counter + this.thousands; }
+		} // CurrentPosition
 
 		private ulong counter;
 		private ulong thousands;

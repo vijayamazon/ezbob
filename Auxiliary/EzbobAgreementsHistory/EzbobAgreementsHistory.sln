@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobAgreementsHistory", "EzbobAgreementsHistory\EzbobAgreementsHistory.csproj", "{567BA60B-F4F8-4775-9C40-A7D767E74362}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barrymore", "..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj", "{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readonly", "Readonly", "{ED67F5D6-727C-4849-9881-09E6783F38B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzEnvironment", "..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj", "{B91EB116-94EB-416B-9422-D3BA97993163}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnection", "..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj", "{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\..\Tools\EzbobUtils\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{567BA60B-F4F8-4775-9C40-A7D767E74362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{567BA60B-F4F8-4775-9C40-A7D767E74362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{567BA60B-F4F8-4775-9C40-A7D767E74362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{567BA60B-F4F8-4775-9C40-A7D767E74362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E} = {ED67F5D6-727C-4849-9881-09E6783F38B3}
+		{B91EB116-94EB-416B-9422-D3BA97993163} = {ED67F5D6-727C-4849-9881-09E6783F38B3}
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4} = {ED67F5D6-727C-4849-9881-09E6783F38B3}
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C} = {ED67F5D6-727C-4849-9881-09E6783F38B3}
+	EndGlobalSection
+EndGlobal

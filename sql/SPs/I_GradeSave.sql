@@ -1,0 +1,40 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('I_GradeSave') IS NOT NULL
+	DROP PROCEDURE I_GradeSave
+GO
+
+IF TYPE_ID('I_GradeList') IS NOT NULL
+	DROP TYPE I_GradeList
+GO
+
+CREATE TYPE I_GradeList AS TABLE (
+	[GradeID] INT NOT NULL,
+	[Name] NVARCHAR(255) NULL,
+	[UpperBound] DECIMAL(18, 6) NULL
+)
+GO
+
+CREATE PROCEDURE I_GradeSave
+@Tbl I_GradeList READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO I_Grade (
+		[GradeID],
+		[Name],
+		[UpperBound]
+	) SELECT
+		[GradeID],
+		[Name],
+		[UpperBound]
+	FROM @Tbl
+
+	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	SELECT @ScopeID AS ScopeID
+END
+GO
+
+

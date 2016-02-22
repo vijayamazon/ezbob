@@ -53,167 +53,205 @@
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.LeadAccountService(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.LeadAccountService(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
-
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
-
 			LogResult("LeadAccountService", result, model.Email);
 		}
 
 		public void CreateOpportunity(OpportunityModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.CreateOpportunityService(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.CreateOpportunityService(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId,
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
 			LogResult("CreateOpportunityService", result, model.Email);
 
 		}
 
 		public void UpdateOpportunity(OpportunityModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				// max length of deal lost reason is 255
-				const int maxDealLostReasonLength = 255;
-				if (model.DealLostReason != null && model.DealLostReason.Length > maxDealLostReasonLength) {
-					model.DealLostReason = model.DealLostReason.Substring(0, maxDealLostReasonLength);
-				}
-				var response = this.api.UpdateCloseOpportunityService(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					// max length of deal lost reason is 255
+					const int maxDealLostReasonLength = 255;
+					if (model.DealLostReason != null && model.DealLostReason.Length > maxDealLostReasonLength) {
+						model.DealLostReason = model.DealLostReason.Substring(0, maxDealLostReasonLength);
+					}
+					var response = this.api.UpdateCloseOpportunityService(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
 			LogResult("UpdateCloseOpportunityService", result, model.Email);
 		}
 
 		public void CreateUpdateContact(ContactModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.ContactService(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.ContactService(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
 			LogResult("ContactService", result, model.Email);
 		}
 
 		public void CreateTask(TaskModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.CreateTask(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.CreateTask(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
 			LogResult("CreateTask", result, model.Email);
 
 		}
 
 		public void CreateActivity(ActivityModel model) {
-			Model = model.ToJsonExtension();
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.CreateActivity(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.CreateActivity(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
 			LogResult("CreateActivity", result, model.Email);
 		}
 
-		public void ChangeEmail(string currentEmail, string newEmail) {
-			Model=new { currentEmail, newEmail }.ToJsonExtension();
+		public void ChangeEmail(ChangeEmailModel model) {
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.ChangeEmail(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.ChangeEmail(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
-			LogResult("ChangeEmail", result, newEmail);
+			LogResult("ChangeEmail", result, model.newEmail);
 		}
 
-		public GetActivityResultModel GetActivity(string email) {
-			Model = new { Email = email }.ToJsonExtension(); 
+		public GetActivityResultModel GetActivity(GetActivityModel model) {
 			string result = null;
-			if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
-				var response = this.api.GetActivity(
-					new SalesForceServiceNS.SessionHeader {
-						sessionId = this.loginResult.sessionId
-					},
-					new SalesForceServiceNS.CallOptions(),
-					new SalesForceServiceNS.DebuggingHeader(),
-					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					Model,
-					out result);
+			try {
+				Model = model.ToJsonExtension();
+				if (this.loginResult != null && !string.IsNullOrEmpty(this.loginResult.sessionId)) {
+					var response = this.api.GetActivity(
+						new SalesForceServiceNS.SessionHeader {
+							sessionId = this.loginResult.sessionId
+						},
+						new SalesForceServiceNS.CallOptions(),
+						new SalesForceServiceNS.DebuggingHeader(),
+						new SalesForceServiceNS.AllowFieldTruncationHeader(),
+						Model,
+						out result);
 
-				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+					Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+				}
+			} catch (Exception ex) {
+				var resultModel = new ApiResponse(null, ex.Message);
+				result = resultModel.ToJsonExtension();
 			}
-			LogResult("GetActivity", result, email);
+			LogResult("GetActivity", result, model.Email);
 			try {
 				var res = result.JsonStringToObject<ApiResponse>(true);
-				if (res.Success == null) { res.Success = String.Empty;}
+				if (res.Success == null) { res.Success = String.Empty; }
 				var activities = res.Success.Replace("\\", "").JsonStringToObject<IEnumerable<ActivityResultModel>>(true);
 				return new GetActivityResultModel(activities, res.Error);
 			} catch (Exception) {
@@ -240,6 +278,7 @@
 				Error = "Failed parsing result to object " + result;
 				string message = "SalesForce " + serviceName + " failed for customer " + email + ", request \n" + Model + "\n error: failed parsing response:\n" + result + "";
 				Log.Warn(message);
+				Log.Warn(ex);
 			}
 		}
 

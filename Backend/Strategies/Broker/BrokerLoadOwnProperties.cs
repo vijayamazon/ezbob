@@ -2,12 +2,26 @@
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public class BrokerLoadOwnProperties : AStrategy {
-		public BrokerLoadOwnProperties(string sContactEmail, int nBrokerID) {
+		public BrokerLoadOwnProperties(string sContactEmail, CustomerOriginEnum origin) {
 			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactEmail = sContactEmail,
-				BrokerID = nBrokerID,
+				Origin = (int)origin,
+				BrokerID = 0,
+				ContactMobile = null,
+			};
+
+			Properties = new BrokerProperties();
+		} // constructor
+
+		public BrokerLoadOwnProperties(int brokerID) {
+			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
+				ContactEmail = null,
+				Origin = 0,
+				BrokerID = brokerID,
+				ContactMobile = null,
 			};
 
 			Properties = new BrokerProperties();

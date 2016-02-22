@@ -6,13 +6,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadEmailForPasswordReset
-@TargetID INT
+@TargetID INT,
+@Email NVARCHAR(255) OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
+	SET @Email = NULL
+
 	SELECT
-		Email
+		@Email = Email
 	FROM
 		Security_User
 	WHERE

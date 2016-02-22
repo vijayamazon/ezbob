@@ -24,7 +24,8 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer"),
 			isCustomerRepaymentPeriodSelectionAllowed: this.customer.get('IsCustomerRepaymentPeriodSelectionAllowed'),
 			isLoanTypeSelectionAllowed: this.customer.get('IsLoanTypeSelectionAllowed'),
-			numOfActiveLoans: this.customer.get('ActiveLoans').length
+			numOfActiveLoans: this.customer.get('ActiveLoans').length,
+			isTest: this.customer.get('IsTest')
 		});
 		this.states = {
 			apply: { view: this.createApplyForLoanView, step: 0 },
@@ -86,21 +87,22 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		}
 		data = form.serialize();
 		BlockUi("on");
+	    var self = this;
 		xhr = $.post("" + window.gRootPath + "Customer/GetCash/LoanLegalSigned", data);
-		xhr.done((function (_this) {
-			return function (res) {
-				if (res.error) {
-					EzBob.App.trigger('error', res.error);
-					return;
-				}
-				if (!_this.customer.get("bankAccountAdded")) {
-					_this.model.set("state", "bank");
-					return;
-				}
-				return _this.submit();
-			};
-		})(this));
-		return xhr.always(function () {
+
+		xhr.done(function (res) {
+	        if (res.error) {
+	            EzBob.App.trigger('error', res.error);
+	            return;
+	        }
+	        if (!self.customer.get("bankAccountAdded")) {
+	            self.model.set("state", "bank");
+	            return;
+	        }
+	        return self.submit();
+        });
+
+	    xhr.always(function () {
 			BlockUi("off");
 		});
 	},

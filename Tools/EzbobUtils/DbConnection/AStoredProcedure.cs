@@ -8,6 +8,8 @@
 	using System.Reflection;
 	using Ezbob.Utils;
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
+	using Ezbob.Utils.ParsedValue;
 
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class DirectionAttribute : Attribute {
@@ -25,14 +27,26 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.ExecuteScalar<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			T res =  DB.ExecuteScalar<T>(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return res;
 		} // ExecuteScalar
 
 		public virtual int ExecuteNonQuery(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			int result = DB.ExecuteNonQuery(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return result;
 		} // ExecuteNonQuery
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
@@ -43,7 +57,11 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachRow(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			DB.ForEachRow(oConnectionToUse, oAction, GetName(), Species, args);
+
+			FillOutputs(args);
 		} // ForEachRow
 
 		public virtual void ForEachRowSafe(Action<SafeReader> oAction) {
@@ -71,7 +89,11 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachRowSafe(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			DB.ForEachRowSafe(oConnectionToUse, oAction, GetName(), Species, args);
+
+			FillOutputs(args);
 		} // ForEachRowSafe
 
 		public virtual void ForEachResult(Func<IResultRow, ActionResult> oAction) {
@@ -98,6 +120,8 @@
 			if (oConstructorInfo == null)
 				throw new NotImplementedException("Nested ResultRow class has no parameterless constructor.");
 
+			QueryParameter[] args = PrepareParameters();
+
 			DB.ForEachRowSafe(
 				oConnectionToUse,
 				(sr, bRowsetStart) => {
@@ -110,8 +134,10 @@
 				},
 				GetName(),
 				Species,
-				PrepareParameters()
+				args
 			);
+
+			FillOutputs(args);
 		} // ForEachResult
 
 		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction) where T : IResultRow, new() {
@@ -125,21 +151,37 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.ForEachResult(oConnectionToUse, oAction, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			DB.ForEachResult(oConnectionToUse, oAction, GetName(), Species, args);
+
+			FillOutputs(args);
 		} // ForEachResult
 
 		public virtual List<T> Fill<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.Fill<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			List<T> res = DB.Fill<T>(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return res;
 		} // Fill
 
 		public virtual T FillFirst<T>(ConnectionWrapper oConnectionToUse = null) where T : new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.FillFirst<T>(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			T res =  DB.FillFirst<T>(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return res;
 		} // FillFirst
 
 		public virtual void FillFirst<T>(T oInstance) {
@@ -160,9 +202,18 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			DB.FillFirst(oConnectionToUse, oInstance, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			DB.FillFirst(oConnectionToUse, oInstance, GetName(), Species, args);
+
+			FillOutputs(args);
 		} // FillFirst
 
+		/// <summary>
+		/// Does not support object properties for output values!
+		/// </summary>
+		/// <param name="oConnectionToUse"></param>
+		/// <returns></returns>
 		public virtual IEnumerable<SafeReader> ExecuteEnumerable(ConnectionWrapper oConnectionToUse = null) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
@@ -174,7 +225,13 @@
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
-			return DB.GetFirst(oConnectionToUse, GetName(), Species, PrepareParameters());
+			QueryParameter[] args = PrepareParameters();
+
+			SafeReader res = DB.GetFirst(oConnectionToUse, GetName(), Species, args);
+
+			FillOutputs(args);
+
+			return res;
 		} // GetFirst
 
 		public override string ToString() {
@@ -187,7 +244,7 @@
 			CommandSpecies nSpecies = CommandSpecies.StoredProcedure
 		) {
 			m_aryArgs = null;
-			Log = new SafeLog(oLog);
+			Log = oLog.Safe();
 			Species = nSpecies;
 
 			CheckDirection();
@@ -248,6 +305,25 @@
 						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
 							Direction = nDirection,
 						};
+
+						bool shouldSetSize =
+							qp.Direction.In(ParameterDirection.Output, ParameterDirection.InputOutput) &&
+							(oPropertyInfo.PropertyType == typeof(string));
+
+						if (shouldSetSize) {
+							object[] lengthAttrs = oPropertyInfo.GetCustomAttributes(typeof(LengthAttribute), false);
+
+							if (lengthAttrs.Length < 1) {
+								throw new Exception(string.Format(
+									"Property '{0}' must have attribute Length attached because " +
+									"it is converted to '{1}' parameter.",
+									oPropertyInfo.Name,
+									qp.Direction
+								));
+							} // if
+
+							qp.Size = ((LengthAttribute)lengthAttrs[0]).Quantity;
+						} // if
 					} else {
 						if (TypeUtils.IsEnumerable(oPropertyInfo.PropertyType)) {
 							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
@@ -257,13 +333,15 @@
 								sFieldName,
 								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
 								TypeUtils.GetConvertorToObjectArray(oUnderlyingType)
-								);
+							);
 						} else {
 							throw new NotImplementedException(
 								"Type " + oPropertyInfo.PropertyType + " does not implement IEnumerable<T>"
 							);
 						} // if
 					} // if
+
+					qp.ObjectPropertyName = oPropertyInfo.Name;
 
 					args.Add(qp);
 				});
@@ -284,6 +362,20 @@
 		protected virtual string GetName() {
 			return this.GetType().Name;
 		} // GetName
+
+		protected virtual TiedException CreateTiedException() {
+			return new TiedException(GetName());
+		} // CreateTiedException
+
+		protected static string CheckForSp(string sName) {
+			if (sName.Equals("sp", StringComparison.InvariantCultureIgnoreCase))
+				return sName;
+
+			if (sName.StartsWith("sp", StringComparison.InvariantCultureIgnoreCase))
+				sName = sName.Substring(2);
+
+			return sName;
+		} // CheckForSp
 
 		private void CheckDirection() {
 			bool bReturnFound = false;
@@ -308,6 +400,30 @@
 			});
 		} // CheckDirection
 
+		private void FillOutputs(QueryParameter[] args) {
+			if ((args == null) || (args.Length < 1))
+				return;
+
+			foreach (QueryParameter prm in args) {
+				if (!prm.Direction.IsOutput())
+					continue;
+
+				PropertyInfo pi = GetType().GetProperty(prm.ObjectPropertyName);
+
+				if (pi == null)
+					continue;
+
+				object rawValue = null;
+
+				if (prm.UnderlyingParameter != null) {
+					if ((prm.UnderlyingParameter.Value != null) && (prm.UnderlyingParameter.Value != DBNull.Value))
+						rawValue = prm.UnderlyingParameter.Value;
+				} // if
+
+				pi.SetValue(this, new ParsedValue(rawValue).ToType(pi.PropertyType));
+			} // for each parameter
+		} // FillOutputs
+
 		private QueryParameter[] m_aryArgs;
 	} // class AStoredProcedure
 
@@ -328,15 +444,7 @@
 		/// </summary>
 		/// <returns>SP name.</returns>
 		protected override string GetName() {
-			string sName = this.GetType().Name;
-
-			if (sName.Equals("sp", StringComparison.InvariantCultureIgnoreCase))
-				return sName;
-
-			if (sName.StartsWith("sp", StringComparison.InvariantCultureIgnoreCase))
-				sName = sName.Substring(2);
-
-			return sName;
+			return CheckForSp(base.GetName());
 		} // GetName
 	} // class AStoredProc
 } // namespace Ezbob.Database
