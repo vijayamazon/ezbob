@@ -7,11 +7,11 @@
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using FluentNHibernate.Testing.Values;
     using OfficeOpenXml;
+    using OfficeOpenXml.FormulaParsing;
 
     public class ExcelCalculator : ILoanCalculator {
         public ExcelCalculator(NL_Model nlModel) {
             NL_Model = nlModel;
-
 
 
             using (ExcelPackage = new ExcelPackage(new FileInfo("D:\\Excel\\Calculator.xlsx"))) {
