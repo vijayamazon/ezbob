@@ -278,11 +278,15 @@
         /// <param name="customerId">The customer identifier.</param>
         /// <returns></returns>
         public IEnumerable<CustomerAddress> GetCustomerAddresses(int customerId) {
-            using (var sqlConnection = GetOpenedSqlConnection2()) {
-                using (var sqlCommand = GetEmptyCommand(sqlConnection.SqlConnection())) {
-                    sqlCommand.CommandText = "SELECT * FROM CustomerAddress WHERE CustomerId = @Id";
-                    sqlCommand.Parameters.AddWithValue("@Id", customerId);
-
+            using (var connection = GetOpenedSqlConnection2()) {
+                var cmd = new SelectWhereGenerator<CustomerAddress>()
+                    .WithOptionalConnection(connection.SqlConnection())
+                    .WithTableName(Tables.CustomerAddress)
+                    .WithSelect()
+                    .WithWhere(o => o.CustomerId, customerId)
+                    .Verify()
+                    .GenerateCommand();
+                using (var sqlCommand = cmd) {
                     return CreateModels<CustomerAddress>(sqlCommand.ExecuteReader());
                 }
             }

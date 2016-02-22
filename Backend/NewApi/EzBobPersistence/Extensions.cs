@@ -51,6 +51,7 @@ namespace EzBobPersistence {
         /// Executes the command and logs errors if there are.
         /// </summary>
         /// <param name="command">The command.</param>
+        /// <param name="log">The log.</param>
         /// <returns></returns>
         public static bool MapNonqueryExecuteToBool(this SqlCommand command, ILog log = null) {
             try {
@@ -106,6 +107,7 @@ namespace EzBobPersistence {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataReader">The data reader.</param>
+        /// <param name="log">The log.</param>
         /// <returns></returns>
         private static T CreateSingleModel<T>(DbDataReader dataReader, ILog log = null) where T : class, new() {
             T instance = new T();

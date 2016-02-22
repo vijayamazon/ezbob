@@ -7,7 +7,7 @@
     [Serializable]
     public class CustomerAddress
     {
-        public int? CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public int? DirectorId { get; set; }
         public int? CompanyId { get; set; }
         public int? addressId { get; set; }//not begins from upper case because in DB it's not upper case.

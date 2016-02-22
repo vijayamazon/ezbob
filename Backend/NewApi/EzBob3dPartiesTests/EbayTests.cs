@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace EzBob3dPartiesTests
 {
     using System.Diagnostics;
+    using eBay.Service.Call;
     using eBay.Service.Core.Soap;
     using EzBob3dParties.EBay;
     using EzBob3dPartiesTests.Properties;
@@ -35,6 +36,15 @@ namespace EzBob3dPartiesTests
 //            var to = from.AddDays(30);
 //            var orders = await ebayService.GetOrders(this.token, from, to);
             var orders = await ebayService.GetOrders(this.token, DateTime.UtcNow.AddYears(-1), DateTime.UtcNow);
+
+            var transactions = orders.AsParallel()
+                .SelectMany(o => o.ApiResponse.OrderArray.Cast<OrderType>()
+                    .SelectMany(t => t.TransactionArray.Cast<TransactionType>())).ToArray();
+            
+            var min = transactions.Min(o => o.CreatedDate.Ticks);
+
+            DateTime date = new DateTime(min);
+
             
             watch.Stop();
             string time = watch.Elapsed.ToString();
