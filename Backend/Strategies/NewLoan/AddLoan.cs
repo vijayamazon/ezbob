@@ -153,7 +153,8 @@
 			 
 				var feeCalculator = new SetupFeeCalculator(setupFee!=null ?setupFee.Percent: servicingFee.Percent, brokerFeePercent);
 				decimal setupFeeAmount = feeCalculator.Calculate(history.Amount);
-				model.BrokerComissions = feeCalculator.CalculateBrokerFee(history.Amount);
+				SetupFeeCalculator.AbsoluteFeeAmount ff = feeCalculator.CalculateTotalAndBroker(history.Amount);
+				model.BrokerComissions = ff.Broker;
 
 				// send ot Calculator to distribute and attach to schedule planned dates
 				history.DistributedFees = servicingFee == null ? 0: setupFeeAmount;
