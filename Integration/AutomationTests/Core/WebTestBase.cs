@@ -76,7 +76,6 @@
             }
             bool res = true;
             foreach (AutomationModels.Browser browser in browsers) {
-                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                 foreach (AutomationModels.Environment enviorment in enviorments) {
                     EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                     foreach (AutomationModels.Brand brand in brands) {
@@ -87,16 +86,17 @@
                                 return false;
                             }
 
+                            Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                             actionBot = new ActionBot(Driver);
 
-                            for (int i = Driver.WindowHandles.Count; i < 1; i--) {
-                                Driver.SwitchTo().Window(Driver.WindowHandles[1]);
-                                Driver.Close();
-                            }
+                            //for (int i = Driver.WindowHandles.Count; i < 1; i--) {
+                            //    Driver.SwitchTo().Window(Driver.WindowHandles[1]);
+                            //    Driver.Close();
+                            //}
+                            //Driver.Manage().Cookies.DeleteAllCookies();
 
-                            Driver.Manage().Cookies.DeleteAllCookies();
-
-                            codeToExecute.Invoke(caseID.ToString() + (isDebugMode == false ? " - " + TestRailRepository.TestRailCaseName(caseID) : ""));
+                            codeToExecute.Invoke(caseID.ToString() + " - " + brand.ToString() + " - " + browser.ToString() + (isDebugMode == false ? " - " + TestRailRepository.TestRailCaseName(caseID) : ""));
+                            Driver.Quit();
 
                             if (!IsDebugMode) {
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
@@ -115,6 +115,7 @@
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                             }
                             res = false;
+                            Driver.Quit();
                         }
                     }
                 }
