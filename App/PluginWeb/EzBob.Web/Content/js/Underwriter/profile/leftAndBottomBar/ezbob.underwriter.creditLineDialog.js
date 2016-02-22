@@ -490,7 +490,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var interestRateTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
 		this.ui.interestRate.parent().tooltip('destroy').tooltip({ title: interestRateTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
+		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(0) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
 		this.ui.manualSetupFeePercent.parent().tooltip('destroy').tooltip({ title: manualSetupFeePercentTooltip, trigger: 'hover focus', placement: 'bottom' });
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
@@ -579,7 +579,7 @@ EzBob.validateCreditLineDialogForm = function(el, gradeRange) {
 			interestRate: { required: true, autonumericMin: (gradeRange.MinInterestRate * 100).toFixed(2), autonumericMax: (gradeRange.MaxInterestRate * 100).toFixed(2), },
 			startingFromDate: { required: true, dateCheck: true, },
 			offerValidUntil: { required: true, dateCheck: true, },
-			manualSetupFeePercent: { autonumericMin: (gradeRange.MinSetupFee * 100).toFixed(2), autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
+			manualSetupFeePercent: { autonumericMin: 0, autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
 			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
 		},
 		messages: {
