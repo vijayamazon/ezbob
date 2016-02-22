@@ -290,9 +290,10 @@
 
              
 			log.DebugFormat(
-				"LoanLegalModel " +
-				"euAgreementTermsRead: {0}" +
-				"cosmeAgreementTermsRead: {1}" +
+				"LoanLegalModel - " +
+                "dynamicLoanAgreementsStringified : {0}" +
+				"euAgreementTermsRead: {1}" +
+				"cosmeAgreementTermsRead: {2}",
                 dynamicLoanAgreementsStringified,
 				euAgreementTermsRead,
 				cosmeAgreementTermsRead                
