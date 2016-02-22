@@ -77,6 +77,8 @@
 			ProcessSms();
 			ProcessSnailmails();
 			ProcessDropbox();
+
+			this.log.Debug("Processing complete.");
 		} // Run
 
 		private bool Do(WorkingMode mode) {
@@ -174,8 +176,11 @@
 
 				string loanPath = Path.Combine(TargetPath, loanID, "snail-mails");
 
-				if (!Directory.Exists(loanPath))
+				if (!Directory.Exists(loanPath)) {
 					Directory.CreateDirectory(loanPath);
+					this.log.Debug("Created snail mail path for loan {0}: {1}", loanID, loanPath);
+				} else
+					this.log.Debug("Already exists snail mail path for loan {0}: {1}", loanID, loanPath);
 
 				string fileName = Path.GetFileName(path);
 
@@ -269,6 +274,8 @@
 		} // ProcessExperianData
 
 		private void ProcessCustomerData() {
+			int loanCount = 0;
+
 			this.loansForLsa.ForEachResult<CustomerData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID))
 					this.loans[cd.LoanID] = new LoanData(cd.LoanID, cd.LoanInternalID);
@@ -282,8 +289,12 @@
 
 				this.log.Debug("{0} has loan #{1}.", cd.FullName, cd.LoanID);
 
+				loanCount++;
+
 				return ActionResult.Continue;
 			});
+
+			this.log.Debug("{0} loans loaded.", loanCount);
 
 			this.loansForLsaDirectors.ForEachResult<DirectorData>(cd => {
 				if (!this.loans.ContainsKey(cd.LoanID)) {
@@ -313,7 +324,7 @@
 
 			if (Do(WorkingMode.Customer))
 				foreach (LoanData ld in this.loans.Values)
-					ld.SaveTo(TargetPath);
+					ld.SaveTo(TargetPath, this.log);
 
 			File.WriteAllLines(
 				Path.Combine(TargetPath, "loans.csv"),

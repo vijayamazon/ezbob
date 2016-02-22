@@ -16,6 +16,8 @@ BEGIN
 			CompanyNum = co.ExperianRefNum
 		FROM
 			Customer c
+			INNER JOIN Loan l ON c.Id = l.CustomerId
+			INNER JOIN PollenLoans lsa ON l.Id = lsa.LoanID
 			LEFT JOIN Company co ON c.CompanyId = co.Id
 	) SELECT
 		LoanID = l.RefNum,

@@ -2,6 +2,7 @@
 	using System.Collections.Generic;
 	using System.IO;
 	using Ezbob.ExcelExt;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	class LoanData {
@@ -21,11 +22,14 @@
 
 		public List<CRMData> Crm { get; private set; }
 
-		public void SaveTo(string basePath) {
+		public void SaveTo(string basePath, ASafeLog log) {
 			string fullDirName = Path.Combine(basePath, LoanID);
 
-			if (!Directory.Exists(fullDirName))
+			if (!Directory.Exists(fullDirName)) {
 				Directory.CreateDirectory(fullDirName);
+				log.Debug("Created directory for loan {0}: {1}", LoanID, fullDirName);
+			} else
+				log.Debug("Already exists directory for loan {0}: {1}", LoanID, fullDirName);
 
 			ExcelPackage book = new ExcelPackage();
 
@@ -57,7 +61,11 @@
 
 			book.AutoFitColumns();
 
-			book.SaveAs(new FileInfo(Path.Combine(fullDirName, LoanID + ".xlsx")));
+			string fileName = Path.Combine(fullDirName, LoanID + ".xlsx");
+
+			book.SaveAs(new FileInfo(fileName));
+
+			log.Debug("Saved loan file for {0}: {1}", LoanID, fileName);
 		} // SaveTo
 	} // class LoanData
 } // namespace
