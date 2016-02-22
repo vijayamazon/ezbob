@@ -1,6 +1,11 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID('tempdb..#cv') IS NOT NULL 
+BEGIN
+DROP TABLE #cv
+END 
+
 SELECT
 	Name,
 	Value
@@ -29,13 +34,17 @@ GO
 
 INSERT INTO ConfigurationVariables (Name, Value, Description, IsEncrypted)
 SELECT
-	Name,
-	Value,
-	Name,
+	n.Name,
+	n.Value,
+	n.Name,
 	0
 FROM
 	#cv n
-	LEFT JOIN ConfigurationVariables c ON n.Name
+	LEFT JOIN ConfigurationVariables c ON n.Name = c.Name
 
+IF OBJECT_ID('tempdb..#cv') IS NOT NULL 
+BEGIN
 DROP TABLE #cv
+END 
 GO
+
