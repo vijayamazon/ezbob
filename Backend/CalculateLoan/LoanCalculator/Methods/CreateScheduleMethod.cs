@@ -1,16 +1,13 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using PaymentServices.Calculators;
 
 	internal class CreateScheduleMethod : AMethod {
 
-		public CreateScheduleMethod(ALoanCalculator calculator)
-			: base(calculator, false) {
+		public CreateScheduleMethod(ALoanCalculator calculator): base(calculator, false) {
 		} // constructor
 
 		/// <exception cref="NoInitialDataException">Condition. </exception>
@@ -40,11 +37,13 @@
 
 			//int interestOnlyRepayments = history.InterestOnlyRepaymentCount; //  default is 0 \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 35
 
-			// RepaymentCount,  EventTime, InterestRate, RepaymentIntervalType 
-			Calculator.currentHistory.SetDefaults();
+			// EventTime RepaymentIntervalType RepaymentDate
+			Calculator.currentHistory.SetDefaultEventTime(); // now
+			Calculator.currentHistory.SetDefaultRepaymentIntervalType(); // month
+			Calculator.currentHistory.SetDefaultRepaymentDate(); // EqualPrincipal 
 
-			// LoanType, LoanFormulaID, RepaymentDate
-			WorkingModel.Loan.SetDefaults();
+			// LoanFormulaID - have defualt for property
+			//WorkingModel.Loan.SetDefaultFormula();
 
 			// TODO: LoanType balances \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 44, 66, 68
 			// decimal[] balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray(); ???
@@ -59,10 +58,13 @@
 				Log.Error("No schedules created");
 				throw new NoScheduleException();
 			}
+			
+			Log.Debug("servicingFeeAmount: {0}", Calculator.currentHistory.DistributedFees); // "spreaded" amount
 
-			AddFeesToScheduleItems();
+			Calculator.AttachDistributedFeesToLoanBySchedule(WorkingModel, Calculator.currentHistory.DistributedFees, Calculator.NowTime);
 
-			WorkingModel.Loan.Histories.Insert(0, Calculator.currentHistory);
+			int index = WorkingModel.Loan.Histories.IndexOf(Calculator.currentHistory);
+			WorkingModel.Loan.Histories[index] = Calculator.currentHistory;
 		}
 
 		/// <summary>
@@ -136,8 +138,14 @@
 			// http://www.hughcalc.org/formula.php
 			// Finding the Number of Periods given a Payment, Interest and Loan Amount
 			/*
-			 * This formula previously was not explicit enough!! The 1/q factor in there was to convert the number of periods into years. For number of payments this must actually be left out.
-			Many people have asked me how to find N (number of payments) given the payment, interest and loan amount. I didn't know the answer and in my calculators I find it by doing a binary search over the payment formula above. However, Gary R. Walo ( nenonen5@southeast.net) found the answer to the actual formula in the book: The Vest Pocket Real Estate Advisor by Martin Miles (Prentice Hall). Here is the corrected formula:
+			 * This formula previously was not explicit enough!! The 1/q factor in there was to convert the number of periods into years. 
+			 * For number of payments this must actually be left out.
+			 * Many people have asked me how to find N (number of payments) given the payment, interest and loan amount. 
+			 * I didn't know the answer and in my calculators I find it by doing a binary search over the payment formula above. 
+			 * However, Gary R. Walo ( nenonen5@southeast.net) found the answer to the actual formula in the book: The Vest Pocket Real Estate Advisor by Martin Miles (Prentice Hall). 
+			 * Here is the corrected formula:
+			 * 
+			 * 
 			n = - (LN(1-(B/m)*(r/q)))/LN(1+(r/q))
 			# years = - 1/q * (LN(1-(B/m)*(r/q)))/LN(1+(r/q))
 
@@ -152,10 +160,10 @@
 			*/
 		}
 
-		/// <summary>
+	/*	/// <summary>
 		/// calculate setup/servicing (arrangement) fees and attach it to schedule items PlannedDate
 		/// </summary>
-		private void AddFeesToScheduleItems() {
+		private void AttachFees() {
 
 			// no fees defined
 			if (WorkingModel.Offer.OfferFees == null || WorkingModel.Offer.OfferFees.Count == 0) {
@@ -208,27 +216,30 @@
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
-				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
-				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+				Calculator.AttachDistributedFeesToLoanBySchedule(WorkingModel, servicingFeeAmount, Calculator.NowTime);
 
-				foreach (NL_LoanSchedules s in Calculator.currentHistory.Schedule) {
-					decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
-					WorkingModel.Loan.Fees.Add(
-						new NL_LoanFees() {
-							Amount = feeAmount,
-							AssignTime = s.PlannedDate,
-							Notes = "spread (servicing) fee",
-							LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
-							CreatedTime = Calculator.NowTime,
-							AssignedByUserID = 1
-						});
+				//decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
+				//decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-					s.Fees += feeAmount;
-					s.AmountDue += s.Fees;
+				//foreach (NL_LoanSchedules s in Calculator.currentHistory.Schedule) {
+				//	decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
+				//	WorkingModel.Loan.Fees.Add(
+				//		new NL_LoanFees() {
+				//			Amount = feeAmount,
+				//			AssignTime = s.PlannedDate,
+				//			Notes = "spread (servicing) fee",
+				//			LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+				//			CreatedTime = Calculator.NowTime,
+				//			AssignedByUserID = 1
+				//		});
 
-					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
-				}
+				//	s.Fees += feeAmount;
+				//	s.AmountDue += s.Fees;
+
+				//	schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+				//}
 			}
-		}
+		}*/
+		
 	} // class CreateScheduleMethod
 } // namespace

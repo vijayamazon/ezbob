@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Runtime.CompilerServices;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -23,7 +22,7 @@
 		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
 		/// <exception cref="OverflowException">The result is outside the range of a <see cref="T:System.Decimal" />.</exception>
 		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
-		protected ALoanCalculator(NL_Model model, DateTime? calculationDate = null) {
+		protected ALoanCalculator(NL_Model model, DateTime? calculationDate = null, bool lastHistoryOnly = true) {
 
 			if (model == null)
 				throw new NoInitialDataException("nl model not found.");
@@ -31,37 +30,39 @@
 			if (model.Loan == null)
 				throw new NoInitialDataException("Loan in nl model not found.");
 
-			if (model.Loan.LastHistory() == null)
-				throw new NoLoanHistoryException();
-
-			if (model.Loan.FirstHistory().EventTime == DateTime.MinValue)
-				throw new NoInitialDataException("loan (history) creation date (EventTime) not found");
-
-			if (model.Loan.LastHistory().InterestRate == 0)
-				throw new InvalidInitialInterestRateException(model.Loan.LastHistory().InterestRate);
-
-			if (decimal.Round(model.Loan.LastHistory().Amount) == 0)
-				throw new InvalidInitialAmountException(model.Loan.LastHistory().Amount);
-
 			WorkingModel = model;
 			WriteToLog = true;
+
+			currentHistory = WorkingModel.Loan.LastHistory()??null;
+
+			if (currentHistory == null)
+				throw new NoLoanHistoryException();
+
+			if (currentHistory.EventTime == DateTime.MinValue)
+				throw new NoInitialDataException("loan (history) creation date (EventTime) not found");
+
+			if (currentHistory.InterestRate == 0)
+				throw new InvalidInitialInterestRateException(currentHistory.InterestRate);
+
+			if (decimal.Round(currentHistory.Amount) == 0)
+				throw new InvalidInitialAmountException(currentHistory.Amount);
 
 			NowTime = DateTime.UtcNow;
 
 			CalculationDate = calculationDate ?? NowTime;
 
-			currentHistory = WorkingModel.Loan.LastHistory();
-
-			InterestCalculationDateStart = WorkingModel.Loan.FirstHistory().EventTime;
-
-			initialAmount = WorkingModel.Loan.FirstHistory().Amount;
-
+			InterestCalculationDateStart = currentHistory.EventTime;
+			initialAmount = currentHistory.Amount;
 			currentOpenPrincipal = initialAmount;
+
+			LastHistoryOnly = lastHistoryOnly;
 		}
 
 		internal int decimalAccurancy = 6;
 
 		public abstract string Name { get; }
+
+		public bool LastHistoryOnly { get; private set; }
 
 		/// <summary>
 		/// loan state date - input
@@ -72,7 +73,7 @@
 
 		internal LoanEvent calculationDateEventEnd;
 
-		protected static ASafeLog Log { get { return Library.Instance.Log; } }
+		public ASafeLog Log { get { return Library.Instance.Log ?? new ConsoleLog(); }}
 
 		public bool WriteToLog { get; set; }
 
@@ -80,7 +81,7 @@
 
 		public decimal NextEarlyPayment { get; internal set; }
 
-		public decimal RolloverPayment { get; internal set; }
+		public decimal RolloverPayment { get; internal set; } // == AccumilatedInterest
 
 		/// <summary>
 		/// for backworks compatibility with LoanRepaymentScheduleCalculator and "old" Loan model - sum of all AmountDue(s)
@@ -261,6 +262,46 @@
 		[ExcludeFromToString]
 		public abstract decimal AverageDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
 
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="servicingFeeAmount"></param>
+		/// <param name="createTime"></param>
+		/// <param name="notes"></param>
+		[ExcludeFromToString]
+		public virtual void AttachDistributedFeesToLoanBySchedule(NL_Model model, decimal servicingFeeAmount, DateTime createTime, string notes = "spread (servicing) fee") {
+			if (servicingFeeAmount == 0m) {
+				Log.Debug("no servicingFeeAmount");
+				return;
+			}
+
+			int schedulesCount = model.Loan.LastHistory().Schedule.Count;
+			decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
+			decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+
+			foreach (NL_LoanSchedules s in model.Loan.LastHistory().Schedule) {
+				decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
+				model.Loan.Fees.Add(
+					new NL_LoanFees() {
+						LoanID = model.Loan.LoanID,
+						LoanFeeID = 0,
+						Amount = feeAmount,
+						AssignTime = s.PlannedDate,
+						Notes = notes,
+						LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
+						CreatedTime = createTime, 
+						AssignedByUserID = model.UserID ?? 1
+					});
+
+				s.Fees += feeAmount;
+				s.AmountDue += s.Fees;
+
+				schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+			}
+		}
+
 		/// <summary>
 		/// Calculates interest rate for specific day based on loan data: 
 		/// 1. Check freeze intervals
@@ -398,10 +439,11 @@
 			currentPaidInterest = 0;
 			currentPaidPrincipal = 0;
 
+			// TODO remove those from processing, not from model
 			// remove future histories, payments, late fees
-			WorkingModel.Loan.Histories.RemoveAll(h => h.EventTime.Date > CalculationDate.Date);
-			WorkingModel.Loan.Payments.RemoveAll(p => p.PaymentTime.Date > CalculationDate.Date);
-			WorkingModel.Loan.Fees.RemoveAll(f => f.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee && f.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && f.AssignTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Histories.RemoveAll(h => h.EventTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Payments.RemoveAll(p => p.PaymentTime.Date > CalculationDate.Date);
+			//WorkingModel.Loan.Fees.RemoveAll(f => f.LoanFeeTypeID != (int)NLFeeTypes.ArrangementFee && f.LoanFeeTypeID != (int)NLFeeTypes.ServicingFee && f.AssignTime.Date > CalculationDate.Date);
 
 			// histories => schedules
 			foreach (var h in WorkingModel.Loan.Histories) {
@@ -411,7 +453,7 @@
 				decimal initAmount = h.Amount;
 				decimal plannedPrincipal = 0;
 
-				foreach (NL_LoanSchedules s in h.Schedule.Where(s => s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule)) {
+				foreach (NL_LoanSchedules s in h.Schedule.Where(s => !s.IsDeleted())) {
 
 					s.Balance = initAmount - plannedPrincipal;
 					plannedPrincipal += s.Principal;
@@ -436,8 +478,8 @@
 				}
 			}
 
-			// payments - by PaymentTime, only non-deleted
-			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime)) {
+			// payments - by PaymentTime, PaymentID, only non-deleted
+			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime).ThenBy(p=>p.PaymentID)) {
 
 				var item = GetScheduleItemForDate(p.PaymentTime);
 				bool itemDeleted = false;
@@ -446,7 +488,7 @@
 				foreach (NL_LoanSchedulePayments sp in p.SchedulePayments) {
 
 					if (item != null) {
-						itemDeleted = (item.LoanScheduleStatusID == (int)NLScheduleStatuses.DeletedOnReschedule || item.LoanScheduleStatusID == (int)NLScheduleStatuses.ClosedOnReschedule);
+						itemDeleted = item.IsDeleted();
 					}
 
 					if (itemDeleted) {
@@ -487,17 +529,17 @@
 			}
 
 			// add event for accepted and non processed rollovers
-			NL_LoanRollovers aRollover = WorkingModel.Loan.Rollovers.LastOrDefault(r => r.IsAccepted && r.CustomerActionTime.HasValue && r.DeletionTime == null && r.DeletedByUserID == null);
+			NL_LoanRollovers pendingRollover = WorkingModel.Loan.Rollovers.LastOrDefault(r => r.IsAccepted && r.CustomerActionTime.HasValue && r.DeletionTime == null && r.DeletedByUserID == null);
 
-			if (aRollover != null) {
+			if (pendingRollover != null) {
 
-				DateTime acDate = aRollover.CustomerActionTime.Value;
+				DateTime acDate = pendingRollover.CustomerActionTime.Value;
 				var historyEvent = WorkingModel.Loan.Histories.FirstOrDefault(h => h.EventTime.Date.Equals(acDate.Date));
 				this.acceptedRolloverProcessed = true;
 
 				if (historyEvent == null) {
 					acceptedRolloverEvents.Add(new LoanEvent(
-						new DateTime(aRollover.CustomerActionTime.Value.Year, aRollover.CustomerActionTime.Value.Month, aRollover.CustomerActionTime.Value.Day), aRollover));
+						new DateTime(pendingRollover.CustomerActionTime.Value.Year, pendingRollover.CustomerActionTime.Value.Month, pendingRollover.CustomerActionTime.Value.Day), pendingRollover));
 					this.acceptedRollover = acceptedRolloverEvents.LastOrDefault();
 					this.acceptedRolloverProcessed = false;
 				}
@@ -517,6 +559,11 @@
 
 			// actually nulls should not exists here
 			this.events.RemoveAll(e => e == null);
+
+			// remove events that happened before last history occured
+			if (LastHistoryOnly) {
+				this.events.RemoveAll(e => e.EventTime <= WorkingModel.Loan.LastHistory().EventTime);
+			}
 
 			/*Log.Debug("\n\n==================CALCULATOR EVENTS==========================");
 			this.events.ForEach(e => Log.Debug(e));
@@ -926,7 +973,12 @@
 				Interest = currentEarnedInterest - currentPaidInterest;		// outstanding interest 
 				Principal = currentOpenPrincipal;							// outstanding principal 
 
-				Log.Debug("GetStateAction: Fees={0}, Interest={1}, Principal={2}, earnedInterestForCalculationDate={3:F4}", WorkingModel.Fees, WorkingModel.Interest, WorkingModel.Principal, earnedInterestForCalculationDate);
+				currentHistory.Amount = currentOpenPrincipal;
+				currentHistory.OutstandingInterest = Interest;
+				currentHistory.LateFees = this.lateFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date && f.DisabledTime == null && f.DeletedByUserID == null).Sum(f => f.Amount) - this.lateFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date && f.DisabledTime == null && f.DeletedByUserID == null).Sum(f => f.PaidAmount);
+				currentHistory.DistributedFees = tDistributedFees - this.distributedFeesList.Where(f => f.AssignTime.Date <= this.calculationDateEventEnd.EventTime.Date && f.DisabledTime == null && f.DeletedByUserID == null).Sum(f => f.PaidAmount);
+
+				Log.Debug("GetStateAction: Fees={0}, Interest={1}, Principal={2}, earnedInterestForCalculationDate={3:F4} currentHistory={4}", WorkingModel.Fees, WorkingModel.Interest, WorkingModel.Principal, earnedInterestForCalculationDate, currentHistory);
 			};
 
 			HandleEvents();

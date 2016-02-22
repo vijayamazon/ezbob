@@ -28,7 +28,8 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,
 	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1,	
 	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
-	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1	
+	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1,
+	[ProductSubTypeID] INT NULL
 )
 GO
 
@@ -57,7 +58,8 @@ BEGIN
 		[IsLoanTypeSelectionAllowed] ,
 		[SendEmailNotification] ,		
 		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed] 				
+		[IsAmountSelectionAllowed] ,
+		[ProductSubTypeID]		
 	) SELECT
 		[DecisionID],
 		[LoanTypeID] , 
@@ -77,7 +79,8 @@ BEGIN
 		[IsLoanTypeSelectionAllowed] ,
 		[SendEmailNotification] ,		
 		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed] 	
+		[IsAmountSelectionAllowed] ,
+		[ProductSubTypeID]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

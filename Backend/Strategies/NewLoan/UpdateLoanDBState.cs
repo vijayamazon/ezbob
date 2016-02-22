@@ -1,16 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
-	using Ezbob.Database;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	using NHibernate.Linq;
 
 	/// <summary>
 	/// triggered on payment adding/cancellation, rollover, re-scheduling.
@@ -34,7 +29,6 @@
 
 		private object[] strategyArgs;
 
-		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
@@ -112,7 +106,19 @@
 
 			NL_AddLog(LogType.Info, "recalculated loan state", stateBefore, stateAfter, Error, null);
 
-			List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
+			try {
+				bool loanClose = !stateAfter["LoanStatusID"].Equals(stateBefore["LoanStatusID"]);
+				SaveLoanStateToDB saveLoan = new SaveLoanStateToDB(RecalculatedModel, loanClose);
+				saveLoan.Execute();
+
+			} catch (Exception ex) {
+				Error = ex.Message;
+				Log.Error("Failed to save updated loan DB dbState. err: {0}", Error);
+
+				NL_AddLog(LogType.Error, "Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+			}
+
+			/*List<NL_LoanSchedules> schedules = new List<NL_LoanSchedules>();
 			List<NL_LoanSchedulePayments> schedulePayments = new List<NL_LoanSchedulePayments>();
 			List<NL_LoanFeePayments> feePayments = new List<NL_LoanFeePayments>();
 
@@ -145,13 +151,13 @@
 				}
 
 				// disable fees
-				foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
-					DB.ExecuteNonQuery(pconn, "NL_LoanFeeDisable", CommandSpecies.StoredProcedure,
-							new QueryParameter("LoanFeeID", f.LoanFeeID),
-							new QueryParameter("DeletedByUserID", f.DeletedByUserID),
-							new QueryParameter("DisabledTime", f.DisabledTime),
-							new QueryParameter("Notes", f.Notes));
-				}
+				//foreach (NL_LoanFees f in RecalculatedModel.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
+				//	DB.ExecuteNonQuery(pconn, "NL_LoanFeeCancel", CommandSpecies.StoredProcedure,
+				//			new QueryParameter("LoanFeeID", f.LoanFeeID),
+				//			new QueryParameter("DeletedByUserID", f.DeletedByUserID),
+				//			new QueryParameter("DisabledTime", f.DisabledTime),
+				//			new QueryParameter("Notes", f.Notes));
+				//}
 
 				// insert fees
 				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure,
@@ -192,7 +198,7 @@
 				}
 	
 				// update loan status				
-				if (stateBefore["LoanStatusID"] != stateAfter["LoanStatusID"]) {
+				if (!stateAfter["LoanStatusID"].Equals(stateBefore["LoanStatusID"])) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanUpdate", CommandSpecies.StoredProcedure,
 						new QueryParameter("LoanID", RecalculatedModel.Loan.LoanID),
 						new QueryParameter("LoanStatusID", RecalculatedModel.Loan.LoanStatusID),
@@ -213,7 +219,7 @@
 				Log.Error("Failed to update loan DB dbState. err: {0}", Error);
 
 				NL_AddLog(LogType.Error, "Failed - Rollback", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
-			}
+			}*/
 		}
 	}
 

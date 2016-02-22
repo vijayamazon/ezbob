@@ -34,9 +34,11 @@
 		RolloverFee = 4,
 		AdminFee = 5,
 		LatePaymentFee = 6,
-		PartialPaymentFee = 7
+		PartialPaymentFee = 7,
+		OtherCharge = 8
 	} // enum FeeTypes
 
+	
 	public enum NLScheduleStatuses {
 		[Description("Open")]
 		StillToPay = 1, // db ID
@@ -47,7 +49,9 @@
 		[Description("Deleted on reschedule (nothing was repaid before reschedule)")]
 		DeletedOnReschedule = 4,
 		[Description("Closed on reschedule (was partially repaid before reschedule)")]
-		ClosedOnReschedule = 5
+		ClosedOnReschedule = 5,
+		[Description("Was late on reschedule")]
+		LateDeletedOnReschedule = 6
 	} // enum NLScheduleStatuses
 
 	public enum NLLoanTypes {
@@ -108,6 +112,8 @@
 		SystemRepay = 12,
 	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
 
+
+
 	/// <summary>
 	/// used in "pay loan" flows to indicate throuhg which payment system current transaction done
 	/// </summary>
@@ -144,6 +150,8 @@
 		[Description("0")] // 
 		FixedPayment = 2 // used for "out of loan agreement" rescheduling, not supported yet (15 October 2015)
 	}
+
+
 
 
 } // namespace

@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
@@ -31,7 +32,7 @@
 		private readonly ILoanOptionsRepository loanOptionsRepository;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient serviceClient;
-		private readonly ISession session;
+		//private readonly ISession session;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
 		public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
 
@@ -53,7 +54,8 @@
 			this._history = history;
 			this._context = context;
 			this.loanOptionsRepository = loanOptionsRepository;
-			this.session = session;
+			//this.session = session;
+
 			this.serviceClient = new ServiceClient();
 		}
 
@@ -79,7 +81,7 @@
 
 			var model = this._loanModelBuilder.BuildModel(loan);
 
-			RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(id, model);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -114,6 +116,9 @@
 			var amount = cr.ApprovedSum();
 			var loan = this._loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 			var model = this._loanModelBuilder.BuildModel(loan);
+
+			RescheduleSetmodel(loan.Id, model);
+
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
@@ -126,6 +131,8 @@
 			model = RecalculateModel(model, cr, model.Date);
 
 			cr.LoanTemplate = model.ToJSON();
+
+			RescheduleSetmodel(model.Id, model);
 
 			return Json(model);
 		}
@@ -150,7 +157,10 @@
 			};
 			this._history.Save(historyItem);
 
+			//  remove/add fees/installment
 			this._loanModelBuilder.UpdateLoan(model, loan);
+
+			Log.DebugFormat("model {0} =================== loan {1} ", model, loan);
 
 			//TODO update loan (apply all modifications)
 			Log.DebugFormat("apply loan modifications for customer {0}", loan.Customer.Id);
@@ -158,28 +168,23 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-			try {
-				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, loan.Customer.Id, this._context.UserId).Value;
-				if (nlLoanId > 0) {
-					var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, true).Value;
-					Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
-				}
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
-				Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
-			}
-
-			RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(loan.Id, model);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan) {
+		private void RescheduleSetmodel(int loanID, EditLoanDetailsModel model) {
+
+			var	loan = this._loans.Get(loanID);
+			model.Id = loanID;
+
 			model.Options = this.loanOptionsRepository.GetByLoanId(model.Id) ?? LoanOptions.GetDefault(model.Id);
+
+			Log.DebugFormat("RescheduleSetmodel: loanID: {2} model {0}, loan: {1}", model, loan, loanID);
 
 			ReschedulingArgument renewModel = new ReschedulingArgument();
 			renewModel.LoanType = loan.GetType().AssemblyQualifiedName;
-			renewModel.LoanID = model.Id;
+			renewModel.LoanID = loanID;
 			renewModel.SaveToDB = false;
 			renewModel.ReschedulingDate = DateTime.UtcNow;
 			renewModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
@@ -188,7 +193,7 @@
 			try {
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
 				model.ReResultIn = result.Value;
-				Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
+				//Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
 				// ReSharper disable once CatchAllClause
 			} catch (Exception editex) {
 				Log.Error(editex);
@@ -199,7 +204,7 @@
 			try {
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
 				model.ReResultOut = result.Value;
-				Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
+				//Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
 				// ReSharper disable once CatchAllClause
 			} catch (Exception editex) {
 				Log.Error(editex);
@@ -216,29 +221,28 @@
 			loan.LoanType = cr.LoanType;
 			loan.CashRequest = cr;
 
+			RescheduleSetmodel(model.Id, model);
+
 			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
 
-				try {
-					long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, cr.Customer.Id, this._context.UserId).Value;
-					if (nlLoanId > 0) {
-						var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, now, this._context.UserId, true).Value;
-						Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
-					}
-					// ReSharper disable once CatchAllClause
-				} catch (Exception ex) {
-					Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
-				}
+				//try {
+				//	long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loan.Id, cr.Customer.Id, this._context.UserId).Value;
+				//	if (nlLoanId > 0) {
+				//		var nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, now, this._context.UserId, true).Value;
+				//		Log.InfoFormat("<<< NL_Compare: nlModel : {0} loan: {1}  >>>", nlModel, loan);
+				//	}
+				//	// ReSharper disable once CatchAllClause
+				//} catch (Exception ex) {
+				//	Log.InfoFormat("<<< NL_Compare Fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				//}
 
 			} catch (Exception e) {
 				model.Errors.Add(e.Message);
 				return model;
 			}
-
-			//TODO build loan model
-			//Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
-
+			
 			return this._loanModelBuilder.BuildModel(loan);
 		}
 
@@ -261,7 +265,8 @@
 					reModel.LoanID = loanID;
 					reModel.SaveToDB = save;
 					reModel.ReschedulingDate = reschedulingDate;
-					reModel.ReschedulingRepaymentIntervalType = (DbConstants.RepaymentIntervalTypes)intervalType;
+					if (intervalType != null)
+						reModel.ReschedulingRepaymentIntervalType = (DbConstants.RepaymentIntervalTypes)intervalType;
 					reModel.RescheduleIn = (bool)rescheduleIn;
 					reModel.StopFutureInterest = stopFutureInterest;
 
@@ -279,7 +284,7 @@
 			return result == null ? null : Json(result.Value);
 		}
 
-
+		/// <exception cref="NotImplementedException">Always.</exception>
 		[Ajax]
 		[HttpPost]
 		[Transactional]
@@ -299,7 +304,7 @@
 				// to.Subtract(from)
 				if (options.StopLateFeeToDate.Value.Subtract(options.StopLateFeeFromDate.Value).Days < 0) {
 					model.Errors.Add("'Until date must be greater then From date");
-					RescheduleSetmodel(model, this._loans.Get(id));
+					RescheduleSetmodel(id, model);
 					return Json(model);
 				}
 			}
@@ -318,7 +323,7 @@
 			NL_SaveLoanOptions(options, PropertiesUpdateList);
 
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
-			RescheduleSetmodel(model, this._loans.Get(id));
+			RescheduleSetmodel(id, model);
 			return Json(model);
 		} // SaveLateFeeOption
 
@@ -344,7 +349,9 @@
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
-			RescheduleSetmodel(model, this._loans.Get(id));
+
+			RescheduleSetmodel(id, model);
+
 			return Json(model);
 		} // RemoveLateFeeOption
 
@@ -378,7 +385,7 @@
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
-			RescheduleSetmodel(model, this._loans.Get(id));
+			RescheduleSetmodel(id, model);
 			return Json(model);
 		} // SaveAutoChargesOption
 
@@ -401,7 +408,7 @@
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
-			RescheduleSetmodel(model, this._loans.Get(id));
+			RescheduleSetmodel(id, model);
 			return Json(model);
 		} // RemoveAutoChargesOption
 
@@ -420,14 +427,15 @@
 			if (freezeStartDate > freezeEndDate) {
 
 				model.Errors.Add("Until date must be greater then From date");
-				RescheduleSetmodel(model, this._loans.Get(id));
+				RescheduleSetmodel(id, model);
 				return Json(model);
 			}
 
 			Loan loan = this._loans.Get(id);
+			var loan1 = loan;
 			new Transactional(() => {
-				loan.InterestFreeze.Add(new LoanInterestFreeze {
-					Loan = loan,
+				loan1.InterestFreeze.Add(new LoanInterestFreeze {
+					Loan = loan1,
 					StartDate = freezeStartDate,
 					EndDate = freezeEndDate,
 					InterestRate = 0,
@@ -435,7 +443,7 @@
 					DeactivationDate = null
 				});
 
-				this._loans.SaveOrUpdate(loan);
+				this._loans.SaveOrUpdate(loan1);
 			}).Execute();
 
 			SaveLoanInterestFreeze(loan.InterestFreeze.Last(), id);
@@ -444,7 +452,7 @@
 			model = this._loanModelBuilder.BuildModel(loan);
 			model.Options = this.loanOptionsRepository.GetByLoanId(id);
 
-			RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(loan.Id, model);
 
 			return Json(model);
 		} //SaveFreezeInterval
@@ -455,11 +463,12 @@
 			Loan loan = this._loans.Get(id);
 			LoanInterestFreeze lif = loan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
 
+			var loan1 = loan;
 			new Transactional(() => {
 
 				if (lif != null)
 					lif.DeactivationDate = DateTime.UtcNow;
-				this._loans.SaveOrUpdate(loan);
+				this._loans.SaveOrUpdate(loan1);
 
 			}).Execute();
 
@@ -486,7 +495,7 @@
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
 			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-			RescheduleSetmodel(model, loan);
+			RescheduleSetmodel(id, model);
 
 			return Json(model);
 		} // RemoveFreezeInterval
@@ -509,6 +518,8 @@
 																					  customerId,
 																					  nlLoanInterestFreeze).Value;
 		}
+
+
 		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int loanID) {
 
 			int customerId = this._loans.Get(loanInterestFreeze.Loan.Id).Customer.Id;
@@ -529,16 +540,6 @@
 			};
 			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
 		}
-
-		//private DateTime? NL_GetStopAutoChargeDate(bool AutoCharge, DateTime? StopAutoChargeDate) {
-		//	if (AutoCharge) {
-		//		if (StopAutoChargeDate == null)
-		//			return DateTime.Now;
-		//		return StopAutoChargeDate;
-		//	}
-		//	return null;
-		//}
-
 
 		private void NL_SaveLoanOptions(LoanOptions options, List<String> PropertiesUpdateList) {
 
@@ -567,5 +568,62 @@
 			var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId, PropertiesUpdateList.ToArray());
 			Log.DebugFormat("NL LoanOptions save: LoanOptionsID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
 		}
+
+		[Ajax]
+		[HttpPost]
+		//[Transactional]
+		public void NL_SyncFees(int id) {
+
+			Log.DebugFormat("sync NL fees for old loan {0}", id);
+
+			var loan = this._loans.Get(id);
+
+			try {
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, loan.Customer.Id, this._context.UserId).Value;
+				if (nlLoanId > 0) {
+
+					NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
+					Log.InfoFormat("nlModel : {0} loan: {1}  >>>", nlModel, loan);
+
+					// new/edit
+					foreach (LoanCharge ch in loan.Charges.OrderBy(ff => ff.Date)) {
+						NL_LoanFees f = nlModel.Loan.Fees.FirstOrDefault(ff => ff.OldFeeID == ch.Id);
+						if (f == null) {
+							f = new NL_LoanFees() {
+								AssignedByUserID = this._context.UserId,
+								LoanFeeTypeID = (int)NL_Model.ConfVarToNLFeeType(ch.ChargesType),
+								LoanID = nlLoanId,
+								OldFeeID = ch.Id, // update in strategy after this [Transactional] 
+								Amount = ch.Amount,
+								AssignTime = ch.Date.Date,
+								Notes = !string.IsNullOrEmpty(ch.Description) ? ch.Description : "add fee from edit loan"
+							};
+							this.serviceClient.Instance.SaveFee(this._context.UserId, loan.Customer.Id, f);
+
+							// fee type is editable + modified (amount/assign date/notes)
+						} else if (Array.Exists<NLFeeTypes>(NL_Model.NLFeeTypesEditable, element => element == (NLFeeTypes)f.LoanFeeTypeID) && (f.Amount != ch.Amount || f.AssignTime.Date != ch.Date.Date || f.Notes != ch.Description)) {
+							f.UpdatedByUserID = this._context.UserId;
+							f.Amount = ch.Amount;
+							f.AssignTime = ch.Date.Date;
+							f.Notes = !string.IsNullOrEmpty(ch.Description) ? ch.Description : "add fee from edit loan";
+							this.serviceClient.Instance.SaveFee(this._context.UserId, loan.Customer.Id, f);
+						}
+					}
+
+					//	removed
+					foreach (NL_LoanFees f in nlModel.Loan.Fees.OrderBy(ff => ff.AssignTime)) {
+						var charge = loan.Charges.FirstOrDefault(c => c.Id == f.LoanFeeID);
+						if (charge == null) {
+							f.DeletedByUserID = this._context.UserId;
+							this.serviceClient.Instance.CancelFee(this._context.UserId, loan.Customer.Id, f);
+						}
+					}
+				}
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.InfoFormat("Fail to sync NL loan fees. {0}, err: {1}", Environment.StackTrace, ex.Message);
+			}
+		}
+
 	}
 }

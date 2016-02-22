@@ -1,5 +1,4 @@
 ﻿namespace EzServiceHost {
-
 	using System;
 	using System.Diagnostics;
 	using System.IO;
@@ -10,24 +9,19 @@
 	using CompanyFiles;
 	using ConfigManager;
 	using EKM;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.AmazonLib;
 	using Ezbob.Backend.Strategies.Misc;
-	using EzBob.CommonLib;
-	using EzBob.PayPal;
-	using EzBob.PayPalServiceLib.Common;
-	using EzBob.eBayLib;
-	using EzService;
-	using EzServiceAccessor;
-	using EzServiceCrontab;
-	using EzServiceShortcut;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
+	using Ezbob.RegistryScanner;
+	using EzBob.AmazonLib;
+	using EzBob.eBayLib;
+	using EzBob.PayPal;
+	using EzService;
+	using EzServiceConfigurationLoader;
+	using EzServiceCrontab;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
 	using NDesk.Options;
@@ -38,9 +32,6 @@
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
-	using ISession = NHibernate.ISession;
-	using EzServiceConfigurationLoader;
-	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class Program : IHost {
 
@@ -155,11 +146,11 @@
 				m_oDB.ForEachRowSafe(
 					(sr, bRowSetStarts) => {
 						m_sInstanceName = sr["InstanceName"];
-						return ActionResult.SkipAll;
+						return Ezbob.Database.ActionResult.SkipAll;
 					},
 					"EzServiceGetDefaultInstance",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@Argument", System.Environment.MachineName)
+					new QueryParameter("@Argument", Environment.MachineName)
 				);
 			} // if
 
@@ -201,7 +192,7 @@
 			CurrentValues.Init(m_oDB, m_oLog);
 			CurrentValues.Instance.RefreshIntervalMinutes = CurrentValues.Instance.EzServiceUpdateConfiguration;
 
-			Ezbob.RegistryScanner.Scanner.Register();
+			Scanner.Register();
 
 			ObjectFactory.Configure(x => {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());

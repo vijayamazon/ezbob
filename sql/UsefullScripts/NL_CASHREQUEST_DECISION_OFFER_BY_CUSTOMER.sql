@@ -1,28 +1,11 @@
 DECLARE @CustomerID int; SET @CustomerID = 371;
 
---select * from [dbo].[NL_Offers] o join [dbo].[NL_Decisions] d on o.DecisionID = d.DecisionID join [dbo].[NL_CashRequests] cr on cr.CashRequestID = d.CashRequestID
---where cr.CustomerID = @CustomerID order by cr.[CashRequestID] desc ;
+select * from NL_CashRequests cr
+join 
+(select MAX([DecisionID]) as lastDesicionID, d.CashRequestID as CRID from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] cr1 on d.CashRequestID=cr1.CashRequestID and cr1.CustomerID=CustomerID group by d.CashRequestID) dd 
+on dd.CRID=cr.CashRequestID
+left join [dbo].[NL_Offers] o on o.DecisionID=dd.lastDesicionID
+where CustomerID=CustomerID
 
-SELECT 	 
-	   d.DecisionID, 
-	  --d.DecisionNameID, 
-	  dn.DecisionName , d.DecisionTime, d.Notes, d.Position, d.UserID	
-	 , o.[OfferID]
-    -- , o.[DecisionID]     
-      ,[RepaymentIntervalTypeID]
-      --,[LoanSourceID]
-      ,[StartTime]
-      ,[EndTime]
-      ,[RepaymentCount]
-      ,[Amount]
-      ,[MonthlyInterestRate]
-      ,[CreatedTime]
-     -- ,[BrokerSetupFeePercent]
-     -- ,[SetupFeeAddedToLoan]
-      , o.Notes as OfferNotes
-      --,[InterestOnlyRepaymentCount]
-      ,[DiscountPlanID]   
-  FROM [dbo].[NL_Offers] o join [dbo].[NL_Decisions] d on
-   o.DecisionID = (select MAX(d1.DecisionID) from  [dbo].[NL_Decisions] d1 join [dbo].[NL_CashRequests] cr on cr.[CashRequestID] = d1.[CashRequestID] where cr.CustomerID = @CustomerID)
-   join [dbo].[Decisions] dn on dn.DecisionID = d.DecisionNameID 
-  order by d.DecisionTime desc 
+select * from  NL_CashRequests cr join [dbo].[NL_Decisions] d on d.CashRequestID=cr.CashRequestID and cr.CustomerID=CustomerID;
+

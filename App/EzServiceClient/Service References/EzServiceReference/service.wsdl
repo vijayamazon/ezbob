@@ -621,6 +621,18 @@
   <wsdl:message name="IEzService_AcceptRollover_OutputMessage">
     <wsdl:part name="parameters" element="tns:AcceptRolloverResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaveFee_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveFee" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveFee_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveFeeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CancelFee_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelFee" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CancelFee_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelFeeResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetPricingModelModel_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPricingModelModel" />
   </wsdl:message>
@@ -2117,6 +2129,14 @@
     <wsdl:operation name="AcceptRollover">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AcceptRollover" message="tns:IEzService_AcceptRollover_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AcceptRolloverResponse" message="tns:IEzService_AcceptRollover_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveFee">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/SaveFee" message="tns:IEzService_SaveFee_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/SaveFeeResponse" message="tns:IEzService_SaveFee_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelFee">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelFee" message="tns:IEzService_CancelFee_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CancelFeeResponse" message="tns:IEzService_CancelFee_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPricingModelModel">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServicePricing/GetPricingModelModel" message="tns:IEzService_GetPricingModelModel_InputMessage" />
@@ -3668,6 +3688,24 @@
     </wsdl:operation>
     <wsdl:operation name="AcceptRollover">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AcceptRollover" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveFee">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/SaveFee" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelFee">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CancelFee" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -5397,20 +5435,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

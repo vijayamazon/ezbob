@@ -10,11 +10,14 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.LegalDocs;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Collection;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+	using Ezbob.Backend.Strategies.NewLoan.Migration;
 	using Ezbob.Database;
 	using Ezbob.Utils;
+	using EzBob.Models;
 	using EzServiceAccessor;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -90,7 +93,7 @@
 
 		[Test]
 		public void BuildLoanFromOffer() {
-			NL_Model model = new NL_Model(365) {
+			NL_Model model = new NL_Model(1394) {
 				UserID = 357,
 				Loan = new NL_Loans()
 			};
@@ -194,7 +197,7 @@
 		[Test]
 		public void AddLoan() {
 			const int userID = 357;
-			const int oldLoanID = 5095;
+			const int oldLoanID = 7152;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
 			if (oldLoan == null)
@@ -212,16 +215,16 @@
 				}
 			};
 			model.Loan.Histories.Add(new NL_LoanHistory() {
-				EventTime = DateTime.UtcNow, // now,
+				EventTime = now,
 				AgreementModel = JsonConvert.SerializeObject(oldLoan.AgreementModel)
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
-				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath = "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
+				LoanAgreementTemplateID = 2065, //(int)NLLoanAgreementTemplateTypes.PreContractAgreement,
+				FilePath =  "2016/2/21/PAD64J14012/Guaranty Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", // "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
-				LoanAgreementTemplateID = (int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
-				FilePath = "guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
+				LoanAgreementTemplateID = 2067, //(int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
+				FilePath = "2016/2/21/PAD64J14012/Private Company Loan Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", //"guarantyAgreement/aa/bb" + oldLoan.RefNumber + ".pdf"
 			});
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
@@ -421,8 +424,8 @@
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		[Test]
 		public void LoanStateStrategy() {
-			const long loanID = 21;
-			var strategy = new GetLoanState(351, loanID, DateTime.UtcNow); // loanID = 17, customer = 56
+			const long loanID = 9;
+			var strategy = new GetLoanState(351, loanID, DateTime.UtcNow, 1, false); // loanID = 17, customer = 56
 			strategy.Execute();
 			m_oLog.Debug(strategy.Result);
 		}
@@ -430,8 +433,8 @@
 		/// <exception cref="InvalidCastException"><paramref /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Test]
 		public void GetLoanFees() {
-			const long loanid = 15;
-			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoansFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
+			const long loanid = 9;
+			var loanFees = this.m_oDB.Fill<NL_LoanFees>("NL_LoanFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanid));
 			m_oLog.Debug(AStringable.PrintHeadersLine(typeof(NL_LoanFees)));
 			loanFees.ForEach(f => m_oLog.Debug(f));
 		}
@@ -440,8 +443,8 @@
 		[Test]
 		public void CalculatorState() {
 			DateTime calcTime = DateTime.UtcNow;
-			const long loanID = 14;
-			const int customerID = 389;
+			const long loanID = 10007;
+			const int customerID = 59;
 			GetLoanState dbState = new GetLoanState(customerID, loanID, calcTime, 357, false);
 			try {
 				dbState.Execute();
@@ -518,7 +521,7 @@
 		[Test]
 		public void CreateSchedule() {
 			DateTime issueDate = DateTime.UtcNow; // new DateTime(2015, 12, 8, 19, 12, 00);
-			NL_Model model = new NL_Model(365) { UserID = 365, Loan = new NL_Loans() };
+			NL_Model model = new NL_Model(1394) { UserID = 357, Loan = new NL_Loans() };
 			model.Loan.Histories.Add(new NL_LoanHistory() { EventTime = issueDate });
 			BuildLoanFromOffer strategy = new BuildLoanFromOffer(model);
 			strategy.Execute();
@@ -618,7 +621,7 @@
 		}
 
 		[Test]
-		public void AddPAymentTest() {
+		public void AddPaymentTest() {
 			const int customerid = 390;
 			const long loanID = 15;
 			/*NL_Payments nlpayment = new NL_Payments() {
@@ -708,8 +711,8 @@
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		[Test]
 		public void UpdateLoanDBStateTest() {
-			const long loanID = 4;
-			const int customerID = 1394;
+			const long loanID = 10009;
+			const int customerID = 59;
 			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(customerID, loanID, 357);
 			reloadLoanDBState.Context.UserID = 357;
 			try {
@@ -1030,6 +1033,113 @@
 			const int customerID = 387;
 			AcceptRollover s = new AcceptRollover(customerID, loanID);
 			s.Execute();
+		}
+
+	
+
+		[Test]
+		public void SaveFeeNewTest() {
+			NL_LoanFees f = new NL_LoanFees() {
+				LoanID = 3,
+				Amount = 54,
+				AssignedByUserID = 357,
+				AssignTime = DateTime.UtcNow,
+				CreatedTime = DateTime.UtcNow,
+				LoanFeeTypeID = (int)NLFeeTypes.OtherCharge,
+				Notes = "other fee",
+				UpdatedByUserID = 357
+			};
+			SaveFee s = new SaveFee(f);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				m_oLog.Debug(e);
+			}
+		}
+
+		[Test]
+		public void SaveFeeUpdateTest() {
+			NL_LoanFees f = m_oDB.FillFirst<NL_LoanFees>("NL_LoanFeesGet", 
+				CommandSpecies.StoredProcedure, 
+				new QueryParameter("LoanID", 3), 
+				new QueryParameter("LoanFeeID", 20011));
+
+			f.UpdatedByUserID=357;
+			f.UpdateTime = DateTime.UtcNow;
+			f.Amount = 29;
+			f.AssignTime = DateTime.Now.Date.AddDays(-30);
+
+			SaveFee s = new SaveFee(f);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				m_oLog.Debug(e);
+			}
+		}
+
+
+		[Test]
+		public void CompareNlOldFees() {
+			int loanid = 5146;
+			long lid = 9;
+			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			var loan = loanRep.Get(loanid);
+
+			List<NL_LoanFees> fl = this.m_oDB.Fill<NL_LoanFees>("NL_LoanFeesGet", new QueryParameter("LoanID", lid));
+
+			List<LoanChargesModel> list1 = new List<LoanChargesModel>();
+			List<LoanChargesModel> list2 = new List<LoanChargesModel>();
+
+			//foreach (NL_LoanFees nlFee in fl.OrderBy(f => f.AssignTime)) {
+			//	list1.Add(LoanChargesModel.CompareFromNLFee(nlFee));
+			//}
+
+			//m_oLog.Debug("NL fees");
+			//list1.ForEach(f => m_oLog.Debug(f));
+
+			//foreach (LoanCharge ch in loan.Charges.OrderBy(ff => ff.Date)) {
+			//	list2.Add(LoanChargesModel.CompareFromCharges(ch));
+			//}
+
+			//m_oLog.Debug("old fees fees");
+			//list2.ForEach(f => m_oLog.Debug(f));
+
+			//var list3 = list2.Except(list1, new LoanChargeModelIdComparer()).ToList();
+			//m_oLog.Debug("\n DIFFERENCES----------------");
+			//list3.ForEach(f => m_oLog.Debug(f));
+		}
+
+		[Test]
+		public void CancelFeeTest() {
+			NL_LoanFees f = m_oDB.FillFirst<NL_LoanFees>("NL_LoanFeesGet",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("LoanID", 3),
+				new QueryParameter("LoanFeeID", 20011));
+
+			f.DeletedByUserID = 357;
+			CancelFee s = new CancelFee(f);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				m_oLog.Debug(e);
+			}
+		}
+
+		[Test]
+		public void MigrateCRDecisionOfferTest() {
+			MigrateCRDecisionOffer s = new MigrateCRDecisionOffer();
+			try {
+				s.Execute();
+			} catch (Exception ex) {
+				m_oLog.Error(ex);
+			}
+		}
+
+
+		[Test]
+		public void TestManualLegalDocsSyncTemplatesFiles() {
+			var stra = new ManualLegalDocsSyncTemplatesFiles(@"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement");
+			stra.Execute();
 		}
 
 	} // class TestNewLoan

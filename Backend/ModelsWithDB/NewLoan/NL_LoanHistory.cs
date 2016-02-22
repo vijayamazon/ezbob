@@ -63,6 +63,28 @@
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
 
+		[DataMember]
+		public decimal LateFees {
+			get { return this.lateFees; }
+			set { this.lateFees = value; }
+		}
+
+		[DataMember]
+		public decimal DistributedFees {
+			get { return this.distributedFees; }
+			set { this.distributedFees = value; }
+		}
+		
+		[DataMember]
+		public decimal OutstandingInterest {
+			get { return this.outstandingInterest; }
+			set { this.outstandingInterest = value; }
+		}
+
+		private decimal lateFees;
+		private decimal distributedFees;
+		private decimal outstandingInterest;
+
 		// additions
 
 		private List<NL_LoanSchedules> _schedule = new List<NL_LoanSchedules>();
@@ -84,7 +106,9 @@
 
 		// helpers
 		public List<NL_LoanSchedules> ActiveSchedule() {
-			return this._schedule.Where(s => (s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)).ToList();
+			return this._schedule.Where(s => !s.IsDeleted()
+				//(s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)
+				).ToList();
 		}
 
 		//set default to 3? \ezbob\Integration\PaymentServices\Calculators\LoanScheduleCalculator.cs line 11-14, 143 -TODO should be from LoanSource

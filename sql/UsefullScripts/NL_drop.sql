@@ -41,6 +41,26 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UQ_LoanID_LoanFee
 	ALTER TABLE NL_LoanFees DROP CONSTRAINT UQ_LoanID_LoanFeeTypeID_Amount_AssignTime;	
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_CRDecisionTime')
+	ALTER TABLE NL_Decisions DROP CONSTRAINT UC_CRDecisionTime;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_OldCR')
+	ALTER TABLE NL_CashRequests DROP CONSTRAINT UC_OldCR;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_Desicion')
+	ALTER TABLE NL_Offers DROP CONSTRAINT UC_Desicion;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'FK_NL_Offers_I_ProductSubType')
+	ALTER TABLE NL_Offers DROP CONSTRAINT FK_NL_Offers_I_ProductSubType;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'FK_NL_LoanFees_UpdateUser')
+	ALTER TABLE NL_LoanFees DROP CONSTRAINT FK_NL_LoanFees_UpdateUser;	
+GO
+
 
 -------------------------------------------------------------------------------
 --
@@ -150,6 +170,10 @@ GO
 
 IF OBJECT_ID('NL_LoansFeesGet') IS NOT NULL
 	DROP PROCEDURE NL_LoansFeesGet
+GO
+
+IF OBJECT_ID('NL_LoanFeesGet') IS NOT NULL
+	DROP PROCEDURE NL_LoanFeesGet
 GO
 
 IF OBJECT_ID('NL_LoansSave') IS NOT NULL

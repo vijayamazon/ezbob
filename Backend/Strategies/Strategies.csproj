@@ -272,9 +272,13 @@
     <Compile Include="Misc\GetSlidersData.cs" />
     <Compile Include="Misc\LoadMessagesSentToUser.cs" />
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
-    <Compile Include="SalesForce\AddUpdateBrokerAccount.cs" />
-    <Compile Include="PricingModel\GetPricingScenarioDetails.cs" />
+    <Compile Include="NewLoan\DAL\ILoanFees.cs" />
+    <Compile Include="NewLoan\DAL\LoanFees.cs" />
     <Compile Include="SalesForce\ChangeEmail.cs" />
+    <Compile Include="NewLoan\Migration\MigrateLoan.cs" />
+    <Compile Include="NewLoan\Migration\MigrateCRDecisionOffer.cs" />
+    <Compile Include="NewLoan\SaveFee.cs" />
+    <Compile Include="NewLoan\SaveLoanStateToDB.cs" />
     <Compile Include="StoredProcs\GetCurrencyRate.cs" />
     <Compile Include="StoredProcs\GetCustomerCompanyID.cs" />
     <Compile Include="StoredProcs\LoadMatchingGradeRanges.cs" />

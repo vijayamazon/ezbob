@@ -566,6 +566,7 @@
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				SendEmailNotification = allowSendingEmail,
+				ProductSubTypeID = productSubTypeID
 				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
 				// InterestOnlyRepaymentCount = 
 				//IsAmountSelectionAllowed = 1 default 1 always allowed

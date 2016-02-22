@@ -122,15 +122,7 @@ namespace EzBob.Models
                 Errors.Add("Zero fees are not allowed");
             }
         }
-        /* public override string ToString() {
-             StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-             Type t = typeof(EditLoanDetailsModel);
-             foreach (var prop in t.GetProperties()) {
-                 if (prop.GetValue(this) != null)
-                     sb.Append("\n" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
-             }
-             return sb.ToString();
-         }*/
+
         
         public override string ToString(){
             var sb = new StringBuilder();
@@ -142,6 +134,11 @@ namespace EzBob.Models
                 sb.AppendLine(item.ToString());
             }
 
+			sb.AppendLine("Fees:");
+			foreach (var item in Items.Where(s => s.Type == "Fee")) {
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
 
             sb.AppendLine("Freezes:");
             foreach (var item in InterestFreeze.Where(f => f.DeactivationDate == null))

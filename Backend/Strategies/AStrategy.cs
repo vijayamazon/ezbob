@@ -40,9 +40,7 @@
 
 					return this.description;
 				} // get
-				set {
-					this.description = string.IsNullOrWhiteSpace(value) ? DefaultDescription : value.Trim();
-				} // set
+				set { this.description = string.IsNullOrWhiteSpace(value) ? DefaultDescription : value.Trim(); } // set
 			} // Description
 
 			/// <summary>
@@ -57,7 +55,7 @@
 					UserID.HasValue ? UserID.Value.ToString() : "-- null --",
 					CustomerID.HasValue ? CustomerID.Value.ToString() : "-- null --",
 					StartTime.MomentStr()
-				);
+					);
 			} // ToString
 
 			private const string DefaultDescription = "This strategy usually finishes almost instantly.";
@@ -92,7 +90,8 @@
 			if (task == null)
 				return;
 
-			string taskID = Guid.NewGuid().ToString("N");
+			string taskID = Guid.NewGuid()
+				.ToString("N");
 
 			ASafeLog log = Log;
 
@@ -117,7 +116,8 @@
 		} // FireToBackground
 
 		protected static IMarketplaceModelBuilder GetMpModelBuilder(MP_CustomerMarketPlace mp) {
-			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
+			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType()
+				.ToString());
 			return builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 		} // GetMpModelBuilder
 
@@ -126,24 +126,21 @@
 		} // DbHelper
 
 		protected virtual string BrokerSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
-			} // get
+			get { return RemoveLastSlash(CurrentValues.Instance.BrokerSite); } // get
 		} // BrokerSite
 
 		protected virtual string UnderwriterSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite);
-			} // get
+			get { return RemoveLastSlash(CurrentValues.Instance.UnderwriterSite); } // get
 		} // UnderwriterSite
 
-		protected enum LogType {
-			DataExsistense,
-			Error,
+		 public enum LogType {
+	        DataExsistense,
+            Error,
 			Warn,
-			Info,
-			Debug,
-		} // LogType
+            Info,
+            Debug,
+			InputInvalid
+	    }
 
 		protected virtual void NL_AddLog(
 			LogType logType,
@@ -152,7 +149,7 @@
 			object result,
 			string exception,
 			string stacktrace
-		) {
+			) {
 			var nlLog = new NL_Log {
 				Exception = exception,
 				Description = description,
@@ -170,7 +167,7 @@
 				"NL_AddLog",
 				CommandSpecies.StoredProcedure,
 				DB.CreateTableParameter("Tbl", nlLog)
-			);
+				);
 		} // NL_AddLog
 
 		private string RemoveLastSlash(string sResult) {
@@ -198,5 +195,6 @@
 
 		private static readonly object ms_oLock;
 		private static bool ms_bDefaultsAreReady;
-	} // class AStrategy
+		
+	}// class AStrategy
 } // namespace Ezbob.Backend.Strategies

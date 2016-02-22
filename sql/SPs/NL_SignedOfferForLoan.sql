@@ -6,7 +6,6 @@ IF OBJECT_ID('NL_SignedOfferForLoan') IS NULL
 GO
 
 
-
 ALTER PROCEDURE [dbo].[NL_SignedOfferForLoan] 
 	@CustomerID INT, 
 	@Now DATETIME
@@ -48,38 +47,38 @@ BEGIN
 		select 0 as OfferID, 'Max loans limit' as Error; --from @validOffer 
 		RETURN 
 	END
+		
+	select top 1 o.OfferID,
+			o.LoanTypeID,
+			o.RepaymentIntervalTypeID,
+			o.LoanSourceID,
+			o.RepaymentCount AS OfferRepaymentCount,
+			o.Amount AS OfferAmount,
+			o.MonthlyInterestRate,
+			o.SetupFeeAddedToLoan,
+			o.BrokerSetupFeePercent,
+			o.InterestOnlyRepaymentCount,
+			o.DiscountPlanID,
+			ll.LoanLegalID,
+			ll.Amount AS LoanLegalAmount,
+			ll.RepaymentPeriod AS LoanLegalRepaymentPeriod,
+			@LoansCount AS LoansCount,
+			0 AS AvailableAmount,
+			ExistsRefnums = (Select distinct(Refnum)+ ',' AS [text()] From NL_Loans For XML PATH ('')),
+			o.IsRepaymentPeriodSelectionAllowed	
+	INTO #validOffer	
+	from (select * from 
+	((select MAX(d1.[DecisionID]) as lastDesicionID, d1.CashRequestID as CRID from [dbo].[NL_Decisions] d1 
+		join [dbo].[NL_CashRequests] cr1 on d1.CashRequestID=cr1.CashRequestID and cr1.CustomerID=@CustomerID 
+		join Decisions dn on d1.DecisionNameID = dn.DecisionID and dn.DecisionName IN ('Approve','ReApprove') group by d1.CashRequestID) dd1
+		join (select MAX(OfferID) as lastOffer, DecisionID from [dbo].[NL_Offers] where @Now BETWEEN StartTime AND EndTime group by DecisionID) of1 on of1.DecisionID=dd1.lastDesicionID)) maxOffer
+		join NL_Offers o on o.OfferID=maxOffer.lastOffer
+		join NL_LoanLegals ll on ll.OfferID=maxOffer.lastOffer and ll.LoanLegalID = (select MAX(LoanLegalID) from NL_LoanLegals where OfferID=maxOffer.lastOffer)
+	order by o.OfferID desc;
 
-	-- valid offer	
-	SELECT top 1 
-		ll.LoanLegalID,
-		ll.Amount AS LoanLegalAmount,
-		ll.RepaymentPeriod AS LoanLegalRepaymentPeriod,
-		o.OfferID,
-		o.LoanTypeID,
-		o.RepaymentIntervalTypeID,
-		o.LoanSourceID,
-		o.RepaymentCount AS OfferRepaymentCount,
-		o.Amount AS OfferAmount,
-		o.MonthlyInterestRate,
-		o.SetupFeeAddedToLoan,
-		o.BrokerSetupFeePercent,
-		o.InterestOnlyRepaymentCount,
-		o.DiscountPlanID,
-		@LoansCount AS LoansCount,
-		0 AS AvailableAmount,
-		ExistsRefnums = (Select distinct(Refnum)+ ',' AS [text()] From NL_Loans For XML PATH ('')),
-		o.IsRepaymentPeriodSelectionAllowed
-	INTO #validOffer				   		
-	FROM NL_Offers o
-	JOIN NL_Decisions d ON d.DecisionID = o.DecisionID
-	JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
-	JOIN Decisions dn ON d.DecisionNameID = dn.DecisionID	
-	JOIN NL_LoanLegals ll ON o.OfferID = ll.OfferID
-	WHERE cr.CustomerID = @CustomerID
-		AND @Now BETWEEN o.StartTime AND o.EndTime
-		AND dn.DecisionName IN ('Approve','ReApprove') 
-		and ll.LoanLegalID = (select MAX( ll1.LoanLegalID) from NL_LoanLegals ll1 where ll1.OfferID=o.OfferID )
-	ORDER BY o.OfferID DESC ;
+
+	--select * from #validOffer;
+	--return
 
 	IF ((SELECT IsRepaymentPeriodSelectionAllowed from #validOffer) = 0
 	   AND (SELECT OfferRepaymentCount from #validOffer) <> (SELECT LoanLegalRepaymentPeriod from #validOffer))	 

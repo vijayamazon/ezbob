@@ -50,13 +50,25 @@
 				}
 
 				NL_AddLog(LogType.Info, "Strategy End", this.offer, OfferID, null, null);
+
+			} catch (DbException dbException) {
+
+				if (dbException.Message.Contains("Violation of UNIQUE KEY constraint"))
+					NL_AddLog(LogType.Info, "Strategy End", this.offer, OfferID, null, null);
+				else
+					LogAndExit(dbException);
+
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
-				Log.Alert("Failed to add NL Offer or OfferFee. Rolling back. {0} ", ex);
-				Error = string.Format("Failed to add NL Offer|OfferFees, err: {0} ", ex.Message);
-				NL_AddLog(LogType.Error, "Strategy Faild", this.offer, null, ex.ToString(), ex.StackTrace);
+				LogAndExit(ex);
 			}
+		}
 
+
+		private void LogAndExit(Exception ex) {
+			Log.Alert("Failed to add NL Offer or OfferFee. Rolling back. {0} ", ex);
+			Error = string.Format("Failed to add NL Offer|OfferFees, err: {0} ", ex.Message);
+			NL_AddLog(LogType.Error, "Strategy Faild", this.offer, null, ex.ToString(), ex.StackTrace);
 		}
 
 

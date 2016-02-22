@@ -79,7 +79,7 @@
 			NL_AddLog(LogType.Info, "Strategy Start", this.strategyArgs, null, Error, null);
 
 			// fetch loan's rollovers and check rollover exists, valid and not accepted yet
-			NL_LoanRollovers rollover=DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", LoanID))
+			NL_LoanRollovers rollover=DB.Fill<NL_LoanRollovers>("NL_RolloversGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", LoanID))
 				.FirstOrDefault(r => r.DeletedByUserID == null && r.DeletionTime == null && r.IsAccepted == false && (r.CreationTime <= nowTime && nowTime <= r.ExpirationTime));
 
 			if (rollover == null) {

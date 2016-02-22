@@ -129,6 +129,10 @@
       <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
       <Name>EzServiceAccessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
       <Name>Ezbob.Backend.Models</Name>

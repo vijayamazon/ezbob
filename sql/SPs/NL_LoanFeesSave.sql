@@ -18,7 +18,10 @@ CREATE TYPE NL_LoanFeesList AS TABLE (
 	[AssignTime] DATE NOT NULL,
 	[DeletedByUserID] INT NULL,
 	[DisabledTime] DATETIME NULL,
-	[Notes] NVARCHAR(MAX) NULL
+	[Notes] NVARCHAR(MAX) NULL,
+	[UpdatedByUserID] INT NULL,
+	[UpdateTime] DATETIME NULL,
+	[OldFeeID] INT NULL
 )
 GO
 
@@ -37,7 +40,10 @@ BEGIN
 		[AssignTime],
 		[DeletedByUserID],
 		[DisabledTime],
-		[Notes]
+		[Notes],
+		[UpdatedByUserID],
+		[UpdateTime],
+		[OldFeeID]
 	) SELECT		
 		[LoanID],
 		[LoanFeeTypeID],
@@ -47,7 +53,10 @@ BEGIN
 		[AssignTime],
 		[DeletedByUserID],
 		[DisabledTime],
-		[Notes]
+		[Notes],
+		[UpdatedByUserID] ,
+		[UpdateTime],
+		[OldFeeID]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

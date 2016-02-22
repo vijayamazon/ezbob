@@ -29,7 +29,7 @@
 		[DataMember]
 		[DecimalFormat("C2")]
 		public decimal Amount { get; set; }
-
+		
 		[DataMember]
 		public DateTime CreatedTime { get; set; }
 
@@ -47,10 +47,20 @@
 		[DataMember]
 		public string Notes { get; set; }
 
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? UpdatedByUserID { get; set; }  
+
+		[DataMember]
+		public DateTime? UpdateTime { get; set; }
+
+		[FK("LoanCharges", "Id")]
+		[DataMember]
+		public int? OldFeeID { get; set; }
+
 		[DataMember]
 		[NonTraversable]
 		public decimal PaidAmount { get; set; }
-		
 
 	} // class NL_LoanFees
 } // ns

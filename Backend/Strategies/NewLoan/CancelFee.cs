@@ -1,71 +1,60 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+	using Ezbob.Database;
 
 	/// <summary>
 	/// </summary>
 	public class CancelFee : AStrategy {
 
-		public CancelFee(int customerID, NL_LoanFees fee, int userID) {
-	
-			CustomerID = customerID;
+		public CancelFee(NL_LoanFees fee) {
 			Fee = fee;
-			UserID = userID;
-
-			this.strategyArgs = new object[] { CustomerID, Fee, UserID };
+			this.strategyArgs = new object[] { Fee };
 		}
 
-		public override string Name { get { return "CancelPayment"; } }
+		public override string Name { get { return "CancelFee"; } }
 		public NL_LoanFees Fee { get; private set; }
-		public int CustomerID { get; private set; }
-		public int UserID { get; private set; }
-
-		public string Error;
-
+		public string Error { get; private set; }
 		private readonly object[] strategyArgs;
 
-		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
-		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
 		public override void Execute() {
 			if (!CurrentValues.Instance.NewLoanRun) {
 				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
 			}
 
-			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
-
-			if (CustomerID == 0) {
-				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionCustomerNotFound(this.Error);
-			}
+			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
 
 			if (Fee == null || Fee.LoanID == 0) {
-				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionLoanNotFound(this.Error);
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.InputInvalid, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
+				return;
 			}
 
-			if (Fee.LoanFeeID == 0) {
-				this.Error = NL_ExceptionInputDataInvalid.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+			if (!Array.Exists<NLFeeTypes>(NL_Model.NLFeeTypesEditable, element => element == (NLFeeTypes)Fee.LoanFeeTypeID)) {
+				Error = string.Format("Fee type '{0}' not editable", Enum.GetName(typeof(NLFeeTypes), Fee.LoanFeeTypeID));
+				NL_AddLog(LogType.InputInvalid, "InputInvalid", this.strategyArgs, null, Error, null);
+				return;
 			}
-		
-			// make fee cancellation
 
-			// recalculate state with calculator + save new state to DB
-			UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(CustomerID, Fee.LoanID, UserID);
 			try {
-				reloadLoanDBState.Execute();
-			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Fee, reloadLoanDBState.Error + "\n" + this.Error, ex.ToString(), ex.StackTrace);
-			}
 
+				DB.ExecuteNonQuery("NL_LoanFeeCancel", CommandSpecies.StoredProcedure,
+					new QueryParameter("LoanFeeID", Fee.LoanFeeID),
+					new QueryParameter("DeletedByUserID", Fee.DeletedByUserID),
+					new QueryParameter("DisabledTime", DateTime.UtcNow),
+					new QueryParameter("Notes", Fee.Notes));
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Error = ex.Message;
+				Log.Alert(ex, "Failed to disable fee");
+				NL_AddLog(LogType.Error, "Failed", this.strategyArgs, Error, ex.ToString(), ex.StackTrace);
+			}
+	
 		}
-	} // class AddPayment
+	} // class CancelFee
 } // ns

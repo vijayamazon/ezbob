@@ -45,7 +45,7 @@
 				if (Result.CustomerID == 0) {
 					Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 					Log.Error(Error);
-					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
@@ -61,14 +61,14 @@
 				if (!string.IsNullOrEmpty(DataForLoan.Error)) {
 					Error = DataForLoan.Error;
 					Log.Info(Error);
-					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
 				if (DataForLoan.OfferID == 0) {
 					Error = NL_ExceptionOfferNotValid.DefaultMessage;
 					Log.Info(Error);
-					NL_AddLog(LogType.DataExsistense, "Strategy Failed", this.strategyArgs, Result, Error, null);
+					NL_AddLog(LogType.DataExsistense, "Failed", this.strategyArgs, Result, Error, null);
 					return;
 				}
 
@@ -115,7 +115,7 @@
 				};
 
 				// offer-fees
-				Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", DataForLoan.OfferID));
+				Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("OfferID", DataForLoan.OfferID));
 
 				//Result.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
 
@@ -123,7 +123,7 @@
 				if (DataForLoan.DiscountPlanID > 0) {
 					var discounts = DB.Fill<NL_DiscountPlanEntries>("NL_DiscountPlanEntriesGet",
 						CommandSpecies.StoredProcedure,
-						new QueryParameter("@DiscountPlanID", DataForLoan.DiscountPlanID)
+						new QueryParameter("DiscountPlanID", DataForLoan.DiscountPlanID)
 					);
 					foreach (NL_DiscountPlanEntries dpe in discounts) {
 						Result.Offer.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
@@ -135,7 +135,7 @@
 
 			} catch (Exception ex) {
 				Log.Error(ex.Message);
-				NL_AddLog(LogType.Error, "Strategy Faild", this.strategyArgs, Result, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Failed", this.strategyArgs, Result, ex.ToString(), ex.StackTrace);
 			}
 		} // Execute
 

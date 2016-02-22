@@ -1,10 +1,5 @@
-﻿using System;
-using DbConstants;
-using NUnit.Framework;
-
-namespace EzBobTest {
+﻿namespace EzBobTest {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
@@ -12,11 +7,11 @@ namespace EzBobTest {
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.Models.Alibaba;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
 	using NHibernate.Linq;
-	using NHibernate.Util;
 	using NUnit.Framework;
 	using Reports;
 
@@ -137,7 +132,7 @@ namespace EzBobTest {
 		}
 
 
-		
+
 
 
 		[Test]
@@ -173,14 +168,14 @@ namespace EzBobTest {
 			// Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 		}
 
-	    [Test]
-	    public void TestDateTimeFormat() {
-	        CustomerDataSharing cds = new CustomerDataSharing();
-	        DateTime xx = new DateTime(2000, 03, 12, 12, 12, 12, 122);
-            Console.WriteLine(xx);
-	        cds.applicationDate = xx;
-	        Console.WriteLine(cds.applicationDate.ToString());
-	    }
+		[Test]
+		public void TestDateTimeFormat() {
+			CustomerDataSharing cds = new CustomerDataSharing();
+			DateTime xx = new DateTime(2000, 03, 12, 12, 12, 12, 122);
+			Console.WriteLine(xx);
+			cds.applicationDate = xx;
+			Console.WriteLine(cds.applicationDate.ToString());
+		}
 
 		[Test]
 		public void TestEnum() {
@@ -200,15 +195,15 @@ namespace EzBobTest {
 		}
 
 
-	    [Test]
-	    public void TestEnumGetName() {
-            //Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
-            //Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
-            //Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
-            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2));
-            Console.WriteLine(NLLoanTypes.HalfWayLoanType.ToString());
-            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2) == NLLoanTypes.HalfWayLoanType.ToString());
-	    }
+		[Test]
+		public void TestEnumGetName() {
+			//Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
+			//Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
+			//Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
+			Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2));
+			Console.WriteLine(NLLoanTypes.HalfWayLoanType.ToString());
+			Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2) == NLLoanTypes.HalfWayLoanType.ToString());
+		}
 
 
 		[Test]
@@ -222,24 +217,24 @@ namespace EzBobTest {
 
 			Console.WriteLine("{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} ", 66, 67, 10050, 0.000000, 0.000000, 0.000000m);
 
-		/*	{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} {6,-17:d} {7,-8} 
-66
-67
-10050
-0.000000
-0.000000
-0.000000
-0.000000
-False*/
+			/*	{0,-21} {1,-14} {2,-9} {3,-13:F} {4,-12:F} {5,-18:d} {6,-17:d} {7,-8} 
+	66
+	67
+	10050
+	0.000000
+	0.000000
+	0.000000
+	0.000000
+	False*/
 		}
 
 		/// <exception cref="InvalidCastException"><paramref name="value" /> cannot be cast to the element type of the current <see cref="T:System.Array" />.</exception>
 		[Test]
 		public void ArrayListTest() {
-			int[] myIntArray = new int[3] ;
+			int[] myIntArray = new int[3];
 			myIntArray.SetValue(1, 0);
 			myIntArray.SetValue(100, 2);
-			myIntArray.ForEach(a=>Console.WriteLine( a));
+			myIntArray.ForEach(a => Console.WriteLine(a));
 		}
 
 		[Test]
@@ -262,9 +257,22 @@ False*/
 		public void TestEnumByString() {
 			string s = "bank transfer";
 			Console.WriteLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s));
-
 			//NLLoanTransactionMethods e = (NLLoanTransactionMethods)Enum.Parse(typeof(NLLoanTransactionMethods), s);
 			//Console.WriteLine(e);
 		}
+
+		[Test]
+		public void IsInTest() {
+			NL_LoanFees f = new NL_LoanFees() { LoanFeeTypeID = 8 };
+			Console.WriteLine(Array.Exists<NLFeeTypes>(NL_Model.NLFeeTypesEditable, element => element == (NLFeeTypes)f.LoanFeeTypeID));
+		}
+
+		[Test]
+		public void TomeFormatTest() {
+			// 2014 January 09, 16:53:32.000
+			DateTime d = new DateTime(2014, 1, 9, 16, 53, 32);
+			Console.WriteLine(d.ToShortTimeString());
+		}
+
 	} // class Misc
 } // namespace

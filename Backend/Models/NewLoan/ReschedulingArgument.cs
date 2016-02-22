@@ -8,7 +8,7 @@
 	public class ReschedulingArgument {
 
 		[DataMember]
-		public int LoanID { get; set; }  // loan ID to re-schedule
+		public int LoanID { get; set; }  // "old" loan ID to re-schedule
 
 		[DataMember]
 		public string LoanType { get; set; }  // loan old/new
@@ -30,7 +30,13 @@
 
 		[DataMember]
 		public bool StopFutureInterest { get; set; } // freeze interest for "outside", starts from ReschedulingDate
+		
+		//[DataMember]
+		//public long NLLoanID { get; set; }  // nl loan ID to re-schedule
 
+		[DataMember]
+		public int? UserID { get; set; } 
+	
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(ReschedulingArgument);
