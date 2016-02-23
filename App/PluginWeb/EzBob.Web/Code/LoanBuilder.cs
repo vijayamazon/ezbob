@@ -2,11 +2,11 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
+	using Ezbob.Logger;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using log4net;
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 
@@ -26,8 +26,38 @@
 		} // CreateLoan
 
 		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0) {
-			var fees = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent)
-				.Calculate(amount);
+			return BuildLoan(cr, amount, now, term, interestOnlyTerm).Loan;
+		} // CreateNewLoan
+
+		public BuiltLoan BuildLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0) {
+			decimal setupFeePct = cr.ManualSetupFeePercent ?? 0;
+			decimal brokerFeePct = cr.BrokerSetupFeePercent ?? 0;
+
+			decimal approvedAmount = (decimal)(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum ?? 0);
+
+			if ((cr.Customer.Broker != null) && (approvedAmount != amount)) {
+				log.Debug(
+					"CreateNewLoan: broker customer '{0}', broker fee in cash request with approved amount {1} is {2}.",
+					cr.Customer.Stringify(),
+					approvedAmount.ToString("C2"),
+					brokerFeePct.ToString("P2")
+				);
+
+				Loan firstLoan = cr.Customer.Loans.OrderBy(l => l.Date).FirstOrDefault();
+
+				brokerFeePct = new CommissionCalculator(amount, firstLoan == null ? (DateTime?)null : firstLoan.Date)
+					.Calculate()
+					.BrokerCommission;
+
+				log.Debug(
+					"CreateNewLoan: broker customer '{0}', broker fee adjusted to loan amount {1} is {2}.",
+					cr.Customer.Stringify(),
+					amount.ToString("C2"),
+					brokerFeePct.ToString("P2")
+				);
+			} // if broker customer
+
+			var fees = new SetupFeeCalculator(setupFeePct, brokerFeePct).Calculate(amount);
 
 			decimal setupFee = fees.Total;
 			decimal brokerFee = fees.Broker;
@@ -61,8 +91,12 @@
 				});
 			} // if broker fee & broker
 
-			return loan;
-		} // CreateNewLoan
+			return new BuiltLoan {
+				Loan = loan,
+				BrokerFeePercent = brokerFeePct,
+				ManualSetupFeePercent = setupFeePct,
+			};
+		} // BuildLoan
 
 		/// <summary>
 		/// Looks like this method is not used any more (after removing edit loan button from underwriter's
@@ -91,13 +125,13 @@
 						.Value;
 					if (nlLoanId > 0) {
 						var nlModel = serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, 1, true).Value;
-						Log.InfoFormat("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
+						log.Msg("<<< NL_Compare: {0}\n===============loan: {1}  >>>", nlModel, loan);
 					}
 					// ReSharper disable once CatchAllClause
 				} catch (Exception ex) {
-					Log.InfoFormat("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
-				}
-			}
+					log.Msg("<<< NL_Compare fail at: {0}, err: {1}", Environment.StackTrace, ex.Message);
+				} // try
+			} // if
 
 			loan.LoanSource = cr.LoanSource;
 			return loan;
@@ -132,6 +166,6 @@
 		} // AdjustDates
 
 		private readonly ChangeLoanDetailsModelBuilder _builder;
-		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanBuilder));
+		private static readonly ASafeLog log = new SafeILog(typeof(LoanBuilder));
 	} // class LoanBuilder
 } // namespace

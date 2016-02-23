@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculators\APRCalculator.cs" />
+    <Compile Include="Calculators\CommissionCalculator.cs" />
     <Compile Include="Calculators\IPayEarlyCalculatorFactory.cs" />
     <Compile Include="Calculators\LoanPaymentFacade.cs" />
     <Compile Include="Calculators\LoanScheduleCalculator.cs" />

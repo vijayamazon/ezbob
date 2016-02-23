@@ -53,9 +53,9 @@
 
 			CheckCustomerStatus(customer);
 
-			if (loan_amount < 0) {
-				loan_amount = (int)Math.Floor(customer.CreditSum.Value);
-			}
+			if (loan_amount < 0)
+				loan_amount = (int)Math.Floor(customer.CreditSum ?? 0);
+
 			var cr = customer.LastCashRequest;
 
 			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
@@ -86,15 +86,17 @@
 		}
 
 		private void CheckCustomerStatus(Customer customer) {
-			if (
+			bool invalidState =
 				!customer.CreditSum.HasValue ||
 				!customer.Status.HasValue ||
-				customer.Status.Value != Status.Approved ||
+				(customer.Status.Value != Status.Approved) ||
 				!customer.CollectionStatus.IsEnabled ||
-				!customer.LastCashRequest.LoanLegals.Any()) {
+				!customer.LastCashRequest.LoanLegals.Any();
+
+			if (invalidState)
 				throw new Exception("Invalid customer state");
-			}
-		}
+		} // CheckCustomerStatus
+
 		/// <summary>
 		/// Callback from paypoint after trying to charge customer with 5 pounds on adding dabit card
 		/// </summary>
@@ -246,8 +248,6 @@
 			return Json(new { url = url });
 		}
 
-
-
 		private void ValidateCustomerName(string customer, Customer cus) {
 			if (!this.validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {
 			    this.logRepository.Log(this.context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Warning",
@@ -267,88 +267,105 @@
 		[Transactional]
 		[HttpPost]
 		public JsonResult LoanLegalSigned(FormCollection collection) {
-		    
-            decimal loanAmount = Convert.ToDecimal(collection["loanAmount"]);
+			decimal loanAmount = Convert.ToDecimal(collection["loanAmount"]);
 			int repaymentPeriod = Convert.ToInt32(collection["repaymentPeriod"]);
-		    string signedName = collection["signedName"];
+			string signedName = collection["signedName"];
 			bool notInBankruptcy = Convert.ToBoolean(collection["notInBankruptcy"]);
-            bool euAgreementTermsRead = Convert.ToBoolean(collection["euAgreementTermsRead"]);
-            bool cosmeAgreementTermsRead = Convert.ToBoolean(collection["cosmeAgreementTermsRead"]);
+			bool euAgreementTermsRead = Convert.ToBoolean(collection["euAgreementTermsRead"]);
+			bool cosmeAgreementTermsRead = Convert.ToBoolean(collection["cosmeAgreementTermsRead"]);
+			decimal manualSetupFeePercent = Convert.ToDecimal(collection["manualSetupFeePercent"]);
+			decimal brokerFeePercent = Convert.ToDecimal(collection["brokerFeePercent"]);
 
+			var dynamicLoanAgreements = new Dictionary<LegalDocsEnums.LoanAgreementTemplateType, bool>();
 
-		    Dictionary<LegalDocsEnums.LoanAgreementTemplateType, bool> dynamicLoanAgreements = new Dictionary<LegalDocsEnums.LoanAgreementTemplateType, bool>();
+			foreach (var loanAgreementTemplateName in Enum.GetNames(typeof(LegalDocsEnums.LoanAgreementTemplateType))) {
+				var key = loanAgreementTemplateName + "TermsRead";
 
-            foreach (var loanAgreementTemplateName in Enum.GetNames(typeof(LegalDocsEnums.LoanAgreementTemplateType))) {
-                var key = loanAgreementTemplateName + "TermsRead";
-                if (collection.AllKeys.Contains(key))
-                {
-                    var value = Convert.ToBoolean(collection[key]);
-                    dynamicLoanAgreements.Add((LegalDocsEnums.LoanAgreementTemplateType)Enum.Parse(typeof(LegalDocsEnums.LoanAgreementTemplateType),loanAgreementTemplateName), value);
-                }
-            }
-            var dynamicLoanAgreementsStringified = new JavaScriptSerializer().Serialize(dynamicLoanAgreements.ToDictionary(x => x.Key.DescriptionAttr(), x => x.Value.ToString()));
+				if (collection.AllKeys.Contains(key)) {
+					var value = Convert.ToBoolean(collection[key]);
 
-             
+					dynamicLoanAgreements.Add(
+						(LegalDocsEnums.LoanAgreementTemplateType)Enum.Parse(
+							typeof(LegalDocsEnums.LoanAgreementTemplateType),
+							loanAgreementTemplateName
+						),
+						value
+					);
+				} // if
+			} // for each
+
+			var dynamicLoanAgreementsStringified = new JavaScriptSerializer().Serialize(
+				dynamicLoanAgreements.ToDictionary(x => x.Key.DescriptionAttr(), x => x.Value.ToString())
+			);
+
 			log.DebugFormat(
 				"LoanLegalModel - " +
-                "dynamicLoanAgreementsStringified : {0}" +
+				"dynamicLoanAgreementsStringified : {0}" +
 				"euAgreementTermsRead: {1}" +
 				"cosmeAgreementTermsRead: {2}",
-                dynamicLoanAgreementsStringified,
+				dynamicLoanAgreementsStringified,
 				euAgreementTermsRead,
-				cosmeAgreementTermsRead                
+				cosmeAgreementTermsRead
 			);
 
 			var cashRequest = this.context.Customer.LastCashRequest;
 			var typeOfBusiness = this.context.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
-            //dynamic agreements validation
-            foreach (var dynamicLoanAgreement in dynamicLoanAgreements) {
-                if (dynamicLoanAgreement.Value != true) {
-                    var errorMsg = string.Format("You must agree on {0} agreement", dynamicLoanAgreement.Key.DescriptionAttr());
-                    return Json(new { error = errorMsg });
-                }
-		    }
+			// Dynamic agreements validation
+			foreach (var dynamicLoanAgreement in dynamicLoanAgreements) {
+				if (dynamicLoanAgreement.Value != true) {
+					return Json(new {
+						error = string.Format("You must agree on {0} agreement", dynamicLoanAgreement.Key.DescriptionAttr())
+					});
+				} // if
+			} // for each
 
-		    var personalInfo = cashRequest.Customer.PersonalInfo;
-            
-            //customer name validation
-            var seperator = " ";
-		    List<String> nameCombinations = new List<string>() {
-		        string.Format("{0}{3}{1}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{0}{3}{2}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{1}{3}{0}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{1}{3}{2}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{2}{3}{0}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{2}{3}{1}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, seperator).Replace(seperator+seperator,seperator),
-		        string.Format("{0}{2}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, seperator),
-		        string.Format("{1}{2}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, seperator),
-		    };
-            if (!nameCombinations.Contains(signedName))
-                return Json(new { error = "sign name supplied is incorrect" });
+			var personalInfo = cashRequest.Customer.PersonalInfo;
 
-			
-            if ((cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) ||
-				(cashRequest.LoanSource.Name == LoanSourceName.COSME.ToString() && !cosmeAgreementTermsRead) ||
-				!notInBankruptcy)
+			// Customer name validation
+			const string separator = " ";
+
+			List<String> nameCombinations = new List<string> {
+				string.Format("{0}{3}{1}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{0}{3}{2}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{1}{3}{0}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{1}{3}{2}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{2}{3}{0}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{2}{3}{1}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
+				string.Format("{0}{2}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, separator),
+				string.Format("{1}{2}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, separator),
+			};
+
+			if (!nameCombinations.Contains(signedName))
+				return Json(new { error = "sign name supplied is incorrect" });
+
+			bool somethingIsMissing =
+				((cashRequest.LoanSource.Name == LoanSourceName.EU.ToString()) && !euAgreementTermsRead) ||
+				((cashRequest.LoanSource.Name == LoanSourceName.COSME.ToString()) && !cosmeAgreementTermsRead) ||
+				!notInBankruptcy;
+
+			if (somethingIsMissing)
 				return Json(new { error = "You must agree to all agreements." });
 
-            var productSubTypeID = cashRequest.ProductSubTypeID;
-		    var originId = cashRequest.Customer.CustomerOrigin.CustomerOriginID;
-            var isRegulated = cashRequest.Customer.PersonalInfo.TypeOfBusiness.IsRegulated();
+			var productSubTypeID = cashRequest.ProductSubTypeID;
+			var originId = cashRequest.Customer.CustomerOrigin.CustomerOriginID;
+			var isRegulated = cashRequest.Customer.PersonalInfo.TypeOfBusiness.IsRegulated();
 
-		    var requiredlegalDocsTemplates = this.serviceClient.Instance.GetLegalDocs(cashRequest.Customer.Id, this.context.UserId,originId,isRegulated,productSubTypeID ?? 0)
-		        .LoanAgreementTemplates.Select(x => x.TemplateTypeID);
+			var requiredlegalDocsTemplates = this.serviceClient.Instance.GetLegalDocs(
+				cashRequest.Customer.Id,
+				this.context.UserId,
+				originId,
+				isRegulated,
+				productSubTypeID ?? 0
+			).LoanAgreementTemplates.Select(x => x.TemplateTypeID);
 
-		    //validate sign on the right agreements
-		    foreach (var requiredlegalDocTemplate in requiredlegalDocsTemplates) {
-		        if (!dynamicLoanAgreements.ContainsKey((LegalDocsEnums.LoanAgreementTemplateType)requiredlegalDocTemplate))
-		            return Json(new {
-		                error = "You must agree to all agreements."
-		            });
-		    }
+			// Validate sign on the right agreements
+			foreach (var requiredlegalDocTemplate in requiredlegalDocsTemplates) {
+				if (!dynamicLoanAgreements.ContainsKey((LegalDocsEnums.LoanAgreementTemplateType)requiredlegalDocTemplate))
+					return Json(new { error = "You must agree to all agreements." });
+			} // foreach
 
-		    DateTime now = DateTime.UtcNow;
+			DateTime now = DateTime.UtcNow;
 
 			this.context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
 				CashRequest = cashRequest,
@@ -361,9 +378,10 @@
 				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
-                SignedLegalDocs = dynamicLoanAgreementsStringified
+				SignedLegalDocs = dynamicLoanAgreementsStringified,
+				ManualSetupFeePercent = manualSetupFeePercent,
+				BrokerSetupFeePercent = brokerFeePercent,
 			});
-
 
 			NL_LoanLegals nlLoanLegals = new NL_LoanLegals {
 				Amount = loanAmount,
@@ -377,7 +395,9 @@
 				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
-                SignedLegalDocs = dynamicLoanAgreementsStringified
+				SignedLegalDocs = dynamicLoanAgreementsStringified,
+				// TODO ManualSetupFeePercent = manualSetupFeePercent,
+				// TODO BrokerSetupFeePercent = brokerFeePercent,
 			};
 
 			var nlStrategyLegals = this.serviceClient.Instance.AddLoanLegals(this.context.UserId, this.context.Customer.Id, nlLoanLegals);
@@ -385,7 +405,6 @@
 			//_log.Debug("NL_LoanLegals: ID {0}, Error: {1}", nlStrategyLegals.Value, nlStrategyLegals.Error);
 
 			return Json(new { });
-
 		} // LoanLegalSigned
 
 		[Transactional]

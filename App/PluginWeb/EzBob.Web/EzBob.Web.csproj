@@ -209,6 +209,7 @@
     <Compile Include="Areas\Underwriter\Models\PendingInvestorModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
+    <Compile Include="Code\BuiltLoan.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
     <Compile Include="Code\ForceNhibernateResync.cs" />

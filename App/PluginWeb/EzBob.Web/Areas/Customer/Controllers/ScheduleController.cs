@@ -137,18 +137,23 @@
 			if (cr.IsCustomerRepaymentPeriodSelectionAllowed)
 				cr.RepaymentPeriod = repaymentPeriod;
 
-			var loan = this.loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
+			BuiltLoan builtLoan = this.loanBuilder.BuildLoan(cr, amount, DateTime.UtcNow, cr.RepaymentPeriod);
 
-			var schedule = loan.Schedule;
-			var apr = this.aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
+			var schedule = builtLoan.Loan.Schedule;
+			var apr = this.aprCalc.Calculate(amount, schedule, builtLoan.Loan.SetupFee, builtLoan.Loan.Date);
 
 			var b = new AgreementsModelBuilder(this.loanLegalRepo);
-			var agreement = b.Build(this.context.Customer, amount, loan);
+			var agreement = b.Build(this.context.Customer, amount, builtLoan.Loan);
 
 			// TODO calculate offer
 			log.Debug("calculate offer for customer {0}", this.context.Customer.Id);
 
-			return LoanOffer.InitFromLoan(loan, apr, agreement, cr);
+			var loanOffer = LoanOffer.InitFromLoan(builtLoan.Loan, apr, agreement, cr);
+
+			loanOffer.ManualSetupFeePercent = builtLoan.ManualSetupFeePercent;
+			loanOffer.BrokerFeePercent = builtLoan.BrokerFeePercent;
+
+			return loanOffer;
 		} // CalculateLoan
 
 		private readonly ILoanLegalRepository loanLegalRepo;

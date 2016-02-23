@@ -1,5 +1,4 @@
-﻿@using System.Collections.Generic
-@using EzBob.Web.Infrastructure.Html
+﻿@using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
@@ -10,15 +9,14 @@
 <script id="apply-forloan-template" type="text/template">
 	<div class="loan-amount-header">
 		<h2>
-            <span class="loan-amount-header-start">Choose loan amount</span>
-            <span class="duration-select-allowed"> and duration</span>
+			<span class="loan-amount-header-start">Choose loan amount</span>
+			<span class="duration-select-allowed"> and duration</span>
 		</h2>
 		<p>
 			<span class="duration-select-allowed">Select between 3 to 12 months. </span>
 			<span>You can always pay the loan early and save on interest.</span>
 			<span class="cannot-take-another-loan" style="display: none;">Please pay attention that you will not be able to take the remaining amount as a separate loan, as it is not possible to have more than <%-EzBob.Config.NumofAllowedActiveLoans%> active loans at the same time.</span>
-            <span class="cannot-take-under-minloan" style="display: none;">You will not be able to take the remaining amount as a separate loan, as the issued amount is limited to minimum of £<%-EzBob.Config.MinLoan%></span>
-
+			<span class="cannot-take-under-minloan" style="display: none;">You will not be able to take the remaining amount as a separate loan, as the issued amount is limited to minimum of £<%-EzBob.Config.MinLoan%></span>
 		</p>
 	</div>
 
@@ -64,7 +62,7 @@
 			</div>
 		</div>
 	</div>
-    
+
 	<div class="cosme-agreement-section corner-border clearfix">
 		<div class="overview loan-agreement simple-well corner-border-inner">
 			<div class="clearfix">
@@ -80,8 +78,8 @@
 						<li>I employ less than 250 people.</li>
 						<li>Annual turnover is less than £40M.</li>
 						<li>My company/business does not have a substantial focus on one or more of the following sectors: arms production and trading; human cloning; genetically modified organisms; tobacco or alcohol; gambling, pornography, internet piracy.</li>
-				<li>I acknowledge that this financing is made possible through the support of the EU guarantee for Debt Financing with the financial backing of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020).</li>
-				<li>The loan will be used for funding (A) investment in tangible and/or intangible assets; and/or (B) working capital.</li>
+						<li>I acknowledge that this financing is made possible through the support of the EU guarantee for Debt Financing with the financial backing of the European Union under the Loan Guarantee Facility established under Regulation (EU) No 1287/2013 of the European Parliament and the Council establishing a Programme for the Competitiveness of Enterprises and small and medium enterprises (COSME) (2014-2020).</li>
+						<li>The loan will be used for funding (A) investment in tangible and/or intangible assets; and/or (B) working capital.</li>
 					</ol>
 				</div>
 			</div>
@@ -92,11 +90,10 @@
 		<h2 class="accept-agreement-header">
 			<span>Accept the agreement</span>
 		</h2>
-		
-		<div class="controls agreements-checkboxes">
 
-            <div class="dynamic-agreements-checkboxes"></div>            
-          
+		<div class="controls agreements-checkboxes">
+			<div class="dynamic-agreements-checkboxes"></div>
+
 			@EzForm.ClickableInputTag(new EzInputBuilder("euAgreementTermsRead", "I agree to the EU program terms",
 				value: "true",
 				type: "checkbox",
@@ -140,7 +137,7 @@
 			<div class="loan-disclosure-text2 hide">
 				<h3>Disclosure for Borrowers under non-regulated Loan Agreements:</h3>
 				You hereby represent and warranty that at the date of applying for and accepting this loan that with respect to the Borrower: (i) no resolution has been passed, petition presented, proceedings commenced or other procedure or step for its liquidation; (ii) no procedure has been used against the Borrower to attach or take possession of any property for payment of a debt; (iii) no receiver or other similar official has been appointed in respect of any of the property of the Borrower;  (iv) no application or petition for an administration order has been made; and none of the foregoing is pending or contemplated; and (v) no director of the Company or proposed guarantor of the loan is: (A) in a Debt Management Plan (or similar scheme) or considering entering a Debt Management Plan (or similar scheme) in the coming 12 month period; (B) in an I.V.A or are considering entering into an I.V.A in the coming 12 month period; or (C) bankrupt or considering filing for bankruptcy in the coming 12 month period.
-            </div>
+			</div>
 
 			<div class="form_field_container"></div>
 
@@ -168,34 +165,34 @@
 				uiEventControlID: "loan-legal:back",
 				buttonType: EzButtonType.link,
 				href:"#"),
-				
-		},origin: origin)
+
+		}, origin: origin)
 	}
 </script>
 
 
 <script id="agreement-template" type="text/template">
-    <div class="simple-well clearfix">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <%_.each(templates, function (t, i){ console.log('templates', t,i);
-                var active = ((i == 0) ? 'active' : '');%>
-                <li class=" agreement-tab <%- active %>"><a href="#tab<%- i %>" data-toggle="tab" page-name="<%- t.TemplateTypeName %>"><%- t.Name %></a></li>
-                <%});%>
-            </ul>
-            <div class="tab-content">
-                <%_.each(templates, function (t, i){ %>
-                
-                <div class="tab-pane  <%-(i == 0) ? ' active': ''%>" id="tab<%- i %>">
-                    <div class="overview loan-agreement" id="<%= t.TemplateTypeName %>">
-                        <%= t.Template %>
-                    </div>
-                    @PrintDownload()
-                </div>
-                <%});%>
-            </div>
-        </div>
-    </div>
+	<div class="simple-well clearfix">
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<%_.each(templates, function (t, i){ console.log('templates', t,i);
+				var active = ((i == 0) ? 'active' : '');%>
+				<li class=" agreement-tab <%- active %>"><a href="#tab<%- i %>" data-toggle="tab" page-name="<%- t.TemplateTypeName %>"><%- t.Name %></a></li>
+				<%});%>
+			</ul>
+			<div class="tab-content">
+				<%_.each(templates, function (t, i){ %>
+
+				<div class="tab-pane  <%-(i == 0) ? ' active': ''%>" id="tab<%- i %>">
+					<div class="overview loan-agreement" id="<%= t.TemplateTypeName %>">
+						<%= t.Template %>
+					</div>
+					@PrintDownload()
+				</div>
+				<%});%>
+			</div>
+		</div>
+	</div>
 </script>
 
 @helper PrintDownload() {
