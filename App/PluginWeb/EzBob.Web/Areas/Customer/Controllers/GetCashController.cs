@@ -67,7 +67,7 @@
 
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointFacade.PayPointAccount.CardExpiryMonths);
 
-			var fee = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent).Calculate(loan_amount);
+			var fee = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent).Calculate(loan_amount).Total;
 
 			string callback = Url.Action("PayPointCallback", "GetCash",
 										 new {

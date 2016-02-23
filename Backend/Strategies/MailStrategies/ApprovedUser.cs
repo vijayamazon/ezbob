@@ -43,7 +43,7 @@
 
 
 			SetupFeeCalculator sfCalculator = new SetupFeeCalculator(cashRequestRelevantData.ManualSetupFeePercent, cashRequestRelevantData.BrokerSetupFeePercent);
-			var setupFeeAmount = sfCalculator.Calculate(cashRequestRelevantData.ManagerApprovedSum);
+			var setupFeeAmount = sfCalculator.Calculate(cashRequestRelevantData.ManagerApprovedSum).Total;
 			this.setupFeePercents = (cashRequestRelevantData.ManualSetupFeePercent + cashRequestRelevantData.BrokerSetupFeePercent) * 100;
 			this.interestRatePercents = cashRequestRelevantData.InterestRate * 100;
 			this.setupFeePercents = MathUtils.Round2DecimalDown(this.setupFeePercents);

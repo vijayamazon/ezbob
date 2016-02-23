@@ -227,7 +227,7 @@
 
 		private void BuildSetupFee() {
 			var fees = new SetupFeeCalculator(Result.ManualSetupFeePercent, Result.BrokerSetupFeePercent)
-				.CalculateTotalAndBroker(Result.OfferedCreditLine);
+				.Calculate(Result.OfferedCreditLine);
 
 			Result.TotalSetupFee = fees.Total;
 			Result.BrokerSetupFee = fees.Broker;

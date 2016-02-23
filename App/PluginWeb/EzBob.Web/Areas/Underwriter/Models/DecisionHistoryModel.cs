@@ -31,7 +31,7 @@
 				originatorStr = originator.DescriptionAttr();
 
 			var fees = new SetupFeeCalculator(item.ManualSetupFeePercent, item.BrokerSetupFeePercent)
-				.CalculateTotalAndBroker(item.ApprovedSum);
+				.Calculate(item.ApprovedSum);
 
 			return new DecisionHistoryModel {
 				Id = item.DecisionHistoryID,

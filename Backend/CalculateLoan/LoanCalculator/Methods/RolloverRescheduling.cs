@@ -136,7 +136,7 @@
 				if (offerFees != null && offerFees.DistributedPartPercent != null && (decimal)offerFees.DistributedPartPercent == 1) {
 
 					var feeCalculator = new SetupFeeCalculator(offerFees.Percent, null);
-					decimal servicingFeeAmount = feeCalculator.Calculate(newHistory.Amount);
+					decimal servicingFeeAmount = feeCalculator.Calculate(newHistory.Amount).Total;
 					decimal servicingFeePaidAmount = WorkingModel.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).Sum(f => f.PaidAmount);
 
 					Log.Debug("servicingFeeAmount: {0}, servicingFeePaidAmount: {1}", servicingFeeAmount, servicingFeePaidAmount); // new "spreaded" amount

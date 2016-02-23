@@ -27,7 +27,7 @@
 
 		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0) {
 			var fees = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent)
-				.CalculateTotalAndBroker(amount);
+				.Calculate(amount);
 
 			decimal setupFee = fees.Total;
 			decimal brokerFee = fees.Broker;

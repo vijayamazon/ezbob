@@ -42,7 +42,7 @@
 					EndDate = item.OfferValidUntil,
 					Comments = item.Comment,
 					InterestRate = item.InterestRate,
-					SetupFee = setupFeeCalculator.Calculate(item.ApprovedSum),
+					SetupFee = setupFeeCalculator.Calculate(item.ApprovedSum).Total,
 					RepaymentPeriod = item.ApprovedRepaymentPeriod,
 					UnderwriterDecision = item.UnderwriterDecision,
 					LoanType = item.LoanType,

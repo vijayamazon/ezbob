@@ -11,6 +11,7 @@
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Backend.Strategies.NewLoan.Migration;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 	using MailApi;
 	using PaymentServices.Calculators;
 
@@ -145,8 +146,8 @@
 				decimal? brokerFeePercent = model.Offer.BrokerSetupFeePercent;
 			 
 				var feeCalculator = new SetupFeeCalculator(setupFee!=null ?setupFee.Percent: servicingFee.Percent, brokerFeePercent);
-				decimal setupFeeAmount = feeCalculator.Calculate(history.Amount);
-				SetupFeeCalculator.AbsoluteFeeAmount ff = feeCalculator.CalculateTotalAndBroker(history.Amount);
+				SetupFeeCalculator.AbsoluteFeeAmount ff = feeCalculator.Calculate(history.Amount);
+				decimal setupFeeAmount = ff.Total;
 				model.BrokerComissions = ff.Broker;
 
 				// send ot Calculator to distribute and attach to schedule planned dates

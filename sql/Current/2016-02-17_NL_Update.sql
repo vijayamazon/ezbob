@@ -107,7 +107,7 @@ END
 IF EXISTS (select id from sysobjects where name='NL_LoansFeesGet') and NOT EXISTS (select id from sysobjects where name='NL_LoanFeesGet')
 BEGIN
 	EXEC sp_rename 'NL_LoansFeesGet', 'NL_LoanFeesGet';
-	drop procedure NL_LoansFeesGet;
+	-- drop procedure NL_LoansFeesGet;
 END
 
 IF EXISTS (select id from sysobjects where name='NL_LoanFeeDisable') and NOT EXISTS (select id from sysobjects where name='NL_LoanFeeDisable')
