@@ -417,6 +417,7 @@
                                             <div>InterestRate <%-EzBob.formatPercents(l.InterestRate)%> <span class="red_cell"><%-l.IsLate ? 'Late' : ''%></span></div>
                                             <div>TotalFee <%-EzBob.formatPoundsAsInt(l.TotalFee)%></div>
                                             <div>Term <%-l.Term%>m / <%-l.TermApproved%>m approved</div>
+											<div><%-l.InvestorData%></div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="approved-loan" style="width: <%-l.WidthPercent*100%>%;">Approved <%-l.Approved < 1000 ? EzBob.formatPoundsAsInt(l.Approved) : EzBob.formatPoundsAsThousands(l.Approved)%></div>

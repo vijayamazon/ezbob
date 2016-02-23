@@ -129,8 +129,25 @@
 				)")
 				.Not.Insert()
 				.Not.Update();
-			//.LazyLoad();
 
+			Map(x => x.InvestorData)
+				.Formula(@"(
+						SELECT 
+							i.Name + ', holds ' +CAST(CAST(opo.InvestmentPercent*100 AS INT) AS VARCHAR) + '% of the loan, ' AS 'data()' 
+						FROM
+							Loan 
+						LEFT JOIN 
+							CashRequests cr ON Loan.RequestCashId = cr.Id
+						LEFT JOIN 
+							I_OpenPlatformOffer opo ON opo.CashRequestID = cr.Id
+						LEFT JOIN 
+							I_Investor i ON i.InvestorID = opo.InvestorID
+						WHERE 
+							Loan.Id = Id
+						FOR XML PATH('')  
+				)")
+				.Not.Insert()
+				.Not.Update();
 		} // constructor
 	} // class LoanMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

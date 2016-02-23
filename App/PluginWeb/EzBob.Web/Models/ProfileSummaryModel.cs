@@ -57,6 +57,8 @@
 		public decimal TotalFee { get; set; }
 
 		public double WidthPercent { get; set; }
+
+		public string InvestorData { get; set; }
 	}
 
 	public class AffordabilityAnalysis {

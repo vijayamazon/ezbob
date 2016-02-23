@@ -715,7 +715,8 @@
 							TermApproved = loan.CashRequest.ApprovedRepaymentPeriod ?? loan.CashRequest.RepaymentPeriod,
 							TotalFee = loan.SetupFee,
 							LoanNumber = i,
-							Comment = loan.CashRequest.UnderwriterComment
+							Comment = loan.CashRequest.UnderwriterComment,
+							InvestorData = loan.InvestorData
 						});
 					}
 				}
