@@ -102,8 +102,8 @@
 			this.Dropzone = new Dropzone(this.$el.find('#' + this.options.formID).addClass('dropzone dz-clickable')[0], {
 				parallelUploads: 1,
 				uploadMultiple: true,
-				acceptedFiles: EzBob.Config.HmrcAcceptedFiles,
-				maxFilesize: EzBob.Config.HmrcMaxFileSize,
+				acceptedFiles: EzBob.Config.CompanyFilesAcceptedFiles,
+				maxFilesize: EzBob.Config.CompanyFilesMaxFileSize,
 				autoProcessQueue: true,
 				headers: this.options.headers,
 
@@ -271,12 +271,12 @@
 				}
 				else {
 					var bHasRows = oResponse.aaData && oResponse.aaData.length;
-
+					self.showButton(self.DoneButton, 'Done');/*
 					if (self.HasRowBeenRemoved || bHasRows) {
-						self.showButton(self.DoneButton, 'Done');
+						
 					} else {
 						self.showButton(self.BackButton, 'Back');
-					}
+					}*/
 				} // if
 
 				oTableOpts.aaData = self.fillGaps(oResponse.aaData);

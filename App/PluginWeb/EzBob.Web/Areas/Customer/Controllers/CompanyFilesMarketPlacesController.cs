@@ -102,7 +102,7 @@
 		} // BankUploadedFiles
 
 		[HttpPost]
-		public ActionResult Connect() {
+		public JsonResult Connect() {
 			int mpId = -1;
 
 			try {
@@ -125,7 +125,10 @@
 				Log.Error(ex, "Error connecting a company files account.");
 			} // try
 
-			return Json(new { });
+			return Json(new {
+				Data = new { success = true },
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+			});
 		} // Connect
 
 		private static readonly ASafeLog Log = new SafeILog(typeof(CompanyFilesMarketPlacesController));

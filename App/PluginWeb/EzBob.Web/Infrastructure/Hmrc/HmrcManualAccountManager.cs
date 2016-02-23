@@ -1,11 +1,13 @@
 ﻿namespace EzBob.Web.Infrastructure.Hmrc {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
 	using Areas.Customer.Controllers;
 	using Code.MpUniq;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
@@ -23,6 +25,7 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Coin = Ezbob.HmrcHarvester.Coin;
 
 	public class HmrcManualAccountManager {
@@ -104,11 +107,42 @@
 			var oProcessor = new HmrcFileProcessor(nCustomerID, oFiles, sControllerName, sActionName);
 			oProcessor.Run();
 
-			if (!string.IsNullOrWhiteSpace(oProcessor.ErrorMsg))
-				return CreateJsonError(oProcessor.ErrorMsg);
+			if (!string.IsNullOrWhiteSpace(oProcessor.ErrorMsg) || oProcessor.AddedCount < 1) {
+				//return CreateJsonError(oProcessor.ErrorMsg);
+				OneUploadLimitation oLimitations = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
 
-			if (oProcessor.AddedCount < 1)
-				return CreateJsonError("No files were accepted.");
+				for (int i = 0; i < oFiles.Count; ++i) {
+					HttpPostedFileBase file = oFiles[i];
+
+					if (file != null) {
+
+						var content = new byte[file.ContentLength];
+						file.InputStream.Seek(0, SeekOrigin.Begin);
+						int nRead = file.InputStream.Read(content, 0, file.ContentLength);
+
+						if (nRead != file.ContentLength) {
+							log.Warn("File {0}: failed to read entire file contents, ignoring.", i);
+							continue;
+						} // if
+
+						string sMimeType = oLimitations.DetectFileMimeType(content, file.FileName, oLog: log);
+
+						if (string.IsNullOrWhiteSpace(sMimeType)) {
+							log.Warn("Not saving file #{0}: {1} because it has unsupported MIME type.", (i + 1), file.FileName);
+							continue;
+						} // if
+
+						this.serviceClient.Instance.CompanyFilesUpload(oCustomer.Id, OneUploadLimitation.FixFileName(file.FileName), content, sMimeType, false);
+						
+					} // if
+				}
+				var companyFiles = ObjectFactory.GetInstance<CompanyFilesMarketPlacesController>();
+				companyFiles.Connect();
+				return CreateJsonNoError();
+			}
+
+			//if (oProcessor.AddedCount < 1)
+			//	return CreateJsonError("No files were accepted.");
 
 			return DoSave(
 				oProcessor.Hopper,
