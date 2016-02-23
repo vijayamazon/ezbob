@@ -165,7 +165,9 @@
 						serviceInstance.AddPayment(customerID, nlPayment, nlPayment.CreatedByUserID);
 					}
 				}
+
 				transaction.Commit();
+
 			} catch (Exception ex) {
 				Log.ErrorFormat("Failed to pay {1} pounds for loan {0}, rollbacking \n {2}", loan.Id, amount, ex);
 				transaction.Rollback();

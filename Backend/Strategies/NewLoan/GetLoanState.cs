@@ -71,7 +71,7 @@
 				Result.Loan = LoanDAL.GetLoan(Result.Loan.LoanID);
 				
 				// offer-fees
-				Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("OfferID", Result.Loan.OfferID));
+				//Result.Offer.OfferFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("OfferID", Result.Loan.OfferID));
 
 				// histories
 				Result.Loan.Histories.Clear();

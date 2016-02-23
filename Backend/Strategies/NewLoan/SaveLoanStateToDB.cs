@@ -71,9 +71,9 @@
 				foreach (NL_LoanHistory h in model.Loan.Histories.Where(h => h.LoanHistoryID > 0)) {
 					DB.ExecuteNonQuery(pconn, "NL_LoanHistoryUpdate", CommandSpecies.StoredProcedure,
 						new QueryParameter("LoanHistoryID", h.LoanHistoryID),
-						new QueryParameter("LateFees", h.LoanHistoryID),
-						new QueryParameter("DistributedFees", h.LoanHistoryID),
-						new QueryParameter("AccumulatedInterest", h.LoanHistoryID));
+						new QueryParameter("LateFees", h.LateFees),
+						new QueryParameter("DistributedFees", h.DistributedFees),
+						new QueryParameter("OutstandingInterest", h.OutstandingInterest));
 				}
 
 				// collect all schedules into one list
@@ -90,15 +90,6 @@
 							new QueryParameter("LoanScheduleStatusID", s.LoanScheduleStatusID),
 							new QueryParameter("ClosedTime", s.ClosedTime));
 				}
-
-				// disable fees
-				//foreach (NL_LoanFees f in model.Loan.Fees.Where(f => f.LoanFeeID > 0 && f.DeletedByUserID != null && f.DisabledTime != null)) {
-				//	DB.ExecuteNonQuery(pconn, "NL_LoanFeeCancel", CommandSpecies.StoredProcedure,
-				//			new QueryParameter("LoanFeeID", f.LoanFeeID),
-				//			new QueryParameter("DeletedByUserID", f.DeletedByUserID),
-				//			new QueryParameter("DisabledTime", f.DisabledTime),
-				//			new QueryParameter("Notes", f.Notes));
-				//}
 
 				// insert fees
 				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure,

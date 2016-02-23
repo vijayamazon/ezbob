@@ -835,7 +835,7 @@
 
 		[Test]
 		public void DirectQueryTest() {
-			AddLoan.LoanTransactionModel rebateTransaction = this.m_oDB.FillFirst<AddLoan.LoanTransactionModel>(
+			MigrateLoan.LoanTransactionModel rebateTransaction = this.m_oDB.FillFirst<MigrateLoan.LoanTransactionModel>(
 			   "select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
 			   "join PayPointCard c on c.TransactionId = t.PaypointId " +
 			   "where Description='system-repay' " +
@@ -1140,6 +1140,16 @@
 		public void TestManualLegalDocsSyncTemplatesFiles() {
 			var stra = new ManualLegalDocsSyncTemplatesFiles(@"C:\ezbob\App\PluginWeb\EzBob.Web\Areas\Customer\Views\Agreement");
 			stra.Execute();
+		}
+
+		[Test]
+		public void MigrateLoanTest() {
+			MigrateLoan s = new MigrateLoan();
+			try {
+				s.Execute();
+			} catch (Exception ex) {
+				m_oLog.Error(ex);
+			}
 		}
 
 	} // class TestNewLoan

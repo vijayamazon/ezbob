@@ -26,8 +26,8 @@ from
  left join PayPointCard c on c.TransactionId = t.PaypointId inner join NL_Loans nl on nl.OldLoanID = l.Id 
  left join [dbo].[NL_Payments] p on p.LoanID = nl.LoanID-- and p.PaymentID = null ;
 
---select * from @ppTransactionsList;
---return;
+select * from @ppTransactionsList;
+return;
 
 -- record NL_Payments 
 insert into [dbo].[NL_Payments] (PaymentTime, Amount, CreatedByUserID, LoanID, PaymentStatusID, PaymentMethodID, CreationTime, Notes) 

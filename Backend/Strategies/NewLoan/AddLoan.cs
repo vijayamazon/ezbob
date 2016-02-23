@@ -9,6 +9,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
+	using Ezbob.Backend.Strategies.NewLoan.Migration;
 	using Ezbob.Database;
 	using MailApi;
 	using PaymentServices.Calculators;
@@ -48,15 +49,7 @@
 
 		public DateTime nowTime { get; private set; }
 
-		public class LoanTransactionModel {
-			public DateTime PostDate { get; set; }
-			public decimal Amount { get; set; }
-			public string Description { get; set; }
-			public string IP { get; set; }
-			public string PaypointId { get; set; }
-			public int CardID { get; set; }
-		}
-
+		
 		/**
 			- loan
 			- fees
@@ -337,10 +330,7 @@
 
 				// 11. if setup fee - add payment to offset it
 				SetupOffsetPayment();
-
-				// temporary - should be removed/modified after "old" loan remove
-				CopyRebateTransaction();
-
+				
 				// 6. broker commissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
 				if (model.Offer.BrokerSetupFeePercent > 0) {
@@ -352,6 +342,19 @@
 
 				// copy LoanCharges Ids into OldFeeID, NL_LoanFees
 				DB.ExecuteNonQuery("NL_LoanFeesOldIDUpdate", CommandSpecies.StoredProcedure);
+
+				// temporary - should be removed/modified after "old" loan remove
+				//CopyRebateTransaction();
+
+				MigrateLoan sMigrateLoan = new MigrateLoan();
+				try {
+					sMigrateLoan.Execute();
+					// ReSharper disable once CatchAllClause
+				} catch (Exception mex) {
+					Error = mex.Message;
+					Log.Error("Failed sync migration: {0}", Error);
+					NL_AddLog(LogType.Error, "Failed sync migration", this.strategyArgs, Error, mex.ToString(), mex.StackTrace);
+				}
 
 				NL_AddLog(LogType.Info, "Strategy End", this.strategyArgs, LoanID, Error, null);
 
@@ -386,54 +389,54 @@
 			}
 		}
 
-		private void CopyRebateTransaction() {
-			if (LoanID == 0)
-				return;
+		//private void CopyRebateTransaction() {
+		//	if (LoanID == 0)
+		//		return;
 
-			LoanTransactionModel rebateTransaction = DB.FillFirst<LoanTransactionModel>(
-				"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
-				"join PayPointCard c on c.TransactionId = t.PaypointId " +
-				"where Description='system-repay' " +
-				"and Status='Done' " +
-				"and Type ='PaypointTransaction' " +
-				"and LoanId = @loanID " +
-				"and DateDiff(d, t.PostDate, @dd) = 0 " +
-				 "and LoanTransactionMethodId = @methodId",
-				CommandSpecies.Text, new QueryParameter("@loanID", model.Loan.OldLoanID), new QueryParameter("@dd", DateTime.UtcNow.Date), new QueryParameter("@methodId", (int)NLLoanTransactionMethods.Auto)
-			 );
+		//	Migration.MigrateLoan.LoanTransactionModel rebateTransaction = DB.FillFirst<Migration.MigrateLoan.LoanTransactionModel>(
+		//		"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
+		//		"join PayPointCard c on c.TransactionId = t.PaypointId " +
+		//		"where Description='system-repay' " +
+		//		"and Status='Done' " +
+		//		"and Type ='PaypointTransaction' " +
+		//		"and LoanId = @loanID " +
+		//		"and DateDiff(d, t.PostDate, @dd) = 0 " +
+		//		 "and LoanTransactionMethodId = @methodId",
+		//		CommandSpecies.Text, new QueryParameter("@loanID", model.Loan.OldLoanID), new QueryParameter("@dd", DateTime.UtcNow.Date), new QueryParameter("@methodId", (int)NLLoanTransactionMethods.Auto)
+		//	 );
 
-			if (rebateTransaction == null || rebateTransaction.Amount == 0) {
-				Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
-				NL_AddLog(LogType.Info, string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
-				return;
-			}
+		//	if (rebateTransaction == null || rebateTransaction.Amount == 0) {
+		//		Log.Debug("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID);
+		//		NL_AddLog(LogType.Info, string.Format("rebate transaction for oldLoanID {0} not found", model.Loan.OldLoanID), this.strategyArgs, null, Error, null);
+		//		return;
+		//	}
 
-			NL_AddLog(LogType.Info, "Addloan:rebate", new object[] { rebateTransaction }, Error, null, null);
+		//	NL_AddLog(LogType.Info, "Addloan:rebate", new object[] { rebateTransaction }, Error, null, null);
 
-			// call AddPayment 
-			NL_Payments rebatePayment = new NL_Payments() {
-				Amount = rebateTransaction.Amount,
-				CreatedByUserID = 1,
-				LoanID = LoanID,
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
-				CreationTime = nowTime,
-				PaymentTime = nowTime.AddMilliseconds(60), // workaround: guarantee that "setup offset" payment (with PaymentTime=nowTime) will be recorded before rebate //rebateTransaction.PostDate,
-				Notes = "rebate"
-			};
-			rebatePayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
-				Amount = rebateTransaction.Amount,
-				IP = rebateTransaction.IP,
-				Notes = rebateTransaction.Description,
-				PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
-				PaypointUniqueID = rebateTransaction.PaypointId,
-				PaypointCardID = rebateTransaction.CardID,
-				TransactionTime = rebateTransaction.PostDate
-			});
+		//	// call AddPayment 
+		//	NL_Payments rebatePayment = new NL_Payments() {
+		//		Amount = rebateTransaction.Amount,
+		//		CreatedByUserID = 1,
+		//		LoanID = LoanID,
+		//		PaymentStatusID = (int)NLPaymentStatuses.Active,
+		//		PaymentMethodID = (int)NLLoanTransactionMethods.Auto,
+		//		CreationTime = nowTime,
+		//		PaymentTime = nowTime.AddMilliseconds(60), // workaround: guarantee that "setup offset" payment (with PaymentTime=nowTime) will be recorded before rebate //rebateTransaction.PostDate,
+		//		Notes = "rebate"
+		//	};
+		//	rebatePayment.PaypointTransactions.Add(new NL_PaypointTransactions() {
+		//		Amount = rebateTransaction.Amount,
+		//		IP = rebateTransaction.IP,
+		//		Notes = rebateTransaction.Description,
+		//		PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done,
+		//		PaypointUniqueID = rebateTransaction.PaypointId,
+		//		PaypointCardID = rebateTransaction.CardID,
+		//		TransactionTime = rebateTransaction.PostDate
+		//	});
 
-			AddPayment p = new AddPayment(model.CustomerID, rebatePayment, 1);
-			p.Execute();
-		}
+		//	AddPayment p = new AddPayment(model.CustomerID, rebatePayment, 1);
+		//	p.Execute();
+		//}
 
 		private void SendMail(string subject, NL_LoanHistory history, List<NL_LoanFees> fees, List<NL_LoanSchedules> schedule, List<NL_LoanAgreements> agreements) {
 

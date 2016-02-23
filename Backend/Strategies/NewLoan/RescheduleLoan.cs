@@ -461,21 +461,21 @@
 				this.Result.FirstPaymentInterest = this.tNLLoan.Loan.LastHistory().Schedule.First().InterestRate;
 
 				// 7. attach distributed fees
-				if (distributedFees) {
+				//if (distributedFees) {
 					
-					NL_OfferFees offerFees = this.tNLLoan.Offer.OfferFees.FirstOrDefault();
+				//	NL_OfferFees offerFees = this.tNLLoan.Offer.OfferFees.FirstOrDefault();
 
-					if (offerFees != null && offerFees.DistributedPartPercent != null && (decimal)offerFees.DistributedPartPercent == 1) {
+				//	if (offerFees != null && offerFees.DistributedPartPercent != null && (decimal)offerFees.DistributedPartPercent == 1) {
 
-						var feeCalculator = new SetupFeeCalculator(offerFees.Percent, null);
-						decimal servicingFeeAmount = feeCalculator.Calculate(this.tNLLoan.Loan.LastHistory().Amount);
-						decimal servicingFeePaidAmount = this.tNLLoan.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).Sum(f => f.PaidAmount);
+				//		var feeCalculator = new SetupFeeCalculator(offerFees.Percent, null);
+				//		decimal servicingFeeAmount = feeCalculator.Calculate(this.tNLLoan.Loan.LastHistory().Amount);
+				//		decimal servicingFeePaidAmount = this.tNLLoan.Loan.Fees.Where(f => f.LoanFeeTypeID == (int)NLFeeTypes.ServicingFee).Sum(f => f.PaidAmount);
 
-						Log.Debug("servicingFeeAmount: {0}, servicingFeePaidAmount: {1}", servicingFeeAmount, servicingFeePaidAmount); // new "spreaded" amount
+				//		Log.Debug("servicingFeeAmount: {0}, servicingFeePaidAmount: {1}", servicingFeeAmount, servicingFeePaidAmount); // new "spreaded" amount
 
-						calc.AttachDistributedFeesToLoanBySchedule(this.tNLLoan, (servicingFeeAmount - servicingFeePaidAmount), this.Result.ReschedulingIntervalStart);
-					}
-				}
+				//		calc.AttachDistributedFeesToLoanBySchedule(this.tNLLoan, (servicingFeeAmount - servicingFeePaidAmount), this.Result.ReschedulingIntervalStart);
+				//	}
+				//}
 
 				Log.Debug("NL result: {0}, nlmodel: {1}", this.Result, this.tNLLoan);
 
