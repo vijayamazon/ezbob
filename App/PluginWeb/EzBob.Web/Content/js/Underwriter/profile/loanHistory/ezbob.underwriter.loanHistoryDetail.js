@@ -160,6 +160,9 @@ EzBob.Underwriter.LoanDetailsView = Backbone.Marionette.View.extend({
 					that.trigger("ManualPaymentAdded");
 					return true;
 				});
+				$('body').removeClass('stop-scroll');
+				$('body').scrollTo('.confirmationDialog');
+				$('body').addClass('stop-scroll');
 			}
 		}).done(function() {
 			BlockUi("off");
