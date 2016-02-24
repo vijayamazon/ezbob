@@ -41,13 +41,11 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 
 		var details = new EzBob.Underwriter.LoanHistoryDetailsModel();
 		details.loanid = id;
-
 		var loan = _.find(this.model.get('loans'), function(l) {
-			return l.Id === id;
+			return l.Id == id;
 		});
 
 		details.id = this.idCustomer;
-
 		var detailsView = new EzBob.Underwriter.LoanDetailsView({
 			model: details,
 			loan: loan
