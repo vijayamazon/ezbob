@@ -55,7 +55,7 @@
             if (IsDebugMode)
                 return;
             foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
-                GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
+                WebDriverManager.Instance.GetWebDriverForBrowser(driver).Quit();
         }
 
         protected bool ExecuteTest(Action<string> codeToExecute) {
@@ -86,7 +86,7 @@
                                 return false;
                             }
 
-                            Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                            Driver = WebDriverManager.Instance.GetWebDriverForBrowser(browser);
                             actionBot = new ActionBot(Driver);
 
                             //for (int i = Driver.WindowHandles.Count; i < 1; i--) {
