@@ -149,8 +149,8 @@ a[data-bug-type],
 .permission-ChangeCompany .change-company,
 .permission-SendDocuments .do-send,
 .permission-AddEditDirector .add-director,
-.permission-AddEditDirector .btn-edit-director
-.permission-AddEditDirector .btn-delete-director
+.permission-AddEditDirector .btn-edit-director,
+.permission-AddEditDirector .btn-delete-director,
 .permission-UploadFile #addNewDoc,
 .permission-DeleteFile #deleteDocs,
 .permission-SendSMS #sendSms,
