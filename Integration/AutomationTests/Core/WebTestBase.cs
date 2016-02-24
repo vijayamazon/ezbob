@@ -55,7 +55,7 @@
             if (IsDebugMode)
                 return;
             foreach (var driver in TestRailRepository.PlanRepository.Select(x => x.Browser).Distinct().ToList())
-                GetBrowserWebDriver.GetWebDriverForBrowser(driver).Quit();
+                WebDriverManager.Instance.GetWebDriverForBrowser(driver).Quit();
         }
 
         protected bool ExecuteTest(Action<string> codeToExecute) {
@@ -86,7 +86,7 @@
                                 return false;
                             }
 
-                            Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                            Driver = WebDriverManager.Instance.GetWebDriverForBrowser(browser);
                             actionBot = new ActionBot(Driver);
 
                             //for (int i = Driver.WindowHandles.Count; i < 1; i--) {
@@ -101,13 +101,15 @@
                             if (!IsDebugMode) {
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                             }
-                        } catch (Exception ex) {
+                        }
+                        catch (Exception ex) {
                             log.Error(String.Format("------------------Exception for CaseId{0}------------------\n{1}\n------------------{2}------------------\n".Replace("\n", Environment.NewLine), caseID.ToString(), ex.ToString(), DateTime.UtcNow.ToString("u")));
                             try {
                                 string scrshtFileName = DateTime.Now.Ticks + " - " + DateTime.UtcNow.ToString("yyyy-MM-ddTHH.mm.ssZ") + " - CaseId_" + caseID.ToString() + " - Enviorment_" + EnvironmentConfig.BaseName.Split('.')[3] + " - Brand_" + BrandConfig.BaseName.Split('.')[3] + " - Browser_" + Driver.GetType().ToString().Split('.')[2] + ".png";
                                 (Driver as ITakesScreenshot).GetScreenshot().SaveAsFile("C:\\Exception\\" + scrshtFileName, ImageFormat.Png);
                                 log.Error("Screenshot of last screen was taken and saved in C:\\Exception\\" + scrshtFileName);
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 log.Error("ERROR: failed to save screen shot.");
                             }
                             if (!IsDebugMode) {

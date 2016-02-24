@@ -7,18 +7,27 @@
     using OpenQA.Selenium.IE;
     using TestRailModels.Automation;
 
-    public static class GetBrowserWebDriver {
+    public class WebDriverManager {
+
 
         public const int DriverTimeOut = 30;
-        public static IWebDriver ChromeDriver { get; set; }
-        public static IWebDriver FirefoxDriver { get; set; }
-        public static IWebDriver IEDriver { get; set; }
-        public static IWebDriver InternetExplorerDriver { get; set; }
-        public static IWebDriver SafariDriver { get; set; }
+        public IWebDriver ChromeDriver { get; set; }
+        public IWebDriver FirefoxDriver { get; set; }
+        public IWebDriver IEDriver { get; set; }
+        public IWebDriver InternetExplorerDriver { get; set; }
+        public IWebDriver SafariDriver { get; set; }
 
-        public static IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser) {
+        private static WebDriverManager instance;
+        private WebDriverManager() { }
+
+        public static WebDriverManager Instance {
+            get { return instance ?? (instance = new WebDriverManager()); }
+        }
+
+
+        public IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser) {
             IWebDriver driver = null;
-            string path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
+            string path = Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory).FullName).FullName;
             switch (browser) {
                 case AutomationModels.Browser.Chrome:
                     if (ChromeDriver == null) {
