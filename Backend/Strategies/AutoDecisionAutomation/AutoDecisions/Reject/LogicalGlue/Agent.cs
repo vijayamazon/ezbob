@@ -117,7 +117,7 @@
 			} // gather data step
 
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
-				if (Trail.MyInputData.CompanyIsRegulated)
+				if (Trail.MyInputData.AutoDecisionInternalLogic)
 					Trail.Dunno<InternalFlow>().Init();
 				else
 					Trail.Dunno<LogicalGlueFlow>().Init();
@@ -147,7 +147,8 @@
 
 			inputData.CompanyID = this.args.CompanyID;
 			inputData.TypeOfBusiness = sp.TypeOfBusiness;
-			inputData.CompanyIsRegulated = sp.TypeOfBusiness.IsRegulated();
+			inputData.CompanyIsRegulated = sp.IsRegulated;
+			inputData.AutoDecisionInternalLogic = sp.AutoDecisionInternalLogic;
 
 			inputData.CustomerOrigin = customerOrigins.Contains(sp.OriginID)
 				? (CustomerOriginEnum)sp.OriginID
@@ -335,6 +336,8 @@
 		private class LoadLGAutoRejectData : AStoredProcedure {
 			public LoadLGAutoRejectData(AConnection db, ASafeLog log) : base(db, log) {
 				TypeOfBusiness = TypeOfBusiness.Entrepreneur;
+				IsRegulated = true;
+				AutoDecisionInternalLogic = true;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -364,6 +367,14 @@
 
 			[UsedImplicitly]
 			[Direction(ParameterDirection.Output)]
+			public bool IsRegulated { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
+			public bool AutoDecisionInternalLogic { get; set; }
+
+			[UsedImplicitly]
+			[Direction(ParameterDirection.Output)]
 			[Length(50)]
 			public string TypeOfBusinessName {
 				get { return TypeOfBusiness.ToString(); }
@@ -389,6 +400,8 @@
 					} // if
 
 					TypeOfBusiness = TypeOfBusiness.Entrepreneur;
+					IsRegulated = true;
+					AutoDecisionInternalLogic = true;
 
 					Log.Warn(
 						"Failed to parse type of business for company {0} from '{1}', defaulting to {2}.",

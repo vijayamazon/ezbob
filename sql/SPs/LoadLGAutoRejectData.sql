@@ -10,14 +10,18 @@ ALTER PROCEDURE LoadLGAutoRejectData
 @CompanyID INT,
 @Now DATETIME,
 @OriginID INT OUTPUT,
-@TypeOfBusinessName NVARCHAR(50) OUTPUT,
 @LoanSourceID INT OUTPUT,
-@LoanCount INT OUTPUT
+@LoanCount INT OUTPUT,
+@IsRegulated BIT OUTPUT,
+@AutoDecisionInternalLogic BIT OUTPUT,
+@TypeOfBusinessName NVARCHAR(50) OUTPUT
 AS
 BEGIN
 	SET @OriginID = NULL
 	SET @TypeOfBusinessName = NULL
 	SET @LoanSourceID = NULL
+	SET @IsRegulated = NULL
+	SET @AutoDecisionInternalLogic = NULL
 
 	------------------------------------------------------------------------------
 
@@ -31,9 +35,11 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@TypeOfBusinessName = TypeOfBusiness
+		@TypeOfBusinessName = c.TypeOfBusiness,
+		@IsRegulated = t.IsRegulated
 	FROM
-		Company
+		Company c
+		INNER JOIN TypeOfBusiness t ON c.TypeOfBusiness = t.Name
 	WHERE
 		Id = @CompanyID
 
@@ -54,6 +60,21 @@ BEGIN
 	WHERE
 		r.IdCustomer = @CustomerID
 		AND
-		l.[Date] < @Now 
+		l.[Date] < @Now
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@AutoDecisionInternalLogic = AutoDecisionInternalLogic
+	FROM
+		I_ProductSubType
+	WHERE
+		OriginID = @OriginID
+		AND
+		LoanSourceID = @LoanSourceID
+		AND
+		IsRegulated = @IsRegulated
+
+	SET @AutoDecisionInternalLogic = ISNULL(@AutoDecisionInternalLogic, 1)
 END
 GO

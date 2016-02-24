@@ -96,10 +96,21 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			var self = this;
 
-			EzBob.ShowMessage(el, 'New Credit Line Option', (function() {
-				var optionID = el.find('input[type="radio"]:checked').data('option-id');
-				self.createNewCreditLine(optionID);
-			}), 'OK', null, 'Cancel');
+			EzBob.ShowMessageEx({
+				message: el,
+				title: 'New Credit Line Option',
+				timeout: 0,
+				onOk: function() {
+					var optionID = el.find('input[type="radio"]:checked').data('option-id');
+					self.createNewCreditLine(optionID);
+				},
+				okText: 'OK',
+				onCancel: null,
+				cancelText: 'Cancel',
+				closeOnEscape: true,
+				dialogWidth: 400,
+				resizable: false,
+			});
 
 			return false;
 		}, // runNewCreditLine

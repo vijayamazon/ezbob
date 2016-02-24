@@ -15,17 +15,37 @@ BEGIN
 
 	DECLARE @ModelID BIGINT = (SELECT m.ModelID FROM LogicalGlueModels m WHERE m.ModelName = 'Neural network')
 
+	DECLARE @OriginID INT = (SELECT c.OriginID FROM Customer c WHERE c.Id = @CustomerID)
+
+	DECLARE @LoanSourceID INT = (
+		SELECT dls.LoanSourceID
+		FROM DefaultLoanSources dls
+		INNER JOIN Customer c
+			ON dls.OriginID = c.OriginID AND c.Id = @CustomerID
+	)
+
 	;WITH meta AS (
 		SELECT
-			CustomerOrigin = (SELECT o.Name FROM Customer c INNER JOIN CustomerOrigin o ON c.OriginID = o.CustomerOriginID WHERE Id = @CustomerID),
+			CustomerOrigin = (SELECT o.Name FROM CustomerOrigin o WHERE o.CustomerOriginID = @OriginID),
 			TypeOfBusiness = (SELECT TypeOfBusiness FROM Company WHERE Id = @CompanyID),
 			LoanCount = (SELECT COUNT(DISTINCT Id) FROM Loan l WHERE l.CustomerId = @CustomerID AND l.[Date] <= @ProcessingDate),
-			LoanSource = (
-				SELECT ls.LoanSourceName
-				FROM LoanSource ls
-				INNER JOIN DefaultLoanSources dls ON ls.LoanSourceID = dls.LoanSourceID
-				INNER JOIN Customer c ON dls.OriginID = c.OriginID AND c.Id = @CustomerID
-			)
+			LoanSource = (SELECT ls.LoanSourceName FROM LoanSource ls WHERE ls.LoanSourceID = @LoanSourceID)
+	), more_meta AS (
+		SELECT
+			IsRegulated = (SELECT IsRegulated FROM TypeOfBusiness WHERE Name = m.TypeOfBusiness)
+		FROM
+			meta m
+	), even_more_meta AS (
+		SELECT
+			AutoDecisionInternalLogic = ISNULL((
+				SELECT AutoDecisionInternalLogic
+				FROM I_ProductSubType
+				WHERE OriginID = @OriginID
+				AND LoanSourceID = @LoanSourceID
+				AND IsRegulated = mm.IsRegulated
+			), 1)
+		FROM
+			more_meta mm
 	), lg AS (
 		SELECT
 			l.Id as ServiceLogID,
@@ -73,6 +93,8 @@ BEGIN
 		meta.TypeOfBusiness,
 		meta.LoanCount,
 		meta.LoanSource,
+		mm.IsRegulated,
+		mmm.AutoDecisionInternalLogic,
 		lg.RequestID,
 		lg.ResponseID,
 		lg.HttpStatus,
@@ -90,6 +112,8 @@ BEGIN
 		lg.MissingColumnCount
 	FROM
 		meta
+		FULL OUTER JOIN more_meta mm ON 1 = 1
+		FULL OUTER JOIN even_more_meta mmm ON 1 = 1
 		FULL OUTER JOIN lg ON 1 = 1
 END
 GO

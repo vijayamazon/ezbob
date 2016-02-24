@@ -2379,7 +2379,8 @@ input[type="text"].err-field-red {
 }
 
 .new-credit-line-mode-selector > div > div:first-child {
-	text-align: right;
+	text-align: left;
+	white-space: nowrap;
 }
 
 .new-credit-line-mode-selector > div > div:not(:first-child),

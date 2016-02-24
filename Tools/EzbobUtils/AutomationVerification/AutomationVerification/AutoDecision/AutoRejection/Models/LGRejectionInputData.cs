@@ -12,6 +12,7 @@
 		public virtual int LoanCount { get; set; }
 		public virtual CustomerOriginEnum? CustomerOrigin { get; set; }
 		public virtual LoanSourceName? LoanSource { get; set; }
+		public virtual bool AutoDecisionInternalLogic { get; set; }
 
 		public virtual Guid? RequestID { get; set; }
 		public virtual long? ResponseID { get; set; }
@@ -77,6 +78,7 @@
 			LoanCount = lgData.LoanCount;
 			CustomerOrigin = lgData.CustomerOrigin;
 			LoanSource = lgData.LoanSource;
+			AutoDecisionInternalLogic = lgData.AutoDecisionInternalLogic;
 
 			RequestID = lgData.RequestID;
 			ResponseID = lgData.ResponseID;

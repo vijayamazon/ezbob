@@ -842,8 +842,8 @@ EzBob.ShowMessageEx = function(args) {
 		title: args.title,
 		width: args.dialogWidth || 350,
 		modal: true,
-		draggable: isUW, // enable for underwriter
-		resizable: isUW, // -"-
+		draggable: (args.draggable === undefined) ? isUW : !!args.draggable, // enable for underwriter
+		resizable: (args.resizable === undefined) ? isUW : !!args.resizable, // -"-
 		buttons: buttonModel,
 		dialogClass: "confirmationDialog " + args.customClass,
 		zIndex: 3999,

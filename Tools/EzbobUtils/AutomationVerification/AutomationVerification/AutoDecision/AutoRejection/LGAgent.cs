@@ -55,7 +55,7 @@
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				Log.Debug("Secondary LG: checking auto reject for customer {0}...", this.args.CustomerID);
 
-				if (Trail.MyInputData.CompanyIsRegulated) {
+				if (Trail.MyInputData.AutoDecisionInternalLogic) {
 					Output.FlowType = AutoDecisionFlowTypes.Internal;
 					StepNoDecision<InternalFlow>().Init();
 					Trail.AppendOverridingResults(this.oldWayAgent.Trail);
@@ -153,8 +153,9 @@
 			inputData.TypeOfBusiness = Enum.TryParse(sr["TypeOfBusiness"], out typeOfBusiness)
 				? typeOfBusiness
 				: EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur;
-			
-			inputData.CompanyIsRegulated = inputData.TypeOfBusiness.IsRegulated();
+
+			inputData.CompanyIsRegulated = sr["IsRegulated"];
+			inputData.AutoDecisionInternalLogic = sr["AutoDecisionInternalLogic"];
 			inputData.LoanCount = sr["LoanCount"];
 
 			CustomerOriginEnum coe;
