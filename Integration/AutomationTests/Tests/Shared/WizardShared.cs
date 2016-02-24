@@ -239,9 +239,9 @@
 
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
-            //actionBot.MoveToBottom();
-            //actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
-            actionBot.JQueryClick("#link_account_see_more_less", "(see full data source button)");
+            actionBot.MoveToBottom();
+            actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
+            //actionBot.JQueryClick("#link_account_see_more_less", "(see full data source button)");
             //Step 1 - Click on relevant data source.
             //By marketplacedAssert;
             //switch (marketplace) {
@@ -276,8 +276,8 @@
             //        break;
             //}
             //actionBot.ClickAssert(By.Id("finish-wizard"), finishWizardAssert, "(complete button)");
-            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
-            actionBot.JQueryClick("#finish-wizard", "(complete button)");
+            actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            //actionBot.JQueryClick("#finish-wizard", "(complete button)");
 
             //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {
@@ -299,10 +299,10 @@
             SharedServiceClass.WaitForBlockUiOff(Driver);
 
             actionBot.Click(By.Id("link_account_see_more_less"), "(see full data source button)");
-            SharedServiceClass.JqueryElementReady(Driver, ".marketplace-button-account-paypal");
+            //SharedServiceClass.JqueryElementReady(Driver, ".marketplace-button-account-paypal");
             //Step 1 - Click on relevant data source.
 
-            actionBot.Click(By.ClassName("marketplace-button-account-paypal"), "(data source button)");
+            actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
             //actionBot.Click(By.CssSelector("a.marketplace-button-account-paypal"), "(data source button)");
 
             //PayPal Click continue.
