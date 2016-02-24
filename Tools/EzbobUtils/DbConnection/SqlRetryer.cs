@@ -3,17 +3,16 @@
 	using System.Data.SqlClient;
 	using System.Threading;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 
-	public class SqlRetryer : ARetryer {
-		public SqlRetryer(
-			int nRetryCount = 3,
-			int nSleepBeforeRetryMilliseconds = 0,
-			ASafeLog oLog = null
-		) : base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog) {
+	public class SqlRetryer { 
+		public SqlRetryer(int retryCount = 3, int sleepBeforeRetryMilliseconds = 0, ASafeLog log = null) {
+			RetryCount = retryCount;
+			SleepBeforeRetry = sleepBeforeRetryMilliseconds;
+			Log = log.Safe();
+			this.logVerbosityLevel = LogVerbosityLevel.Compact;
 		} // constructor
 
-		public override void Retry(Action oAction, string sFuncDescription = null) {
+		public virtual void Retry(Action oAction, string sFuncDescription = null) {
 			if (oAction == null)
 				throw new ArgumentNullException("oAction", "Function to retry not specified.");
 
@@ -36,9 +35,6 @@
 						Log.Debug("Success on attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
 					return;
-				} catch (ForceRetryException e) {
-					ex = e;
-					sErrName = ForceRetryException.Name;
 				} catch (SqlException e) {
 					ex = e;
 
@@ -64,10 +60,23 @@
 					throw new DbException(ex.Message, ex);
 
 				if (nCount < RetryCount) {
-					Log.Warn(ex, "{2} encountered on attempt {0} of {1}, retrying after {3} milliseconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
+					Log.Warn(
+						ex,
+						"{2} encountered on attempt {0} of {1}, retrying after {3} milliseconds.",
+						nCount,
+						RetryCount,
+						sErrName,
+						SleepBeforeRetry
+					);
 					Thread.Sleep(SleepBeforeRetry);
 				} else
-					Log.Alert(ex, "{2} encountered on attempt {0} of {1}, out of retry attempts.", nCount, RetryCount, sErrName);
+					Log.Alert(
+						ex,
+						"{2} encountered on attempt {0} of {1}, out of retry attempts.",
+						nCount,
+						RetryCount,
+						sErrName
+					);
 			} // for
 
 			if (ex == null)
@@ -76,13 +85,48 @@
 			throw new DbException("Out of retry attempts.", ex);
 		} // Retry
 
+		public virtual LogVerbosityLevel LogVerbosityLevel {
+			get { return this.logVerbosityLevel; }
+			set { this.logVerbosityLevel = value; }
+		} // LogVerbosityLevel
+
+		public virtual T Retry<T>(Func<T> func, string actionDescription = null) {
+			if (func == null)
+				throw new ArgumentNullException("func", "Function to retry not specified.");
+
+			T res = default(T);
+
+			Retry(() => { res = func(); }, actionDescription);
+
+			return res;
+		} // Retry
+
+		public virtual int RetryCount {
+			get { return this.retryCount; } // get
+			private set { this.retryCount = (value < 1) ? 1 : value; } // set
+		} // RetryCount
+
+		/// <summary>
+		/// In milliseconds.
+		/// </summary>
+		public virtual int SleepBeforeRetry {
+			get { return this.sleepBeforeRetry; } // get
+			private set { this.sleepBeforeRetry = (value < 0) ? 0 : value; } // set
+		} // SleepBeforeRetry
+
+		protected ASafeLog Log { get; private set; }
+
+		private LogVerbosityLevel logVerbosityLevel;
+		private int retryCount;
+		private int sleepBeforeRetry;
+
 		private static class ErrorNumber {
 			public const int Network = 11;
 			public const int Deadlock = 1205;
 			public const int Locking = 1222;
 			public const int UpdateConflict = 3960;
 			public const int Timeout1 = -2;
-			public const int Timeout2 =  -2147217871;
+			public const int Timeout2 = -2147217871;
 		} // class ErrorNumber
 	} // class SqlRetryer
 } // namespace Ezbob.Database

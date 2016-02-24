@@ -36,7 +36,7 @@
 		public static int GetBrowserVersionID(this Controller oController, string sUserAgent, AConnection oDB, ASafeLog oLog) {
 			int nBrowserVersionID = 0;
 
-			var oRetryer = new SqlRetryer(oLog: oLog);
+			var oRetryer = new SqlRetryer(log: oLog);
 
 			oRetryer.Retry(() => {
 				nBrowserVersionID = oDB.ExecuteScalar<int>(

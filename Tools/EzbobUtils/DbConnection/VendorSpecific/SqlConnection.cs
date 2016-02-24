@@ -111,7 +111,7 @@
 			prm.UnderlyingParameter = oParam;
 		} // AppendParameter
 
-		protected override Utils.ARetryer CreateRetryer() {
+		protected override SqlRetryer CreateRetryer() {
 			var rnd = new Random();
 
 			int nSleepBeforeRetryMilliseconds = 400 + rnd.Next(200);

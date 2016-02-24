@@ -51,7 +51,6 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ARetryer.cs" />
     <Compile Include="Attributes\DecimalFormatAttribute.cs" />
     <Compile Include="Attributes\EnumNameAttribute.cs" />
     <Compile Include="Attributes\ExcludeFromToStringAttribute.cs" />
@@ -117,7 +116,7 @@
     <Compile Include="Security\SecurityUtils.cs" />
     <Compile Include="Exceptions\SeldenException.cs" />
     <Compile Include="Serialization\Serialized.cs" />
-    <Compile Include="SimpleRetryer.cs" />
+    <Compile Include="ASimpleRetryer.cs" />
     <Compile Include="SortedTable.cs" />
     <Compile Include="MiscUtils.cs" />
     <Compile Include="NameList.cs" />

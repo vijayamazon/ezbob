@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Repository {
 
 	public class ExperianBankCacheRepository : NHibernateRepositoryBase<MP_ExperianBankCache> {
 		public ExperianBankCacheRepository(ISession session) : base(session) {
-			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			m_oRetryer = new SqlRetryer(log: new SafeILog(Log));
 		} // constructor
 
 		public virtual T Get<T>(string key, long? expirationPeriodSec) where T : class {

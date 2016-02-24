@@ -377,7 +377,7 @@
 
 		protected abstract DbConnection CreateConnection();
 
-		protected abstract ARetryer CreateRetryer();
+		protected abstract SqlRetryer CreateRetryer();
 
 		protected void PublishRunningTime(
 			string sPooledConnectionID,
@@ -452,7 +452,7 @@
 			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
 				Log.Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
-			ARetryer oRetryer = CreateRetryer();
+			SqlRetryer oRetryer = CreateRetryer();
 			oRetryer.LogVerbosityLevel = this.LogVerbosityLevel;
 
 			DbCommand oCmdToDispose = null;

@@ -20,7 +20,7 @@
 
 	public class EBusinessService {
 		public EBusinessService(AConnection oDB) {
-			this.retryer = new SqlRetryer(oLog: log);
+			this.retryer = new SqlRetryer(log: log);
 			this.eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
 
 			this.db = oDB;

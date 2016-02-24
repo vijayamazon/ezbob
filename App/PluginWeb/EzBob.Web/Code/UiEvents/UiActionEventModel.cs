@@ -41,7 +41,7 @@
 
 			string sResult = null;
 
-			var oRetryer = new SqlRetryer(oLog: log);
+			var oRetryer = new SqlRetryer(log: log);
 
 			string evtArgs = string.IsNullOrWhiteSpace(eventArgs) ? null : eventArgs;
 

@@ -199,63 +199,23 @@
 					explicitMonthlyPayment,
 					isTryOut
 				);
+
 				return null;
 			} // if
 
-			Log.Debug("Engine.DownloadAndSave({0}, {1}, {2}) started...", customerID, explicitMonthlyPayment, isTryOut);
-
-			InferenceInputPackage inputPkg = Keeper.LoadInputData(customerID, Now, false);
-
-			Log.Debug(
-				"Engine.DownloadAndSave({0}, {1}, {2}) retrieved input package.",
+			var action = new DownloadAndSaveAction(
+				Harvester,
+				Keeper,
 				customerID,
 				explicitMonthlyPayment,
-				isTryOut
+				isTryOut,
+				Now,
+				Log
 			);
 
-			if (explicitMonthlyPayment > 0)
-				inputPkg.InferenceInput.MonthlyPayment = explicitMonthlyPayment;
+			action.Execute();
 
-			List<string> errors = inputPkg.InferenceInput.Validate();
-
-			if (errors != null)
-				throw new FailedToLoadInputDataAlert(Log, customerID, Now, errors);
-
-			Log.Debug(
-				"Engine.DownloadAndSave({0}, {1}, {2}) input package is valid.",
-				customerID,
-				explicitMonthlyPayment,
-				isTryOut
-			);
-
-			long requestID = Keeper.SaveInferenceRequest(customerID, inputPkg.CompanyID, isTryOut, inputPkg.InferenceInput);
-
-			Log.Debug(
-				"Engine.DownloadAndSave({0}, {1}, {2}) input package has been stored.",
-				customerID,
-				explicitMonthlyPayment,
-				isTryOut
-			);
-
-			Response<Reply> reply = Harvester.Infer(inputPkg.InferenceInput, Keeper.LoadHarvesterConfiguration());
-
-			Log.Debug(
-				"Engine.DownloadAndSave({0}, {1}, {2}) reply received.",
-				customerID,
-				explicitMonthlyPayment,
-				isTryOut
-			);
-
-			Inference result = Keeper.SaveInference(customerID, requestID, reply);
-
-			Log.Debug(
-				"Engine.DownloadAndSave({0}, {1}, {2}) complete.",
-				customerID,
-				explicitMonthlyPayment,
-				isTryOut
-			);
-
-			return result;
+			return action.Result;
 		} // DownloadAndSave
 	} // class Engine
 } // namespace

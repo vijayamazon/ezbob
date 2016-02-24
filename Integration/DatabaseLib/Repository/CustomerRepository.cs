@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository {
 		public CustomerRepository(ISession session) : base(session) { }
 
 		public Customer Get(int clientId) {
-			var m_oRetryer = new SqlRetryer(nSleepBeforeRetryMilliseconds: 500);
+			var m_oRetryer = new SqlRetryer(sleepBeforeRetryMilliseconds: 500);
 
 			// var customer = m_oRetryer.Retry(() => Session.Get<Customer>(clientId));
 			var customer = m_oRetryer.Retry(

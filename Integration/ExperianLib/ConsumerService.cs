@@ -72,7 +72,7 @@
 
 		public ConsumerService()
 		{
-			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			m_oRetryer = new SqlRetryer(log: new SafeILog(Log));
 			interactiveMode = CurrentValues.Instance.ExperianInteractiveMode;
 		} // constructor
 
