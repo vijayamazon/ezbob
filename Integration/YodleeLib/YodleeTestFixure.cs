@@ -11,7 +11,7 @@
 	internal class YodleeTestFixure
 	{
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public long test_get_itemId()
 		{
 			var m = new YodleeMain();
@@ -29,7 +29,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_refresh_not_mfa()
 		{
 			var m = new YodleeMain();
@@ -38,7 +38,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_remove_item()
 		{
 			var m = new YodleeMain();
@@ -46,7 +46,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_get_data_for_item()
 		{
 			var m = new YodleeMain();

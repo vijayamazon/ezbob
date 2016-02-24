@@ -1,5 +1,4 @@
 ﻿namespace UIAutomationTests.Core {
-    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.IO;
@@ -9,7 +8,6 @@
     using TestRailEngine;
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
-    using TestStack.Seleno.Extensions;
 
     class TestRailRepository {
         private static List<AtutomationCaseRun> _PlanRepository;
@@ -50,12 +48,8 @@
         }
 
         internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID) {
-            var automationCases = PlanRepository
-                .Where(x => x.CaseBase.ID == caseID)
-                .Each(x => TestRailManager.Instance.AddResultForCase(x.RunId,
-                                                                    caseID,
-                                                                    ResultStatus.Blocked,
-                                                                    "Could not find valid configiration for this run, make sure run has {browser, brand, enviorment}"));
+            foreach (var singleCase in PlanRepository.Where(x => x.CaseBase.ID == caseID).ToList())
+                TestRailManager.Instance.AddResultForCase(singleCase.RunId, caseID, ResultStatus.Blocked, "Could not find valid configiration for this run, make sure run has {browser, brand, enviorment}");
         }
 
         internal static string TestRailCaseName(ulong caseID) {

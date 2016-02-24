@@ -32,7 +32,8 @@
 			"FluentNHibernate",
 			"DevExpress",
 			"AjaxControlToolkit",
-            "FSharp.Core"
+            "FSharp.Core",
+            "NUnit.CompareNetObjects"
 		};
 	} // class Scanner
 }

@@ -7,7 +7,7 @@
 	class ZooplaTestFixure
 	{
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_get_average_prices()
 		{
 			var postcode = "EC1V4PW";
@@ -17,7 +17,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_get_graphs()
 		{
 			var postcode = "NR3 2SY";
@@ -27,7 +27,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_get_zoopla_estimate()
 		{
 			var z = new ZooplaEstimate();
@@ -44,7 +44,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void test_get_zoopla_estimate_sorry()
 		{
 			var z = new ZooplaEstimate();

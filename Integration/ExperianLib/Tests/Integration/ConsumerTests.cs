@@ -15,7 +15,7 @@ namespace ExperianLib.Tests.Integration
 	class ConsumerTests : BaseTest
     {
         [Test]
-        [Ignore]
+        [Ignore("Ignore this fixture")]
         public void TestConsumer()
         {
             //debug mode
@@ -39,7 +39,7 @@ namespace ExperianLib.Tests.Integration
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Ignore this fixture")]
         public void TestRealConsumer()
         {
             //Work only with experian real certificates
@@ -63,7 +63,7 @@ namespace ExperianLib.Tests.Integration
         }
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void TestBuilder()
 		{
 			var b = new ConsumerExperianModelBuilder();
@@ -79,7 +79,7 @@ namespace ExperianLib.Tests.Integration
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void TestSaveToDB()
 		{
 			var b = new ConsumerExperianModelBuilder();
@@ -101,7 +101,7 @@ namespace ExperianLib.Tests.Integration
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void SaveCais() {
 			List<ExperianConsumerDataCais> cais = new List<ExperianConsumerDataCais>();
 			cais.Add(new ExperianConsumerDataCais() {
@@ -137,7 +137,7 @@ namespace ExperianLib.Tests.Integration
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void TestReadFromDB()
 		{
 
@@ -161,7 +161,7 @@ namespace ExperianLib.Tests.Integration
 			Console.WriteLine(JsonConvert.SerializeObject(d, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 		}
 
-		[Test,Ignore]
+        [Test, Ignore("Ignore this fixture")]
 		public void TestRequest() {
 			var inputSerializer = new XmlSerializer(typeof(Input));
 			var input = (Input)inputSerializer.Deserialize(new StringReader(consumerRequest2));

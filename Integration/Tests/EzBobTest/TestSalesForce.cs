@@ -30,7 +30,7 @@
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("This test case is ignored")]
 		public void TestRequestsToJson() {
 			Log.Debug("call CreateUpdateLeadAccount");
 			LeadAccountModel model = new LeadAccountModel {
@@ -266,7 +266,7 @@
 			};
 
 			this.client.CreateUpdateLeadAccount(model);
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 		}
 
 		[Test]
@@ -285,7 +285,7 @@
 			};
 
 			this.client.CreateTask(tModel);
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 		}
 
 		[Test]
@@ -303,13 +303,13 @@
 			};
 
 			this.client.CreateActivity(aModel);
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 		}
 
 		[Test]
 		public void TestChangeEmail() {
 			this.client.ChangeEmail(new ChangeEmailModel { currentEmail = "testdev1@b.c", newEmail = "testdev2@b.c", Origin = "ezbob" });
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 		}
 
 		[Test]
@@ -319,8 +319,8 @@
 			//client.GetActivity("stasdes@ezbob.com");
 			var activity = this.client.GetActivity(new GetActivityModel { Email = "testdev1@b.c", Origin = "ezbob" });
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(this.client.Error);
-			Assert.IsNullOrEmpty(activity.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
+			Assert.IsTrue(String.IsNullOrEmpty(activity.Error));
 			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
@@ -346,7 +346,7 @@
 				Origin = "ezbob"
 			});
 
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 		}
 
 		[Test]
@@ -364,7 +364,7 @@
 				Type = OpportunityType.New.DescriptionAttr()
 			});
 
-			Assert.IsNullOrEmpty(this.client.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(this.client.Error));
 
 		}
 
@@ -373,8 +373,8 @@
 			ISalesForceAppClient fakeClient = new FakeApiClient();
 			var activity = fakeClient.GetActivity(new GetActivityModel());
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(fakeClient.Error);
-			Assert.IsNullOrEmpty(activity.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(fakeClient.Error));
+			Assert.IsTrue(String.IsNullOrEmpty(activity.Error));
 			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
@@ -409,7 +409,7 @@
 			});
 
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(activity.Error);
+			Assert.IsTrue(String.IsNullOrEmpty(activity.Error));
 			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
@@ -418,8 +418,8 @@
 			var service = GetSb1Service();
 			var login = service.Login().Result;
 			Assert.IsNotNull(login);
-			Assert.IsNotNullOrEmpty(login.access_token);
-			Assert.IsNotNullOrEmpty(login.instance_url);
+			Assert.IsFalse(String.IsNullOrEmpty(login.access_token));
+			Assert.IsFalse(String.IsNullOrEmpty(login.instance_url));
 		}
 
 		[Test]
@@ -463,9 +463,9 @@
 
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.attributes);
-			Assert.IsNotNullOrEmpty(result.Id);
-			Assert.IsNotNullOrEmpty(result.attributes.type);
-			Assert.IsNotNullOrEmpty(result.attributes.url);
+			Assert.IsFalse(String.IsNullOrEmpty(result.Id));
+			Assert.IsFalse(String.IsNullOrEmpty(result.attributes.type));
+			Assert.IsFalse(String.IsNullOrEmpty(result.attributes.url));
 		}
 	}
 }

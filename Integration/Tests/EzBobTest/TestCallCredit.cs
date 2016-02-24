@@ -114,7 +114,7 @@
 		}*/
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestParseCallCredit() {
 			ParseCallCredit test = new ParseCallCredit(24706);
 			test.Execute();
@@ -126,21 +126,21 @@
 		private readonly SafeILog log;
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestNonLimitedParser() {
 			NonLimitedParser test = new NonLimitedParser(new SqlConnection(), new SafeILog(log));
 			test.ParseAndStore(response, "01820769", 556, null);
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestNonLimitedParserAnother() {
 			NonLimitedParser test = new NonLimitedParser(new SqlConnection(), new SafeILog(log));
 			test.ParseAndStore(14832);
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestBackfillNonLimitedCompanies() {
 
 
@@ -149,7 +149,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestBackfillExperianLtd() {
 
 

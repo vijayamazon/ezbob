@@ -286,7 +286,7 @@
 			//	sOutput = string.Empty;
 			//} // try
 			Console.WriteLine(sOutDec);
-			Assert.IsNotNullOrEmpty(sOutDec);
+			Assert.IsFalse(String.IsNullOrEmpty(sOutDec));
 		}
 
 		[Test]
@@ -389,7 +389,7 @@
 		public void TestLREnquiry() {
 			var s = new LandRegistryEnquiry(21340, null, "test", null, null, "E12 6AY");
 			s.Execute();
-			Assert.IsNotNullOrEmpty(s.Result);
+			Assert.IsTrue(String.IsNullOrEmpty(s.Result));
 		}
 
 		// TestCalculateModelsAndAffordability
@@ -397,7 +397,7 @@
 		public void TestLRRes() {
 			var s = new LandRegistryRes(29, "SK310937");
 			s.Execute();
-			Assert.IsNotNullOrEmpty(s.Result);
+			Assert.IsFalse(String.IsNullOrEmpty(s.Result));
 		}
 
 		[Test]
@@ -643,7 +643,7 @@
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("This test case is ignored")]
 		public void TestCreditSfaeServiceLogWriter() {
 			ServiceLogCreditSafeLtd saveTest = new ServiceLogCreditSafeLtd("X999999", 1);
 			saveTest.Execute();
@@ -656,7 +656,7 @@
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("This test case is ignored")]
 		public void TestBackFillExperianNonLtdScoreText() {
 			BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
 			test.Execute();
@@ -822,8 +822,8 @@
 			if (!stra.ExistsInCash) {
 				Assert.IsNotNull(stra.Result);
 				Assert.AreEqual(stra.Result.status, 200);
-				Assert.IsNotNullOrEmpty(stra.Result.result.postcode);
-				Assert.IsNotNullOrEmpty(stra.Result.result.codes.nuts);
+                Assert.IsFalse(String.IsNullOrEmpty(stra.Result.result.postcode));
+				Assert.IsFalse(String.IsNullOrEmpty(stra.Result.result.codes.nuts));
 			} else {
 				this.m_oLog.Info("Exists in cash");
 			}

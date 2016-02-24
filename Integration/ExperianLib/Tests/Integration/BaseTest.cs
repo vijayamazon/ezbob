@@ -14,7 +14,7 @@
 	using StructureMap;
 	using StructureMap.Pipeline;
 
-	[Ignore]
+    [Ignore("Ignore this fixture")]
 	[TestFixture]
 	public class BaseTest {
 		[SetUp]

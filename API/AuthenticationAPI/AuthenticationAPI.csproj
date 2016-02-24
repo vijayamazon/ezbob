@@ -146,7 +146,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
+    <Reference Include="nunit.framework, Version=3.0.5813.39035, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">

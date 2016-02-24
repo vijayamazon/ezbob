@@ -206,8 +206,8 @@
             //actionBot.MoveToElement(By.Id("companyContinueBtn"));
             actionBot.MoveToBottom();
             //Step 4 - Click continue.
-            //actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
-            actionBot.JQueryClick("#companyContinueBtn", "(continue button)");
+            actionBot.Click(By.Id("companyContinueBtn"), "(continue button)");
+            //actionBot.JQueryClick("#companyContinueBtn", "(continue button)");
 
             //TODO: find out when this dialog is displayed, and create more acurate scenario for it.
             try {
@@ -257,7 +257,7 @@
             actionBot.Click(marketplace, "(data source button)");
 
             //Step 3 - Insert prepared credentials and click sign in.
-            actionBot.SendKeys(accLogin, loginVal, "(data source login field)", 20);
+            actionBot.SendKeys(accLogin, loginVal, "(data source login field)");
 
             actionBot.SendKeys(accPass, passVal, "(data source password field)");
 
@@ -336,8 +336,8 @@
 
             //Step 4 - Click complete.
             actionBot.Sleep(5000);
-            //actionBot.Click(By.Id("finish-wizard"), "(complete button)");
-            actionBot.JQueryClick("#finish-wizard", "(complete button)");
+            actionBot.Click(By.Id("finish-wizard"), "(complete button)");
+            //actionBot.JQueryClick("#finish-wizard", "(complete button)");
 
             //Step 5 - Accept dialog.
             if (String.Equals("ClientSignup", origin)) {

@@ -63,8 +63,8 @@
 			Message message = this.twilioClient.SendMessage(this.fromPhone, toPhone, content);
 			Assert.IsNotNull(message);
 			Assert.IsNull(message.RestException);
-			Assert.IsNullOrEmpty(message.ErrorMessage);
-			Assert.IsNotNullOrEmpty(message.Sid);
+			Assert.IsTrue(String.IsNullOrEmpty(message.ErrorMessage));
+			Assert.IsFalse(String.IsNullOrEmpty(message.Sid));
 		}
 
 		[Test]
@@ -73,7 +73,7 @@
 			var message = this.twilioClient.GetMessage(sid);
 			Assert.IsNotNull(message);
 			Assert.IsNull(message.RestException);
-			Assert.IsNullOrEmpty(message.ErrorMessage);
+            Assert.IsTrue(String.IsNullOrEmpty(message.ErrorMessage));
 			Assert.AreNotEqual(message.Price, 0M);
 		}
 

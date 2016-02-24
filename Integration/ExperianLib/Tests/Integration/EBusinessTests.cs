@@ -8,7 +8,7 @@ namespace ExperianLib.Tests.Integration {
 
 	internal class EBusinessTests : BaseTest {
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void GetLimitedCompanyTest() {
 			var service = new EBusinessService(m_oDB);
 
@@ -28,7 +28,7 @@ namespace ExperianLib.Tests.Integration {
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void GetNonLimitedCompanyTest() {
 			var service = new EBusinessService(m_oDB);
 			const string refNum = "02406500";
@@ -38,7 +38,7 @@ namespace ExperianLib.Tests.Integration {
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void TargetingTest() {
 			var service = new EBusinessService(m_oDB);
 			var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.Limited, "7852687");
@@ -47,7 +47,7 @@ namespace ExperianLib.Tests.Integration {
 		}
 
 		[Test]
-		[Ignore]
+        [Ignore("Ignore this fixture")]
 		public void TargetingCacheTest()
 		{
 			var service = new EBusinessService(m_oDB);

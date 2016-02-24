@@ -7,7 +7,7 @@ namespace ExperianLib.Tests.Integration
     class EndpointTest:BaseTest
     {
         [Test]
-        [Ignore]
+        [Ignore("Ignore this fixture")]
         public void TestAndrewMilburnAMLA()
         {
             //real check
@@ -17,7 +17,7 @@ namespace ExperianLib.Tests.Integration
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Ignore this fixture")]
         public void TestAndrewMilburnBwa()
         {
             //real check
@@ -27,7 +27,7 @@ namespace ExperianLib.Tests.Integration
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Ignore this fixture")]
         public void TestAdamPhilpottBwa()
         {
             //real check

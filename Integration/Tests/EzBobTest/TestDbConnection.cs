@@ -117,7 +117,7 @@
 				new QueryParameter("IsVipLead", false));
 
 			Assert.IsNotNull(leadAccountModel);
-			Assert.IsNotNullOrEmpty(leadAccountModel.MobilePhoneNumber);
+			Assert.IsFalse(String.IsNullOrEmpty(leadAccountModel.MobilePhoneNumber));
 
 
 		}
