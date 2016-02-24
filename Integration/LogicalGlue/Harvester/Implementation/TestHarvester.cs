@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Implementation {
 	using System;
 	using System.Globalization;
+	using System.IO;
 	using System.Net;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
@@ -29,6 +30,7 @@
 			EquifaxTimeout,
 			LogicalGlueInferenceApiTimeout,
 			HardRejection,
+			EtlFailBadAddress,
 		} // enum ReplyModes
 
 		private string GetReply() {
@@ -56,6 +58,9 @@
 
 			case ReplyModes.HardRejection:
 				return HardRejection;
+
+			case ReplyModes.EtlFailBadAddress:
+				return ReadEtlFailBadAddress();
 			} // switch
 
 			int rnd = new Random().Next(1, 101);
@@ -77,6 +82,25 @@
 			
 			return HardRejection;
 		} // ChooseReply
+
+		private static string ReadEtlFailBadAddress() {
+			const string fileName = "Ezbob.Integration.LogicalGlue.Harvester.Implementation.etl_F_bad_address.json";
+
+			Stream stream = typeof(TestHarvester).Assembly.GetManifestResourceStream(fileName);
+
+			if (stream == null)
+				throw new Exception("Failed to read embedded file " + fileName);
+
+			var reader = new StreamReader(stream);
+
+			string json = reader.ReadToEnd();
+
+			reader.Close();
+
+			stream.Close();
+
+			return json;
+		} // ReadEtlFailBadAddress
 
 		private static string CreateSuccess() {
 			var fl = ModelContent.Replace("__MAP_OUTPUT_RATIOS__", MapOutputRatios);

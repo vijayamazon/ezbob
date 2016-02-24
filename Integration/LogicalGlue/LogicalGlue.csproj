@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Harvester\Implementation\etl_F_bad_address.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
