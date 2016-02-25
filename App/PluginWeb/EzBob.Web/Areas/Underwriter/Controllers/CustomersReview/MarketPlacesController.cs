@@ -319,7 +319,7 @@
 
 		[Ajax]
 		[Transactional]
-		[Permission(Name = "RecheckMarketPlaces")]
+		[Permission(Name = "RecheckMarketplaces")]
 		public void ReCheckMarketplaces(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 

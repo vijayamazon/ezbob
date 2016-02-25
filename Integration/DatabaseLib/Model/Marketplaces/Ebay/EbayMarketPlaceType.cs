@@ -12,8 +12,10 @@
 	public class eBayMarketPlaceType : MP_MarketplaceType {
 		public override int UWPriority { get { return 1; } }
 
-		public override IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
-
+		public override IEnumerable<IAnalysisDataParameterInfo> GetAggregations(
+			MP_CustomerMarketPlace mp,
+			DateTime? history
+		) {
 			DateTime relevantDate = GetRelevantDate(history);
 
 			List<EbayAggregation> aggregations = Library.Instance.DB.Fill<EbayAggregation>(
@@ -30,98 +32,143 @@
 
 			DateTime firstOfMonth = new DateTime(relevantDate.Year, relevantDate.Month, 1);
 
-			var month = TimePeriodFactory.Create(TimePeriodEnum.Month);
-			var month3 = TimePeriodFactory.Create(TimePeriodEnum.Month3);
-			var month6 = TimePeriodFactory.Create(TimePeriodEnum.Month6);
-			var year = TimePeriodFactory.Create(TimePeriodEnum.Year);
-			var month15 = TimePeriodFactory.Create(TimePeriodEnum.Month15);
-			var month18 = TimePeriodFactory.Create(TimePeriodEnum.Month18);
-			var year2 = TimePeriodFactory.Create(TimePeriodEnum.Year2);
-			var all = TimePeriodFactory.Create(TimePeriodEnum.Lifetime);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Month, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Month3, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Month6, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Year, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Month15, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Month18, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Year2, firstOfMonth);
+			AppendAggregations(calculatedAggregations, aggregations, TimePeriodEnum.Lifetime, firstOfMonth);
 
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month3, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month6, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, year, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month15, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month18, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, year2, firstOfMonth));
-			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, all, firstOfMonth));
+			AppendFeedbacks(calculatedAggregations, mp, history);
 
-			calculatedAggregations.AddRange(GetFeedbacks(mp, history));
 			return calculatedAggregations;
-		}//GetAggregations
+		} // GetAggregations
 
-		private IEnumerable<IAnalysisDataParameterInfo> GetAnalysisDataParameters(List<EbayAggregation> ag, ITimePeriod time, DateTime firstOfMonth) {
-			if (time.TimePeriodType != TimePeriodEnum.Lifetime) {
+		private void AppendAggregations(
+			List<IAnalysisDataParameterInfo> target,
+			List<EbayAggregation> ag,
+			TimePeriodEnum timePeriod,
+			DateTime firstOfMonth
+		) {
+			ITimePeriod time = TimePeriodFactory.Create(timePeriod);
+
+			if (time.TimePeriodType != TimePeriodEnum.Lifetime)
 				ag = ag.Where(x => x.TheMonth > firstOfMonth.AddMonths(-time.MonthsInPeriod)).ToList();
-			}
+
 			var parameterInfos = new List<IAnalysisDataParameterInfo>();
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.Turnover), AggregationFunction.Turnover));
-			var averageSumOfOrderDenominator = ag.Sum(x => x.AverageSumOfOrderDenominator);
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, averageSumOfOrderDenominator == 0 ? 0 : ag.Sum(x => x.AverageSumOfOrderNumerator) / averageSumOfOrderDenominator, AggregationFunction.AverageSumOfOrder));
-			var averageItemsPerOrderDenominator = ag.Sum(x => x.AverageItemsPerOrderDenominator);
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, averageItemsPerOrderDenominator == 0 ? 0 : ag.Sum(x => x.AverageItemsPerOrderNumerator) / averageItemsPerOrderDenominator, AggregationFunction.AverageItemsPerOrder));
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.CancelledOrdersCount), AggregationFunction.CancelledOrdersCount));
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.NumOfOrders), AggregationFunction.NumOfOrders));
-			var ordersCancellationRateDenominator = ag.Sum(x => x.OrdersCancellationRateDenominator);
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ordersCancellationRateDenominator == 0 ? 0 : ag.Sum(x => x.OrdersCancellationRateNumerator) / ordersCancellationRateDenominator, AggregationFunction.OrdersCancellationRate));
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalItemsOrdered), AggregationFunction.TotalItemsOrdered));
-			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders), AggregationFunction.TotalSumOfOrders));
+
+			AddAnalysisItem(parameterInfos, time, AggregationFunction.Turnover, ag.Sum(x => x.Turnover));
+
+			AddAnalysisItem(
+				parameterInfos,
+				time,
+				AggregationFunction.AverageSumOfOrder,
+				ag.Sum(x => x.AverageSumOfOrderNumerator),
+				ag.Sum(x => x.AverageSumOfOrderDenominator)
+			);
+
+			AddAnalysisItem(
+				parameterInfos,
+				time,
+				AggregationFunction.AverageItemsPerOrder,
+				ag.Sum(x => x.AverageItemsPerOrderNumerator),
+				ag.Sum(x => x.AverageItemsPerOrderDenominator)
+			);
+
+			AddAnalysisItem(
+				parameterInfos,
+				time,
+				AggregationFunction.CancelledOrdersCount,
+				ag.Sum(x => x.CancelledOrdersCount)
+			);
+
+			AddAnalysisItem(parameterInfos, time, AggregationFunction.NumOfOrders, ag.Sum(x => x.NumOfOrders));
+
+			AddAnalysisItem(
+				parameterInfos,
+				time,
+				AggregationFunction.OrdersCancellationRate,
+				ag.Sum(x => x.OrdersCancellationRateNumerator),
+				ag.Sum(x => x.OrdersCancellationRateDenominator)
+			);
+
+			AddAnalysisItem(parameterInfos, time, AggregationFunction.TotalItemsOrdered, ag.Sum(x => x.TotalItemsOrdered));
+
+			AddAnalysisItem(parameterInfos, time, AggregationFunction.TotalSumOfOrders, ag.Sum(x => x.TotalSumOfOrders));
 
 			if (time.MonthsInPeriod <= MonthsInYear) {
-				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalSumOfOrdersAnnualized));
-			}
+				AddAnalysisItem(
+					parameterInfos,
+					time,
+					AggregationFunction.TotalSumOfOrdersAnnualized,
+					ag.Sum(x => x.TotalSumOfOrders) * (MonthsInYear / (decimal)time.MonthsInPeriod)
+				);
+			} // if
 
-			return parameterInfos;
-		}//GetAnalysisDataParameters
+			target.AddRange(parameterInfos);
+		} // AppendAggregations
 
-		protected List<IAnalysisDataParameterInfo> GetFeedbacks(MP_CustomerMarketPlace mp, DateTime? history) {
+		private void AppendFeedbacks(
+			List<IAnalysisDataParameterInfo> target,
+			MP_CustomerMarketPlace mp,
+			DateTime? history
+		) {
 			MP_EbayFeedback feedbacks;
-			if (history == null) {
-				feedbacks = mp.EbayFeedback
-					.OrderByDescending(x => x.Created)
-					.FirstOrDefault();
-			} else {
+
+			if (history == null)
+				feedbacks = mp.EbayFeedback.OrderByDescending(x => x.Created).FirstOrDefault();
+			else {
 				feedbacks = mp.EbayFeedback
 					.Where(x => x.Created <= history)
 					.OrderByDescending(x => x.Created)
 					.FirstOrDefault();
-			}//if
+			} // if
 
-			var feedBackParams = new List<IAnalysisDataParameterInfo>();
-
-			if (feedbacks == null) {
-				return feedBackParams;
-			}//if
+			if (feedbacks == null)
+				return;
 
 			feedbacks.FeedbackByPeriodItems.ForEach(afp => {
-				var timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
+				ITimePeriod timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
 
-				var g = new AnalysisDataParameterInfo(timePeriod, afp.Negative, AggregationFunction.NegativeFeedbackRate);
-				var n = new AnalysisDataParameterInfo(timePeriod, afp.Neutral, AggregationFunction.NeutralFeedbackRate);
-				var p = new AnalysisDataParameterInfo(timePeriod, afp.Positive, AggregationFunction.PositiveFeedbackRate);
+				int sum = (afp.Positive ?? 0) + (afp.Neutral ?? 0) + (afp.Negative ?? 0);
 
-				var sum = afp.Positive + afp.Neutral + afp.Negative;
-				var c = new AnalysisDataParameterInfo(timePeriod, sum, AggregationFunction.NumberOfReviews);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.NumberOfReviews, sum);
 
-				decimal? positivePercent = sum != 0 ? ((afp.Positive)) / (decimal)sum.Value : null;
-				decimal? neutralPercent = sum != 0 ? ((afp.Neutral)) / (decimal)sum.Value : null;
-				decimal? negativePercent = sum != 0 ? ((afp.Negative)) / (decimal)sum.Value : null;
-				var pp = new AnalysisDataParameterInfo(timePeriod, positivePercent, AggregationFunction.PositiveFeedbackPercentRate);
-				var np = new AnalysisDataParameterInfo(timePeriod, neutralPercent, AggregationFunction.NeutralFeedbackPercentRate);
-				var gp = new AnalysisDataParameterInfo(timePeriod, negativePercent, AggregationFunction.NegativeFeedbackPercentRate);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.NegativeFeedbackRate, afp.Negative ?? 0);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.NeutralFeedbackRate, afp.Neutral ?? 0);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.PositiveFeedbackRate, afp.Positive ?? 0);
 
-				feedBackParams.AddRange(new[] { c, n, g, p, pp, np, gp });
+				AddAnalysisItem(target, timePeriod, AggregationFunction.PositiveFeedbackPercentRate, afp.Positive ?? 0, sum);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.NeutralFeedbackPercentRate, afp.Neutral ?? 0, sum);
+				AddAnalysisItem(target, timePeriod, AggregationFunction.NegativeFeedbackPercentRate, afp.Negative ?? 0, sum);
 			});
+		} // AppendFeedbacks
 
-			return feedBackParams;
-		}//GetFeedbacks
-	}//class eBayMarketPlaceType
+		private void AddAnalysisItem(
+			List<IAnalysisDataParameterInfo> target,
+			ITimePeriod time,
+			AggregationFunction function,
+			decimal numerator,
+			decimal denominator
+		) {
+			AddAnalysisItem(target, time, function, denominator == 0 ? 0 : numerator / denominator);
+		} // AddAnalysisItem
+
+		private void AddAnalysisItem<T>(
+			List<IAnalysisDataParameterInfo> target,
+			ITimePeriod time,
+			AggregationFunction function,
+			T val
+		) {
+			target.Add(new AnalysisDataParameterInfo(time, val, function));
+		} // AddAnalysisItem
+	} // class eBayMarketPlaceType
 
 	public class eBayMarketPlaceTypeMap : SubclassMap<eBayMarketPlaceType> {
 		public eBayMarketPlaceTypeMap() {
 			DiscriminatorValue("eBay");
-		}//constructor
-	}//eBayMarketPlaceTypeMap
-}//ns
+		} // constructor
+	} // eBayMarketPlaceTypeMap
+} // ns

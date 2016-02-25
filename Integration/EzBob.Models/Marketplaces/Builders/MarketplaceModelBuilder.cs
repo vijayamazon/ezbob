@@ -14,7 +14,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
-	using log4net;
 	using StructureMap;
 
 	using ThisLibrary = Ezbob.Models.Library;
