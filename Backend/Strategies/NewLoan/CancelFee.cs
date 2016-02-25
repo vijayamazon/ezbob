@@ -48,6 +48,8 @@
 					new QueryParameter("DisabledTime", DateTime.UtcNow),
 					new QueryParameter("Notes", Fee.Notes));
 
+				NL_AddLog(LogType.Info, "Ended", this.strategyArgs, Error, null, null);
+
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Error = ex.Message;

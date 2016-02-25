@@ -51,6 +51,8 @@
 
 		public const string Manual = "--- manual ---";
 
+		public virtual bool Cancelled { get; set; }
+		public virtual decimal CancelledAmount { get; set; }
     }
 
     public interface IPaypointTransactionRepository : IRepository<PaypointTransaction>

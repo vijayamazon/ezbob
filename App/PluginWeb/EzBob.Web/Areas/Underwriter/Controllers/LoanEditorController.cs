@@ -32,7 +32,7 @@
 		private readonly ILoanOptionsRepository loanOptionsRepository;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient serviceClient;
-		//private readonly ISession session;
+
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
 		public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
 
@@ -54,7 +54,6 @@
 			this._history = history;
 			this._context = context;
 			this.loanOptionsRepository = loanOptionsRepository;
-			//this.session = session;
 
 			this.serviceClient = new ServiceClient();
 		}
@@ -145,7 +144,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		[Permission(Name="OldEditLoanDetails")]
+		[Permission(Name = "OldEditLoanDetails")]
 		public JsonResult Loan(EditLoanDetailsModel model) {
 			var loan = this._loans.Get(model.Id);
 
@@ -157,7 +156,9 @@
 			};
 			this._history.Save(historyItem);
 
-			//  remove/add fees/installment
+			//  remove/add fees/installment/pp transaction
+
+			// model - from UI (modified), loan - from DB
 			this._loanModelBuilder.UpdateLoan(model, loan);
 
 			Log.DebugFormat("model {0} =================== loan {1} ", model, loan);
@@ -167,6 +168,42 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
+
+
+			try {
+				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, loan.Customer.Id, this._context.UserId).Value;
+
+				if (nlLoanId > 0) {
+
+					NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
+					Log.InfoFormat("nlModel : {0} loan: {1}  >>>", nlModel, loan);
+
+					List<NL_Payments> ppPayments = (List<NL_Payments>)nlModel.Loan.Payments.Where(p => p.PaypointTransactions.Count > 0);
+
+					foreach (PaypointTransaction t in loan.TransactionsWithPaypoint.Where(t => t.Cancelled)) {
+
+						foreach (NL_Payments zz in ppPayments) {
+
+							if (zz.Amount == t.CancelledAmount && zz.PaymentTime.Date.Equals(t.PostDate.Date) &&
+								(zz.PaypointTransactions.FirstOrDefault(x => x.PaypointUniqueID == t.PaypointId && x.IP == t.IP) != null)) {
+
+								zz.DeletedByUserID = this._context.UserId;
+								zz.DeletionTime = DateTime.UtcNow;
+								zz.Notes = t.Description;
+								zz.PaymentStatusID = (int)NLPaymentStatuses.WrongPayment;
+
+								Log.InfoFormat("cancelling NL payment {0}", zz);
+
+								this.serviceClient.Instance.CancelPayment(this._context.UserId, zz, loan.Customer.Id);
+							}
+						}
+					}
+				}
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception fex) {
+				Log.InfoFormat("Fail to cancel NL payment(s). {0}, err: {1}", Environment.StackTrace, fex.Message);
+			}
 
 			RescheduleSetmodel(loan.Id, model);
 
@@ -242,7 +279,7 @@
 				model.Errors.Add(e.Message);
 				return model;
 			}
-			
+
 			return this._loanModelBuilder.BuildModel(loan);
 		}
 
@@ -514,9 +551,9 @@
 				AssignedByUserID = this._context.UserId,
 				DeletedByUserID = null,
 			};
-			var nlStrategy = this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId,
+			this.serviceClient.Instance.DeactivateLoanInterestFreeze(this._context.UserId,
 																					  customerId,
-																					  nlLoanInterestFreeze).Value;
+																					  nlLoanInterestFreeze);
 		}
 
 
@@ -538,7 +575,7 @@
 				AssignedByUserID = this._context.UserId,
 				DeletedByUserID = null,
 			};
-			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze).Value;
+			this.serviceClient.Instance.AddLoanInterestFreeze(this._context.UserId, customerId, nlLoanInterestFreeze);
 		}
 
 		private void NL_SaveLoanOptions(LoanOptions options, List<String> PropertiesUpdateList) {
@@ -580,12 +617,13 @@
 
 			try {
 				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(id, loan.Customer.Id, this._context.UserId).Value;
+
 				if (nlLoanId > 0) {
 
 					NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
 					Log.InfoFormat("nlModel : {0} loan: {1}  >>>", nlModel, loan);
 
-					// new/edit
+					// new/edit fee
 					foreach (LoanCharge ch in loan.Charges.OrderBy(ff => ff.Date)) {
 						NL_LoanFees f = nlModel.Loan.Fees.FirstOrDefault(ff => ff.OldFeeID == ch.Id);
 						if (f == null) {
@@ -610,7 +648,7 @@
 						}
 					}
 
-					//	removed
+					//	removed fee
 					foreach (NL_LoanFees f in nlModel.Loan.Fees.OrderBy(ff => ff.AssignTime)) {
 						var charge = loan.Charges.FirstOrDefault(c => c.Id == f.LoanFeeID);
 						if (charge == null) {

@@ -17,72 +17,70 @@
 	/// 
 	/// By PaymentID
 	/// TODO: Add file uploading on full UI implementation of https://ezbobtech.atlassian.net/browse/EZ-3452
+	/// file uploading - not supported yet
 	/// </summary>
 	public class CancelPayment : AStrategy {
 
 		public CancelPayment(int customerID, NL_Payments payment, int userID) {
-	
 			CustomerID = customerID;
-			Payment = payment;
 			UserID = userID;
-
-			this.strategyArgs = new object[] { CustomerID, Payment, UserID };
+			Payment = payment;
+			this.strategyArgs = new object[] { CustomerID, UserID, Payment };
 		}
 
 		public override string Name { get { return "CancelPayment"; } }
+
 		public NL_Payments Payment { get; private set; }
 		public int CustomerID { get; private set; }
 		public int UserID { get; private set; }
-
-		public string Error;
-
+		public string Error { get; private set; }
 		private readonly object[] strategyArgs;
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		/// <exception cref="NL_ExceptionLoanNotFound">Condition. </exception>
+		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		public override void Execute() {
 			if (!CurrentValues.Instance.NewLoanRun) {
 				NL_AddLog(LogType.Info, "NL disabled by configuration", null, null, null, null);
 				return;
 			}
 
-			NL_AddLog(LogType.Info, "Started", this.strategyArgs, this.Error, null, null);
+			NL_AddLog(LogType.Info, "Started", this.strategyArgs, Error, null, null);
 
 			if (CustomerID == 0) {
-				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionCustomerNotFound(this.Error);
+				Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, NL_ExceptionCustomerNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
+				throw new NL_ExceptionCustomerNotFound(Error);
 			}
 
 			if (Payment == null || Payment.LoanID == 0) {
-				this.Error = NL_ExceptionLoanNotFound.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionLoanNotFound(this.Error);
+				Error = NL_ExceptionLoanNotFound.DefaultMessage;
+				NL_AddLog(LogType.Error, NL_ExceptionLoanNotFound.DefaultMessage, this.strategyArgs, null, Error, null);
+				throw new NL_ExceptionLoanNotFound(Error);
 			}
 
 			if (Payment.PaymentID == 0) {
-				this.Error = NL_ExceptionInputDataInvalid.DefaultMessage;
-				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, null, this.Error, null);
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+				Error = NL_ExceptionInputDataInvalid.DefaultMessage;
+				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, null, Error, null);
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
 			if (Payment.PaymentStatusID != (int)NLPaymentStatuses.ChargeBack && Payment.PaymentStatusID != (int)NLPaymentStatuses.WrongPayment) {
-				this.Error = "PaymentStatusID not ChargeBack and not WrongPayment";
-				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, this.Error, null, null);
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+				Error = "PaymentStatusID not ChargeBack and not WrongPayment";
+				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, Error, null, null);
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
 			if (Payment.DeletionTime.Equals(DateTime.MinValue) || Payment.DeletionTime == null) {
-				this.Error = "DeletionTime not set";
-				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, this.Error, null, null);
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+				Error = "DeletionTime not set";
+				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, Error, null, null);
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
 			if (Payment.DeletedByUserID == null || Payment.DeletedByUserID == 0) {
-				this.Error = "DeletedByUserID not set";
-				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, this.Error, null, null);
-				throw new NL_ExceptionInputDataInvalid(this.Error);
+				Error = "DeletedByUserID not set";
+				NL_AddLog(LogType.Error, NL_ExceptionInputDataInvalid.DefaultMessage, this.strategyArgs, Error, null, null);
+				throw new NL_ExceptionInputDataInvalid(Error);
 			}
 
 			ConnectionWrapper pconn = DB.GetPersistent();
@@ -94,7 +92,7 @@
 				Log.Debug("==============================={0}", new QueryParameter("PaymentStatusID", Payment.PaymentStatusID));
 
 				// RESET PAID PRINCIPAL, INTEREST (SCHEDULE), FEES PAID AFTER [DeletionTime] on delete payment  - in SP NL_ResetPaymentsPaidAmounts, called from NL_PaymentCancel
-				DB.ExecuteNonQuery("NL_PaymentCancel", CommandSpecies.StoredProcedure, 
+				DB.ExecuteNonQuery(pconn, "NL_PaymentCancel", CommandSpecies.StoredProcedure, 
 					new QueryParameter("PaymentID", Payment.PaymentID),
 					new QueryParameter("LoanID", Payment.LoanID),
 					new QueryParameter("PaymentStatusID", Payment.PaymentStatusID),
@@ -102,13 +100,7 @@
 					new QueryParameter("DeletedByUserID", Payment.DeletedByUserID),
 					new QueryParameter("Notes", Payment.Notes)
 				);
-
-				/*if (result == -1) {
-					this.Error = "Sent PaymentStatus not ChargeBack and not WrongPayment";
-					// ReSharper disable once ThrowingSystemException
-					throw new Exception(this.Error);
-				}*/
-
+				
 				pconn.Commit();
 
 				// ReSharper disable once CatchAllClause
@@ -116,10 +108,10 @@
 
 				pconn.Rollback();
 
-				this.Error = ex.Message;
-				Log.Error("Failed to cancel payment: {0}", this.Error);
+				Error = ex.Message;
+				Log.Error("Failed to cancel payment: {0}", Error);
 
-				NL_AddLog(LogType.Error, "Failed - Rollback", Payment, this.Error, ex.ToString(), ex.StackTrace);
+				NL_AddLog(LogType.Error, "Failed - Rollback", Payment, Error, ex.ToString(), ex.StackTrace);
 
 				return;
 			}
@@ -131,8 +123,8 @@
 			try {
 				reloadLoanDBState.Execute();
 			} catch (Exception ex) {
-				this.Error = ex.Message;
-				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + this.Error, ex.ToString(), ex.StackTrace);
+				Error = ex.Message;
+				NL_AddLog(LogType.Error, "Failed on UpdateLoanDBState", Payment, reloadLoanDBState.Error + "\n" + Error, ex.ToString(), ex.StackTrace);
 			}
 
 		}

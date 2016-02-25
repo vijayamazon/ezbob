@@ -108,6 +108,7 @@
 				Result.Loan.Payments.Clear();
 				Result.Loan.Payments.AddRange(DB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID)));
 
+				var ppt = DB.Fill<NL_PaypointTransactions>("NL_PaypointTransactionsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
 				var schp = DB.Fill<NL_LoanSchedulePayments>("NL_LoanSchedulePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
 				var fps = DB.Fill<NL_LoanFeePayments>("NL_LoanFeePaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("LoanID", Result.Loan.LoanID));
 
@@ -117,6 +118,9 @@
 	
 					p.FeePayments.Clear();
 					p.FeePayments.AddRange(fps.Where(fp=>fp.PaymentID == p.PaymentID).ToList());
+
+					p.PaypointTransactions.Clear();
+					p.PaypointTransactions.AddRange(ppt.Where(pp => pp.PaymentID == p.PaymentID).ToList());
 				}
 
 				// set paid amount for each fee

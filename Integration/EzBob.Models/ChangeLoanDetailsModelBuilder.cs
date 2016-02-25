@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate.Linq;
 
 	public class ChangeLoanDetailsModelBuilder {
 		public EditLoanDetailsModel BuildModel(Loan loan) {
@@ -19,7 +20,7 @@
 				LoanType = loan.LoanType.Type
 			};
 
-            model.LoanStatus = Enum.GetName(typeof(LoanStatus), loan.Status);
+			model.LoanStatus = Enum.GetName(typeof(LoanStatus), loan.Status);
 
 			if (loan.CashRequest != null)
 				model.CashRequestId = loan.CashRequest.Id;
@@ -33,23 +34,23 @@
 
 			model.Items = model.Items.OrderBy(i => i.Date).ToList();
 
-            DateTime now = DateTime.UtcNow;
+			DateTime now = DateTime.UtcNow;
 
-		   var loanFutureScheduleItems = loan.Schedule.Where(x => x.Date > now)
-		            .OrderBy(x => x.Date)
-                    .ToDictionary(pair => pair.Date.ToString("dd/MM/yyyy"), pair => pair.Id.ToString());
+			var loanFutureScheduleItems = loan.Schedule.Where(x => x.Date > now)
+					 .OrderBy(x => x.Date)
+					 .ToDictionary(pair => pair.Date.ToString("dd/MM/yyyy"), pair => pair.Id.ToString());
 
-		    model.LoanFutureScheduleItems = new Dictionary<string, string>();
-            model.LoanFutureScheduleItems.Add("Immediately Stop...", "-1");
-            
-            for (int i = 0; i <= loanFutureScheduleItems.Count - 1; i++) {
-                model.LoanFutureScheduleItems.Add(string.Format("{0} : {1}", i+1, loanFutureScheduleItems.ElementAt(i)
-                    .Key), loanFutureScheduleItems.ElementAt(i)
-                        .Value);
-            }
+			model.LoanFutureScheduleItems = new Dictionary<string, string>();
+			model.LoanFutureScheduleItems.Add("Immediately Stop...", "-1");
+
+			for (int i = 0; i <= loanFutureScheduleItems.Count - 1; i++) {
+				model.LoanFutureScheduleItems.Add(string.Format("{0} : {1}", i + 1, loanFutureScheduleItems.ElementAt(i)
+					.Key), loanFutureScheduleItems.ElementAt(i)
+						.Value);
+			}
 
 			model.SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList();
-			
+
 			foreach (LoanInterestFreeze fr in loan.InterestFreeze.OrderBy(fr => fr.StartDate).Where(fr => fr.DeactivationDate == null)) {
 				model.InterestFreeze.Add(new InterestFreezeModel {
 					Id = fr.Id,
@@ -60,7 +61,7 @@
 					DeactivationDate = fr.DeactivationDate
 				});
 			}
-			
+
 			return model;
 		}
 
@@ -120,6 +121,7 @@
 				Description = item.Description,
 				Status = item.Status.ToString(),
 				Editable = false,
+				Deletable = true,
 				Principal = item.LoanRepayment,
 				Interest = item.Interest,
 				Total = item.Amount,
@@ -185,7 +187,7 @@
 				InterestRate = item.InterestRate,
 				Id = item.Id
 			}).ToList();
-			
+
 			return loan;
 		}
 
@@ -239,34 +241,24 @@
 			};
 		}
 
+		// model - from UI, loan - from DB
 		public void UpdateLoan(EditLoanDetailsModel model, Loan loan) {
 			var actual = CreateLoan(model);
 
 			UpdateInstallments(loan, actual);
 			UpdateFees(loan, actual);
 
+			// loan - from DB, actual - from UI
+			RemovePaypointTransactions(loan, actual);
+
 			loan.Modified = true;
 		}
 
 		private static void UpdateInstallments(Loan loan, Loan actual) {
-
-			//Console.WriteLine("================loan.Schedule=====================");
-			//loan.Schedule.ForEach(ls => Console.WriteLine(ls));
-			//Console.WriteLine("==========actual.Schedule=========");
-			//actual.Schedule.ForEach(ls => Console.WriteLine(ls));
-
-
-
 			for (int i = loan.Schedule.Count - 1; i >= 0; i--) {
 				var item = loan.Schedule[i];
-
-				//Console.WriteLine(item);
-				//Console.WriteLine();
-
 				//если в модели есть installment с таким id, то обновляем его
 				if (actual.Schedule.Any(x => x.Id == item.Id)) {
-
-
 					//		var installment = actual.Schedule.Single(x => x.Id == item.Id);
 					var installment = actual.Schedule.First(x => x.Id == item.Id);
 					actual.Schedule.Remove(installment);
@@ -279,7 +271,6 @@
 				//иначе Installment был удален
 				loan.Schedule.Remove(item);
 			}
-
 			foreach (var item in actual.Schedule) {
 				loan.Schedule.Add(item);
 				item.Loan = loan;
@@ -306,6 +297,61 @@
 			foreach (var item in actual.Charges) {
 				loan.Charges.Add(item);
 				item.Loan = loan;
+			}
+		}
+
+		// loan - from DB, actual - from UI
+		private static void RemovePaypointTransactions(Loan loan, Loan actual) {
+
+			Console.WriteLine("DB state:");
+			loan.TransactionsWithPaypoint.ForEach(xxx => Console.WriteLine(xxx));
+
+			Console.WriteLine("\n\n from UI:");
+			actual.TransactionsWithPaypoint.ForEach(xxx => Console.WriteLine(xxx));
+
+			IEnumerable<PaypointTransaction> removedPayments = loan.TransactionsWithPaypoint.Except(actual.TransactionsWithPaypoint);
+
+			Console.WriteLine("Removed payment:");
+			var paypointTransactions = removedPayments as IList<PaypointTransaction> ?? removedPayments.ToList();
+			paypointTransactions.ForEach(t => Console.WriteLine(t));
+
+			foreach (PaypointTransaction transaction in loan.TransactionsWithPaypoint) {
+
+				if (paypointTransactions.FirstOrDefault(t => t.Id == transaction.Id) == null) {
+					continue;
+				}
+
+				transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
+				transaction.Interest = 0;
+				transaction.Fees = 0;
+				transaction.LoanRepayment = 0;
+				transaction.Rollover = 0;
+
+				transaction.Cancelled = true;
+				transaction.CancelledAmount = transaction.Amount;
+
+				transaction.Amount = 0;
+
+				var transaction1 = transaction;
+
+				// reset paid charges 
+				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.AmountPaid = 0);
+				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.State = null);
+
+				IEnumerable<LoanScheduleTransaction> schTransactions = loan.ScheduleTransactions.Where(st => st.Transaction.Id == transaction1.Id);
+
+				foreach (LoanScheduleTransaction st in schTransactions) {
+					var paidSchedule = loan.Schedule.FirstOrDefault(s => s.Id == st.Schedule.Id);
+					if (paidSchedule != null) {
+						// reset paid rollover
+						foreach (PaymentRollover r in paidSchedule.Rollovers) {
+							r.PaidPaymentAmount = 0;
+							r.CustomerConfirmationDate = null;
+							r.PaymentNewDate = null;
+							r.Status = (r.ExpiryDate.HasValue && r.ExpiryDate.Value <= DateTime.UtcNow) ? RolloverStatus.Expired : RolloverStatus.New;
+						}
+					}
+				}
 			}
 		}
 

@@ -59,12 +59,20 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click #fees-save-btn': 'feesSaveBtn',
         'click #fees-delete-btn': 'feesDeleteBtn',
         'click #intrest-save-btn': 'intrestSaveBtn',
-        'click .remove-freeze-interval': 'onRemoveFreezeInterval',
         'blur #outsidePrincipal': 'onChangeAmount',
         'change #withinSelect': 'withinSelectChange',
         'change #outsideSelect': 'outsideSelectChange',
+
+        'click .remove-freeze-interval': 'onRemoveFreezeInterval',
+      
         'click .edit-schedule-item': 'editScheduleItem',
         'click .remove-schedule-item': 'removeScheduleItem',
+
+        'click .edit-fee-item': 'editScheduleItem',
+        'click .remove-fee-item': 'removeFeeItem',
+        'click .remove-payment-item': 'removePaymentItem',
+
+
         //   'click .add-installment': 'addInstallment',
         'click .add-fee': 'addFee',
         'click .save': 'onOk',
@@ -414,6 +422,28 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 		EzBob.ShowMessage('Confirm deleting installment', 'Delete installment', ok, 'Ok', null, 'Cancel');
 	}, // removeScheduleItem 
+
+
+	removeFeeItem: function(e) {
+		var self = this;
+		var id = e.currentTarget.getAttribute('data-id');
+
+		var ok = function() { self.model.removeItem(id); };
+
+		EzBob.ShowMessage('Confirm deleting fee', 'Delete fee', ok, 'Ok', null, 'Cancel');
+
+	}, // removeFeeItem 
+
+	removePaymentItem: function(e) {
+		var self = this;
+		var id = e.currentTarget.getAttribute('data-id');
+
+		var ok = function() { self.model.removeItem(id); };
+
+		EzBob.ShowMessage('Confirm deleting payment', 'Delete payment', ok, 'Ok', null, 'Cancel');
+
+	}, // removeFeeItem 
+
 
 	editScheduleItem: function(e) {
 		var id = e.currentTarget.getAttribute('data-id');

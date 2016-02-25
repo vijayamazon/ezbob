@@ -363,9 +363,9 @@
 				Status = LoanStatus.PaidOff;
 				DateClosed = date;
 				return;
-			} else {
+			}// else {
 				DateClosed = null;
-			}
+			//}
 
 			var firstLate = Schedule.FirstOrDefault(x => x.Status == LoanScheduleStatus.Late);
 

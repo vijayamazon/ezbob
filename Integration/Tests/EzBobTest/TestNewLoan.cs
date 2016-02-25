@@ -686,17 +686,17 @@
 
 		[Test]
 		public void CancelPaymentTest() {
-			const int customerid = 56;
-			const long loanID = 17;
-			const long paymentToCancel = 10050;
-			DateTime canceldate = new DateTime(2015, 12, 30);
+			const int customerid = 1394;
+			const long loanID = 7;
+			const long paymentToCancel = 6;
+			DateTime canceldate = DateTime.UtcNow; // new DateTime(2015, 12, 30);
 			var pp = this.m_oDB.Fill<NL_Payments>("NL_PaymentsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", loanID));
 			var nlpayment = pp.FirstOrDefault(p => p.PaymentID == paymentToCancel);
 			if (nlpayment != null) {
-				nlpayment.PaymentStatusID = (int)NLPaymentStatuses.ChargeBack;
+				nlpayment.PaymentStatusID = (int)NLPaymentStatuses.WrongPayment; // (int)NLPaymentStatuses.ChargeBack;
 				nlpayment.DeletionTime = canceldate;
-				nlpayment.Notes = "charge";
-				nlpayment.DeletedByUserID = 1;
+				nlpayment.Notes = "remove";
+				nlpayment.DeletedByUserID = 357;
 				try {
 					CancelPayment pstrategy = new CancelPayment(customerid, nlpayment, 357);
 					pstrategy.Execute();

@@ -103,27 +103,27 @@
 		{
 			get
 			{
-				return _interestRate;
+				return this._interestRate;
 			}
 			set
 			{
-				_interestRate = value;
+				this._interestRate = value;
 			}
 		}
 
 		private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
 		public virtual ISet<LoanScheduleTransaction> ScheduleTransactions
 		{
-			get { return _scheduleTransactions; }
-			set { _scheduleTransactions = value; }
+			get { return this._scheduleTransactions; }
+			set { this._scheduleTransactions = value; }
 		} // ScheduleTransactions
 
 		private ISet<PaymentRollover> _rollovers = new HashedSet<PaymentRollover>();
 
 		public virtual ISet<PaymentRollover> Rollovers
 		{
-			get { return _rollovers; }
-			set { _rollovers = value; }
+			get { return this._rollovers; }
+			set { this._rollovers = value; }
 		}
 
 		public virtual void UpdateStatus(DateTime? term = null)
@@ -155,19 +155,19 @@
 		{
 			var newItem = new LoanScheduleItem()
 				{
-					AmountDue = this.AmountDue,
-					Balance = this.Balance,
-					Date = this.Date,
-					Delinquency = this.Delinquency,
-					Interest = this.Interest,
-					InterestPaid = this.InterestPaid,
-					LateCharges = this.LateCharges,
-					LoanRepayment = this.LoanRepayment,
-					RepaymentAmount = this.RepaymentAmount,
-					Fees = this.Fees,
-					FeesPaid = this.FeesPaid,
-					Status = this.Status,
-					LastNoticeSent = this.LastNoticeSent,
+					AmountDue = AmountDue,
+					Balance = Balance,
+					Date = Date,
+					Delinquency = Delinquency,
+					Interest = Interest,
+					InterestPaid = InterestPaid,
+					LateCharges = LateCharges,
+					LoanRepayment = LoanRepayment,
+					RepaymentAmount = RepaymentAmount,
+					Fees = Fees,
+					FeesPaid = FeesPaid,
+					Status = Status,
+					LastNoticeSent = LastNoticeSent,
 				};
 			return newItem;
 		}
