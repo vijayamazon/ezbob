@@ -2445,14 +2445,32 @@ input[type="text"].err-field-red {
 	padding-right: 2%;
 }
 
-/*
+
 .tab-pane#accounting-tbl tr,.investors-tables .main-investors-table{
 	border: 1px solid #dddddd;
-	border-right: 2px solid #dddddd;
+	
 }
-*/
+.table.main-investors-table > thead > tr > th {
+    padding-top:20px;
+}
 
-
+.manage-investors-checkactive img {
+    margin-left:3px;
+    height:35px;
+}
+.manage-investors-companyName {
+    width:15%;
+}
+.manage-investors-investorType {
+    width:10%;
+}
+.manage-investor-id {
+    width:4%;
+    
+}
+.has-switch label.switch-mini {
+   height:18px;
+}
 .tab-pane#accounting-tbl td > span {
 	width: 45%;
 	display: inline-block;

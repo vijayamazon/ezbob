@@ -32,9 +32,9 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
         'click #addInvestorBank': 'manageInvestorBankView',
         'click #CancelContactsEdit': 'CancelContactsEdit',
         'click #CancelBanksEdit': 'CancelContactsEdit',
-        'click .contact-investor-row': 'ContactInvestorEdit',
+        'click .edit-investor-contact-btn': 'ContactInvestorEdit',
         'click #SubmitBanksEdit': 'SubmitBanksEdit',
-        'click .bank-investor-row': 'BankInvestorEdit',
+        'click .edit-investor-bank-btn': 'BankInvestorEdit',
        
 
     },
@@ -276,7 +276,7 @@ EzBob.Underwriter.ManageInvestorView = Backbone.Marionette.ItemView.extend({
         }
         else {
 
-            var newRow = $('<tr class="edit-investor-contact"><td   class="td-no-padding" data-id="' + id + '" colspan="12"></td></tr>');
+            var newRow = $('<tr class="edit-investor-contact"><td   class="td-no-padding" data-id="' + id + '" colspan="13"></td></tr>');
             tr.after(newRow);
             var newRowEl = this.$el.find('tr.edit-investor-contact td');
             var contact = this.model.get('Contacts').find(function (item) {

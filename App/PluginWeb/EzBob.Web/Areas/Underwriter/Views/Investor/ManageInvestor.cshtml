@@ -35,6 +35,7 @@
                                                 <th>active</th>
                                                 <th>Getting Alerts</th>
                                                 <th>Getting Reports</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -70,11 +71,11 @@
                                                         <input type="checkbox" <%-(c.IsGettingReports ? 'checked':'')%> />
                                                     </div>
                                                 </td>
-
+                                                <td class="edit-investor-contact-btn"><button class="btn btn-primary "><i class="fa fa-pencil "></i></button></td>
                                             </tr>
                                             <%})};%>
                                             <tr class="add-contact-row">
-                                                <td colspan="9"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
+                                                <td colspan="10"><button id="addInvestorContact" class="btn btn-primary">Add Contact</button></td>
                                                 <td class="submition-buttons" colspan="2"><button id="CancelContactsEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitContactsEdit" class="btn btn-primary">Submit</button></td>
 
                                             </tr>
@@ -94,6 +95,7 @@
                                                 <th>Sort code</th>
                                                 <th>TS</th>
                                                 <th>active</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -113,11 +115,11 @@
                                                         <input type="checkbox" <%-(b.IsActive ? 'checked':'')%> />
                                                     </div>
                                                 </td>
-
+                                                <td class="edit-investor-bank-btn"><button class="btn btn-primary "><i class="fa fa-pencil "></i></button></td>
                                             </tr>
                                             <%});}%>
                                             <tr class="add-bank-row">
-                                                <td colspan="4"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
+                                                <td colspan="5"><button id="addInvestorBank" class="btn btn-primary">Add Bank</button></td>
                                                 <td class="submition-buttons" colspan="2"><button id="CancelBanksEdit" class="btn btn-primary Cancel-Investor-Edit">Cancel</button><button id="SubmitBanksEdit" class=" btn btn-primary">Submit</button></td>
                                             </tr>
                                         </tbody>

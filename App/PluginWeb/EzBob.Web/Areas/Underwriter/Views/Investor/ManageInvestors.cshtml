@@ -20,15 +20,16 @@
                                                 <th>Name</th>
                                                 <th>Type</th>
                                                 <th>Active</th>
+                                       
                                                 <th></th>
                                             </tr>
                                             <% data = data || {}; %>
                                             <%_.each(data, function(a){ %>
                                             <tr class="manage-investor-row activeHover" data-id="<%-a.InvestorID%>">
                                                 <td class="manage-investor-id"><%-a.InvestorID%></td>
-                                                <td><%-a.CompanyName%></td>
-                                                <td><%-a.InvestorType%></td>
-                                                <td><img src="/Content/img/<%-a.IsActive?'check_icon.svg':'close_icon.svg'%>" style="height:100%" /></td>
+                                                <td class="manage-investors-companyName"><%-a.CompanyName%></td>
+                                                <td class="manage-investors-investorType"><%-a.InvestorType%></td>
+                                                <td class="manage-investors-checkactive"><img src="/Content/img/<%-a.IsActive?'check_icon.svg':'close_icon.svg'%>" /></td>
                                                 <td class="edit-investor"><button class="btn btn-primary edit-investor-details"><i class="fa fa-pencil "></i></button></td>
                                             </tr>
                                             <%});%>

@@ -61,7 +61,7 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
         } else {
 
 
-            var newRow = $('<tr class="manage-investor-view"><td class="manage-investor-column" data-id="' + id + '"colspan="12"></td></tr>');
+            var newRow = $('<tr class="manage-investor-view"><td class="manage-investor-column" data-id="' + id + '"colspan="5"></td></tr>');
 
             tr.after(newRow);
 
@@ -92,7 +92,7 @@ EzBob.Underwriter.ManageInvestorsView = Backbone.Marionette.ItemView.extend({
 
     }, //EditInvestorDetails
     OpenInvestorDetails: function(tr, id) {
-        var newRow = $('<tr class="edit-details-view-area"><td  colspan="12"></td></tr>');
+        var newRow = $('<tr class="edit-details-view-area"><td  colspan="5"></td></tr>');
 
         var toSave = this.model.get('Investors').find(function (item) {
             return Number(item['InvestorID']) === id;
