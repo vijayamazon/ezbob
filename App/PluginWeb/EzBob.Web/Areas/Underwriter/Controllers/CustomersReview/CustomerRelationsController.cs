@@ -210,7 +210,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		[Permission(Name = "SendSms")]
+		[Permission(Name = "SendSMS")]
 		public JsonResult SendSms(int customerId, string phone, string content, bool isBroker) {
 			try {
 				var sendSmsResult = this._serviceClient.Instance.SendSms(customerId, this._context.UserId, phone, content);
