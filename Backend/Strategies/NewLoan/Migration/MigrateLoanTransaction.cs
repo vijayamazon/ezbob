@@ -52,26 +52,26 @@
 
 
 		public void CopyPaypointTransactions() {
-			
-			List<LoanTransactionModel> transactionsList = DB.Fill<LoanTransactionModel>(
-				"select t.PostDate,t.Amount,t.[Description], t.IP, t.PaypointId, t.LoanTransactionMethodId, c.Id as CardID, nl.[LoanID], l.CustomerId " +
-					"from NL_Loans nl join LoanTransaction t on t.LoanId=nl.OldLoanID " +
-					"left join PayPointCard c on c.TransactionId = t.PaypointId " +
-					"left join [dbo].[NL_Payments] p on p.LoanID=nl.LoanID join Loan l on l.Id=t.LoanId " +
-					"where t.[Status]='Done' and t.[Type]='PaypointTransaction' order by t.LoanId, t.PostDate", CommandSpecies.Text);
+
+			const string query = "select t.PostDate,t.Amount,t.[Description], t.IP, t.PaypointId, t.LoanTransactionMethodId, c.Id as CardID, nl.[LoanID], l.CustomerId " +
+				"from NL_Loans nl join LoanTransaction t on t.LoanId=nl.OldLoanID " +
+				"join Loan l on l.Id=t.LoanId " +
+				"left join PayPointCard c on c.TransactionId = t.PaypointId " +
+				"left join [dbo].[NL_Payments] p on p.LoanID=nl.LoanID " +
+				"where t.[Status]='Done' and t.[Type]='PaypointTransaction' and p.PaymentID is null order by t.LoanId, t.PostDate";
+
+			List<LoanTransactionModel> transactionsList = DB.Fill<LoanTransactionModel>(query, CommandSpecies.Text);
 
 			foreach (LoanTransactionModel transaction in transactionsList) {
 
 				bool savePayment = false;
 
-				var args = new object[] {
-					transaction
-				};
+				var args = new object[] {transaction, query};
 
 				if (transaction == null || transaction.Amount == 0) {
-					Error = "transaction not found/or amount=0";
-					Log.Debug(Error);
-					NL_AddLog(LogType.Info, Error, args, null, Error, null);
+					//Error = "transaction not found/or amount=0";
+					//Log.Debug(Error);
+					NL_AddLog(LogType.Info, "transaction not found or amount=0", args, null, null, null);
 					continue;
 				}
 				
