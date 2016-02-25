@@ -275,7 +275,7 @@
     <Compile Include="NewLoan\DAL\ILoanFees.cs" />
     <Compile Include="NewLoan\DAL\LoanFees.cs" />
     <Compile Include="SalesForce\ChangeEmail.cs" />
-    <Compile Include="NewLoan\Migration\MigrateLoan.cs" />
+    <Compile Include="NewLoan\Migration\MigrateLoanTransaction.cs" />
     <Compile Include="NewLoan\Migration\MigrateCRDecisionOffer.cs" />
     <Compile Include="NewLoan\SaveFee.cs" />
     <Compile Include="NewLoan\SaveLoanStateToDB.cs" />

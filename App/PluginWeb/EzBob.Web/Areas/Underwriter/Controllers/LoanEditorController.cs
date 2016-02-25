@@ -169,31 +169,21 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-
+			// NL cancel payment
 			try {
 				long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(model.Id, loan.Customer.Id, this._context.UserId).Value;
-
 				if (nlLoanId > 0) {
-
 					NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
 					Log.InfoFormat("nlModel : {0} loan: {1}  >>>", nlModel, loan);
-
-					List<NL_Payments> ppPayments = (List<NL_Payments>)nlModel.Loan.Payments.Where(p => p.PaypointTransactions.Count > 0);
-
 					foreach (PaypointTransaction t in loan.TransactionsWithPaypoint.Where(t => t.Cancelled)) {
+						foreach (NL_Payments zz in nlModel.Loan.Payments) {
 
-						foreach (NL_Payments zz in ppPayments) {
-
-							if (zz.Amount == t.CancelledAmount && zz.PaymentTime.Date.Equals(t.PostDate.Date) &&
-								(zz.PaypointTransactions.FirstOrDefault(x => x.PaypointUniqueID == t.PaypointId && x.IP == t.IP) != null)) {
-
+							if (zz.Amount == t.CancelledAmount && zz.PaymentTime.Date.Equals(t.PostDate.Date)){ //&& (zz.PaypointTransactions.FirstOrDefault(x => x.PaypointUniqueID == t.PaypointId && x.IP == t.IP) != null)) 
 								zz.DeletedByUserID = this._context.UserId;
 								zz.DeletionTime = DateTime.UtcNow;
 								zz.Notes = t.Description;
 								zz.PaymentStatusID = (int)NLPaymentStatuses.WrongPayment;
-
 								Log.InfoFormat("cancelling NL payment {0}", zz);
-
 								this.serviceClient.Instance.CancelPayment(this._context.UserId, zz, loan.Customer.Id);
 							}
 						}

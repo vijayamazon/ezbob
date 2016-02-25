@@ -826,8 +826,8 @@ BEGIN
 		CONSTRAINT FK_NL_LoanSchedulePayments_Schedule FOREIGN KEY (LoanScheduleID) REFERENCES NL_LoanSchedules (LoanScheduleID),
 		CONSTRAINT FK_NL_LoanSchedulePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
 		--CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE (LoanScheduleID, PaymentID),
-		CONSTRAINT CHK_NL_LoanSchedulePayments_Principal CHECK (PrincipalPaid >= 0),
-		CONSTRAINT CHK_NL_LoanSchedulePayments_Interest CHECK (InterestPaid >= 0)	
+		--CONSTRAINT CHK_NL_LoanSchedulePayments_Principal CHECK (PrincipalPaid >= 0),
+		--CONSTRAINT CHK_NL_LoanSchedulePayments_Interest CHECK (InterestPaid >= 0)	
 	)
 END
 GO
@@ -847,7 +847,7 @@ BEGIN
 		CONSTRAINT PK_LoanFeePayments PRIMARY KEY (LoanFeePaymentID),
 		CONSTRAINT FK_LoanFeePayments_Fee FOREIGN KEY (LoanFeeID) REFERENCES NL_LoanFees (LoanFeeID),
 		CONSTRAINT FK_LoanFeePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
-		CONSTRAINT UC_LoanFeePayments UNIQUE (LoanFeeID, PaymentID),
+		CONSTRAINT UC_LoanFeePayments UNIQUE (LoanFeeID, PaymentID, Amount, [ResetAmount]),
 		CONSTRAINT CHK_LoanFeePayments CHECK (Amount >= 0)
 	)
 END

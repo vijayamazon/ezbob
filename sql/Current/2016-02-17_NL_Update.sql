@@ -141,3 +141,20 @@ IF EXISTS (select id from sysobjects where name='NL_LoanFeesOldIDUpdate')
 BEGIN
 	EXEC NL_LoanFeesOldIDUpdate;
 END
+
+IF EXISTS (select id from sysobjects where name='UC_LoanFeePayments') 
+BEGIN
+	alter table [dbo].[NL_LoanFeePayments] drop CONSTRAINT UC_LoanFeePayments;
+END
+
+alter table [dbo].[NL_LoanFeePayments] add CONSTRAINT UC_LoanFeePayments UNIQUE (LoanFeeID, PaymentID, Amount, [ResetAmount]);
+
+
+IF EXISTS (select id from sysobjects where name='CHK_NL_LoanSchedulePayments_Principal') 
+BEGIN
+	alter table [dbo].[NL_LoanSchedulePayments] drop CONSTRAINT CHK_NL_LoanSchedulePayments_Principal;
+END
+IF EXISTS (select id from sysobjects where name='CHK_NL_LoanSchedulePayments_Interest') 
+BEGIN
+	alter table [dbo].[NL_LoanSchedulePayments] drop CONSTRAINT CHK_NL_LoanSchedulePayments_Interest;
+END

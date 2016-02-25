@@ -1,7 +1,9 @@
 DECLARE @LoanID bigint;
-set @LoanID = 14;
+set @LoanID = 11;
 
 select * from [dbo].[NL_Payments] where LoanID = @LoanID;
+
+select * from NL_PaypointTransactions ppt join [dbo].[NL_Payments] p on p.PaymentID=ppt.PaymentID where p.LoanID=@LoanID;
 
 select * from [dbo].[NL_LoanFeePayments] where [PaymentID] in (select PaymentID from [dbo].[NL_Payments] where [LoanID] = @LoanID);
 select * from [dbo].[NL_LoanSchedulePayments] where [PaymentID] in (select PaymentID from [dbo].[NL_Payments] where [LoanID] = @LoanID);

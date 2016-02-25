@@ -146,7 +146,7 @@
 							var card = loan.Customer.PayPointCards.FirstOrDefault(x => transId.StartsWith(x.TransactionId));
 
 							if (card == null) {
-								Log.ErrorFormat("PayPointCard for customer {0}, transId={1}, oldLoanID={2}, nl loanID={3} not found. Can't to write NL_PaypointTransactions for nl payment\n {4}{5}",
+								Log.InfoFormat("PayPointCard for customer {0}, transId={1}, oldLoanID={2}, nl loanID={3} not found. nl payment\n {4}{5}",
 									customerID, transId, loan.Id, nlPayment.LoanID, AStringable.PrintHeadersLine(typeof(NL_Payments)), nlPayment.ToStringAsTable());
 							} else {
 								nlPayment.PaypointTransactions.Clear();

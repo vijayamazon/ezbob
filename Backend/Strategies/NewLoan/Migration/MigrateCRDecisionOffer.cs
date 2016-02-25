@@ -28,7 +28,7 @@
 
 			NL_AddLog(LogType.Info, "Strategy start", query, null, null, null);
 
-			List<MigrateLoan.LoanId> loansList = DB.Fill<MigrateLoan.LoanId>(query, CommandSpecies.Text);
+			List<MigrateLoanTransaction.LoanId> loansList = DB.Fill<MigrateLoanTransaction.LoanId>(query, CommandSpecies.Text);
 
 			if (loansList.Count == 0) {
 				Error = "Loans to migrate to NL not found";
@@ -39,7 +39,7 @@
 
 			NL_AddLog(LogType.Info, "Loans to migrate", null, loansList.Count, null, null);
 
-			foreach (MigrateLoan.LoanId l in loansList) {
+			foreach (MigrateLoanTransaction.LoanId l in loansList) {
 
 				Loan loan = loanRep.Get(l.Id);
 
@@ -61,7 +61,7 @@
 
 					Log.Debug("Processing loan {0}, cr {1}, {2}", loan.Id, loan.CashRequest.Id, query);
 
-					MigrateLoan.CashReqModel crModel = DB.FillFirst<MigrateLoan.CashReqModel>(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id));
+					MigrateLoanTransaction.CashReqModel crModel = DB.FillFirst<MigrateLoanTransaction.CashReqModel>(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id));
 
 					NL_AddLog(LogType.Info, "crModel", new object[] { query, loan.CashRequest.Id, l.Id }, crModel, null, null);
 
@@ -100,7 +100,7 @@
 						//	"and d.UserID=@uID and d.DecisionNameID=@dID and d.DecisionTime='@dDate'";
 							//"datediff(DAY, d.DecisionTime, '@dDate')=0";
 
-						MigrateLoan.CashReqModel dModel = DB.FillFirst<MigrateLoan.CashReqModel>(query, CommandSpecies.Text/*, 
+						MigrateLoanTransaction.CashReqModel dModel = DB.FillFirst<MigrateLoanTransaction.CashReqModel>(query, CommandSpecies.Text/*, 
 							new QueryParameter("@crID", dh.CashRequest.Id),
 							new QueryParameter("@uID", dh.Underwriter.Id),
 							new QueryParameter("@dID", (int)dh.Action),

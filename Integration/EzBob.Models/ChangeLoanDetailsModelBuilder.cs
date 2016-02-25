@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Models {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
@@ -121,7 +122,7 @@
 				Description = item.Description,
 				Status = item.Status.ToString(),
 				Editable = false,
-				Deletable = true,
+				Deletable = (item.Amount != 0),
 				Principal = item.LoanRepayment,
 				Interest = item.Interest,
 				Total = item.Amount,
@@ -247,9 +248,8 @@
 
 			UpdateInstallments(loan, actual);
 			UpdateFees(loan, actual);
-
 			// loan - from DB, actual - from UI
-			RemovePaypointTransactions(loan, actual);
+			RemovePayments(loan, actual);
 
 			loan.Modified = true;
 		}
@@ -259,7 +259,6 @@
 				var item = loan.Schedule[i];
 				//если в модели есть installment с таким id, то обновляем его
 				if (actual.Schedule.Any(x => x.Id == item.Id)) {
-					//		var installment = actual.Schedule.Single(x => x.Id == item.Id);
 					var installment = actual.Schedule.First(x => x.Id == item.Id);
 					actual.Schedule.Remove(installment);
 					item.Balance = installment.Balance;
@@ -301,19 +300,18 @@
 		}
 
 		// loan - from DB, actual - from UI
-		private static void RemovePaypointTransactions(Loan loan, Loan actual) {
+		private static void RemovePayments(Loan loan, Loan actual) {
 
-			Console.WriteLine("DB state:");
-			loan.TransactionsWithPaypoint.ForEach(xxx => Console.WriteLine(xxx));
+			Trace.WriteLine("DB state:");
+			loan.TransactionsWithPaypoint.ForEach(xxx => Trace.WriteLine(xxx));
 
-			Console.WriteLine("\n\n from UI:");
-			actual.TransactionsWithPaypoint.ForEach(xxx => Console.WriteLine(xxx));
+			Trace.WriteLine("\n\n from UI:");
+			actual.TransactionsWithPaypoint.ForEach(xxx => Trace.WriteLine(xxx));
 
 			IEnumerable<PaypointTransaction> removedPayments = loan.TransactionsWithPaypoint.Except(actual.TransactionsWithPaypoint);
-
-			Console.WriteLine("Removed payment:");
 			var paypointTransactions = removedPayments as IList<PaypointTransaction> ?? removedPayments.ToList();
-			paypointTransactions.ForEach(t => Console.WriteLine(t));
+
+			paypointTransactions.ForEach(t => Trace.WriteLine(string.Format("Removed payment: {0}", t)));
 
 			foreach (PaypointTransaction transaction in loan.TransactionsWithPaypoint) {
 
@@ -354,7 +352,7 @@
 				}
 			}
 		}
-
+		
 		public bool IsAmountChangingAllowed(CashRequest cr) {
 			if (cr == null || string.IsNullOrEmpty(cr.LoanTemplate))
 				return true;

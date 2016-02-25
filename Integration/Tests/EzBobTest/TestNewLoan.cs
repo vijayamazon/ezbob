@@ -835,7 +835,7 @@
 
 		[Test]
 		public void DirectQueryTest() {
-			MigrateLoan.LoanTransactionModel rebateTransaction = this.m_oDB.FillFirst<MigrateLoan.LoanTransactionModel>(
+			MigrateLoanTransaction.LoanTransactionModel rebateTransaction = this.m_oDB.FillFirst<MigrateLoanTransaction.LoanTransactionModel>(
 			   "select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
 			   "join PayPointCard c on c.TransactionId = t.PaypointId " +
 			   "where Description='system-repay' " +
@@ -1144,7 +1144,7 @@
 
 		[Test]
 		public void MigrateLoanTest() {
-			MigrateLoan s = new MigrateLoan();
+			MigrateLoanTransaction s = new MigrateLoanTransaction();
 			try {
 				s.Execute();
 			} catch (Exception ex) {
