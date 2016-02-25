@@ -2663,3 +2663,21 @@ iframe#logical-glue-iframe{
 .fca-incompliance-area .modal-header {
 	margin-bottom: 10px;
 }
+
+.logical-glue-bucket-value,
+.grid-item-Cart .grade {
+	font-weight: bold;
+	display: inline-block;
+	margin-right: 5px;
+	font-size: 18px;
+	line-height: 15px;
+}
+
+.grade-A { color: #21B91C; }
+.grade-B { color: #51BE20; }
+.grade-C { color: #83C423; }
+.grade-D { color: #B5CA27; }
+.grade-E { color: #B5CA27; }
+.grade-F { color: #D58C2E; }
+.grade-G { color: #DB6232; }
+.grade-H { color: #E13636; }

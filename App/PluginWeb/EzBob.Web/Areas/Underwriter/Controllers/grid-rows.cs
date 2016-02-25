@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Collections.Generic;
-	using ExperianLib.Web_References.IDHubService;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.Web.Areas.Underwriter.Models;
@@ -60,11 +59,13 @@
 			base.Init(nCustomerID, oRow);
 
 			Cart = oRow["Medal"];
+			Grade = oRow["Grade"];
 			ApplyDate = oRow["ApplyDate"];
 			RegDate = oRow["RegDate"];
 		} // Init
 
 		public virtual string Cart { get; private set; }
+		public virtual string Grade { get; private set; }
 		public virtual string MP_List { get { return m_sMP_List; } }
 		public virtual DateTime ApplyDate { get; private set; }
 		public virtual DateTime RegDate { get; private set; }

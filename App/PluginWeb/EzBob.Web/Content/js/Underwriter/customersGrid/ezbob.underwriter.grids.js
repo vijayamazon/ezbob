@@ -39,8 +39,14 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		GridProperties.prototype.OnAfterRender = function() { };
 
 		GridProperties.prototype.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-			if (oData.hasOwnProperty('Cart'))
-				$('.grid-item-Cart', oTR).empty().html(EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart));
+			if (oData.hasOwnProperty('Cart')) {
+				$('.grid-item-Cart', oTR).empty().html(
+					(oData.Grade
+						? '<span class="grade grade-' + oData.Grade + '">' + oData.Grade + '</span>'
+						: '<span class=grade>&nbsp;</span>'
+					) + EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart)
+				);
+			} // if
 
 			if (oData.hasOwnProperty('MP_List'))
 				$('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showNewMPsIcon(oData.MP_List, oData.SegmentType));
@@ -97,7 +103,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'UwGridApproved',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken,#ApprovesNum,#RejectsNum,LastStatus,Broker,CRMcomment,~SegmentType,~FirstSale'
 			}), // approved
-
 
 			pendingInvestor: new GridProperties({ 
 				icon: 'hourglass-half',
@@ -159,7 +164,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 				}
 			}), // pendingInvestor
-
 
 			loans: new GridProperties({
 				icon: 'gbp',
@@ -288,7 +292,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			.always(function () {
 				UnBlockUi();
 			}); // on always
-	},
+	}, // findInvestor
 
 	submitChosenInvestor: function(evt) {
 		var customerID = $(evt.currentTarget).attr('data-id');
@@ -296,7 +300,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		var chooseInvestorElem = '.choose-investor#DataID' + customerID;
 		var chosenInvestorID = $(chooseInvestorElem).val();
 		var self = this;
-		
 
 		if (chosenInvestorID === '') {
 			$(chooseInvestorElem).focus();
@@ -317,7 +320,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			.always(function () {
 				UnBlockUi();
 			}); // on always
-	},
+	}, // submitChosenInvestor
 
 	manageChosenInvestor: function(evt) {
 		event.preventDefault();

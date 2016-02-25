@@ -18,6 +18,7 @@ BEGIN
 	SELECT
 		c.Id AS CustomerID,
 		ISNULL(c.MedalType, '') AS Medal,
+		ISNULL(g.Name, '') AS Grade,
 		dbo.udfGetMpsTypes(c.Id) AS MpTypeName,
 		c.ApplyForLoan AS ApplyDate,
 		c.GreetingMailSentDate AS RegDate,
@@ -48,12 +49,14 @@ BEGIN
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 		LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
+		LEFT JOIN CustomerLogicalGlueHistory lg ON c.Id = lg.CustomerID AND c.CompanyId = lg.CompanyID AND lg.IsActive = 1
+		LEFT JOIN I_Grade g ON lg.GradeID = g.GradeID
 	WHERE
-		(
-			@WithTest = 1 OR c.IsTest = 0
-		)
-		AND c.CreditResult = 'Rejected'
-		AND c.DateRejected > DateAdd(MM, -1, @Now)
+		(@WithTest = 1 OR c.IsTest = 0)
+		AND
+		c.CreditResult = 'Rejected'
+		AND
+		c.DateRejected > DateAdd(MM, -1, @Now)
 	ORDER BY
 		c.Id DESC
 END

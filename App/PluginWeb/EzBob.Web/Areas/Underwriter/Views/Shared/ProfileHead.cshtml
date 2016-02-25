@@ -48,7 +48,7 @@
 	<div class="logical-glue-bucket">
 		<span>
 			Bucket
-			<span class="logical-glue-bucket-value"><%-logicalGlue.BucketStr%></span>
+			<span class="logical-glue-bucket-value grade-<%-logicalGlue.BucketStr%>"><%-logicalGlue.BucketStr%></span>
 			<%if(!logicalGlue.ScoreIsReliable){%>
 			<span class="logical-glue-error red_cell">The score is not reliable</span>
 			<%}%>

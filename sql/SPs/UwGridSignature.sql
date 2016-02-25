@@ -17,6 +17,7 @@ BEGIN
 	SELECT
 		c.Id AS CustomerID,
 		ISNULL(c.MedalType, '') AS Medal,
+		ISNULL(g.Name, '') AS Grade,
 		dbo.udfGetMpsTypes(c.Id) AS MpTypeName,
 		c.ApplyForLoan AS ApplyDate,
 		c.GreetingMailSentDate AS RegDate,
@@ -55,7 +56,7 @@ BEGIN
 			FROM
 				[CustomerRelations] AS CR
 			WHERE
-				CR.CustomerId=c.Id
+				CR.CustomerId = c.Id
 			ORDER BY
 				CR.Timestamp DESC
 		) AS CRMcomment,
@@ -73,20 +74,18 @@ BEGIN
 				END
 			)
 			ELSE ''
-		END) AS FirstSale	
+		END) AS FirstSale
 	FROM
 		Customer c
-			INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
-			LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
+		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
+		LEFT JOIN Broker b ON b.BrokerID = c.BrokerID
+		LEFT JOIN CustomerLogicalGlueHistory lg ON c.Id = lg.CustomerID AND c.CompanyId = lg.CompanyID AND lg.IsActive = 1
+		LEFT JOIN I_Grade g ON lg.GradeID = g.GradeID
 	WHERE
-		(
-			@WithTest = 1 OR c.IsTest = 0
-		)
+		(@WithTest = 1 OR c.IsTest = 0)
 		AND
 		ISNULL(c.IsWaitingForSignature, 0) = 1
 	ORDER BY
 		c.Id DESC
 END
-
 GO
-
