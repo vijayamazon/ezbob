@@ -15,6 +15,12 @@ BEGIN
 END
 GO
 
+-------------------------------------------------------------------------------
+--
+-- LoanLegal table.
+--
+-------------------------------------------------------------------------------
+
 IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('LoanLegal') AND name = 'TimestampCounter')
 	ALTER TABLE LoanLegal DROP COLUMN TimestampCounter
 GO
@@ -36,4 +42,25 @@ END
 GO
 
 ALTER TABLE LoanLegal ADD TimestampCounter ROWVERSION
+GO
+
+-------------------------------------------------------------------------------
+--
+-- NL_LoanLegals table.
+--
+-------------------------------------------------------------------------------
+
+IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('NL_LoanLegals') AND name = 'TimestampCounter')
+	ALTER TABLE NL_LoanLegals DROP COLUMN TimestampCounter
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('NL_LoanLegals') AND name = 'BrokerSetupFeePercent')
+BEGIN
+	ALTER TABLE NL_LoanLegals ADD BrokerSetupFeePercent DECIMAL(18, 4) NULL
+
+	EXECUTE('UPDATE NL_LoanLegals SET BrokerSetupFeePercent = c.BrokerSetupFeePercent FROM NL_LoanLegals l INNER JOIN NL_Offers c ON l.OfferID = c.OfferID')
+END
+GO
+
+ALTER TABLE NL_LoanLegals ADD TimestampCounter ROWVERSION
 GO

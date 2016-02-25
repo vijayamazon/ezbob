@@ -22,7 +22,8 @@ CREATE TYPE NL_LoanLegalsList AS TABLE (
 	[COSMEAgreementAgreed] BIT NULL,
 	[NotInBankruptcy] BIT NULL,
 	[SignedName] NVARCHAR(128) NULL,
-	[SignedLegalDocs] NVARCHAR(MAX)
+	[SignedLegalDocs] NVARCHAR(MAX),
+	[BrokerSetupFeePercent] DECIMAL(18, 4) NULL
 )
 GO
 
@@ -45,7 +46,8 @@ BEGIN
 		[COSMEAgreementAgreed],
 		[NotInBankruptcy],
 		[SignedName],
-		[SignedLegalDocs]
+		[SignedLegalDocs],
+		[BrokerSetupFeePercent]
 	) SELECT
 		[OfferID],
 		[SignatureTime],
@@ -59,12 +61,11 @@ BEGIN
 		[COSMEAgreementAgreed],
 		[NotInBankruptcy],
 		[SignedName],
-		[SignedLegalDocs]
+		[SignedLegalDocs],
+		[BrokerSetupFeePercent]
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO
-
-

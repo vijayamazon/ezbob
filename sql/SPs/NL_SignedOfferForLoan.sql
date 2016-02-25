@@ -56,7 +56,7 @@ BEGIN
 			o.Amount AS OfferAmount,
 			o.MonthlyInterestRate,
 			o.SetupFeeAddedToLoan,
-			o.BrokerSetupFeePercent,
+			BrokerSetupFeePercent = CASE WHEN ll.LoanLegalID IS NOT NULL THEN ll.BrokerSetupFeePercent ELSE o.BrokerSetupFeePercent END,
 			o.InterestOnlyRepaymentCount,
 			o.DiscountPlanID,
 			ll.LoanLegalID,

@@ -111,6 +111,7 @@
       <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" base="q7:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BrokerSetupFeePercent" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="COSMEAgreementAgreed" nillable="true" type="xs:boolean" />
           <xs:element minOccurs="0" name="CreditActAgreementAgreed" nillable="true" type="xs:boolean" />
           <xs:element minOccurs="0" name="EUAgreementAgreed" nillable="true" type="xs:boolean" />

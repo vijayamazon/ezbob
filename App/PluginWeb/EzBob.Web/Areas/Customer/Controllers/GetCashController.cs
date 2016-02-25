@@ -396,11 +396,14 @@
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
 				SignedLegalDocs = dynamicLoanAgreementsStringified,
-				// TODO ManualSetupFeePercent = manualSetupFeePercent,
-				// TODO BrokerSetupFeePercent = brokerFeePercent,
+				BrokerSetupFeePercent = brokerFeePercent,
 			};
 
-			var nlStrategyLegals = this.serviceClient.Instance.AddLoanLegals(this.context.UserId, this.context.Customer.Id, nlLoanLegals);
+			var nlStrategyLegals = this.serviceClient.Instance.AddLoanLegals(
+				this.context.UserId,
+				this.context.Customer.Id,
+				nlLoanLegals
+			);
 
 			//_log.Debug("NL_LoanLegals: ID {0}, Error: {1}", nlStrategyLegals.Value, nlStrategyLegals.Error);
 
