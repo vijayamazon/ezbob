@@ -208,6 +208,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 				oCaption.find('.dataTables_filter').remove();
 				oCaption.append($('.dataTables_filter', oGroup));
+				self.$el.find('.directors-list').wrap('<div class="dashboard-table-wrap"><div class="dashboard-table-scorllable"></div></div>');
 
 				self.reloadDirectors(oResponse.potential_signers);
 			} // on success loading customer details
@@ -333,8 +334,15 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 					return;
 				} // if
+			    var opts = {};
+				if (EzBob.Config.Origin !== 'everline') {
+				     opts = self.initDataTablesOptions('files', 'FileName', 'ftr<"bottom"<"col-md-6 dataTables_bottom_left"il><"col-md-6 dataTables_bottom_right"p>><"clear">');
 
-				var opts = self.initDataTablesOptions('files', 'FileName', 'ftr<"bottom"<"col-md-6"il><"col-md-6 dataTables_bottom_right"p>><"clear">');
+				} else {
+				    opts = self.initDataTablesOptions('files', 'FileName', 'ftr<"bottom"<"col-md-12 dataTables_bottom_right clearfix"p><"col-md-6 dataTables_bottom_left"i>><"clear">');
+
+				}
+                //shlomi
 
 				opts.aaData = oResponse.file_list;
 
@@ -363,15 +371,27 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				self.FileTable = self.$el.find('.customer-file-list').dataTable(opts);
 
 				var oGroup = self.$el.find('.files-group');
+				var bGroup = self.$el.find('.dataTables_bottom_right');
 				var oCaption = $('.aka-caption', oGroup);
-
+				
 				oCaption.find('.dataTables_filter, .delete-selected-files').remove();
 				oCaption.append($('.dataTables_filter', oGroup));
-
-				oCaption.prepend(self.setSomethingEnabled(
-					$('<button type=button class="button btn-green delete-selected-files ev-btn-org" title="Delete selected files">Delete</button>'),
+				self.$el.find('.customer-file-list').wrap('<div class="dashboard-table-wrap"><div class="dashboard-table-scorllable"></div></div>');
+				if (EzBob.Config.Origin !== 'everline') {
+				    oCaption.prepend(self.setSomethingEnabled(
+				        $('<button type=button class="button btn-green delete-selected-files ev-btn-org" title="Delete selected files">Delete</button>'),
+				        false
+				    ));
+				} else {
+				    bGroup.prepend(self.setSomethingEnabled(
+					$('<div class="delete-selected-files" >Delete Selected</div>'),
 					false
-				));
+				    ));
+				}
+				
+				
+
+			
 			} // on success loading customer details
 		); // getJSON
 	}, // reloadFileList
@@ -454,37 +474,47 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 	initDataTablesOptions: function(sGridKey, sColumns, sDom) {
 		sGridKey = 'brk-grid-state-' + this.router.getAuth() + '-customer-' + sGridKey;
+		var tableConf = {
+		    bDestroy: true,
+		    bProcessing: true,
+		    aoColumns: EzBob.DataTables.Helper.extractColumns(sColumns),
+		    sDom: sDom,
+		    bDeferRender: true,
 
-		return {
-			bDestroy: true,
-			bProcessing: true,
-			aoColumns: EzBob.DataTables.Helper.extractColumns(sColumns),
+	        bJQueryUI: false,
 
-			bDeferRender: true,
+	        aaSorting: [[0, 'desc']],
+	        iDisplayLength: 10,
+	        bAutoWidth: true,
+	        aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
+	        bStateSave: true,
 
-			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
-			iDisplayLength: 10,
+	        fnStateSave: function (oSettings, oData) {
+	            localStorage.setItem(sGridKey, JSON.stringify(oData));
+	        }, // fnStateSave
 
-			sPaginationType: 'bootstrap',
-			bJQueryUI: false,
-
-			aaSorting: [[0, 'desc']],
-
-			bAutoWidth: true,
-			sDom: sDom,
-
-			bStateSave: true,
-
-			fnStateSave: function(oSettings, oData) {
-				localStorage.setItem(sGridKey, JSON.stringify(oData));
-			}, // fnStateSave
-
-			fnStateLoad: function(oSettings) {
-				var sData = localStorage.getItem(sGridKey);
-				var oData = sData ? JSON.parse(sData) : null;
-				return oData;
-			}, // fnStateLoad
-		};
+	        fnStateLoad: function (oSettings) {
+	            var sData = localStorage.getItem(sGridKey);
+	            var oData = sData ? JSON.parse(sData) : null;
+	            return oData;
+	        }, // fnStateLoad
+	    };
+	    if (EzBob.Config.Origin !== 'everline') {
+	        tableConf.sPaginationType = 'bootstrap';
+	    } else {
+	        tableConf.sPaginationType = 'full_numbers';
+	        tableConf.oLanguage = {
+	         
+	            "oPaginate": {
+	                "sNext": "...",
+	                "sPrevious": "...",
+	                "sFirst": "",
+	                "sLast": "..."
+	            }
+	        };
+	    
+	    }
+	    return tableConf;
 	}, // initDataTablesOptions
 
 	backToList: function(event) {

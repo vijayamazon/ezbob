@@ -1,674 +1,766 @@
 ﻿/* mobile */
 @media screen and (min-width: 800px) and (max-width: 960px) {
-	/*
+    /*
         footer
     */
-	.footer-eif-text {
-		width: 63%;
-	}
+    .footer-eif-text {
+        width: 63%;
+    }
 
-	.footer-navigator-inner ul li a {
-		font-size: 12px;
-	}
+    .footer-bottom-text {
+        width: 60%;
+        margin-top: 5px;
+        display: inline-block;
+        margin-left: 5%;
+    }
 
-	.footer-navigator-inner ul li:last-child {
-		padding-right: 0;
-	}
-	/*end footer*/
-	.broker-finish-inner-text {
-		width: 58%;
-	}
+    .norton-img {
+        margin-right: 25px;
+    }
 
-	.marketplace-button-wrapper,
-	.form_field_container .input-wrapper .clean-btn.btn-showmore {
-		width: 47%;
-	}
+    footer .privacy-and-cookie-policy {
+        margin-bottom: 50px;
+        margin-top: 20px;
+        padding-left: 10px;
+    }
 
-	.form_field_container .input-wrapper .clean-btn.form_field_right_side, .form_field_container .input-wrapper .clean-btn.form_field_right_side_signup_phone {
-		width: 42%;
-	}
+    .business-text {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 0;
+        margin-top: -50px;
+        padding-left: 20px;
+        width: 70%;
+        float: left;
+        padding: 10px;
+    }
 
-	.form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
-		width: 42%;
-	}
+    .privacy-wrap {
+        display: inline-block;
+        margin-top: 20px;
+        padding-left: 10px;
+        width: 35%;
+    }
+    .footer-navigator-inner ul.footer-navigator-list {
+        padding:0 10px;
+    }
+   
+
+    .social-link-icons ul {
+        padding: 0 20px;
+        margin-top: 8px;
+        margin-left:40px;
+    }
+
+    .footer-navigator-inner ul li:last-child {
+        padding-right: 0;
+    }
+    /*end footer*/
+    .broker-finish-inner-text {
+        width: 58%;
+    }
+
+    .marketplace-button-wrapper,
+    .form_field_container .input-wrapper .clean-btn.btn-showmore {
+        width: 47%;
+    }
+
+    .form_field_container .input-wrapper .clean-btn.form_field_right_side, .form_field_container .input-wrapper .clean-btn.form_field_right_side_signup_phone {
+        width: 42%;
+    }
+
+    .form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
+        width: 42%;
+    }
 }
 
 
 @media screen and (max-width: 800px) {
-	body{
-		width: 100%;
-	}
+    body {
+        width: 100%;
+    }
 
-	optgroup.fixiphone{
-		display: block;
-	}
+    optgroup.fixiphone {
+        display: block;
+    }
+    .footer-navigator-inner ul.footer-navigator-list {
+        margin-left:10px;
+    }
+    header.everline_header {
+        background: #28211f;
+        border-top: 18px solid #f0f0f0;
+        padding-top: 11px;
+        margin: 0;
+        left: auto;
+        padding: 0;
+        position: static;
+        text-align: center;
+        top: 0;
+        position: static;
+    }
 
-	header.everline_header {
-	  background: #28211f;
-	  border-top: 18px solid #f0f0f0;
-	  padding-top: 11px;
-	  margin: 0;
-	  left: auto;
-	  padding: 0;
-	  position: static;
-	  text-align: center;
-	  top: 0;
-	  position: static;
-	}
+    .everline-header-placeholder {
+        height: 0;
+    }
 
-	.everline-header-placeholder {
-		height: 0;
-	}
+    header:before {
+        border-top: 11px solid #8dc641;
+        content: "";
+        display: block;
+        position: absolute;
+        top: 14px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 10px;
+    }
 
-	header:before {
-	  border-top: 11px solid #8dc641;
-	  content: "";
-	  display: block;
-	  position: absolute;
-	  top: 14px;
-	  left: 0;
-	  right: 0;
-	  bottom: 0;
-	  height: 10px;
-	}
+    header nav {
+        float: left;
+        display: inline;
+        width: 100%;
+        position: relative;
+        height: 100px;
+    }
 
-	header nav {
-	  float: left;
-	  display: inline;
-	  width: 100%;
-	  position: relative;
-	  height: 100px;
-	}
+        header.everline_header nav ul.sub-links a,
+        header nav ul.sub-links a,
+        header nav .sub-links a,
+        header.everline_header nav ul#user-menu a,
+        header nav ul#user-menu a,
+        header nav #user-menu a {
+            padding: 7px 0 !important;
+            margin-right: 0 !important;
+            margin-top: 7px;
+            width: 81px;
+        }
 
-	header.everline_header nav ul.sub-links a,
-	header nav ul.sub-links a,
-	header nav .sub-links a,
-	header.everline_header nav ul#user-menu a,
-	header nav ul#user-menu a,
-	header nav #user-menu a{
-		padding: 7px 0 !important;
-		margin-right: 0 !important;
-		margin-top: 7px;
-		width: 81px;
-	}
+    header.everline_header nav ul.sub-links li.sign-up.signup_btn a.org-btn {
+        padding: 7px 2.5px !important;
+    }
 
-	header.everline_header nav ul.sub-links li.sign-up.signup_btn a.org-btn {
-		padding: 7px 2.5px !important;
-	}
+    header nav .sub-links a.telephone i.fa.fa-phone {
+        position: absolute;
+        top: 20px;
+        left: 25px;
+    }
 
-	header nav .sub-links a.telephone i.fa.fa-phone{
-		position:absolute;
-		top: 20px;
-		left: 25px;
-	}
+    header nav .sub-links .telephone,
+    header nav #user-menu .telephone {
+        height: 32px;
+        margin: 28px 40px;
+        right: -15px;
+        top: 0;
+        font-size: 1em;
+        width: 32px;
+    }
 
-	header nav .sub-links .telephone,
-	header nav #user-menu .telephone {
-	  height: 32px;
-	  margin: 28px 40px;
-	  right: -15px;
-	  top: 0;
-	  font-size: 1em;
-	  width: 32px;
-	}
-	header nav .sub-links .telephone span,
-	header nav #user-menu .telephone span{
-		display: none;
-	}
+        header nav .sub-links .telephone span,
+        header nav #user-menu .telephone span {
+            display: none;
+        }
 
-	header.everline_header nav ul.sub-links li:first-child a {
-		font-weight: 600;
-		font-size: 3em;
-		margin-right:25px;
-	}
+    header.everline_header nav ul.sub-links li:first-child a {
+        font-weight: 600;
+        font-size: 3em;
+        margin-right: 25px;
+    }
 
-	header.everline_header nav #user-menu li:first-child a {
-		font-weight: 600;
-		font-size: 2em;
-		margin-right:25px;
-	}
+    header.everline_header nav #user-menu li:first-child a {
+        font-weight: 600;
+        font-size: 2em;
+        margin-right: 25px;
+    }
 
-	/*
+    /*
         Header
     */
-	header nav span.svg {
-		margin-left: 10px;
-	}
-	/*
+    header nav span.svg {
+        margin-left: 10px;
+    }
+    /*
         footer
     */
-	footer {
-		position: relative;
-	}
+    footer {
+        position: relative;
+    }
 
-	.main-page-everline {
-		padding-bottom: 0;
-	}
+    .main-page-everline {
+        padding-bottom: 0;
+    }
 
-	.footer-eif-text {
-		width: 100%;
-		float: none;
-	}
+    .footer-eif-text {
+        width: 100%;
+        float: none;
+    }
 
-	.footer-eif-inner {
-		padding: 50px 20px;
-	}
+    .footer-bottom-text {
+        width: 100%;
+        padding: 0 10px;
+    }
 
-	.cosme-images {
-		text-align: center;
-		width: 100%;
-		margin-bottom: 20px;
-	}
+    .footer-eif-inner {
+        padding: 50px 20px;
+    }
 
-	.social-link-icons {
-		display: none;
-	}
+    .business-text {
+        width: 100%;
+        padding: 0 10px;
+    }
 
-	.footer-navigator-inner ul li {
-		margin-top: 20px;
-	}
+    .privacy-wrap {
+        width: 100%;
+        padding: 30px 10px 0;
+    }
 
-	.footer-navigator-inner ul {
-		margin-top: 0;
-	}
+    .norton-img {
+        margin-right: 35px;
+    }
 
-		.footer-navigator-inner ul li.hide-mobile {
-			display: none;
-		}
+    .cosme-images {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
 
-	footer {
-		position: relative;
-	}
-	/* end footer */
+    .social-link-icons {
+        display: block;
+        float: none;
+    }
 
-	input, textarea, img {
-		max-width: 100%
-	}
+        .social-link-icons ul {
+            display: block;
+            padding: 0 10px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-	/*
+            .social-link-icons ul li:first-child {
+                margin-left: 0;
+            }
+
+            .social-link-icons ul li {
+                display: inline-block;
+                margin-left: 5%;
+                padding: 0;
+            }
+
+    .footer-navigator-inner ul li {
+        margin-top: 20px;
+    }
+
+    .footer-navigator-inner ul {
+        margin-top: 0;
+    }
+
+        .footer-navigator-inner ul li.hide-mobile {
+            display: none;
+        }
+
+    footer {
+        position: relative;
+    }
+    /* end footer */
+
+    input, textarea, img {
+        max-width: 100%;
+    }
+
+    /*
         login
     */
-	.forgotpass {
-		width: 100%;
-	}
-	/*
+    .forgotpass {
+        width: 100%;
+    }
+    /*
         wizard
     */
-	.wizard-wrap {
-		padding: 40px 20px 40px 20px;
-		margin-bottom: 0;
-	}
-
-		.security-icons .item .lock-icon {
-			left: 0;
-		}
-
-	.account-or {
-		margin-top: 0;
-	}
-
-	.form_field_container .input-title, .form_field_container .input-title-address {
-		width: 100%;
-		text-align: left;
-	}
-
-	.form_field_container .input-wrapper {
-		width: 100%;
-		padding-left: 0;
-	}
-
-	.forgotpass {
-		margin-right: 0;
-	}
-
-	.clean-btn, a.clean-btn, a.clean-btn:focus, .clean-btn:focus, .simpleCaptcha a, .ui-widget button.clean-btn, .broker-captcha a {
-		font-size: 14px;
-		width: 100% !important;
-		margin-top: 20px;
-		margin-left: 0;
-	}
-
-	.form_field_container .simpleCaptcha .captcha-image-margin {
-		width: 100%;
-	}
-
-	.form_field_container .simpleCaptcha {
-		width: 100%;
-		float: left;
-		padding-left: 0;
-	}
-
-	.form_field_container .input-wrapper .form_field_left_side {
-		width: 100% !important;
-	}
-
-	.form_field_container .input-wrapper .clean-btn {
-		width: 100%;
-		margin-left: 0;
-		margin-top: 20px;
-		border-radius: 0;
-	}
-
-	.wizard-top {
-		padding: 0 20px;
-	}
-
-	.form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
-		width: 100%;
-		display: block;
-		margin: 0;
-		margin-top: 20px;
-		float: none;
-		border-radius: 0;
-	}
-
-	.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
-		width: 100%;
-	}
-
-	.wizard-steps-wrapper .wizard-steps .progress-time {
-		width: 100%;
-		text-align: center;
-		line-height: normal;
-		height: 86px;
-		padding-top: 35px;
-	}
-
-	.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
-		width: 100%;
-	}
-    .ui-dialog .address-dialog-widget {
-        height:280px !important;
+    .wizard-wrap {
+        padding: 40px 20px 40px 20px;
+        margin-bottom: 0;
     }
-	.ui-dialog {
-        top:0 !important;
-		left: 0 !important;
-		width: 100% !important;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-	}
 
-	.marketplace-button-wrapper, .form_field_container .input-wrapper .clean-btn.btn-showmore {
-		display: block !important;
-		position: static;
-		width: 100%;
-		margin-top: 15px;
-		float: none;
-	}
+    .security-icons .item .lock-icon {
+        left: 0;
+    }
 
-	.dropzone {
-		min-height: initial;
-	}
+    .account-or {
+        margin-top: 0;
+    }
 
-		.dropzone .dz-with-text {
-			width: 100%;
-			height: 100%;
-			left: 0;
-			top: 0;
-			position: relative;
-			margin: 0 auto;
-		}
+    .form_field_container .input-title, .form_field_container .input-title-address {
+        width: 100%;
+        text-align: left;
+    }
 
-	.add-director-container.form_field_container .input-wrapper .clean-btn {
-		margin-top: 20px;
-	}
+    .form_field_container .input-wrapper {
+        width: 100%;
+        padding-left: 0;
+    }
 
-	.BankContainer .marketplace-button {
-		width: 100%;
-	}
+    .forgotpass {
+        margin-right: 0;
+    }
 
-	.loan-summery-box-container {
-		clear: both;
-	}
+    .clean-btn, a.clean-btn, a.clean-btn:focus, .clean-btn:focus, .simpleCaptcha a, .ui-widget button.clean-btn, .broker-captcha a {
+        font-size: 14px;
+        width: 100% !important;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+    .ForgottenPassword {
+    float: left;
+   margin-right:0;
+}
+    .form_field_container .simpleCaptcha .captcha-image-margin {
+            width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    float: none;
+    display: block;
+    margin-top: 10px;
+    }
 
-	.loan-summary-box {
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-		width: 49%;
-		margin-top: 10px;
-		text-align: center;
-	}
+    .form_field_container .simpleCaptcha {
+        width: 100%;
+        float: left;
+        padding-left: 0;
+    }
 
-	.security-icons {
-		display: block;
-	}
+    .form_field_container .input-wrapper .form_field_left_side {
+        width: 100% !important;
+    }
 
-		.security-icons .item .lock-icon {
-			background: url('');
-		}
+    .form_field_container .input-wrapper .clean-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+        border-radius: 0;
+    }
 
-	.ui-dialog {
-		padding: 20px 20px 20px 10px;
-		height: 100% !important;
-		position:fixed !important;
-	}
+    .wizard-top {
+        padding: 0 20px;
+    }
 
-	.ui-dialog.target-dialog{
-		overflow: visible;
-	}
+    .form_buttons_container .input-wrapper .ev-btn-org, .form_buttons_container .input-wrapper a.ev-btn-org {
+        width: 100%;
+        display: block;
+        margin: 0;
+        margin-top: 20px;
+        float: none;
+        border-radius: 0;
+    }
 
-	.ui-dialog .ui-dialog-content {
-		height: 100% !important;
-		box-sizing: border-box;
-		padding-bottom: 250px;
-		overflow-y: hidden;
-	}
+    .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+        width: 100%;
+    }
 
-	.ui-dialog .address-dialog-widget {
-		padding-bottom: 170px;
-	}
+    .wizard-steps-wrapper .wizard-steps .progress-time {
+        width: 100%;
+        text-align: center;
+        line-height: normal;
+        height: 86px;
+        padding-top: 35px;
+    }
 
-	.ui-dialog.companyaddress .ui-dialog-content {
-		padding-bottom: 190px;
-	}
+    .ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
+        width: 100%;
+    }
 
-	.ui-dialog .address-dialog-titlebar .ui-dialog-titlebar-close,
-	.ui-dialog.consent-class .ui-dialog-titlebar-close {
-		right: -30px;
-	}
+    .ui-dialog .address-dialog-widget {
+        height: 280px !important;
+    }
 
-	.consent-class .ui-dialog-content>div,
-	.consent-dialog-wrapper,
-	#consent-conent,
-	#address-popup,
-	#address-popup .address-selector-block,
-	#address-popup .address-selector-block ul.matchingAddressList,
-	#address-popup .address-input-block,
-	ul.targets {
-		height: 100% !important;
-	}
+    .ui-dialog {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
 
-	#address-popup .address-input-block .form_field_container.control-group{
-		height: auto !important;
-	}
-	
-	#address-popup .address-selector-block ul.matchingAddressList,
-	.ui-dialog.add-scroll,
-	ul.targets {
-		overflow-y: auto !important;
-		overflow-x: hidden !important;
-	}
+    .marketplace-button-wrapper, .form_field_container .input-wrapper .clean-btn.btn-showmore {
+        display: block !important;
+        position: static;
+        width: 100%;
+        margin-top: 15px;
+        float: none;
+    }
 
-	.ui-dialog .address-dialog-widget.disable-scroll {
-		overflow: visible !important;
-		height: auto !important;
-		padding-bottom: 0;
-	}
-	
-	.ui-dialog .ui-dialog-buttonpane.buttons-footer {
-	position: absolute;
-    bottom: 0;
-    left: 0;
-    box-sizing: border-box;
-    padding: 0 20px 15px 10px;
-    width: 100%;
-	}
+    .dropzone {
+        min-height: initial;
+    }
 
-	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar,
-	.ui-dialog.add-scroll::-webkit-scrollbar,
-	ul.targets::-webkit-scrollbar {
-		width: 8px;
-	}
+        .dropzone .dz-with-text {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            position: relative;
+            margin: 0 auto;
+        }
 
-	#address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar-thumb,
-	.ui-dialog.add-scroll::-webkit-scrollbar-thumb,
-	ul.targets::-webkit-scrollbar-thumb {
-		 background: #28211f;
-		 height: 40px;
-		 border-radius: 10px;
-		 outline: none;
-	}
+    .add-director-container.form_field_container .input-wrapper .clean-btn {
+        margin-top: 20px;
+    }
 
-	.consent-dialog {
-		padding-top: 0;
-		padding-bottom: 0;
-	}
+    .BankContainer .marketplace-button {
+        width: 100%;
+    }
 
-	.ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
-		float: none;
-	}
+    .loan-summery-box-container {
+        clear: both;
+    }
 
-	.loan-summary-boxes {
-		display: block;
-		margin-right: 0;
-		height: auto;
-	}
+    .loan-summary-box {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 49%;
+        margin-top: 10px;
+        text-align: center;
+    }
 
-	.tutor-image {
-		width: 100%;
-	}
+    .security-icons {
+        display: block;
+    }
 
-	.main-page-everline {
-		padding-bottom: 100px;
-	}
+        .security-icons .item .lock-icon {
+            background: url('');
+        }
 
-	.store-img {
-		width: 100%;
-	}
+    .ui-dialog {
+        padding: 20px 20px 20px 10px;
+        height: 100% !important;
+        position: fixed !important;
+    }
 
-	.form_start {
-		clear: both;
-	}
+        .ui-dialog.target-dialog {
+            overflow: visible;
+        }
 
-	.amazon_view_tutorial_label {
-		float: none;
-	}
+        .ui-dialog .ui-dialog-content {
+            height: 100% !important;
+            box-sizing: border-box;
+            padding-bottom: 250px;
+            overflow-y: hidden;
+        }
 
-	.amazonscreenshot {
-		display: block;
-		float: none;
-		margin-top: 10px;
-	}
+        .ui-dialog .address-dialog-widget {
+            padding-bottom: 170px;
+        }
 
-	.store-connect-manual {
-		padding: 0 20px;
-	}
+        .ui-dialog.companyaddress .ui-dialog-content {
+            padding-bottom: 190px;
+        }
 
-	.ui-widget a.ev-btn-org.short-btn {
-		width: 100%;
-		margin-top: 10px;
-	}
+        .ui-dialog .address-dialog-titlebar .ui-dialog-titlebar-close,
+        .ui-dialog.consent-class .ui-dialog-titlebar-close {
+            right: -30px;
+        }
 
-	.clean-btn.short-btn {
-		width: 100% !important;
-	}
-	/*end wizard*/
+    .consent-class .ui-dialog-content > div,
+    .consent-dialog-wrapper,
+    #consent-conent,
+    #address-popup,
+    #address-popup .address-selector-block,
+    #address-popup .address-selector-block ul.matchingAddressList,
+    #address-popup .address-input-block,
+    ul.targets {
+        height: 100% !important;
+    }
+
+        #address-popup .address-input-block .form_field_container.control-group {
+            height: auto !important;
+        }
+
+        #address-popup .address-selector-block ul.matchingAddressList,
+        .ui-dialog.add-scroll,
+        ul.targets {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+    .ui-dialog .address-dialog-widget.disable-scroll {
+        overflow: visible !important;
+        height: auto !important;
+        padding-bottom: 0;
+    }
+
+    .ui-dialog .ui-dialog-buttonpane.buttons-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        box-sizing: border-box;
+        padding: 0 20px 15px 10px;
+        width: 100%;
+    }
+
+    #address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar,
+    .ui-dialog.add-scroll::-webkit-scrollbar,
+    ul.targets::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #address-popup .address-selector-block ul.matchingAddressList::-webkit-scrollbar-thumb,
+    .ui-dialog.add-scroll::-webkit-scrollbar-thumb,
+    ul.targets::-webkit-scrollbar-thumb {
+        background: #28211f;
+        height: 40px;
+        border-radius: 10px;
+        outline: none;
+    }
+
+    .consent-dialog {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .ui-dialog-buttonset .clean-btn, .ui-dialog-buttonset button.ev-btn-org {
+        float: none;
+    }
+
+    .loan-summary-boxes {
+        display: block;
+        margin-right: 0;
+        height: auto;
+    }
+
+    .tutor-image {
+        width: 100%;
+    }
+
+    .main-page-everline {
+        padding-bottom: 100px;
+    }
+
+    .store-img {
+        width: 100%;
+    }
+
+    .form_start {
+        clear: both;
+    }
+
+    .amazon_view_tutorial_label {
+        float: none;
+    }
+
+    .amazonscreenshot {
+        display: block;
+        float: none;
+        margin-top: 10px;
+    }
+
+    .store-connect-manual {
+        padding: 0 20px;
+    }
+
+    .ui-widget a.ev-btn-org.short-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .clean-btn.short-btn {
+        width: 100% !important;
+    }
+    /*end wizard*/
 
 
-	/*
+    /*
     colorbox popup
 
 */
-	#colorbox {
-		-webkit-box-shadow: none;
-		-ms-box-shadow: none;
-		box-shadow: none;
-	}
+    #colorbox {
+        -webkit-box-shadow: none;
+        -ms-box-shadow: none;
+        box-shadow: none;
+    }
 
-	#cboxWrapper {
-		width: 100% !important;
-		padding: 0 10px !important;
-		-webkit-box-sizing: border-box !important;
-		-moz-box-sizing: border-box !important;
-		box-sizing: border-box !important;
-	}
+    #cboxWrapper {
+        width: 100% !important;
+        padding: 0 10px !important;
+        -webkit-box-sizing: border-box !important;
+        -moz-box-sizing: border-box !important;
+        box-sizing: border-box !important;
+    }
 
-	#cboxContent {
-		width: 100% !important;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-		padding: 0;
-	}
+    #cboxContent {
+        width: 100% !important;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 0;
+    }
 
-	#colorbox #cboxClose {
-		top: 0;
-		right: 0;
-	}
+    #colorbox #cboxClose {
+        top: 0;
+        right: 0;
+    }
 
-	.help_security {
-		width: auto;
-		padding-top: 50px;
-		margin-bottom: 80px;
-		background-size: contain;
-	}
+    .help_security {
+        width: auto;
+        padding-top: 50px;
+        margin-bottom: 80px;
+        background-size: contain;
+    }
 
-	#cboxLoadedContent {
-		width: 100% !important;
-		overflow: visible !important;
-		padding: 10px;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-	}
+    #cboxLoadedContent {
+        width: 100% !important;
+        overflow: visible !important;
+        padding: 10px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
 
-	.help_image {
-		height: 200px;
-	}
-	/*
+    .help_image {
+        height: 200px;
+    }
+    /*
     progress bar
 	*/
-	.wizard-steps-wrapper {
-		height: 210px;
-	}
+    .wizard-steps-wrapper {
+        height: 210px;
+    }
 
-		.wizard-steps-wrapper .wizard-steps .steps-wrap {
-			width: 100%;
-			top: 19px;
-		}
+        .wizard-steps-wrapper .wizard-steps .steps-wrap {
+            width: 100%;
+            top: 19px;
+        }
 
-		.wizard-steps-wrapper .wizard-steps .progress-bar {
-			height: 12px;
-			margin-left: 20px;
-			width: 91%;
-			right: 9%;
-			margin-top: 23px;
-			/* right: 0; */
-			position: absolute;
-		}
+        .wizard-steps-wrapper .wizard-steps .progress-bar {
+            height: 12px;
+            margin-left: 20px;
+            width: 91%;
+            right: 9%;
+            margin-top: 23px;
+            /* right: 0; */
+            position: absolute;
+        }
 
-		.wizard-steps-wrapper .wizard-steps .stripe {
-			display: none;
-		}
+        .wizard-steps-wrapper .wizard-steps .stripe {
+            display: none;
+        }
 
-		.wizard-steps-wrapper .side-strip {
-			top: 128px;
-		}
+        .wizard-steps-wrapper .side-strip {
+            top: 128px;
+        }
 
-	.wizard-top h2 {
-		clear: both;
-	}
+    .wizard-top h2 {
+        clear: both;
+    }
 
-	.wizard-steps-wrapper .wizard-steps ul.application_steps {
-		float: none;
-		margin: 0 auto;
-		width: 100%;
-	}
+    .wizard-steps-wrapper .wizard-steps ul.application_steps {
+        float: none;
+        margin: 0 auto;
+        width: 100%;
+    }
 
-	.wizard-steps-wrapper .wizard-steps {
-		padding: 0;
-		overflow: visible;
-	}
+    .wizard-steps-wrapper .wizard-steps {
+        padding: 0;
+        overflow: visible;
+    }
 
-	.wizard-steps-wrapper ul.application_steps li {
-		width: 22.3%;
-	}
-	/*end progress bar*/
-	.broker-finish-wizard-later button {
-		right: 0;
-		position: static;
-	}
+    .wizard-steps-wrapper ul.application_steps li {
+        width: 22.3%;
+    }
+    /*end progress bar*/
+    .broker-finish-wizard-later button {
+        right: 0;
+        position: static;
+    }
 
-	.marketplace-group {
-		text-align: center;
-	}
-	/*header*/
-	header.everline_header nav ul.sub-links,
-	header.everline_header nav #user-menu {
-		right: 10px;
-	}
-	
-	.select_form_field_container span {
-		color: #494949;
-	}
+    .marketplace-group {
+        text-align: center;
+    }
+    /*header*/
+    header.everline_header nav ul.sub-links,
+    header.everline_header nav #user-menu {
+        right: 10px;
+    }
 
-	.form_field_container.control-group.customer-logon-remember-me .input-title,
-	.form_field_container.control-group.form_read_and_accept .input-title,
-	.form_field_container.control-group.form_fca .input-title,
-	.wizard-inner-wrap .clearfix .form_buttons_container .input-title,
-	.simple-login .form_buttons_container .input-title,
-	.PersonalDetailsForm  .form_buttons_container .input-title {
-		display: none;
-	}
+    .select_form_field_container span {
+        color: #494949;
+    }
 
-	.wizard-inner-wrap .clearfix .form_buttons_container #signupSubmitButton {
-		margin-top: 0;
-	}
+    .form_field_container.control-group.customer-logon-remember-me .input-title,
+    .form_field_container.control-group.form_read_and_accept .input-title,
+    .form_field_container.control-group.form_fca .input-title,
+    .wizard-inner-wrap .clearfix .form_buttons_container .input-title,
+    .simple-login .form_buttons_container .input-title,
+    .PersonalDetailsForm .form_buttons_container .input-title {
+        display: none;
+    }
 
-	.form_field_container .input-title.long {
-		padding-bottom: 11px;
-	}
+    .wizard-inner-wrap .clearfix .form_buttons_container #signupSubmitButton {
+        margin-top: 0;
+    }
 
-	.right-box {
-		float: right;
-	}
+    .form_field_container .input-title.long {
+        padding-bottom: 11px;
+    }
 
-	.alert-msg {
-		width: 85%;
-	}
+    .right-box {
+        float: right;
+    }
 
-	.ui-dialog .ui-dialog-buttonpane.address-dialog-buttonpane {
-		margin-top: 25px;
-	}
+    .alert-msg {
+        width: 85%;
+    }
 
-	.consent-modal-footer a.clean-btn {
-		margin-top: 10px;
-	}
+    .ui-dialog .ui-dialog-buttonpane.address-dialog-buttonpane {
+        margin-top: 25px;
+    }
 
-	.consent-modal-footer.modal-footer.terms-conditions-footer {
-		margin-top: 0;
-	}
+    .consent-modal-footer a.clean-btn {
+        margin-top: 10px;
+    }
+    .privacy-and-cookie-policy {
+        padding:0 10px;
+    }
+    .consent-modal-footer.modal-footer.terms-conditions-footer {
+        margin-top: 0;
+    }
 
-	.security-icons {
-		float: left;
-		padding-bottom: 40px;	
-	}
+    .security-icons {
+        float: left;
+        padding-bottom: 40px;
+    }
 
-	.security-icons .truste-item {
-		width: 126px;
-	}
+        .security-icons .truste-item {
+            width: 126px;
+        }
 
-	.security-icons .lock-item {
-		width: 22px;
-	}
+        .security-icons .lock-item {
+            width: 22px;
+        }
 
-	label span.label-first-line,
-	label span.label-second-line {
-		display: inline-block;
-	}
+    label span.label-first-line,
+    label span.label-second-line {
+        display: inline-block;
+    }
 
-	.error-wrap {
-		display: inline;
-	}
+    .error-wrap {
+        display: inline;
+    }
 
-	div.broker-page-content {
-		padding-bottom: 10px !important;
-	}
-
+    div.broker-page-content {
+        padding-bottom: 10px !important;
+    }
 }
 
 @media screen and (max-width: 500px) {
 
-	header.everline_header_broker nav span.for-brokers {
-		display: none;
-	}
+    header.everline_header_broker nav span.for-brokers {
+        display: none;
+    }
 
-	.alert-msg {
-		width: 73%;
-	}
+    .alert-msg {
+        width: 73%;
+    }
 }
-
-
-

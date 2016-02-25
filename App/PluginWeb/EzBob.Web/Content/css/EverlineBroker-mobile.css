@@ -1,0 +1,490 @@
+﻿@media screen and (min-width: 800px) and (max-width: 960px) {
+    div.dataTables_filter input {
+        width: 65%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .dashboard-table-scorllable {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .ui-widget button.clean-btn.reload-customer-list {
+        display: none;
+    }
+
+    a.paginate_button, a.paginate_active {
+        margin-top: 0;
+    }
+
+    .fa.fa-bars {
+        display: block;
+        font-size: 32px;
+        padding-top: 4px;
+        color: white;
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+        .fa.fa-bars + span {
+            color: #ffffff;
+            cursor: pointer;
+            display: inline;
+            line-height: 36px;
+            font-size: 18px;
+            margin-left: 28px;
+            vertical-align: top;
+            border-bottom: 1px #8dc641 solid;
+        }
+
+    .ui-state-active {
+        display: none;
+    }
+
+    .menu-icon.icon-reorder {
+        display: block;
+        height: 32px;
+        width: 32px;
+    }
+
+    .humburger-btn:before {
+        display: block;
+        margin-top: 5px;
+        content: "\f0c9";
+        font-family: FontAwesome;
+        font-weight: 400;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        text-decoration: inherit;
+        display: inline-block;
+        speak: none;
+    }
+
+    .dashboard-table-wrap {
+        border: 1px solid #f5f5f5;
+        padding: 6px 1px;
+        clear: both;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-table-scorllable::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .dashboard-table-scorllable::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    .dashboard-table-scorllable::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .dashboard-table-scorllable::-webkit-scrollbar-thumb {
+        background: #28211f;
+        height: 10px;
+        -ms-border-radius: 10px;
+        border-radius: 10px;
+        outline: none;
+    }
+
+    .dataTables_top_left .dataTables_info {
+        line-height: normal;
+        font-size: 12px;
+    }
+
+    .dataTables_top_right, div.dataTables_filter label {
+        float: none;
+    }
+    /*mobile hamburger menu*/
+    .profile-menu-ul-wrap ul.ui-tabs-nav li.divider-vertical {
+        display: none;
+    }
+
+    .profile-menu-ul-wrap * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+        background: #28211f;
+    }
+
+    .profile-menu-ul-wrap {
+        z-index: 1000000;
+        font-weight: bold;
+        font-size: 0.8em;
+        width: 100%;
+        background: #28211f;
+        position: absolute;
+        text-align: center;
+        top: 40px;
+        display: none;
+    }
+
+    .broker .navbar-inner {
+        padding: 0;
+        border-bottom: 1px solid #aaaaaa;
+    }
+
+    .profile-menu-ul-wrap ul.ui-tabs-nav {
+        height: initial;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        list-style-image: none;
+        float: none;
+    }
+
+    .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+        display: none;
+    }
+
+
+    .profile-menu-ul-wrap ul.ui-tabs-nav li {
+        display: block;
+        float: none;
+        padding: 0 !important;
+        text-align: left;
+    }
+
+        .profile-menu-ul-wrap ul.ui-tabs-nav li:hover {
+            display: block;
+            background: #28211f;
+            padding: 0 !important;
+            border-bottom: #1d1f20 1px solid;
+        }
+
+        .profile-menu-ul-wrap ul.ui-tabs-nav li a {
+            text-decoration: none;
+            padding: 25px 0;
+            font-size: 18px;
+            color: #fff;
+            margin: 0 12px;
+            border-bottom: 1px solid #aaaaaa !important;
+        }
+
+            .profile-menu-ul-wrap ul.ui-tabs-nav li a span {
+                padding-left: 59px;
+            }
+
+            .profile-menu-ul-wrap ul.ui-tabs-nav li a:hover {
+                color: #fff;
+                text-decoration: none;
+                padding-bottom: 25px !important;
+            }
+
+    .broker .navbar .nav li.ui-tabs-selected a span,
+    .broker .navbar .nav li.ui-state-hover a span {
+        border-bottom: none;
+        padding-bottom: initial;
+    }
+
+    .ui-state-hover {
+        border: none;
+    }
+
+    .profile-menu-ul-wrap ul.ui-tabs-nav li a {
+        text-decoration: none;
+        color: white;
+    }
+
+        .profile-menu-ul-wrap ul.ui-tabs-nav li a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+    .broker .navbar .nav li.ui-tabs-selected a span, .broker .navbar .nav li.ui-state-hover a span {
+        padding-bottom: 0;
+    }
+    /*   .broker-hamburger {
+        display:none !important;
+   }
+  .ui-tabs .ui-tabs-nav li.divider-vertical {
+       display:none;
+   }*/
+
+    /*end of hamburger menu*/
+    .broker .d-widgets .d-widget .add-bank {
+        float: none !important;
+        position: static;
+        width: 100%;
+    }
+
+
+
+    .navbar.profile-menu {
+        margin-bottom: 0;
+    }
+
+    .profile-headlines h3 {
+        line-height: 25px;
+    }
+
+    .broker .d-widgets .d-widget h3 {
+        top: -35px;
+    }
+
+    .broker .d-widgets .d-widget {
+        margin-bottom: 10px;
+        margin-top: 40px;
+        padding-bottom: 15px;
+    }
+
+
+        .broker .d-widgets .d-widget dl {
+            margin: 15px 0 9px 0;
+            width: 50%;
+        }
+
+    div.dataTables_filter label {
+        width: 100%;
+    }
+
+    .broker .d-widgets .d-widget h3 {
+        margin-top: 0;
+    }
+
+    div.dataTables_top_right button.clean-btn, div.dataTables_top_right button.ev-btn-org {
+        width: 100%;
+    }
+
+    div.dataTables_filter input {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .section-dashboard h2 {
+        margin-bottom: 10px;
+    }
+    /*header mobile changes*/
+
+    header.everline_header {
+        height: 50px;
+    }
+
+        header.everline_header nav a.svg, header nav span.svg {
+            background: url(../everline/EverlineLogo.png) no-repeat 0 center;
+            -ms-background-size: 85%;
+            background-size: 64%;
+            height: 5em;
+            margin-top: -10px;
+            width: 11.7em;
+            display: inline-block;
+            float: left;
+            text-align: left;
+            text-indent: -9999px;
+        }
+
+    header.everline_header_broker nav #user-menu {
+        margin-top: -10px;
+        right: 20px;
+    }
+
+    header.everline_header nav div.pin span {
+        width: 16px;
+        height: 16px;
+    }
+
+    header.everline_header nav div.pin {
+        position: relative;
+        margin-top: -18px;
+        float: right;
+        margin-right: 2px;
+    }
+
+    ul#user-menu li {
+        padding: 20px 2px 0 0;
+    }
+
+        ul#user-menu li.log-off, ul#user-menu li.log-in, ul#user-menu li.sign-up {
+            display: inline-block;
+            padding: 20px 6px;
+            vertical-align: top;
+        }
+
+    header nav {
+        height: 60px;
+    }
+    /*end of mobile header changes*/
+
+    /*
+        marketing materials
+    */
+    .box > .box-title.aka-caption {
+        line-height: 25px;
+    }
+
+    .aka-cell, .aka-column {
+        display: block;
+    }
+
+    .add-company-director-container {
+        display: none;
+    }
+
+    #section-dashboard-marketing .aka-column {
+        margin-top: 30px;
+    }
+
+    .aka-column-top {
+        display: block;
+    }
+
+    .aka-caption {
+        display: block;
+    }
+
+    .aka-row {
+        display: block;
+        word-wrap: break-word;
+    }
+
+    .aka-table {
+        display: block;
+        padding: 0;
+    }
+
+    .source-ref-container .direct-link {
+        position: static;
+        margin-bottom: 10px;
+    }
+
+    /*
+            Account information 
+        */
+    .aka-row > .value-title, .aka-row > .value {
+        display: block;
+        width: 100%;
+        padding-right: 0;
+        margin-right: 0;
+        width: 100% !important;
+    }
+
+    .aka-row > .value-title {
+        padding-bottom: 0;
+    }
+
+    .aka-column {
+        margin-top: 0;
+    }
+
+    .aka-row {
+        margin-bottom: 4px;
+    }
+
+    .section-dashboard h2 {
+        font-weight: 600;
+    }
+    /*
+         client details
+     */
+    #customerFilesUploader {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .table-responsive {
+        border: 0;
+        overflow: hidden;
+    }
+    /*CRM*/
+    .section-customer-details * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .back-to-list {
+        margin-top: 0;
+    }
+
+    .client-details-group.box > .box-title.aka-caption {
+        margin-bottom: 10px;
+    }
+
+    .section-customer-details .client-details-group {
+        background: #f1f0f0;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+
+    .crm-event-types {
+        margin-top: 0;
+        float: none;
+    }
+
+    #customer-relations-form .FormRadioCtrl span {
+        margin-left: 0;
+    }
+
+    .add-crm-note {
+        margin-bottom: 9px;
+        float: right;
+    }
+    /*
+         your bank details
+     */
+    .ezSortCode .attardi-input.ezSortCode2 {
+        margin-left: 15px;
+    }
+
+    .add_client_button {
+        padding-left: 0px;
+    }
+    /*
+         add customer
+     */
+    .section-add-customer .wizard-wrap {
+        min-height: 550px;
+        height: auto;
+        padding-top: 10px;
+    }
+
+    div.form_field_container {
+        line-height: 22px;
+    }
+
+    div.form_buttons_container #LeadFillWizard, div.form_buttons_container #LeadSendInvitation {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .section-add-customer button.back-to-list {
+        width: 220px;
+        margin-bottom: 10px;
+    }
+
+    div.form_field_container {
+        margin-bottom: 0;
+    }
+
+    .new-lead-form h2 {
+        margin-bottom: 0;
+    }
+
+    .customer-relations-popup .pull-right {
+        float: none !important;
+    }
+
+        .customer-relations-popup .pull-right button {
+            width: 100%;
+        }
+
+    .customer-relations-popup {
+        padding: 20px 20px 20px 0;
+        overflow-y: scroll;
+    }
+
+    .ui-dialog .ui-dialog-content {
+        height: auto !important;
+    }
+
+    .broker {
+        padding: 0 20px;
+    }
+}
+/* end of media 800 */

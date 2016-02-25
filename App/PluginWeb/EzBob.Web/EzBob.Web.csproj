@@ -481,6 +481,7 @@
     <Content Include="Content\css\eurpe-fund.png" />
     <Content Include="Content\css\everline-mobile.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\EverlineBroker-mobile.css" />
     <Content Include="Content\css\EverlineBroker.css" />
     <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />
     <Content Include="Content\css\EverlineCustomerProfile.css" />
@@ -563,6 +564,7 @@
     <Content Include="Content\css\images\europe-fund.png" />
     <Content Include="Content\css\images\eu_explanation.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
+    <Content Include="Content\css\images\facebook-f-icon.png" />
     <Content Include="Content\css\images\facebook-icon.png" />
     <Content Include="Content\css\images\fail.png" />
     <Content Include="Content\css\images\footer_bg.png" />
@@ -601,6 +603,7 @@
     <Content Include="Content\css\images\help\help_sage.jpg" />
     <Content Include="Content\css\images\help\help_security.png" />
     <Content Include="Content\css\images\invite_chat_bg.png" />
+    <Content Include="Content\css\images\linkedin-f-icon.png" />
     <Content Include="Content\css\images\live_help.jpg" />
     <Content Include="Content\css\images\lock_64.png" />
     <Content Include="Content\css\images\magento-logo.png" />
@@ -635,6 +638,7 @@
     <Content Include="Content\css\images\terms-corner.png" />
     <Content Include="Content\css\images\tick-m.png" />
     <Content Include="Content\css\images\tick.png" />
+    <Content Include="Content\css\images\twitter-f-icon.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
     <Content Include="Content\css\images\vip.PNG" />
     <Content Include="Content\css\images\vip_bg.png" />
@@ -646,6 +650,7 @@
     <Content Include="Content\css\images\yodlee\banks_sprite.png" />
     <Content Include="Content\css\images\yodlee\dag_off.png" />
     <Content Include="Content\css\images\yodlee\dag_on.png" />
+    <Content Include="Content\css\images\youtube-f-icon.png" />
     <Content Include="Content\css\lib\alertify.css" />
     <Content Include="Content\css\lib\bootstrap-modal.css" />
     <Content Include="Content\css\lib\bootstrap-switch.css" />

@@ -241,12 +241,14 @@
 				// custom css
 				.Add("~/Content/css/Everlinecustomer.css")
 				.Add("~/Content/css/everline.css")
-               // .Add("~/Content/css/everline-mobile.css")
+              
 				.Add("~/Content/css/EverlineBroker.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
 				.Add("~/Content/css/easter2015scratch.css")
+                  .Add("~/Content/css/everline-mobile.css")
+                   .Add("~/Content/css/EverlineBroker-mobile.css")
 
 			.MvcRender("~/Content/css/min/broker_#.css");
 		} // RenderEverlineBrokerCss

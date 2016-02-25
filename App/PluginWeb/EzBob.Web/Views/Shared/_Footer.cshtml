@@ -1,4 +1,5 @@
-﻿@using EZBob.DatabaseLib.Model.Database
+﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 
 @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
@@ -26,8 +27,8 @@
 						<li><a href="https://www.everline.com/intermediaries/" target="_blank">Intermediaries</a></li>
                         <li class="hide-mobile" ><a href="https://www.everline.com/partners/" target="_blank" >Partners</a></li>
 						<li><a href="https://www.everline.com/legal/" target="_blank">Legal</a></li>
-						<li><a href="https://www.everline.com/terms-and-conditions/" target="_blank">Terms and conditions</a></li>
-						<li><a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and cookie policy</a></li>
+						<li><a href="https://www.everline.com/terms-and-conditions/" target="_blank">Terms & conditions</a></li>
+						<li><a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy & cookie policy</a></li>
 						<li><a href="https://www.everline.com/advice/" target="_blank">Advice</a></li>
 					</ul>
 					<div class="social-link-icons">
@@ -35,24 +36,36 @@
 							<li><a class="facebook" href="https://www.facebook.com/everlineuk" target="_blank"></a></li>
 							<li><a class="tweeter" href="https://twitter.com/everline" target="_blank"></a></li>
 							<li><a class="linkedin" href="https://www.linkedin.com/company/everline" target="_blank"></a></li>
+                            <li><a class="youtube" href="https://www.youtube.com/user/EverlineUK" target="_blank"></a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
-			<div class="footer-text">
-				<div class="privacy-and-cookie-policy">
-					<a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and cookie policy</a>
-				</div>
+            <div class="footer-text clearfix">
+                <div class="privacy-and-cookie-policy">
+                    <a href="https://www.everline.com/privacy-and-cookie-policy" target="_blank">Privacy and cookie policy</a>
+                </div>
+                <p class="business-text">
+                    EZBob Ltd. trading as Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 647816).<br>
+                    EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br>
+                    Registered Address: 36 Soho Square, London W1D 3QY
+                </p>
+                <div class="privacy-wrap clearfix">
+                    <div class="norton-img">
+                        @Html.Raw(UiCustomerOrigin.GetVeriSignSeal(ViewBag))
+                    </div>
+                    <div class="truste-img">
+                        <div class="text truste">@Html.Raw(UiCustomerOrigin.GetTrusteSeal(ViewBag))</div>
+                    </div>
+                </div>
+          
+                <div class="footer-bottom-text">
+                    All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+                    All loans are subject to status and approval. 18+ only.
+                </div>
 
-				<p>
-					EZBob Ltd. trading as Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business (registration number: 7852687).<br />
-					EZBob Ltd. is a lender. Not all credit agreements we enter into are regulated by the Financial Conduct Authority.<br />
-					Registered Address: 36 Soho Square, London W1D 3QY<br />
-					All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.<br />
-					All loans are subject to status and approval. 18+ only.
-				</p>
 
-			</div>
+            </div>
 		</div>
 	</footer>
 } else {

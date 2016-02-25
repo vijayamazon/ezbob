@@ -13,7 +13,7 @@
 		<button type="button" class="back-to-list button btn-green btn-wide clean-btn">Back to client list</button>
 	</div>
 
-	<div class="value-group aka-table table-big box">
+	<div class="value-group client-details-group aka-table table-big box">
 		<div class="box-title aka-caption">Client details</div>
 
 		<div class="aka-row">
@@ -66,30 +66,37 @@
 		</div>
 	</div>
 
-	<div class="value-group crm-group aka-table table-big box">
+	<div class="value-group crm-group aka-table table-big  box">
 		<div class="box-title aka-caption">
 			CRM events
 			<button type="button" class="button btn-green add-crm-note ev-btn-org" title="Add CRM note">+</button>
 		</div>
+        <div class="dashboard-table-wrap">
 
-		<table class="customer-crm-list table">
-			<thead>
-				<tr>
-					<th>Date</th>
-					<th>Action</th>
-					<th>Status</th>
-					<th>Comment</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</tbody>
-		</table>
+        
+            <div class="dashboard-table-scorllable">
+
+
+                <table class="customer-crm-list table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 	</div>
 
 	<div class="value-group files-group aka-table table-big box">
@@ -97,21 +104,23 @@
 
 		<div class="aka-row">
 			<div class="aka-column table-responsive">
-				<table class="customer-file-list table">
-					<thead>
-						<tr>
-							<th>File name</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+              
+                    
+                    <table class="customer-file-list table">
+                        <thead>
+                            <tr>
+                                <th>File name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
 			<form id="customerFilesUploader" class="aka-column">
 				<div class="dz-message"><span>Drag or click to upload files.</span></div>

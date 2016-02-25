@@ -9,9 +9,9 @@
     background-color: inherit !important;
     border: none !important;
 }
-.navbar .nav > li > a, .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
-font-size: 14px;
 
+.navbar .nav > li > a, .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
+    font-size: 14px;
 }
 
 input[type="button"],
@@ -80,14 +80,14 @@ footer {
 
 .section-dashboard {
     margin-top: 20px;
-	height: auto !important;
+    height: auto !important;
 }
 
     .section-dashboard .ui-tabs-panel {
         padding: 0;
     }
 
-.table-big{
+.table-big {
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
@@ -103,7 +103,7 @@ table.customer-list {
 }
 
 div.dataTables_info {
-padding-top: 0;
+    padding-top: 0;
 }
 
 .section-dashboard .dataTables_top_right {
@@ -158,10 +158,9 @@ padding-top: 0;
 .section-dashboard tbody .grid-item-LoanAmount,
 .section-dashboard tbody .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanAmount,
-.section-dashboard tbody .grid-item-CommissionAmount, 
+.section-dashboard tbody .grid-item-CommissionAmount,
 .section-dashboard tfoot .grid-item-SetupFee,
-.section-dashboard tfoot .grid-item-LoanDate
-.section-dashboard tfoot .grid-item-CommissionAmount {
+.section-dashboard tfoot .grid-item-LoanDate .section-dashboard tfoot .grid-item-CommissionAmount {
     text-align: right;
 }
 
@@ -182,12 +181,12 @@ padding-top: 0;
 }
 
 .aka-caption .dataTables_filter {
-	float: right;
+    float: right;
 }
 
-.aka-caption .dataTables_filter input {
-	margin: 0 !important;
-}
+    .aka-caption .dataTables_filter input {
+        margin: 0 !important;
+    }
 
 .value-title {
     font-weight: bold;
@@ -208,7 +207,7 @@ table.table th {
 }
 
 .section-customer-details .center {
-    text-align: center!important;
+    text-align: center !important;
 }
 
 .section-customer-details .dropzone {
@@ -284,17 +283,17 @@ table.table th {
     margin-top: 20px;
 }
 
-.table > thead > tr > th, 
-.table > tbody > tr > th, 
-.table > tfoot > tr > th, 
-.table > thead > tr > td, 
-.table > tbody > tr > td, 
-.table > tfoot > tr > td{
-	vertical-align: middle;
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    vertical-align: middle;
 }
 
-.form_read_and_accept_broker  {
-	width: 90%;
+.form_read_and_accept_broker {
+    width: 90%;
     vertical-align: top;
     white-space: inherit;
 }
@@ -307,7 +306,7 @@ div.form_read_and_accept label {
 }
 
 div.FormRadioCtrl label {
-	width: initial;
+    width: initial;
 }
 
 .broker-dashboard {
@@ -327,21 +326,21 @@ input[type="checkbox"].form_field {
 }
 
 .print-customer_details {
-     display: none;
+    display: none;
 }
 
 b, strong {
     font-family: 'Titillium Web Semi Bold';
 }
 
-.d-widget{
+.d-widget {
     height: 56px;
 }
 
 .d-widgets:before, .d-widgets:after {
-  display: table;
-  line-height: 0;
-  content: "";
+    display: table;
+    line-height: 0;
+    content: "";
 }
 
 .d-widgets:after {
@@ -349,12 +348,12 @@ b, strong {
 }
 
 .d-widget dd.dashes {
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.header-message{
+.header-message {
     color: #67c10b;
 }
 
@@ -362,13 +361,13 @@ b, strong {
 .everline_header *,
 .everline_header *:before,
 .everline_header *:after {
-  -webkit-box-sizing: content-box;
-     -moz-box-sizing: content-box;
-          box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }
 
 div#broker-footer-placeholder {
-	height: 120px;
+    height: 120px;
 }
 
 .profile-menu .navbar-inner {
@@ -398,25 +397,26 @@ div#broker-footer-placeholder {
     color: #ffffff;
 }
 
-.navbar .nav > li > a,
-.profile-menu .nav > li > a {
-    text-shadow: none;
-    font-size: 14px ;
-    padding: 0 18px !important;
-    color: #a7a6a6;
-    font-family: "Titillium Web Semi Bold";
-    line-height: 40px !important;
-    vertical-align: middle;
-}
-.profile-menu .navbar-inner{
+    .navbar .nav > li > a,
+    .profile-menu .nav > li > a {
+        text-shadow: none;
+        font-size: 14px;
+        padding: 0 18px !important;
+        color: #a7a6a6;
+        font-family: "Titillium Web Semi Bold";
+        line-height: 40px !important;
+        vertical-align: middle;
+    }
+
+.profile-menu .navbar-inner {
     padding-left: 0px;
 }
 
 .profile-menu .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,
-.profile-menu.navbar .nav > li > a:focus, 
+.profile-menu.navbar .nav > li > a:focus,
 .profile-menu.navbar .nav > li > a:hover,
-.profile-menu.navbar .nav .active a, 
-.profile-menu.navbar  .nav .active a:hover{
+.profile-menu.navbar .nav .active a,
+.profile-menu.navbar .nav .active a:hover {
     color: #ffffff !important;
 }
 
@@ -427,26 +427,29 @@ div#broker-footer-placeholder {
     border-left: 1px solid #f2f2f2 !important;
 }
 
-.profile-menu .customer-dashboard-main { margin: 0; }
+.profile-menu .customer-dashboard-main {
+    margin: 0;
+}
 
 .broker-terms {
-	display:block;
+    display: block;
 }
 
 .broker .broker-form .form_buttons_container {
-	width: 96%;
+    width: 96%;
 }
 
 .broker .navbar {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 input[type="button"].form_field_right_side_signup_phone {
-	float: right; 
-	margin-right: 20px; 
-	width: 26%; 
-	height: 36px;
+    float: right;
+    margin-right: 20px;
+    width: 26%;
+    height: 36px;
 }
 
-
-
+.profile-menu-title, .broker-hamburger {
+    display: none;
+}

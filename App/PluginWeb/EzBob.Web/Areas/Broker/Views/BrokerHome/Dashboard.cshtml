@@ -9,66 +9,74 @@
 	<div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
 
 	<div class="navbar profile-menu">
+     
 		<div class="navbar-inner">
-			<ul class="nav">
-				<li><a href="#section-dashboard-customers"><span>Clients</span></a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-marketing"><span>Marketing materials</span></a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-account-info"><span>Account information</span></a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="#section-dashboard-terms-and-conditions"><span>Terms and conditions</span></a></li>
-				@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
-					<li class="divider-vertical"></li>
-					<li><a href="#section-dashboard-instant-offer"><span>Instant offer</span></a></li>
-				}
-			</ul>
+            <div class="fa fa-bars broker-hamburger">
+
+            </div>
+            <span class="profile-menu-title">Clients</span>
+            <div class="profile-menu-ul-wrap">
+                <ul class="nav">
+                    <li><a href="#section-dashboard-customers"><span>Clients</span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#section-dashboard-marketing"><span>Marketing materials</span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#section-dashboard-account-info"><span>Account information</span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#section-dashboard-terms-and-conditions"><span>Terms and conditions</span></a></li>
+                    @if (CurrentValues.Instance.BrokerInstantOfferEnabled)
+                    {
+                        <li class="divider-vertical"></li>
+                        <li><a href="#section-dashboard-instant-offer"><span>Instant offer</span></a></li>
+                    }
+                </ul>
+            </div>
 		</div>
 	</div>
 
 	<div id="section-dashboard-customers">
-		<button type="button" id="AddNewCustomer" class="button btn-green pull-right btn-wide ev-btn-org">Add a new client</button>
+		
 
 		<h2 class="form-start">Client list</h2>
 
 		<div class="table-big">
-			<table class="customer-list table">
-				<thead>
-					<tr>
-						<th>First name</th>
-						<th>Last name</th>
-						<th>Status</th>
-						<th>Applied date</th>
-						<th>Approved amount</th>
-						<th>Loan amount</th>
-						<th>Commission amount</th>
-						<th>Commission payment date</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tfoot>
-			</table>
+                <table class="customer-list table">
+                    <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Status</th>
+                            <th>Applied date</th>
+                            <th>Approved amount</th>
+                            <th>Loan amount</th>
+                            <th>Commission amount</th>
+                            <th>Commission payment date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
 		</div>
 	</div>
 
