@@ -352,15 +352,21 @@
 			if (this.cmdLineArgs.Length != 4) {
 				this.log.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");
 				this.log.Msg(@"Available roles (underwriter is usually one of the last three):
-						Admin:             Administrator - Manage users
-						SuperUser:         SuperUser - Have rights to all applications
-						Underwriter:       Underwriter
-						manager:           Manager
-						crm:               CRM
-						Collector:         Collector - Allow change only Loans
-						Sales:             Sales person
-						BrokerSales:       Broker Sales person
-						JuniorUnderwriter: Junior Underwriter
+						Underwriter:	Underwriter
+						manager:	Manager
+						JuniorUnderwriter:	Junior Underwriter
+						Collector:	Collector - Allow change only Loans
+						Sales:	Sales person
+						BrokerSales:	Broker Sales person
+						CollectorSenior:	
+						CollectorManager:	
+						InvestorWeb:	Investor web contact
+						SalesForceSales:	Just for the sf iframe 
+						CollectionIFrame:	Just for collection iframe (to develop)
+						ReadOnly:	User with access to UW without any functionality
+						Accounting:	For Bat-el
+						CustomerCare:	customer care
+						Legal:	Jason for legal agreements editing
 					");
 
 				return;

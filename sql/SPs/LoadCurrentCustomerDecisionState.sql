@@ -18,7 +18,7 @@ BEGIN
 			ManagerRoleCount = (
 				SELECT COUNT(*)
 				FROM Security_UserRoleRelation ur
-				INNER JOIN Security_Role r ON ur.RoleId = r.RoleId AND r.Name = 'manager'
+				INNER JOIN Security_Role r ON ur.RoleId = r.RoleId AND (r.Name = 'manager' OR r.Name = 'Underwriter')
 				WHERE ur.UserId = u.UserId
 			)
 		FROM
@@ -107,4 +107,6 @@ BEGIN
 		FULL OUTER JOIN r ON 1 = 1
 		FULL OUTER JOIN u ON 1 = 1
 END
+
+GO
 
