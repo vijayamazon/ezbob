@@ -111,7 +111,9 @@ a[data-bug-type],
 .add-investor,
 .save-new-email,
 .saveWhiteLabel,
-.change-broker-tr
+.change-broker-tr,
+.finish-wizard-tr
+
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
