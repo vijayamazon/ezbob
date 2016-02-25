@@ -6,6 +6,9 @@
 	using System.ServiceModel;
 	using ConfigManager;
 	using EchoSignLib.Internal;
+	using EchoSignLib.Rest;
+	using EchoSignLib.Rest.Api;
+	using EchoSignLib.Rest.Models;
 	using EchoSignService;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -23,6 +26,34 @@
 	} // class EchoSignFacadeExt
 
 	public class EchoSignFacade {
+
+        private HashSet<int> terminalStatuses;
+
+        private readonly AConnection db;
+        private readonly ASafeLog log;
+
+        private bool isReady;
+
+        private string apiKey;
+        private string url;
+        private ReminderFrequency? reminderFrequency;
+        private int? deadline;
+
+        private EchoSignClient echoSign;
+
+        private const string ExpectedPong = "It works!";
+
+	    private bool isUseRestApi = true;
+
+	    private readonly EchoSignRestClient restClient;
+
+        private class SignedDoc
+        {
+            public bool HasValue { get; set; }
+            public string MimeType { get; set; }
+            public byte[] Content { get; set; }
+        } // class SignedDoc
+
 		public EchoSignFacade(AConnection oDB, ASafeLog oLog) {
 			this.isReady = false;
 
@@ -46,6 +77,9 @@
 				"EchoSign façade is {0}ready.",
 				this.isReady ? string.Empty : "NOT "
 			);
+
+//            this.restClient = new EchoSignRestClient("3AAABLblqZhABY-QxNfpgWJizd4ybsQa4hakBWBma-TYNXRyJYtAvqcU6TjK-zqtPRF4TqM-kLw0*", "96A2AM24676Z7M", "98867629f92bfc28c8fd8df662d74626", "https://redirect.ezbob.com");
+		    this.restClient = new EchoSignRestClient(CurrentValues.Instance.EchoSignRefreshToken, CurrentValues.Instance.EchoSignClientId, CurrentValues.Instance.EchoSignClientSecret, CurrentValues.Instance.EchoSignRedirectUri);
 		} // constructor
 
 		public EchoSignSendResult Send(IEnumerable<EchoSignEnvelope> oCorrespondence) {
@@ -90,18 +124,18 @@
 			foreach (KeyValuePair<int, Esignature> pair in oSp.Signatures) {
 				Esignature oSignature = pair.Value;
 
-				AgreementStatus? nStatus = GetDocumentInfo(oSignature);
+				int nStatus = GetAgreementStatus(oSignature);
 
-				if ((nStatus != null) && this.terminalStatuses.Contains(nStatus.Value)) {
+				if (this.terminalStatuses.Contains(nStatus)) {
 					this.log.Debug(
 						"Terminal status {0} for e-signature {1} (customer {2}).",
-						nStatus.Value, oSignature.ID, oSignature.CustomerID
+						nStatus, oSignature.ID, oSignature.CustomerID
 					);
 
 					oCompleted.Add(new EsignatureStatus {
 						CustomerID = oSignature.CustomerID,
 						EsignatureID = oSignature.ID,
-						Status = nStatus.Value,
+						Status = (AgreementStatus)nStatus
 					});
 				} // if
 			} // for each signature
@@ -329,59 +363,144 @@
 			return new SignedDoc { HasValue = true, MimeType = doc.mimetype, Content = doc.bytes, };
 		} // GetDocuments
 
-		private AgreementStatus? GetDocumentInfo(Esignature oSignature) {
+	    private int GetAgreementStatus(Esignature oSignature) {
+	        if (this.isUseRestApi) {
+	            return HandleRestAgreementStatus(oSignature);
+	        }
+            
+	        var status = HandleSoapAgreementStatus(oSignature);
+	        if (status.HasValue) {
+	            return (int)status.Value;
+	        }
+
+	        return -1;
+	    }
+
+        private int HandleRestAgreementStatus(Esignature oSignature)
+        {
 			this.log.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
 
 			DocumentInfo oResult;
+		    int agreementStatus = -1;
 
+		    EchoSignAgreementStatusResponse response;
 			try {
-				oResult = this.echoSign.getDocumentInfo(this.apiKey, oSignature.DocumentKey);
+			    response = this.restClient.GetAgreementStatus(oSignature.DocumentKey).Result;
+			    agreementStatus = (int)response.status;
+
+			    oResult = new DocumentInfo {
+			        documentKey = response.agreementId,
+                    name = response.name,
+                    message = response.message,
+                    expiration = response.expiration ?? DateTime.MinValue,
+			    };
 			} catch (Exception e) {
 				this.log.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
-				return null;
+				return -1;
 			} // try
 
 			this.log.Debug("Loading document info result:");
 			this.log.Debug("Name: {0}", oResult.name);
-			this.log.Debug("Status: {0}", oResult.status);
+			this.log.Debug("Status: {0}", response.status);
 			this.log.Debug(
 				"Expiration: {0}",
 				oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
 			);
 
-			if (oResult.status.HasValue) {
-				SignedDoc doc = GetDocuments(oSignature);
+            oSignature.SetHistoryAndStatus(response.events, response.participantSetInfos);
 
-				oSignature.SetHistoryAndStatus(oResult.events, oResult.participants);
+            EchoSignAgreementDocumentResponse docResponse = this.restClient.GetAgreementDocument(oSignature.DocumentKey).Result;
 
-				if (doc.HasValue) {
-					var sp = new SpSaveSignedDocument(this.db, this.log) {
-						EsignatureID = oSignature.ID,
-						StatusID = (int)oResult.status.Value,
-						DoSaveDoc = doc.HasValue,
-						MimeType = doc.MimeType,
-						DocumentContent = doc.Content,
-						SignerStatuses = oSignature.SignerStatuses,
-						HistoryEvents = oSignature.HistoryEvents,
-					};
+            var sp = new SpSaveSignedDocument(this.db, this.log)
+            {
+                EsignatureID = oSignature.ID,
+                StatusID = agreementStatus,
+                DoSaveDoc = true,
+                MimeType = docResponse.MimeType,
+                DocumentContent = docResponse.Content,
+                SignerStatuses = oSignature.SignerStatuses,
+                HistoryEvents = oSignature.HistoryEvents,
+            };
 
-					try {
-						sp.ExecuteNonQuery();
-					} catch (Exception e) {
-						this.log.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
-					} // try
-				} else {
-					this.log.Debug(
-						"Nothing to save for the key '{0}': no documents received from EchoSign.",
-						oSignature.DocumentKey
-					);
-				} // if
-			} // if
+            try
+            {
+                sp.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                this.log.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+            } // try
 
 			this.log.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
 
-			return oResult.status;
-		} // GetDocumentInfo
+			return agreementStatus;
+		} // GetAgreementStatus
+
+        private AgreementStatus? HandleSoapAgreementStatus(Esignature oSignature)
+        {
+            this.log.Msg("Loading document info for the key '{0}' started...", oSignature.DocumentKey);
+
+            DocumentInfo oResult;
+
+            try
+            {
+                oResult = this.echoSign.getDocumentInfo(this.apiKey, oSignature.DocumentKey);
+            }
+            catch (Exception e)
+            {
+                this.log.Warn(e, "Failed to load document info for the '{0}'.", oSignature.DocumentKey);
+                return null;
+            } // try
+
+            this.log.Debug("Loading document info result:");
+            this.log.Debug("Name: {0}", oResult.name);
+            this.log.Debug("Status: {0}", oResult.status);
+            this.log.Debug(
+                "Expiration: {0}",
+                oResult.expiration.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+            );
+
+            if (oResult.status.HasValue)
+            {
+                SignedDoc doc = GetDocuments(oSignature);
+
+                oSignature.SetHistoryAndStatus(oResult.events, oResult.participants);
+
+                if (doc.HasValue)
+                {
+                    var sp = new SpSaveSignedDocument(this.db, this.log)
+                    {
+                        EsignatureID = oSignature.ID,
+                        StatusID = (int)oResult.status.Value,
+                        DoSaveDoc = doc.HasValue,
+                        MimeType = doc.MimeType,
+                        DocumentContent = doc.Content,
+                        SignerStatuses = oSignature.SignerStatuses,
+                        HistoryEvents = oSignature.HistoryEvents,
+                    };
+
+                    try
+                    {
+                        sp.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        this.log.Alert(e, "Failed to save signed document for the key '{0}'.", oSignature.DocumentKey);
+                    } // try
+                }
+                else
+                {
+                    this.log.Debug(
+                        "Nothing to save for the key '{0}': no documents received from EchoSign.",
+                        oSignature.DocumentKey
+                    );
+                } // if
+            } // if
+
+            this.log.Msg("Loading document info for the key '{0}' complete.", oSignature.DocumentKey);
+
+            return oResult.status;
+	    }
 
 		private EchoSignSendResultCode SendOne(
 			Template oTemplate,
@@ -421,7 +540,22 @@
 			DocumentKey[] aryResult;
 
 			try {
-				aryResult = this.echoSign.sendDocument(this.apiKey, null, dci);
+			    if (this.isUseRestApi) {
+			        var response = this.restClient.SendAgreement(dci).Result;
+			        if (string.IsNullOrEmpty(response.agreementId)) {
+			            throw new Exception("error sending when sent agreement");
+			        }
+			        DocumentKey documentKey = new DocumentKey {
+			            documentKey = response.agreementId
+			        };
+
+			        aryResult = new[] {
+			            documentKey
+			        };
+
+			    } else {
+			        aryResult = this.echoSign.sendDocument(this.apiKey, null, dci);
+			    }
 			} catch (Exception e) {
 				string msg = string.Format(
 					"Something went exceptionally terrible while sending a document '{0}' to {1}.",
@@ -477,7 +611,7 @@
 			if (this.deadline < 0)
 				this.deadline = null;
 
-			this.terminalStatuses = new SortedSet<AgreementStatus>();
+			this.terminalStatuses = new HashSet<int>();
 
 			this.db.ForEachRowSafe(
 				(sr, bRowsetStart) => {
@@ -487,7 +621,7 @@
 					AgreementStatus nStatus;
 
 					if (Enum.TryParse(sr["StatusName"], out nStatus))
-						this.terminalStatuses.Add(nStatus);
+						this.terminalStatuses.Add((int)nStatus);
 
 					return ActionResult.Continue;
 				},
@@ -559,26 +693,8 @@
 				this.log.Alert("EchoSign echo failed!");
 		} // CreateClient
 
-		private class SignedDoc {
-			public bool HasValue { get; set; }
-			public string MimeType { get; set; }
-			public byte[] Content { get; set; }
-		} // class SignedDoc
+		
 
-		private SortedSet<AgreementStatus> terminalStatuses;
-
-		private readonly AConnection db;
-		private readonly ASafeLog log;
-
-		private bool isReady;
-
-		private string apiKey;
-		private string url;
-		private ReminderFrequency? reminderFrequency;
-		private int? deadline;
-
-		private EchoSignClient echoSign;
-
-		private const string ExpectedPong = "It works!";
+		
 	} // class EchoSignFacade
 } // namespace

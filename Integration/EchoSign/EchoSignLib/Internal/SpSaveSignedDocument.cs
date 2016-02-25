@@ -51,6 +51,9 @@
 		} // class EsignerStatus
 
 		public class HistoryEvent {
+
+            public HistoryEvent() { }
+
 			public HistoryEvent(DocumentHistoryEvent oEvent) {
 				EventTime = oEvent.date;
 				Description = oEvent.description;

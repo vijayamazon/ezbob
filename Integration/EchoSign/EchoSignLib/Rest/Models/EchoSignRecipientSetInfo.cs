@@ -11,6 +11,6 @@ namespace EchoSignLib.Rest.Models
     class EchoSignRecipientSetInfo
     {
         public EchoSignRecipientInfo[] recipientSetMemberInfos { get; set; }
-        public RecipientRole recipientSetRole { get; set; }
+        public string recipientSetRole { get; set; }
     }
 }

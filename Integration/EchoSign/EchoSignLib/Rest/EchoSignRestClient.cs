@@ -13,7 +13,7 @@
     /// </summary>
     internal class EchoSignRestClient {
 
-        private static readonly Uri baseRestUrl = new Uri("https://secure.na1.echosign.com/api/rest/v5");
+        private static readonly Uri baseRestUrl = new Uri("https://api.na1.echosign.com/api/rest/v5/");
 
         private static readonly Uri tokenEndpoint = new Uri("https://secure.echosign.com/oauth/token");
         private static readonly Uri tokenRefreshEndpoint = new Uri("https://secure.echosign.com/oauth/refresh");
@@ -79,14 +79,44 @@
         /// <summary>
         /// Gets the agreement status.
         /// </summary>
-        /// <param name="transientDocId">The transient document identifier.</param>
+        /// <param name="agreementId">The agreement identifier.</param>
         /// <returns></returns>
-        public async Task<EchoSignAgreementStatusResponse> GetAgreementStatus(string transientDocId) {
+        public async Task<EchoSignAgreementStatusResponse> GetAgreementStatus(string agreementId) {
             string accessToken = await GetAccessToken();
 
-            string path = "agreements/" + transientDocId;
+            string path = "agreements/" + agreementId;
 
             var response = await Get<EchoSignAgreementStatusResponse>(accessToken, baseRestUrl, path);
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the agreement document.
+        /// </summary>
+        /// <param name="agreementId">The agreement identifier.</param>
+        /// <returns></returns>
+        public async Task<EchoSignAgreementDocumentResponse> GetAgreementDocument(string agreementId)
+        {
+            string path = string.Format("agreements/{0}/combinedDocument?attachSupportingDocuments=true", agreementId);
+
+            string accessToken = await GetAccessToken();
+
+            var httpClient = GetHttpClient(accessToken);
+            httpClient.BaseAddress = baseRestUrl;
+
+            byte[] file;
+
+            using (var httpResponse = await httpClient.GetAsync(path)) {
+                using (var content = httpResponse.Content) {
+                    file = await content.ReadAsByteArrayAsync();
+                }
+            }
+
+            EchoSignAgreementDocumentResponse response = new EchoSignAgreementDocumentResponse {
+                Content = file,
+                MimeType = "application/pdf"
+            };
+
             return response;
         }
 
@@ -171,7 +201,7 @@
         private HttpClient GetHttpClient(string accessToken = null) {
             HttpClient client = new HttpClient();
             if (accessToken != null) {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Add("Access-Token", accessToken);
             }
 
             return client;

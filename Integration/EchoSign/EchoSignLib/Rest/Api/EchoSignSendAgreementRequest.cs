@@ -36,7 +36,8 @@ namespace EchoSignLib.Rest.Api {
         /// </summary>
         /// <returns></returns>
         public HttpContent BuildContent() {
-            return new JsonContent(ConvertToJsonString(this.dci));
+            string json = ConvertToJsonString(this.dci);
+            return new JsonContent(json);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace EchoSignLib.Rest.Api {
         /// <param name="dci">The dci.</param>
         /// <returns></returns>
         private string ConvertToJsonString(DocumentCreationInfo dci) {
-            var info = new EchoSignDocumentCreateInfo {
+            var createInfo = new EchoSignDocumentCreateInfo {
                 name = dci.name,
                 signatureType = "ESIGN",
                 daysUntilSigningDeadline = dci.daysUntilSigningDeadline ?? 7,
@@ -58,14 +59,21 @@ namespace EchoSignLib.Rest.Api {
                 }
             };
 
-            return JsonConvert.SerializeObject(info);
+            var agreementCreation = new EchoSignAgreementCreationInfo {
+                documentCreationInfo = createInfo
+            };
+
+            return JsonConvert.SerializeObject(agreementCreation);
         }
 
+        /// <summary>
+        /// Creates the file information.
+        /// </summary>
+        /// <returns></returns>
         private EchoSignFileInfo CreateFileInfo() {
             return new EchoSignFileInfo {
                 transientDocumentId = this.transientDocumentId
             };
-
         }
 
         /// <summary>
@@ -77,7 +85,7 @@ namespace EchoSignLib.Rest.Api {
             yield return new EchoSignRecipientSetInfo {
                 recipientSetMemberInfos = ConvertRecipients(recipients)
                     .ToArray(),
-                recipientSetRole = RecipientRole.SIGNER
+                recipientSetRole = "SIGNER"
             };
         }
 

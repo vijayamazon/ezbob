@@ -67,6 +67,7 @@
     <Compile Include="Internal\SpLoadDataForEsign.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\Api\EchoSignAgreementStatusResponse.cs" />
+    <Compile Include="Rest\Api\EchoSignAgreementDocumentResponse.cs" />
     <Compile Include="Rest\Api\EchoSignRefreshAccessTokenRequest.cs" />
     <Compile Include="Rest\Api\EchoSignRefreshAccessTokenResponse.cs" />
     <Compile Include="Rest\Api\EchoSignRefreshTokenRequest.cs" />
@@ -78,15 +79,19 @@
     <Compile Include="Rest\EchoSignRequestBase.cs" />
     <Compile Include="Rest\EchoSignRestClient.cs" />
     <Compile Include="Rest\JsonContent.cs" />
+    <Compile Include="Rest\Models\EchoSignAgreementCreationInfo.cs" />
     <Compile Include="Rest\Models\EchoSignDeviceLocation.cs" />
     <Compile Include="Rest\Models\EchoSignDocumentCreateInfo.cs" />
     <Compile Include="Rest\Models\EchoSignDocumentHistoryEvent.cs" />
     <Compile Include="Rest\Models\EchoSignFileInfo.cs" />
+    <Compile Include="Rest\Models\EchoSignParticipantInfo.cs" />
+    <Compile Include="Rest\Models\EchoSignParticipantSetInfo.cs" />
     <Compile Include="Rest\Models\EchoSignRecipientInfo.cs" />
     <Compile Include="Rest\Models\EchoSignRecipientSetInfo.cs" />
     <Compile Include="Rest\Models\EchoSignUrlFileInfo.cs" />
-    <Compile Include="Rest\Models\Enums\AgreementEventType.cs" />
-    <Compile Include="Rest\Models\Enums\AgreementStatus.cs" />
+    <Compile Include="Rest\Models\Enums\EchoSignAgreementEventType.cs" />
+    <Compile Include="Rest\Models\Enums\EchoSignAgreementStatus.cs" />
+    <Compile Include="Rest\Models\Enums\EchoSignUserAgreementStatus.cs" />
     <Compile Include="Service References\EchoSignService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -285,6 +290,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Rest\Readme.png" />
     <Content Include="Rest\Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

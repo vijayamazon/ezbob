@@ -1,6 +1,7 @@
 ﻿namespace EchoSignLib {
 	using System.Collections.Generic;
 	using System.Linq;
+	using EchoSignLib.Rest.Models;
 	using EchoSignService;
 
 	internal class Esignature {
@@ -27,6 +28,70 @@
 				.Select(ConvertEvent)
 				.ToList();
 		} // SetHistoryAndStatus
+
+	    public void SetHistoryAndStatus(EchoSignDocumentHistoryEvent[] events, EchoSignParticipantSetInfo[] setInfos) {
+	        SignerStatuses = SaveSignerStatus(setInfos);
+
+	        HistoryEvents = events
+                .Select(ConvertToHistoryEvent)
+	            .ToList();
+	    }
+
+	    private List<SpSaveSignedDocument.EsignerStatus> SaveSignerStatus(EchoSignParticipantSetInfo[] setInfos) {
+	        m_oSignerStatuses = new SortedDictionary<string, SpSaveSignedDocument.EsignerStatus>();
+	        List<SpSaveSignedDocument.EsignerStatus> res = new List<SpSaveSignedDocument.EsignerStatus>();
+
+            var es = EmailToSigner();
+
+	        EchoSignParticipantSetInfo setInfo = setInfos[0];
+	        int status = (int)setInfo.status;
+
+			foreach (EchoSignParticipantInfo pi in setInfo.participantSetMemberInfos) {
+				if (!es.ContainsKey(pi.email))
+					continue;
+
+				var st = new SpSaveSignedDocument.EsignerStatus {
+					EsignerID = es[pi.email],
+					StatusID = status,
+				};
+
+				res.Add(st);
+
+				m_oSignerStatuses[pi.email] = st;
+			}
+
+            return res;
+        }
+
+        /// <summary>
+        /// Converts to history event.
+        /// </summary>
+        /// <param name="historyEvent">The echo sign history event.</param>
+        /// <returns></returns>
+        private SpSaveSignedDocument.HistoryEvent ConvertToHistoryEvent(EchoSignDocumentHistoryEvent historyEvent)
+        {
+            SpSaveSignedDocument.HistoryEvent history = new SpSaveSignedDocument.HistoryEvent
+            {
+                ActingUserEmail = historyEvent.actingUserEmail,
+                ActingUserIp = historyEvent.actingUserIpAddress,
+                Comment = historyEvent.comment,
+                Description = historyEvent.description,
+                EventTime = historyEvent.date,
+                EventTypeID = (int)historyEvent.type,
+                ParticipantEmail = historyEvent.participantEmail,
+                SynchronizationKey = historyEvent.synchronizationId,
+                VersionKey = historyEvent.versionId
+            };
+
+            if (historyEvent.deviceLocation != null)
+            {
+                history.Latitude = historyEvent.deviceLocation.latitude;
+                history.Longitude = historyEvent.deviceLocation.longitude;
+            }
+
+            return history;
+        }
+
 
 		private SpSaveSignedDocument.HistoryEvent ConvertEvent(DocumentHistoryEvent oEvent) {
 			switch (oEvent.type) {
