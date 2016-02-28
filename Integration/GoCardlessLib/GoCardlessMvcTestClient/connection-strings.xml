@@ -20,7 +20,7 @@
 	<add name="dev-yarons"  connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 
 	<add name="dev-alexbo"           connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
-	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=automation_report_foxtrot;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+	<add name="dev-alexbo-prod-auto" connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=automation_report_golf;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="production-alexbo"    connectionString="user id=ezbobuser;password=ezbobuser;server=localhost;database=ezbob;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 
 	<!--
