@@ -117,7 +117,8 @@
                                 TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                             }
                             res = false;
-                            Driver.Quit();
+                            if(Driver!=null)
+                                Driver.Quit();
                         }
                     }
                 }
