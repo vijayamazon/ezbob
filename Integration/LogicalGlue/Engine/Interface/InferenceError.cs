@@ -11,13 +11,18 @@
 		public string ParsingExceptionType { get; set; }
 		[DataMember]
 		public string ParsingExceptionMessage { get; set; }
-
-		public bool HasError() {
-			return
-				(TimeoutSource != null) ||
-				!string.IsNullOrWhiteSpace(Message) ||
-				!string.IsNullOrWhiteSpace(ParsingExceptionMessage) ||
-				!string.IsNullOrWhiteSpace(ParsingExceptionType);
-		} // HasError
 	} // class InferenceError
+
+	public static class InferenceErrorExt {
+		public static bool HasError(this InferenceError ie) {
+			if (ie == null)
+				return false;
+
+			return
+				(ie.TimeoutSource != null) ||
+				!string.IsNullOrWhiteSpace(ie.Message) ||
+				!string.IsNullOrWhiteSpace(ie.ParsingExceptionMessage) ||
+				!string.IsNullOrWhiteSpace(ie.ParsingExceptionType);
+		} // HasError
+	} // class InferenceErrorExt
 } // namespace
