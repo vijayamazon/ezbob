@@ -156,6 +156,7 @@
     <Compile Include="Engine\Implementation\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\ABaseTest.cs" />
+    <Compile Include="Tests\AddressTest.cs" />
     <Compile Include="Tests\BasicFlow.cs" />
     <Compile Include="Tests\CreateStoredProcs.cs" />
     <Compile Include="Tests\LGReply.cs" />
@@ -168,6 +169,10 @@
     <EmbeddedResource Include="Harvester\Implementation\etl_F_bad_address.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

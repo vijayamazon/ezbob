@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using Ezbob.Backend.Models;
 
 	/// <summary>
 	/// Holds director data.
@@ -49,22 +50,22 @@
 
 				return this.houseNumber;
 			} // get
-			set {this.houseNumber = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();}
+			set {
+				this.houseNumber = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+			} // set
 		} // HouseNumber
 
-		public void SetAddress(string postCode, string line1, string line2) {
+		public void SetAddress(string postCode, string line1, string line2, string line3) {
 			Postcode = postCode;
 
-			line1 = string.IsNullOrWhiteSpace(line1) ? string.Empty : line1.Trim();
-			line2 = string.IsNullOrWhiteSpace(line2) ? string.Empty : line2.Trim();
+			var cam = new CustomerAddressModel {
+				Line1 = line1,
+				Line2 = line2,
+				Line3 = line3,
+			};
+			cam.FillDetails();
 
-			if (SetHouseNumber(line1))
-				return;
-
-			if (IsApartment(line1))
-				SetHouseNumber(line2);
-			else
-				HouseNumber = line1;
+			HouseNumber = string.IsNullOrWhiteSpace(cam.HouseName) ? cam.HouseNumber : cam.HouseName;
 		} // SetAddress
 
 		/// <summary>
@@ -141,33 +142,8 @@
 			);
 		} // ToString
 
-		private bool SetHouseNumber(string addressLine) {
-			if (addressLine.IndexOfAny(digits) != 0)
-				return false;
-
-			int spacePos = addressLine.IndexOf(" ", StringComparison.InvariantCulture);
-			HouseNumber = spacePos > 0 ? addressLine.Substring(0, spacePos) : addressLine;
-
-			return true;
-		} // SetHouseNumber
-
-		private static bool IsApartment(string addressLine) {
-			foreach (string symptom in apartmentSymptoms) {
-				if (addressLine.StartsWith(symptom + Space, StringComparison.InvariantCultureIgnoreCase))
-					return true;
-
-				if (addressLine.Equals(symptom, StringComparison.InvariantCultureIgnoreCase))
-					return true;
-			} // for each
-			return false;
-		} // IsApartment
-
 		private string postcode;
 		private string houseNumber;
-
-		private const string Space = " ";
-		private static readonly char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
-		private static readonly string[] apartmentSymptoms = { "Flat", "Unit", "Po Box", "Apartment", "Suite", };
 		private static readonly DateTime longAgo = DateTime.UtcNow.AddYears(-120);
 	} // class DirectorData
 } // namespace
