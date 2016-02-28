@@ -81,9 +81,6 @@
 	margin-right: 10px;
 }
 
-.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime > label > span {
-	display: block;
-}
 
 .main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime select {
 	float: none;

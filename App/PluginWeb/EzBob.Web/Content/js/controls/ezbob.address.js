@@ -572,7 +572,7 @@ EzBob.AddressView = Backbone.View.extend({
 			});
 		} // if
 
-		this.$el.find('span, .input-title').text(this.title);
+		this.$el.find('.label-first-line').text(this.title);
 		this.$el.find('.addAddress').val(this.buttonTitle);
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);

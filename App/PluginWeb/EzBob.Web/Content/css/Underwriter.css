@@ -2455,8 +2455,9 @@ input[type="text"].err-field-red {
 }
 
 .manage-investors-checkactive img {
-    margin-left:3px;
-    height:35px;
+      margin-left: 5px;
+    height: 26px;
+    margin-top: 5px;
 }
 .manage-investors-companyName {
     width:15%;

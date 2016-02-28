@@ -364,7 +364,7 @@ a, a:visited {
         font-weight: 600;
         color: #494949;
         text-align: right;
-        line-height: 42px;
+        line-height: 16px;
     }
 
         .form_field_container .input-title.long {
@@ -745,7 +745,10 @@ div.company-full-details {
     }
 
     .click-wrap .click-input-wrap {
-        width: 35px;
+     width: 35px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: middle;
     }
 
         .click-wrap .click-input-wrap .radio-btn {
@@ -812,17 +815,33 @@ div.company-full-details {
     visibility: hidden;
     position: absolute;
 }
-
+.click-wrap {
+    float:none;
+    vertical-align:top;
+}
+.click-wrap.fca-radio {
+    max-width:50%;
+}
 .click-wrap .title {
-    float: left;
+float: none;
     color: #666666;
     font-size: 14px;
     font-weight: 300;
-    display: inline;
-    margin-left: 40px;
-    line-height: 29px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 10px;
+    line-height: 16px;
+    max-width:80%;
 }
 
+.form_field_container .input-wrapper .click-input-wrap input:not([type="button"]):not([type="submit"]) {
+      height:36px;
+    width:36px;
+}
+.click-input-wrap input {
+    height:36px;
+    width:36px;
+}
 .click-wrap .fa {
     position: absolute;
     color: #ebebeb;
@@ -848,12 +867,12 @@ div.company-full-details {
 }
 
 .click-wrap .terms-conditions-checkbox-label {
-    width: 55%;
+    max-width: 165px;
     color: #494949;
     font-weight: 400;
     line-height: 16px;
     font-size: 13px;
-    margin-left: 45px;
+    
 }
 
 .terms-conditions-checkbox-label a {
@@ -878,7 +897,7 @@ div.company-full-details {
     line-height: 17px;
     font-weight: 400;
     color: #3b3b3b;
-    margin-left: 45px;
+   
 }
 
 .click-wrap .soft-label {
@@ -886,10 +905,13 @@ div.company-full-details {
     font-weight: normal;
     line-height: 34px;
     font-size: 14px;
-    margin-left: 45px;
+    
 }
 /*end radio & checkbox*/
-
+.FormRadioCtrl .click-wrap .click-input-wrap {
+    
+    height:30px;
+}
 
 .hmrc-info-button {
     background: url(../everline/help-button.png) no-repeat 0 0;
@@ -1011,7 +1033,8 @@ hr.wizard-hr {
 /**Wizard step 3: breaking line labels**/
 label span.label-first-line,
 label span.label-second-line {
-    display: block;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /**Notifications**/
@@ -2546,4 +2569,10 @@ footer {
 
 .fa-bars {
     display: none;
+}
+.bring-label-middle {
+        display: inline;
+    vertical-align: middle;
+        line-height: 40px;
+
 }

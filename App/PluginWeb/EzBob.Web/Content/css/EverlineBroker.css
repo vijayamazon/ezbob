@@ -942,7 +942,9 @@ div.dataTables_filter input {
 .fa.fa-bars + span {
     display: none;
 }
-
+.click-wrap.fca-radio {
+    max-width:50%;
+}
 div.dataTables_filter input:focus {
     outline: none;
     border: none;
@@ -990,4 +992,8 @@ div.dataTables_top_right button.clean-btn, div.dataTables_top_right button.ev-bt
 
 .form_field_container .input-wrapper.directors-wrapper {
     min-height: initial;
+}
+
+.click-wrap.broker-terms {
+    display:block;
 }

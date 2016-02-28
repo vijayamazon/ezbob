@@ -483,8 +483,9 @@ h2.accept-agreement-header {
 }
 
 .controls.agreements-checkboxes .click-wrap .title{
-	margin-left: 55px;
+
 	font-weight: 500;
+        
 }
 
 .LoanLegal .form_buttons_container .input-wrapper .clean-btn,

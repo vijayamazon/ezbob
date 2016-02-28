@@ -39,7 +39,7 @@
 		<!-- Address information -->
 		@if (origin == CustomerOriginEnum.everline) {
 			<div class="form_field_container control-group ">
-				<label class="input-title-address" for="">Address</label>
+				<label class="input-title-address" for=""><span class="bring-label-middle"></span><span class="label-first-line">Address</span></label>
 				<div class="input-wrapper">
 					<input type="text" class="form_field form_field_left_side" id="<%-addresses.addressInput%>" readonly="readonly" name="addressInput" ui-event-control-id="address-form:address" value="<%-shortAddress.join(', ')%>" />
 					<a href="#" class="removeAddress button btn-green form_field_right_side clean-btn" element-number="<%=i%>" ui-event-control-id="address-form:clear">Clear address</a>

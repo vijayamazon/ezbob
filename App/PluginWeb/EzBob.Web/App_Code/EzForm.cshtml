@@ -66,7 +66,7 @@
         }
         else
         {
-            <label class="input-title @selectProp.TitleClass" for="@identificator">@selectProp.Caption</label>
+            <label class="input-title @selectProp.TitleClass" for="@identificator"><span class="bring-label-middle"></span><span class="label-first-line">@selectProp.Caption</span></label>
 			<div class="input-wrapper attardi-input">
 				<div class="select ">
 					@SelectTag(selectProp, identificator, origin)
@@ -248,7 +248,7 @@ string hiddenFieldAuxClass = "",
         @if (origin == CustomerOriginEnum.everline)
         {
             <div class="form_field_container ezDateTime ">
-                <label class="input-title" >@title</label>
+                <label class="input-title" ><span class="bring-label-middle"></span><span class="label-first-line">@title</span></label>
                 <div class="input-wrapper ">
                     <div class="attardi-input select @labelCss">
 						@SelectTag(dayselect, new HtmlString(dayIdentificator), origin)
@@ -401,12 +401,18 @@ string formFieldID = "")
 			</div>
 		} else {
             
-			<label class="input-title @inputProp.LabelClass @(labelength > 33 ? "long" : "" )"
+			<label class="input-title @inputProp.LabelClass"
 				   @if (true) {
 					   @: for="@identificator"
 				   }
-			><span class="label-first-line">@inputProp.Caption</span>
-			 <span class="label-second-line">@inputProp.CaptionLine2</span></label>
+			><span class="bring-label-middle"></span>
+			    <span class="label-first-line">@inputProp.Caption
+                @if (inputProp.CaptionLine2 != "") {
+                   <br/>@inputProp.CaptionLine2 
+                } 
+                </span>
+			
+			</label>
 			<div class="input-wrapper">
 				@InputTextTag(inputProp, identificator)
 				@if (@inputProp.Button != null) {
@@ -565,15 +571,22 @@ string formFieldID = "")
         else
         {
             <label class="input-title">
-                @if (!string.IsNullOrWhiteSpace(@inputProp.Caption))
-                {
-                    @inputProp.Caption
-                }
-                else
-                {
-                    <span>&nbsp</span>
-                }
-        </label>
+                <span class="bring-label-middle">
+
+                </span>
+               
+                    @if (!string.IsNullOrWhiteSpace(@inputProp.Caption))
+                    {
+                        <span class="label-first-line">
+                            @inputProp.Caption
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="label-first-line">&nbsp</span>
+                    }
+                   
+             </label>
 
             <div class="input-wrapper @inputProp.InputWrapperClass">
 
