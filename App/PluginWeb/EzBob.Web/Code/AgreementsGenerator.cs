@@ -31,7 +31,10 @@
 	    /// <exception cref="NoScheduleException">Condition. </exception>
 	    public void RenderAgreements(Loan loan, bool isRebuld, NL_Model nlModel = null) {
 
-            var model = !isRebuld ? this._builder.Build(loan.Customer, loan.LoanAmount, loan) : this._builder.ReBuild(loan.Customer, loan);
+            var model = !isRebuld
+				? this._builder.Build(loan.Customer, loan.LoanAmount, loan)
+				: this._builder.ReBuild(loan.Customer, loan);
+
             // NL - AgreementModel in json  
             if (nlModel != null)
                 nlModel.Loan.LastHistory().AgreementModel = JsonConvert.SerializeObject(this._builder.NL_BuildAgreementModel(loan.Customer, nlModel));

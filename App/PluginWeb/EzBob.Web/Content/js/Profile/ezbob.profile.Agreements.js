@@ -9,6 +9,8 @@ EzBob.Profile.AgreementView = Backbone.Marionette.ItemView.extend({
     }, // initialize
     
     render: function (data) {
+	    console.log('agreement data is', data);
+
 	    var temp = Handlebars.compile(this.template({ templates: this.templates, data: data }));
     	this.$el.html(temp(data));
 

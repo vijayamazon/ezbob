@@ -153,6 +153,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var url = ('' + window.gRootPath + 'Customer/Schedule/Calculate?amount=' + (parseInt(val))) + sMoreParams;
 
 		$.getJSON(url).done(function (data) {
+			console.log('data from controller:', data);
 			self.renderSchedule(data);
 
 			BlockUi('off', self.$el.find('#block-loan-schedule'));

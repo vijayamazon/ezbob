@@ -104,11 +104,19 @@
 			decimal manualSetupFeePct;
 			decimal brokerSetupFeePct;
 
-			GetSetupFees(loan, out manualSetupFeePct, out brokerSetupFeePct);
+			GetSetupFees(customer, loan, out manualSetupFeePct, out brokerSetupFeePct);
 
 			bool shouldHaveSetupFee =
 				(!loan.CashRequest.SpreadSetupFee.HasValue || !loan.CashRequest.SpreadSetupFee.Value) &&
 				((manualSetupFeePct > 0) || (brokerSetupFeePct > 0));
+
+			this.log.Debug(
+				"Customer {0} agreement model: spread setup fee '{1}', manual {2}, broker {3}.",
+				customer.Id,
+				loan.CashRequest.SpreadSetupFee == null ? "null" : (loan.CashRequest.SpreadSetupFee.Value ? "spread" : "no"),
+				manualSetupFeePct.ToString("P2"),
+				brokerSetupFeePct.ToString("P2")
+			);
 
 			if (shouldHaveSetupFee) {
 				decimal setupFeePercent = manualSetupFeePct + brokerSetupFeePct;
@@ -148,20 +156,52 @@
 			return model;
 		} // GenerateAgreementModel
 
-		private void GetSetupFees(Loan loan, out decimal manualSetupFeePct, out decimal brokerSetupFeePct) {
-			manualSetupFeePct = 0;
-			brokerSetupFeePct = 0;
+		private void GetSetupFees(
+			Customer customer,
+			Loan loan,
+			out decimal manualSetupFeePct,
+			out decimal brokerSetupFeePct
+		) {
+			if (loan.LoanLegalId != null) {
+				var loanLegal = this.loanLegalRepo.GetAll().FirstOrDefault(ll => ll.Id == loan.LoanLegalId.Value);
 
-			if (loan.LoanLegalId == null)
-				return;
+				if (loanLegal != null) {
+					manualSetupFeePct = loanLegal.ManualSetupFeePercent ?? 0;
+					brokerSetupFeePct = loanLegal.BrokerSetupFeePercent ?? 0;
+					return;
+				} // if
+			} // if
 
-			var loanLegal = this.loanLegalRepo.GetAll().FirstOrDefault(ll => ll.Id == loan.LoanLegalId.Value);
+			manualSetupFeePct = loan.CashRequest.ManualSetupFeePercent ?? 0;
+			brokerSetupFeePct = loan.CashRequest.BrokerSetupFeePercent ?? 0;
 
-			if (loanLegal == null)
-				return;
+			decimal approvedAmount =
+				(decimal)(loan.CashRequest.ManagerApprovedSum ?? loan.CashRequest.SystemCalculatedSum ?? 0);
 
-			manualSetupFeePct = loanLegal.ManualSetupFeePercent ?? 0;
-			brokerSetupFeePct = loanLegal.BrokerSetupFeePercent ?? 0;
+			if ((customer.Broker != null) && (approvedAmount != loan.LoanAmount)) {
+				this.log.Debug(
+					"GetSetupFees: broker customer '{0}', broker fee in cash request with approved amount {1} is {2}.",
+					customer.Stringify(),
+					approvedAmount.ToString("C2"),
+					brokerSetupFeePct.ToString("P2")
+				);
+
+				Loan firstLoan = customer.Loans.OrderBy(l => l.Date).FirstOrDefault();
+
+				brokerSetupFeePct = new CommissionCalculator(
+					loan.LoanAmount,
+					firstLoan == null ? (DateTime?)null : firstLoan.Date
+				)
+					.Calculate()
+					.BrokerCommission;
+
+				this.log.Debug(
+					"CreateNewLoan: broker customer '{0}', broker fee adjusted to loan amount {1} is {2}.",
+					customer.Stringify(),
+					loan.LoanAmount.ToString("C2"),
+					brokerSetupFeePct.ToString("P2")
+				);
+			} // if broker customer
 		} // GetSetupFees
 
 		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {
