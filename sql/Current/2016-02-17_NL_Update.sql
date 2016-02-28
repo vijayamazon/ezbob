@@ -158,3 +158,21 @@ IF EXISTS (select id from sysobjects where name='CHK_NL_LoanSchedulePayments_Int
 BEGIN
 	alter table [dbo].[NL_LoanSchedulePayments] drop CONSTRAINT CHK_NL_LoanSchedulePayments_Interest;
 END
+
+
+-- remove duplicates from [dbo].[NL_LoanSchedulePayments]
+BEGIN
+WITH ste_DuplicateSchedulePayments (lastRecord, [LoanScheduleID],[PaymentID],[PrincipalPaid],[InterestPaid],[ResetPrincipalPaid],[ResetInterestPaid])
+AS(
+	select max([LoanSchedulePaymentID]) as lastRecord, [LoanScheduleID],[PaymentID],[PrincipalPaid],[InterestPaid],[ResetPrincipalPaid],[ResetInterestPaid]  from [dbo].[NL_LoanSchedulePayments] 
+	group by [LoanScheduleID],[PaymentID],[PrincipalPaid],[InterestPaid],[ResetPrincipalPaid],[ResetInterestPaid] having 
+	 count([LoanSchedulePaymentID]) > 1  
+	)
+	--select * from [dbo].[NL_LoanSchedulePayments] where [LoanSchedulePaymentID] in (select lastRecord from ste_DuplicateSchedulePayments);
+	delete from [dbo].[NL_LoanSchedulePayments] where [LoanSchedulePaymentID] in (select lastRecord from ste_DuplicateSchedulePayments);
+END
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_NL_LoanSchedulePayments')
+BEGIN
+	alter table [dbo].[NL_LoanSchedulePayments] add CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE ([LoanScheduleID],[PaymentID],[PrincipalPaid],[InterestPaid],[ResetPrincipalPaid],[ResetInterestPaid]);
+END

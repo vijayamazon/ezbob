@@ -220,7 +220,7 @@
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = 2065, //(int)NLLoanAgreementTemplateTypes.PreContractAgreement,
-				FilePath =  "2016/2/21/PAD64J14012/Guaranty Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", // "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
+				FilePath = "2016/2/21/PAD64J14012/Guaranty Agreement_Deka_Dance_1394_21-02-2016_10-18-25.pdf", // "preContract/cc/dd" + oldLoan.RefNumber + ".pdf"
 			});
 			model.Loan.LastHistory().Agreements.Add(new NL_LoanAgreements() {
 				LoanAgreementTemplateID = 2067, //(int)NLLoanAgreementTemplateTypes.GuarantyAgreement,
@@ -288,8 +288,8 @@
 			Console.WriteLine(preContract);
 			// 2
 			// specific LoanAgreementTemplate for current type: 
-            //var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.EzbobAlibabaPreContract : LoanAgreementTemplateType.PreContract);
-            //Console.WriteLine(preContractTemplate.TemplateType);
+			//var preContractTemplate = _helper.GetOrCreateLoanAgreementTemplate(preContract, false ? LoanAgreementTemplateType.EzbobAlibabaPreContract : LoanAgreementTemplateType.PreContract);
+			//Console.WriteLine(preContractTemplate.TemplateType);
 			// 3
 			//var preContractAgreement = new LoanAgreement("precontract", new Loan(), preContractTemplate);
 			//Console.WriteLine(preContractAgreement.ToString());
@@ -550,7 +550,7 @@
 		// n = A/(m-Ar);
 		// total = A+A*r*((n+1)/2)
 
-		
+
 
 		[Test]
 		public void RolloverRescheduling() {
@@ -633,17 +633,17 @@
 				PaymentStatusID = (int)NLPaymentStatuses.Active,
 				PaymentMethodID = (int)NLLoanTransactionMethods.SetupFeeOffset
 			};*/
-		/*	DateTime prebatedate = DateTime.UtcNow; // new DateTime(2015, 12, 6);
-			NL_Payments nlpayment = new NL_Payments() {
-				Amount = 5m,
-				CreatedByUserID = customerid,
-				CreationTime = prebatedate,
-				LoanID = loanID,
-				PaymentTime = prebatedate,
-				Notes = "rebate",
-				PaymentStatusID = (int)NLPaymentStatuses.Active,
-				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
-			};*/
+			/*	DateTime prebatedate = DateTime.UtcNow; // new DateTime(2015, 12, 6);
+				NL_Payments nlpayment = new NL_Payments() {
+					Amount = 5m,
+					CreatedByUserID = customerid,
+					CreationTime = prebatedate,
+					LoanID = loanID,
+					PaymentTime = prebatedate,
+					Notes = "rebate",
+					PaymentStatusID = (int)NLPaymentStatuses.Active,
+					PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay
+				};*/
 			DateTime pdate = DateTime.Now; // new DateTime(2016, 1, 7);
 			NL_Payments nlpayment = new NL_Payments() {
 				Amount = 50m,
@@ -1014,7 +1014,7 @@
 
 			NL_LoanRollovers nlr = state.Result.Loan.Rollovers.FirstOrDefault(nr => nr.CreationTime.Date == r.Created.Date && nr.ExpirationTime.Date == r.ExpiryDate);
 
-			if (nlr == null) 
+			if (nlr == null)
 				return;
 
 			nlr.ExpirationTime = nlr.ExpirationTime.AddDays(4);
@@ -1026,7 +1026,7 @@
 			m_oLog.Debug(saver.Error);
 		}
 
-		
+
 		[Test]
 		public void AcceptRolloverTest() {
 			const long loanID = 9;
@@ -1035,7 +1035,7 @@
 			s.Execute();
 		}
 
-	
+
 
 		[Test]
 		public void SaveFeeNewTest() {
@@ -1059,12 +1059,12 @@
 
 		[Test]
 		public void SaveFeeUpdateTest() {
-			NL_LoanFees f = m_oDB.FillFirst<NL_LoanFees>("NL_LoanFeesGet", 
-				CommandSpecies.StoredProcedure, 
-				new QueryParameter("LoanID", 3), 
+			NL_LoanFees f = m_oDB.FillFirst<NL_LoanFees>("NL_LoanFeesGet",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("LoanID", 3),
 				new QueryParameter("LoanFeeID", 20011));
 
-			f.UpdatedByUserID=357;
+			f.UpdatedByUserID = 357;
 			f.UpdateTime = DateTime.UtcNow;
 			f.Amount = 29;
 			f.AssignTime = DateTime.Now.Date.AddDays(-30);
@@ -1150,6 +1150,93 @@
 			} catch (Exception ex) {
 				m_oLog.Error(ex);
 			}
+		}
+
+		[Test]
+		public void ExceptPaymentTest() {
+
+			const long loanID = 13;
+			var state = new GetLoanState(351, loanID, DateTime.UtcNow, 1, false); // loanID = 17, customer = 56
+			state.Execute();
+			NL_Model nlLoan = state.Result;
+
+			// loan - from DB, actual - from UI
+
+			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			var loan = loanRep.Get(nlLoan.Loan.OldLoanID);
+			var actual = loanRep.Get(nlLoan.Loan.OldLoanID);
+
+
+			List<PaypointTransaction> loanList = loan.TransactionsWithPaypointSuccesefull;
+			m_oLog.Debug("DB state:");
+			loanList.ForEach(xxx => m_oLog.Debug(xxx.ToString()));
+
+			List<PaypointTransaction> actualList = loan.TransactionsWithPaypointSuccesefull;
+			var toremove = actualList.Last();
+			actualList.Remove(toremove);
+
+			m_oLog.Debug("\n\n from UI:");
+			actualList.ForEach(yyy => m_oLog.Debug(yyy.ToString()));
+
+			var removedPayments = loanList.Except(actualList);
+
+			m_oLog.Debug("\n\n Cancelled payments:");
+
+			foreach (PaypointTransaction transaction in removedPayments.ToList()) {
+
+				m_oLog.Debug(transaction);
+
+				transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
+				transaction.Interest = 0;
+				transaction.Fees = 0;
+				transaction.LoanRepayment = 0;
+				transaction.Rollover = 0;
+
+				transaction.Cancelled = true;
+				transaction.CancelledAmount = transaction.Amount;
+
+				transaction.Amount = 0;
+
+				var transaction1 = transaction;
+
+				// reset paid charges 
+				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.AmountPaid = 0);
+				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.State = null);
+
+				IEnumerable<LoanScheduleTransaction> schTransactions = loan.ScheduleTransactions.Where(st => st.Transaction.Id == transaction1.Id);
+
+				foreach (LoanScheduleTransaction st in schTransactions) {
+					var paidSchedule = loan.Schedule.FirstOrDefault(s => s.Id == st.Schedule.Id);
+					if (paidSchedule != null) {
+						// reset paid rollover
+						foreach (PaymentRollover r in paidSchedule.Rollovers) {
+							r.PaidPaymentAmount = 0;
+							r.CustomerConfirmationDate = null;
+							r.PaymentNewDate = null;
+							r.Status = (r.ExpiryDate.HasValue && r.ExpiryDate.Value <= DateTime.UtcNow) ? RolloverStatus.Expired : RolloverStatus.New;
+						}
+					}
+				}
+			}
+
+			m_oLog.Debug("\n\n final state:");
+			loan.TransactionsWithPaypointSuccesefull.ForEach(xx => m_oLog.Debug(xx.ToString()));
+		}
+
+		[Test]
+		public void ExceptListTest() {
+			List<string> list1 = new List<string>();
+			list1.Add("aa");
+			list1.Add("bb");
+			list1.Add("cc");
+
+			List<string> list2 = new List<string>();
+			list2.Add("aa");
+
+			IEnumerable<string> onlyInFirstSet = list1.Except(list2);
+
+			foreach (string xx in onlyInFirstSet)
+				Console.WriteLine(xx);
 		}
 
 	} // class TestNewLoan

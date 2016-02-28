@@ -1,16 +1,19 @@
 ﻿namespace EzBob.Models {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using log4net;
 	using NHibernate.Linq;
 
 	public class ChangeLoanDetailsModelBuilder {
+
+		private static readonly ILog _log = LogManager.GetLogger(typeof(EditLoanDetailsModel));
+
 		public EditLoanDetailsModel BuildModel(Loan loan) {
 			var model = new EditLoanDetailsModel {
 				Amount = loan.LoanAmount,
@@ -249,7 +252,7 @@
 			UpdateInstallments(loan, actual);
 			UpdateFees(loan, actual);
 			// loan - from DB, actual - from UI
-			RemovePayments(loan, actual);
+			CancelPayments(loan, actual);
 
 			loan.Modified = true;
 		}
@@ -299,59 +302,54 @@
 			}
 		}
 
-		// loan - from DB, actual - from UI
-		private static void RemovePayments(Loan loan, Loan actual) {
 
-			Trace.WriteLine("DB state:");
-			loan.TransactionsWithPaypoint.ForEach(xxx => Trace.WriteLine(xxx));
+		private static void CancelPayments(Loan loan, Loan actual) {
 
-			Trace.WriteLine("\n\n from UI:");
-			actual.TransactionsWithPaypoint.ForEach(xxx => Trace.WriteLine(xxx));
+			foreach (PaypointTransaction transaction in loan.TransactionsWithPaypointSuccesefull) {
 
-			IEnumerable<PaypointTransaction> removedPayments = loan.TransactionsWithPaypoint.Except(actual.TransactionsWithPaypoint);
-			var paypointTransactions = removedPayments as IList<PaypointTransaction> ?? removedPayments.ToList();
+				if (actual.TransactionsWithPaypointSuccesefull.FirstOrDefault(t => t.Id == transaction.Id) == null) {
 
-			paypointTransactions.ForEach(t => Trace.WriteLine(string.Format("Removed payment: {0}", t)));
+					_log.Debug(transaction);
 
-			foreach (PaypointTransaction transaction in loan.TransactionsWithPaypoint) {
+					transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
+					transaction.Interest = 0;
+					transaction.Fees = 0;
+					transaction.LoanRepayment = 0;
+					transaction.Rollover = 0;
 
-				if (paypointTransactions.FirstOrDefault(t => t.Id == transaction.Id) == null) {
-					continue;
-				}
+					transaction.Cancelled = true;
+					transaction.CancelledAmount = transaction.Amount;
 
-				transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
-				transaction.Interest = 0;
-				transaction.Fees = 0;
-				transaction.LoanRepayment = 0;
-				transaction.Rollover = 0;
+					transaction.Amount = 0;
 
-				transaction.Cancelled = true;
-				transaction.CancelledAmount = transaction.Amount;
+					var transaction1 = transaction;
 
-				transaction.Amount = 0;
+					// reset paid charges 
+					loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.AmountPaid = 0);
+					loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.State = null);
 
-				var transaction1 = transaction;
+					IEnumerable<LoanScheduleTransaction> schTransactions = loan.ScheduleTransactions.Where(st => st.Transaction.Id == transaction1.Id);
 
-				// reset paid charges 
-				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.AmountPaid = 0);
-				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.State = null);
-
-				IEnumerable<LoanScheduleTransaction> schTransactions = loan.ScheduleTransactions.Where(st => st.Transaction.Id == transaction1.Id);
-
-				foreach (LoanScheduleTransaction st in schTransactions) {
-					var paidSchedule = loan.Schedule.FirstOrDefault(s => s.Id == st.Schedule.Id);
-					if (paidSchedule != null) {
-						// reset paid rollover
-						foreach (PaymentRollover r in paidSchedule.Rollovers) {
-							r.PaidPaymentAmount = 0;
-							r.CustomerConfirmationDate = null;
-							r.PaymentNewDate = null;
-							r.Status = (r.ExpiryDate.HasValue && r.ExpiryDate.Value <= DateTime.UtcNow) ? RolloverStatus.Expired : RolloverStatus.New;
+					foreach (LoanScheduleTransaction st in schTransactions) {
+						var paidSchedule = loan.Schedule.FirstOrDefault(s => s.Id == st.Schedule.Id);
+						if (paidSchedule != null) {
+							// reset paid rollover
+							foreach (PaymentRollover r in paidSchedule.Rollovers) {
+								r.PaidPaymentAmount = 0;
+								r.CustomerConfirmationDate = null;
+								r.PaymentNewDate = null;
+								r.Status = (r.ExpiryDate.HasValue && r.ExpiryDate.Value <= DateTime.UtcNow) ? RolloverStatus.Expired : RolloverStatus.New;
+							}
 						}
 					}
 				}
 			}
+
+			_log.Debug("\n\n final state:");
+			loan.TransactionsWithPaypointSuccesefull.ForEach(xx => _log.Debug(xx.ToString()));
+
 		}
+		
 		
 		public bool IsAmountChangingAllowed(CashRequest cr) {
 			if (cr == null || string.IsNullOrEmpty(cr.LoanTemplate))
