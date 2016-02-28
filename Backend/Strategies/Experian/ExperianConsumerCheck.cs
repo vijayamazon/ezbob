@@ -77,7 +77,6 @@
 		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
 			InputLocationDetailsMultiLineLocation location = this.addressLines.GetLocation(oAddressCurrency);
 
-			var addressHelper = new Ezbob.Backend.Strategies.Misc.CustomerAddressHelper(customerId);
 			var ukAddress = new Models.CustomerAddressModel {
 				Line1 = location.LocationLine1,
 				Line2 = location.LocationLine2,
@@ -85,7 +84,7 @@
 				PostCode = location.LocationLine6,
 				City = location.LocationLine4
 			};
-			addressHelper.FillAddress(ukAddress);
+			ukAddress.FillDetails();
 
 			InputLocationDetailsUKLocation ukLokation = new InputLocationDetailsUKLocation {
 				Postcode = ukAddress.PostCode,

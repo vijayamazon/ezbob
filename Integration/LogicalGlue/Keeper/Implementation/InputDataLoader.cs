@@ -71,7 +71,7 @@
 				break;
 
 			case RowTypes.Address:
-				Result.Director.SetAddress(sr["Postcode"], sr["Line1"], sr["Line2"]);
+				Result.Director.SetAddress(sr["Postcode"], sr["Line1"], sr["Line2"], sr["Line3"]);
 				break;
 
 			case RowTypes.RequestedLoan:

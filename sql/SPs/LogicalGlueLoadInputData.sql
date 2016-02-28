@@ -43,6 +43,7 @@ BEGIN
 			RowType = 'Address',
 			a.Line1,
 			a.Line2,
+			a.Line3,
 			Postcode = a.Rawpostcode
 		FROM
 			CustomerAddress a
