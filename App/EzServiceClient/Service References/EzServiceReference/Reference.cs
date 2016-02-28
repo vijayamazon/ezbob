@@ -4508,6 +4508,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAllResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLogicalGlueForAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAllResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillLogicalGlueForAllAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync", ReplyAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<EZBob.DatabaseLib.Model.Database.CashRequestOriginator> cashRequestOriginator);
         
@@ -6326,6 +6332,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID) {
             return base.Channel.LogicalGlueSetAsCurrentAsync(underwriterID, customerID, uniqueID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLogicalGlueForAll() {
+            return base.Channel.BackfillLogicalGlueForAll();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillLogicalGlueForAllAsync() {
+            return base.Channel.BackfillLogicalGlueForAllAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<EZBob.DatabaseLib.Model.Database.CashRequestOriginator> cashRequestOriginator) {

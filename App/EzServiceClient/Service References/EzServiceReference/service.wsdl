@@ -501,6 +501,12 @@
   <wsdl:message name="IEzService_LogicalGlueSetAsCurrent_OutputMessage">
     <wsdl:part name="parameters" element="tns:LogicalGlueSetAsCurrentResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillLogicalGlueForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillLogicalGlueForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillLogicalGlueForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillLogicalGlueForAllResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategyAsync_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategyAsync" />
   </wsdl:message>
@@ -2050,6 +2056,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent" message="tns:IEzService_LogicalGlueSetAsCurrent_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse" message="tns:IEzService_LogicalGlueSetAsCurrent_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BackfillLogicalGlueForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll" message="tns:IEzService_BackfillLogicalGlueForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAllResponse" message="tns:IEzService_BackfillLogicalGlueForAll_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MainStrategyAsync">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" message="tns:IEzService_MainStrategyAsync_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse" message="tns:IEzService_MainStrategyAsync_OutputMessage" />
@@ -3508,6 +3518,15 @@
     </wsdl:operation>
     <wsdl:operation name="LogicalGlueSetAsCurrent">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillLogicalGlueForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

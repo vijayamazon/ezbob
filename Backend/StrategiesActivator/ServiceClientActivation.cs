@@ -1551,6 +1551,10 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.serviceClient.ManualLegalDocsSyncTemplatesFiles(string.IsNullOrEmpty(agreementsPath) ? pathExample : agreementsPath);
 		} // ManualLegalDocsSyncTemplatesFiles
 
+		[Activation]
+		private void BackfillLogicalGlueForAll() {
+			this.serviceClient.BackfillLogicalGlueForAll();
+		} // BackfillLogicalGlueForAll
 
 		//[Activation]
 		//private void ExampleMethod() {
