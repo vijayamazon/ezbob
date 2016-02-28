@@ -1,7 +1,5 @@
 ﻿namespace UIAutomationTests.Core {
-    using System.Linq;
     using System.Threading;
-    using System.Windows.Forms;
     using log4net;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Interactions;
