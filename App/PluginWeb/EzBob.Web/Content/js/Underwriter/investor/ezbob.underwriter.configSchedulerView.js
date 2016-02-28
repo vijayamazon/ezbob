@@ -17,14 +17,18 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 		'form': '#configSchedulerForm',
 		'monthlyFundingCapital': '#monthlyFundingCapital',
 		'fundsTransferSchedule': '#fundsTransferSchedule',
+		'fundsTransferScheduleOption': '#fundsTransferSchedule option',
 		'fundsTransferDate': '#fundsTransferDate',
+		'fundsTransferDateOption': '#fundsTransferDate option',
 		'repaymentsTransferSchedule': '#repaymentsTransferSchedule',
+		'repaymentsTransferScheduleOption': '#repaymentsTransferSchedule option',
 		'money': '.cashInput'
 	},//ui   
 
 	events: {
 		"click #config-scheduler-cancel-btn": "cancelConfigScheduler",
-		"click #config-scheduler-submit-btn": "submitConfigScheduler"
+		"click #config-scheduler-submit-btn": "submitConfigScheduler",
+		"change #fundsTransferSchedule": "resetFundsTransferDateList"
 	},
 
 	onRender: function() {
@@ -57,10 +61,18 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 		this.ui.money.moneyFormat();
 		var data = this.model.get("SchedulerObject");
 
+		this.setFundsTransferDateList(data.FundsTransferSchedule);
+
 		this.ui.monthlyFundingCapital.val(EzBob.formatPounds(data.MonthlyFundingCapital));
-		this.ui.fundsTransferSchedule.val(data.FundsTransferSchedule);
-		this.ui.fundsTransferDate.val(data.FundsTransferDate);
-		this.ui.repaymentsTransferSchedule.val(data.RepaymentsTransferSchedule);
+		this.ui.fundsTransferScheduleOption.each(function() {
+			 this.selected = (this.text == data.FundsTransferSchedule);
+		});
+		this.$el.find('#fundsTransferDate option').each(function() {
+			 this.selected = (this.value == data.FundsTransferDate);
+		});
+		this.ui.repaymentsTransferScheduleOption.each(function() {
+			 this.selected = (this.text == data.RepaymentsTransferSchedule);
+		});
 	},
 
 	submitConfigScheduler: function() {
@@ -73,7 +85,8 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 
 		BlockUi();
 		var submitParam = {
-			investorID: this.investorID,monthlyFundingCapital: amount,
+			investorID: this.investorID,
+			monthlyFundingCapital: amount,
 			fundsTransferSchedule: this.ui.fundsTransferSchedule.val(),
 			fundsTransferDate: this.ui.fundsTransferDate.val(),
 			repaymentsTransferSchedule: this.ui.repaymentsTransferSchedule.val()
@@ -98,6 +111,25 @@ EzBob.Underwriter.ConfigSchedulerView = Backbone.Marionette.ItemView.extend({
 
 		return false;
 
+	},
+
+	resetFundsTransferDateList: function() {
+		this.ui.fundsTransferDate.empty();
+		this.setFundsTransferDateList(this.ui.fundsTransferSchedule.val());
+	},
+
+	setFundsTransferDateList: function(data) {
+		
+		var weekDateList = ['Mon', 'Tue', 'Wed', 'Thu'];
+		if (data)
+			var scheduleDateList = data === 'month' ? [1, 2, 5, 10, 15, 20, 30] : [1, 2, 3, 4];
+
+		var self = this;
+		_.each(scheduleDateList, function(i, k) {
+			self.ui.fundsTransferDate.append(
+				$('<option></option>').val(i).text(data === 'week' ? weekDateList[k] : i)
+			);
+		}); // for each
 	},
 
 	show: function() {
