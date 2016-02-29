@@ -192,7 +192,7 @@
 					);
 
 					if (inference.Error.TimeoutSource != null)
-						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Value);
+						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Name);
 
 					ModelOutput model = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
 						? inference.ModelOutputs[ModelNames.NeuralNetwork]

@@ -12,8 +12,9 @@
 			DateTime now,
 			bool includeTryOutData,
 			decimal monthlyPayment,
-			BucketRepository bucketRepo
-		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment, bucketRepo) {
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo
+		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment, bucketRepo, timeoutSourceRepo) {
 		} // constructor
 
 		protected override LoadInference CreateLoadInferenceProcedure() {

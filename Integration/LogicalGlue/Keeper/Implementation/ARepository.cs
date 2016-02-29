@@ -8,7 +8,7 @@
 		public virtual void Load() {
 			Clear();
 
-			StoredProc.ForEachRowSafe(sr => Add(sr.Stuff<TMember>()));
+			LoadAllStoredProc.ForEachRowSafe(sr => Add(sr.Stuff<TMember>()));
 		} // Load
 
 		protected ARepository(AConnection db, ASafeLog log) {
@@ -16,7 +16,7 @@
 			Log = log;
 		} // constructor
 
-		protected abstract ALogicalGlueStoredProc StoredProc { get; }
+		protected abstract ALogicalGlueStoredProc LoadAllStoredProc { get; }
 
 		protected AConnection DB { get; private set; }
 		protected ASafeLog Log { get; private set; }

@@ -14,11 +14,13 @@
 			ASafeLog log,
 			long requestID,
 			Response<Reply> response,
-			BucketRepository bucketRepo
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo
 		) : base(db, log) {
 			this.requestID = requestID;
 			this.response = response;
 			this.bucketRepo = bucketRepo;
+			this.timeoutSourceRepo = timeoutSourceRepo;
 			ResponseID = 0;
 		} // constructor
 
@@ -57,9 +59,10 @@
 					this.requestID,
 					this.response,
 					this.bucketRepo,
+					this.timeoutSourceRepo,
 					DB,
 					Log
-				).ExecuteScalar<long>(con);
+				).Execute(con);
 
 				if (this.response.Parsed.HasInference()) {
 					var map = new SortedDictionary<ModelNames, long>();
@@ -127,5 +130,6 @@
 		private readonly long requestID;
 		private readonly Response<Reply> response;
 		private readonly BucketRepository bucketRepo;
+		private readonly TimeoutSourceRepository timeoutSourceRepo;
 	} // class InferenceSaver
 } // namespace

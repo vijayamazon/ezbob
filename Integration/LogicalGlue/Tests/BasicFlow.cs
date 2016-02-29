@@ -33,6 +33,19 @@
 		} // TestEtlFailedBadAddress
 
 		[Test]
+		public void TestTimeoutL() {
+			IEngine engine = InjectorStub.GetTestEngine();
+
+			TestHarvester harvester = (TestHarvester)((Engine)engine).Harvester;
+
+			harvester.ReplyMode = TestHarvester.ReplyModes.TimeoutA;
+
+			Inference inference = engine.GetInference(customerID, 0, false, GetInferenceMode.ForceDownload);
+
+			Log.Info("Inference read: {0}", inference);
+		} // TestTimeoutL
+
+		[Test]
 		public void TestEndToEndFlow() {
 			IEngine engine = InjectorStub.GetEngine();
 

@@ -14,7 +14,7 @@
 		public HttpStatusCode Status { get; set; }
 
 		[JsonProperty(PropertyName = "timeout", NullValueHandling = NullValueHandling.Ignore)]
-		public TimeoutSources? Timeout { get; set; }
+		public string Timeout { get; set; }
 
 		[JsonProperty(PropertyName = "error", NullValueHandling = NullValueHandling.Ignore)]
 		public string Error { get; set; }
@@ -42,7 +42,7 @@
 			return string.Format(
 				"Status '{0}', {1}, {2}, {3}, {4}, {5}.",
 				Status,
-				Timeout == null ? "no timeout" : "timeout " + Timeout.Value,
+				string.IsNullOrEmpty(Timeout) ? "no timeout" : "timeout " + Timeout,
 				string.IsNullOrWhiteSpace(Error) ? "no error" : "with error",
 				(Inference == null ? "no" : "with") + " inference",
 				(this.HasEquifaxData() ? "with" : "no") + " Equifax data",

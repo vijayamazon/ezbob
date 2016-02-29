@@ -28,7 +28,8 @@
 			int historyLength,
 			bool includeTryOutData,
 			decimal monthlyPayment,
-			BucketRepository bucketRepo
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo
 		) : base(db, log, customerID, now) {
 			this.resultSet = new SortedDictionary<long, Inference>();
 			this.models = new SortedDictionary<long, PublicModelOutput>();
@@ -39,6 +40,7 @@
 			this.includeTryOutData = includeTryOutData;
 			this.monthlyPayment = monthlyPayment;
 			this.bucketRepo = bucketRepo;
+			this.timeoutSourceRepo = timeoutSourceRepo;
 		} // constructor
 
 		public List<Inference> Results { get; private set; }
@@ -174,9 +176,9 @@
 				Message = dbResponse.ErrorMessage,
 				ParsingExceptionMessage = dbResponse.ParsingExceptionMessage,
 				ParsingExceptionType = dbResponse.ParsingExceptionType,
-				TimeoutSource = dbResponse.TimeoutSourceID == null
-					? (TimeoutSources?)null
-					: (TimeoutSources)dbResponse.TimeoutSourceID.Value,
+				TimeoutSource = (dbResponse.TimeoutSourceID == null) || (this.timeoutSourceRepo == null)
+					? null
+					: this.timeoutSourceRepo.Find(dbResponse.TimeoutSourceID.Value),
 			};
 
 			result.Status = new InferenceStatus {
@@ -394,6 +396,7 @@
 		private readonly bool includeTryOutData;
 		private readonly decimal monthlyPayment;
 		private readonly BucketRepository bucketRepo;
+		private readonly TimeoutSourceRepository timeoutSourceRepo;
 		private string argList;
 	} // class InferenceLoader
 } // namespace

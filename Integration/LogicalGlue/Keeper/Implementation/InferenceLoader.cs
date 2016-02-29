@@ -12,8 +12,9 @@
 			DateTime now,
 			bool includeTryOutData,
 			decimal monthlyPayment,
-			BucketRepository bucketRepo
-		) : base(db, log, 0, customerID, now, 1, includeTryOutData, monthlyPayment, bucketRepo) {
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo
+		) : base(db, log, 0, customerID, now, 1, includeTryOutData, monthlyPayment, bucketRepo, timeoutSourceRepo) {
 		} // constructor
 
 		internal InferenceLoader(
@@ -21,8 +22,9 @@
 			ASafeLog log,
 			long responseID,
 			int customerID,
-			BucketRepository bucketRepo
-		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0, bucketRepo) {
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo
+		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0, bucketRepo, timeoutSourceRepo) {
 		} // constructor
 
 		public virtual Inference Result {

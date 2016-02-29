@@ -52,7 +52,8 @@
 					time,
 					includeTryOutData,
 					monthlyPayment,
-					LoadBuckets()
+					LoadBuckets(),
+					LoadTimeoutSources()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -61,11 +62,20 @@
 
 		public Inference SaveInference(int customerID, long requestID, Response<Reply> response) {
 			try {
-				long responseID = new InferenceSaver(this.db, this.log, requestID, response, LoadBuckets())
+				long responseID = new InferenceSaver(
+					this.db,
+					this.log,
+					requestID,
+					response,
+					LoadBuckets(),
+					LoadTimeoutSources(false)
+				)
 					.Execute()
 					.ResponseID;
 
-				return new InferenceLoader(this.db, this.log, responseID, customerID, LoadBuckets()).Execute().Result;
+				return new InferenceLoader(this.db, this.log, responseID, customerID, LoadBuckets(), LoadTimeoutSources())
+					.Execute()
+					.Result;
 			} catch (Exception e) {
 				throw new InferenceSaverAlert(customerID, requestID, e, this.log);
 			} // try
@@ -103,8 +113,11 @@
 					time,
 					includeTryOuts,
 					Math.Max(maxHistoryLength ?? 0, 0),
-					LoadBuckets()
-				).Execute().Results;
+					LoadBuckets(),
+					LoadTimeoutSources()
+				)
+					.Execute()
+					.Results;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
@@ -139,7 +152,8 @@
 					time,
 					includeTryOutData,
 					monthlyPayment,
-					LoadBuckets()
+					LoadBuckets(),
+					LoadTimeoutSources()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -159,6 +173,15 @@
 			repo.Load();
 			return repo;
 		} // LoadBuckets
+
+		private TimeoutSourceRepository LoadTimeoutSources(bool doLoad = true) {
+			var repo = new TimeoutSourceRepository(this.db, this.log);
+
+			if (doLoad)
+				repo.Load();
+
+			return repo;
+		} // LoadTimeoutSources
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

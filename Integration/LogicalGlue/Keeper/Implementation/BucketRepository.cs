@@ -8,8 +8,8 @@
 		public BucketRepository(AConnection db, ASafeLog log) : base(db, log) {
 		} // constructor
 
-		protected override ALogicalGlueStoredProc StoredProc {
+		protected override ALogicalGlueStoredProc LoadAllStoredProc {
 			get { return new LoadBuckets(DB, Log); }
-		} // get
+		} // LoadAllStoredProc
 	} // class BucketRepository
 } // namespace

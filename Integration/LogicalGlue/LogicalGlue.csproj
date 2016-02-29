@@ -87,6 +87,8 @@
     <Compile Include="Keeper\Implementation\ARepository.cs" />
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadTimeoutSources.cs" />
+    <Compile Include="Keeper\Implementation\TimeoutSourceRepository.cs" />
     <Compile Include="Keeper\Implementation\BucketRepository.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
     <Compile Include="Keeper\Implementation\InferenceHistoryLoader.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="Harvester\Interface\ModelOutput.cs" />
     <Compile Include="Harvester\Interface\Reply.cs" />
     <Compile Include="Harvester\Interface\Response.cs" />
-    <Compile Include="Engine\Interface\TimeoutSources.cs" />
+    <Compile Include="Engine\Interface\TimeoutSource.cs" />
     <Compile Include="Harvester\Interface\Warning.cs" />
     <Compile Include="Harvester\Implementation\Harvester.cs" />
     <Compile Include="InjectorStub.cs" />
@@ -171,7 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Harvester\Implementation\TimeoutL.json" />
     <EmbeddedResource Include="Harvester\Implementation\etl_F_bad_address.json" />
+    <EmbeddedResource Include="Harvester\Implementation\TimeoutA.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Backend\Models\Ezbob.Backend.Models.csproj">
