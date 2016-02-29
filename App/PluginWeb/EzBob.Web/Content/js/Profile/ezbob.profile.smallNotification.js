@@ -40,7 +40,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
 		    hasChance = this.model.get('HasApprovalChance');
 
         if (state == 'get' && hasLoans && !isAlibaba) {
-            message = '<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.';
+        	message = '<em>Congratulations!</em> Click Choose Amount and select the exact amount you need.';
             cls = 'green';
         }
 
@@ -68,7 +68,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
 
         if (state == 'get' && !hasLoans && !isAlibaba) {
-            message = '<em>Congratulations!</em> Click Choose Amount and choose the exact amount you need.';
+        	message = '<em>Congratulations!</em> Click Choose Amount and select the exact amount you need.';
             cls = 'green';
         }
 

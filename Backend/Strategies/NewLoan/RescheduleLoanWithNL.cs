@@ -21,61 +21,15 @@
 	using PaymentServices.Calculators;
 	using StructureMap;
 
-	public class RescheduleLoanWithN<T> : AStrategy {
+	public class RescheduleLoanWithN<T> : RescheduleLoan<T> {
 
-		public RescheduleLoanWithN(T t, ReschedulingArgument reschedulingArgument) {
-			this.ReschedulingArguments = reschedulingArgument;
-
-			useNL = false;
-
-			if (t.GetType() == typeof(Loan)) {
-				this.tLoan = t as Loan;
-				this.tNLLoan = null;
-				this.loanRep = ObjectFactory.GetInstance<LoanRepository>();
-				this.loanRep.Clear();
-			} else if (t.GetType() == typeof(NL_Model)) {
-				this.tNLLoan = t as NL_Model;
-				this.tLoan = null;
-				this.loanRep = null;
-				useNL = true;
-			}
-
-			this.Result = new ReschedulingResult();
-			this.Result.LoanID = this.ReschedulingArguments.LoanID;
-			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
-			this.Result.BlockAction = false;
-
-			// used in client's calendar for re-date selecting and in strategy for validations
-			this.Result.ReschedulingIntervalStart = DateTime.UtcNow.Date.AddDays(1);
-
-			if (this.ReschedulingArguments.RescheduleIn)
-				this.Result.ReschedulingIntervalEnd = this.Result.ReschedulingIntervalStart.AddDays(30);
-
-			// if today date sent - set re-date to tomorrow, otherwise set the date that sent
-			this.Result.FirstItemDate = (this.ReschedulingArguments.ReschedulingDate.Date == DateTime.UtcNow.Date) ? this.Result.ReschedulingIntervalStart : this.ReschedulingArguments.ReschedulingDate.Date;
-
-			this.cultureInfo = new CultureInfo("en-GB");
-
-			this.emailToAddress = CurrentValues.Instance.EzbobTechMailTo;
-			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
-			this.emailFromName = CurrentValues.Instance.MailSenderName;
-
-			this.sendDebugMail = CurrentValues.Instance.ReschedulingDebugMail;
-			this.toAddressDebugMail = CurrentValues.Instance.ReschedulingDebugMailAddress;
-
-			withinGraceDays = 14; //  TODO add to conf vars
-
-			if (this.ReschedulingArguments.UserID == 0)
-				this.ReschedulingArguments.UserID = 1;
-
-			this.strategyArgs = new object[] {
-				this.ReschedulingArguments, this.Result
-			};
+		
+		public RescheduleLoanWithN(T t, ReschedulingArgument reschedulingArgument): base(T t, ReschedulingArgument reschedulingArgument) {
+			
 		}
 
-		public override string Name { get { return "RescheduleLoan"; } }
-		public ReschedulingArgument ReschedulingArguments; // input
-		public ReschedulingResult Result; // output
+		public override string Name { get { return "RescheduleLoanWithN"; } }
+	
 
 		public override void Execute() {
 
@@ -83,16 +37,11 @@
 				return;
 
 			if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == null) {
-				this.Result.Error = "Weekly/monthly payment amount for OUT rescheduling not provided";
-				if (this.loanRep != null)
-					this.loanRep.Clear();
+				this.Result.Error = "Weekly/monthly payment amount for OUT rescheduling not provided";			
 				return;
 			}
 
-			try {
-
-				if (this.loanRep != null)
-					this.loanRep.BeginTransaction();
+			try {			
 
 				LoadCurrentLoanState();
 
@@ -764,7 +713,7 @@
 		}
 
 
-		private bool ValidateLoanModel() {
+		protected bool ValidateLoanModel() {
 			if (!useNL && this.tLoan == null) {
 				this.Result.Error = string.Format("Loan not found (ID)={0}", this.ReschedulingArguments.LoanID);
 				this.Result.BlockAction = true;
@@ -780,7 +729,7 @@
 			return true;
 		}
 
-		private bool ValidateLoanID() {
+		protected bool ValidateLoanID() {
 			if (this.tLoan != null && this.ReschedulingArguments.LoanID == 0) {
 				this.Result.Error = string.Format("Loan ID {0} not found", this.ReschedulingArguments.LoanID);
 				this.Result.BlockAction = true;
@@ -800,7 +749,7 @@
 		/// // check status, don't continue for "PaidOff"
 		/// </summary>
 		/// <returns></returns>
-		private bool ValidateLoanClosed() {
+		protected bool ValidateLoanClosed() {
 			bool loanClosed = !useNL && this.tLoan.Status == LoanStatus.PaidOff || useNL && this.tNLLoan.Loan.LoanStatusID == (int)NLLoanStatuses.PaidOff;
 			if (loanClosed) {
 				this.Result.Error = string.Format("Loan ID {0} paid off. Loan balance: {1}", this.tLoan.Id, 0m.ToString("C2", this.cultureInfo));
@@ -811,7 +760,7 @@
 		}
 
 
-		private bool ValidateArguments() {
+		protected bool ValidateArguments() {
 			// input validation for "IN"
 			if (this.ReschedulingArguments.RescheduleIn && (this.Result.FirstItemDate > this.Result.LoanCloseDate)) {
 				this.Result.Error = "Within loan arrangement is impossible";
@@ -846,7 +795,7 @@
 			return true;
 		}
 
-		private bool ValidateIntervalsCalculated() {
+		protected bool ValidateIntervalsCalculated() {
 			if (this.Result.IntervalsNum == 0) {
 				this.Result.Error = "Rescheduling impossible (calculated payments number 0)";
 				this.Result.BlockAction = true;
@@ -863,7 +812,7 @@
 		/// <param name="subject"></param>
 		/// <param name="toAddress"></param>
 		/// <param name="transactionEx"></param>
-		private void SendMail(string subject, string toAddress = null, Exception transactionEx = null) {
+		protected void SendMail(string subject, string toAddress = null, Exception transactionEx = null) {
 			if (toAddress == null)
 				toAddress = this.emailToAddress;
 

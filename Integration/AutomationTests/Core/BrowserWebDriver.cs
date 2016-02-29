@@ -1,6 +1,7 @@
 ﻿namespace UIAutomationTests.Core {
     using System;
     using System.IO;
+    using System.Reflection;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Firefox;
@@ -27,7 +28,7 @@
 
         public IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser) {
             IWebDriver driver = null;
-            string path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
+            string path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Uri.UnescapeDataString(new UriBuilder(Assembly.GetExecutingAssembly().CodeBase).Path)).FullName).FullName).FullName;
             switch (browser) {
                 case AutomationModels.Browser.Chrome:
                     ChromeDriver = new ChromeDriver(path + @"\WebDrivers");

@@ -481,6 +481,9 @@
 			// payments - by PaymentTime, PaymentID, only non-deleted
 			foreach (NL_Payments p in WorkingModel.Loan.Payments.OrderBy(p => p.PaymentTime).ThenBy(p=>p.PaymentID)) {
 
+				if(p.DeletionTime!=null && p.DeletedByUserID!=null)
+					continue;
+
 				var item = GetScheduleItemForDate(p.PaymentTime);
 				bool itemDeleted = false;
 

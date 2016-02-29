@@ -175,7 +175,7 @@
 				if (nlLoanId > 0) {
 					NL_Model nlModel = this.serviceClient.Instance.GetLoanState(loan.Customer.Id, nlLoanId, DateTime.UtcNow, this._context.UserId, false).Value;
 					Log.InfoFormat("nlModel : {0} loan: {1}  >>>", nlModel, loan);
-					foreach (PaypointTransaction t in loan.TransactionsWithPaypoint.Where(t => t.Cancelled)) {
+					foreach (PaypointTransaction t in loan.TransactionsWithPaypointSuccesefull.Where(t => t.Cancelled)) {
 						foreach (NL_Payments zz in nlModel.Loan.Payments) {
 
 							if (zz.Amount == t.CancelledAmount && zz.PaymentTime.Date.Equals(t.PostDate.Date)){ //&& (zz.PaypointTransactions.FirstOrDefault(x => x.PaypointUniqueID == t.PaypointId && x.IP == t.IP) != null)) 

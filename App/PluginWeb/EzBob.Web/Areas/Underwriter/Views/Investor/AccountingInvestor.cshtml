@@ -1,4 +1,15 @@
 ﻿@model dynamic
+@{
+	var fundingSchedule = new Dictionary<string, string>();
+	fundingSchedule.Add("", "");
+	fundingSchedule.Add("month", "month");
+	fundingSchedule.Add("week", "week");
+	var repaymentsSchedule = new Dictionary<string, string>();
+	repaymentsSchedule.Add("", "");
+	repaymentsSchedule.Add("once a day", "once a day");
+	repaymentsSchedule.Add("once a week", "once a week");
+	repaymentsSchedule.Add("every MON & THU", "every MON & THU");
+}
 		   
 <script type="text/template" id="accounting-investor-template">
 	@UnderwriterSidebar.Menu(this, UnderwriterSidebar.SideBarType.Investor, Model.IsEscalated)
@@ -332,8 +343,8 @@
 									<label class="config-scheduler-labels">Funding</label>
 									<div class="config-scheduler-fields">
 										@EzForm.InputTextUnderwriter(this, "monthlyFundingCapital", "Periodic Tranfer of Funds for Investment in Amount of", null, "cashInput")
-										@EzForm.InputTextUnderwriter(this, "fundsTransferSchedule", "Bank Will be transfered every", null)
-										@EzForm.InputTextUnderwriter(this, "fundsTransferDate", "On", null)
+										@EzForm.SelectUnderwriter("fundsTransferSchedule", "Bank Will be transfered every", fundingSchedule)
+										@EzForm.SelectUnderwriter("fundsTransferDate", "On", new Dictionary<string, string>())
 									</div>
 								</div>
 
@@ -344,7 +355,7 @@
 										Repayments
 									</label>
 									<div class="config-scheduler-fields">
-										@EzForm.InputTextUnderwriter(this, "repaymentsTransferSchedule", "Repayments to be cleared", null)
+										@EzForm.SelectUnderwriter("repaymentsTransferSchedule", "Repayments to be cleared", repaymentsSchedule)
 									</div>
 								</div>
 								<button class="btn btn-primary pull-right" id="config-scheduler-submit-btn" style="margin-right: 10px;">Submit</button>
