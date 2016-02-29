@@ -87,7 +87,9 @@
     <Compile Include="Keeper\Implementation\ARepository.cs" />
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadEtlCodes.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadTimeoutSources.cs" />
+    <Compile Include="Keeper\Implementation\EtlCodeRepository.cs" />
     <Compile Include="Keeper\Implementation\TimeoutSourceRepository.cs" />
     <Compile Include="Keeper\Implementation\BucketRepository.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />

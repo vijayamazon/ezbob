@@ -12,8 +12,21 @@
 			bool includeTryOutData,
 			int historyLength,
 			BucketRepository bucketRepo,
-			TimeoutSourceRepository timeoutSourceRepo
-		) : base(db, log, 0, customerID, now, historyLength, includeTryOutData, 0, bucketRepo, timeoutSourceRepo) {
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
+		) : base(
+			db,
+			log,
+			0,
+			customerID,
+			now,
+			historyLength,
+			includeTryOutData,
+			0,
+			bucketRepo,
+			timeoutSourceRepo,
+			etlCodeRepo
+		) {
 		} // constructor
 
 		public InferenceHistoryLoader Execute() {

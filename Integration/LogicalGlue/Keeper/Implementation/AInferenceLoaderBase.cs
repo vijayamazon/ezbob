@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -29,7 +28,8 @@
 			bool includeTryOutData,
 			decimal monthlyPayment,
 			BucketRepository bucketRepo,
-			TimeoutSourceRepository timeoutSourceRepo
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
 		) : base(db, log, customerID, now) {
 			this.resultSet = new SortedDictionary<long, Inference>();
 			this.models = new SortedDictionary<long, PublicModelOutput>();
@@ -41,6 +41,7 @@
 			this.monthlyPayment = monthlyPayment;
 			this.bucketRepo = bucketRepo;
 			this.timeoutSourceRepo = timeoutSourceRepo;
+			this.etlCodeRepo = etlCodeRepo;
 		} // constructor
 
 		public List<Inference> Results { get; private set; }
@@ -204,25 +205,8 @@
 				);
 			} // if
 
-			EtlCode? code = null;
-
-			if (dbEtl.EtlCodeID != null) {
-				int[] x = (int[])Enum.GetValues(typeof(EtlCode));
-
-				if (!x.Contains((int)dbEtl.EtlCodeID.Value)) {
-					throw OutOfRangeException(
-						"Inference loader({0}): ETL '{1}' has unsupported ETL code value of '{2}'.",
-						this.argList,
-						dbEtl.ID,
-						dbEtl.EtlCodeID.Value
-					);
-				} // if
-
-				code = (EtlCode)(int)dbEtl.EtlCodeID.Value;
-			} // if
-
 			this.resultSet[dbEtl.ResponseID].Etl = new PublicEtlData {
-				Code = code,
+				Code = dbEtl.EtlCodeID == null ? null : this.etlCodeRepo.Find(dbEtl.EtlCodeID.Value),
 				Message = dbEtl.Message,
 			};
 		} // ProcessEtl
@@ -397,6 +381,7 @@
 		private readonly decimal monthlyPayment;
 		private readonly BucketRepository bucketRepo;
 		private readonly TimeoutSourceRepository timeoutSourceRepo;
+		private readonly EtlCodeRepository etlCodeRepo;
 		private string argList;
 	} // class InferenceLoader
 } // namespace

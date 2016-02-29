@@ -1,15 +1,12 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Engine.Interface {
 	using System.Runtime.Serialization;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
 
 	[DataContract]
-	[JsonConverter(typeof(StringEnumConverter))]
-	public enum EtlCode {
-		[EnumMember(Value = "P")]
-		Success = 1,
+	public class EtlCode : EnumMember<long> {
+		[DataMember]
+		public virtual bool IsHardReject { get; set; }
 
-		[EnumMember(Value = "R")]
-		HardReject = 2,
-	} // enum EtlCode
+		[DataMember]
+		public virtual bool IsError { get; set; }
+	} // class EtlCode
 } // namespace

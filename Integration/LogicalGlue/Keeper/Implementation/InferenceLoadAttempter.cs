@@ -13,8 +13,9 @@
 			bool includeTryOutData,
 			decimal monthlyPayment,
 			BucketRepository bucketRepo,
-			TimeoutSourceRepository timeoutSourceRepo
-		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment, bucketRepo, timeoutSourceRepo) {
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
+		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment, bucketRepo, timeoutSourceRepo, etlCodeRepo) {
 		} // constructor
 
 		protected override LoadInference CreateLoadInferenceProcedure() {

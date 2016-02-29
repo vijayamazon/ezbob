@@ -13,8 +13,21 @@
 			bool includeTryOutData,
 			decimal monthlyPayment,
 			BucketRepository bucketRepo,
-			TimeoutSourceRepository timeoutSourceRepo
-		) : base(db, log, 0, customerID, now, 1, includeTryOutData, monthlyPayment, bucketRepo, timeoutSourceRepo) {
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
+		) : base(
+			db,
+			log,
+			0,
+			customerID,
+			now,
+			1,
+			includeTryOutData,
+			monthlyPayment,
+			bucketRepo,
+			timeoutSourceRepo,
+			etlCodeRepo
+		) {
 		} // constructor
 
 		internal InferenceLoader(
@@ -23,8 +36,9 @@
 			long responseID,
 			int customerID,
 			BucketRepository bucketRepo,
-			TimeoutSourceRepository timeoutSourceRepo
-		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0, bucketRepo, timeoutSourceRepo) {
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
+		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0, bucketRepo, timeoutSourceRepo, etlCodeRepo) {
 		} // constructor
 
 		public virtual Inference Result {

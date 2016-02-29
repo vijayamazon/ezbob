@@ -84,9 +84,7 @@
 			if (string.IsNullOrWhiteSpace(this.timeoutSource))
 				return;
 
-			TimeoutSource src = this.timeoutSourceRepo.FindOrSave(con, this.timeoutSource);
-
-			this.dbr.TimeoutSourceID = src == null ? (long?)null : src.Value;
+			this.dbr.TimeoutSourceID = this.timeoutSourceRepo.FindOrSave(con, this.timeoutSource); 
 		} // FindOrSaveTimeoutSource
 
 		private readonly string timeoutSource;

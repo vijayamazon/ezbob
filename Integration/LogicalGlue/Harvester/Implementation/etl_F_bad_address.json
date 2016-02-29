@@ -2,7 +2,7 @@
 	"status": "200",
 	"etl": {
 		"message": "Equifax returned no address match error",
-		"code": "R",
+		"code": "E",
 		"rejections": [
 			{ "code": "3", "message": "Worst Gazette is not blank" },
 			{ "code": "4", "message": "dissolved date is not blank" }

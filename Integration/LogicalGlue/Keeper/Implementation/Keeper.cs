@@ -53,7 +53,8 @@
 					includeTryOutData,
 					monthlyPayment,
 					LoadBuckets(),
-					LoadTimeoutSources()
+					LoadTimeoutSources(),
+					LoadEtlCodes()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -68,12 +69,21 @@
 					requestID,
 					response,
 					LoadBuckets(),
-					LoadTimeoutSources(false)
+					LoadTimeoutSources(false),
+					LoadEtlCodes(false)
 				)
 					.Execute()
 					.ResponseID;
 
-				return new InferenceLoader(this.db, this.log, responseID, customerID, LoadBuckets(), LoadTimeoutSources())
+				return new InferenceLoader(
+					this.db,
+					this.log,
+					responseID,
+					customerID,
+					LoadBuckets(),
+					LoadTimeoutSources(),
+					LoadEtlCodes()
+				)
 					.Execute()
 					.Result;
 			} catch (Exception e) {
@@ -114,7 +124,8 @@
 					includeTryOuts,
 					Math.Max(maxHistoryLength ?? 0, 0),
 					LoadBuckets(),
-					LoadTimeoutSources()
+					LoadTimeoutSources(),
+					LoadEtlCodes()
 				)
 					.Execute()
 					.Results;
@@ -153,8 +164,11 @@
 					includeTryOutData,
 					monthlyPayment,
 					LoadBuckets(),
-					LoadTimeoutSources()
-				).Execute().Result;
+					LoadTimeoutSources(),
+					LoadEtlCodes()
+				)
+					.Execute()
+					.Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
@@ -182,6 +196,15 @@
 
 			return repo;
 		} // LoadTimeoutSources
+
+		private EtlCodeRepository LoadEtlCodes(bool doLoad = true) {
+			var repo = new EtlCodeRepository(this.db, this.log);
+
+			if (doLoad)
+				repo.Load();
+
+			return repo;
+		} // LoadEtlCodes
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
