@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Database;
+	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Harvester.Interface;
 	using Ezbob.Logger;
 
@@ -13,6 +14,7 @@
 		public SaveResponse(
 			long requestID,
 			Response<Reply> response,
+			BucketRepository bucketRepo,
 			AConnection db,
 			ASafeLog log
 		) : base(db, log) {
@@ -36,10 +38,15 @@
 			} // if
 
 			if (response.Parsed.Exists()) {
+				Bucket bucket = null;
+
+				if ((bucketRepo != null) && response.Parsed.HasDecision())
+					bucket = bucketRepo.Find(response.Parsed.Inference.Decision.Bucket);
+
 				dbr.ResponseStatus = (int)response.Parsed.Status;
 				dbr.TimeoutSourceID = (int?)response.Parsed.Timeout;
 				dbr.ErrorMessage = response.Parsed.Error;
-				dbr.BucketID = response.Parsed.Bucket.HasValue ? (int)response.Parsed.Bucket.Value : (int?)null;
+				dbr.BucketID = bucket == null ? (int?)null : bucket.Value;
 				dbr.HasEquifaxData = response.Parsed.HasEquifaxData();
 				dbr.Reason = response.Parsed.Reason;
 				dbr.Outcome = response.Parsed.Outcome;

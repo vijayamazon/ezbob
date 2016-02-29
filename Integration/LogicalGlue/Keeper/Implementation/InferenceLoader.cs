@@ -11,16 +11,18 @@
 			int customerID,
 			DateTime now,
 			bool includeTryOutData,
-			decimal monthlyPayment
-		) : base(db, log, 0, customerID, now, 1, includeTryOutData, monthlyPayment) {
+			decimal monthlyPayment,
+			BucketRepository bucketRepo
+		) : base(db, log, 0, customerID, now, 1, includeTryOutData, monthlyPayment, bucketRepo) {
 		} // constructor
 
 		internal InferenceLoader(
 			AConnection db,
 			ASafeLog log,
 			long responseID,
-			int customerID
-		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0) {
+			int customerID,
+			BucketRepository bucketRepo
+		) : base(db, log, responseID, customerID, DateTime.UtcNow, 1, true, 0, bucketRepo) {
 		} // constructor
 
 		public virtual Inference Result {

@@ -14,7 +14,7 @@
 		public DateTime ReceivedTime { get; set; }
 
 		[DataMember]
-		public Bucket? Bucket { get; set; }
+		public Bucket Bucket { get; set; }
 
 		[DataMember]
 		public Guid UniqueID { get; set; }

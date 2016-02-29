@@ -13,10 +13,12 @@
 			AConnection db,
 			ASafeLog log,
 			long requestID,
-			Response<Reply> response
+			Response<Reply> response,
+			BucketRepository bucketRepo
 		) : base(db, log) {
 			this.requestID = requestID;
 			this.response = response;
+			this.bucketRepo = bucketRepo;
 			ResponseID = 0;
 		} // constructor
 
@@ -51,7 +53,13 @@
 			try {
 				new SaveRawResponse(this.requestID, this.response, DB, Log).ExecuteNonQuery(con);
 
-				ResponseID = new SaveResponse(this.requestID, this.response, DB, Log).ExecuteScalar<long>(con);
+				ResponseID = new SaveResponse(
+					this.requestID,
+					this.response,
+					this.bucketRepo,
+					DB,
+					Log
+				).ExecuteScalar<long>(con);
 
 				if (this.response.Parsed.HasInference()) {
 					var map = new SortedDictionary<ModelNames, long>();
@@ -118,5 +126,6 @@
 
 		private readonly long requestID;
 		private readonly Response<Reply> response;
+		private readonly BucketRepository bucketRepo;
 	} // class InferenceSaver
 } // namespace

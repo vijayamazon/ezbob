@@ -18,15 +18,13 @@
 			GetLatestKnownInference strategy = new GetLatestKnownInference(cashRequestData.CustomerID, DateTime.Now, false);
 			strategy.Execute();
 
-			var grade = 0;
-			if (strategy.Inference!=null && strategy.Inference.Bucket.HasValue) {
-				grade = (int)strategy.Inference.Bucket;
-			}
+			int grade = 0;
+			if (strategy.Inference!=null && strategy.Inference.Bucket != null)
+				grade = strategy.Inference.Bucket;
 
 			var investorPrecentage = GetPrecentage((I_FundingTypeEnum)cashRequestData.FundingTypeID);
 			if (investorPrecentage < 0)
 				throw new Exception("Couldn't calc investor precentage");
-
 
 			return new InvestorLoanCashRequest() {
 				CashRequestID = cashRequestID,

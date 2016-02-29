@@ -51,6 +51,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Engine\DownloadAndSaveAction.cs" />
+    <Compile Include="Engine\Interface\EnumMember.cs" />
     <Compile Include="Engine\Interface\Bucket.cs" />
     <Compile Include="Engine\Interface\EtlData.cs" />
     <Compile Include="Engine\Interface\GetInferenceMode.cs" />
@@ -82,8 +83,11 @@
     <Compile Include="Harvester\Interface\InferenceOutputDecision.cs" />
     <Compile Include="Harvester\Interface\InferenceOutputDecisionModels.cs" />
     <Compile Include="Keeper\Implementation\ACustomerActionBase.cs" />
+    <Compile Include="Keeper\Implementation\AEnum.cs" />
+    <Compile Include="Keeper\Implementation\ARepository.cs" />
     <Compile Include="Keeper\Implementation\ATimedCustomerActionBase.cs" />
     <Compile Include="Keeper\Implementation\AActionBase.cs" />
+    <Compile Include="Keeper\Implementation\BucketRepository.cs" />
     <Compile Include="Keeper\Implementation\DBTable\EtlData.cs" />
     <Compile Include="Keeper\Implementation\InferenceHistoryLoader.cs" />
     <Compile Include="Keeper\Implementation\AInferenceLoaderBase.cs" />
@@ -128,6 +132,7 @@
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />
+    <Compile Include="Keeper\Implementation\StoredProcedures\LoadBuckets.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInferenceIfExists.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\LoadInference.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\SaveCustomerHistory.cs" />

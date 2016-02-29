@@ -10,8 +10,9 @@
 			int customerID,
 			DateTime now,
 			bool includeTryOutData,
-			int historyLength
-		) : base(db, log, 0, customerID, now, historyLength, includeTryOutData, 0) {
+			int historyLength,
+			BucketRepository bucketRepo
+		) : base(db, log, 0, customerID, now, historyLength, includeTryOutData, 0, bucketRepo) {
 		} // constructor
 
 		public InferenceHistoryLoader Execute() {

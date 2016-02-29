@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Integration.LogicalGlue.Keeper.Implementation.StoredProcedures;
 	using Ezbob.Logger;
 
@@ -12,8 +11,9 @@
 			int customerID,
 			DateTime now,
 			bool includeTryOutData,
-			decimal monthlyPayment
-		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment) {
+			decimal monthlyPayment,
+			BucketRepository bucketRepo
+		) : base(db, log, customerID, now, includeTryOutData, monthlyPayment, bucketRepo) {
 		} // constructor
 
 		protected override LoadInference CreateLoadInferenceProcedure() {

@@ -27,7 +27,8 @@
 			DateTime now,
 			int historyLength,
 			bool includeTryOutData,
-			decimal monthlyPayment
+			decimal monthlyPayment,
+			BucketRepository bucketRepo
 		) : base(db, log, customerID, now) {
 			this.resultSet = new SortedDictionary<long, Inference>();
 			this.models = new SortedDictionary<long, PublicModelOutput>();
@@ -37,6 +38,7 @@
 			this.historyLength = historyLength;
 			this.includeTryOutData = includeTryOutData;
 			this.monthlyPayment = monthlyPayment;
+			this.bucketRepo = bucketRepo;
 		} // constructor
 
 		public List<Inference> Results { get; private set; }
@@ -162,7 +164,9 @@
 
 			result.ResponseID = dbResponse.ID;
 			result.ReceivedTime = dbResponse.ReceivedTime;
-			result.Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID;
+			result.Bucket = ((dbResponse.BucketID != null) && (this.bucketRepo != null))
+				? this.bucketRepo.Find(dbResponse.BucketID.Value)
+				: null;
 			result.Reason = dbResponse.Reason;
 			result.Outcome = dbResponse.Outcome;
 
@@ -389,6 +393,7 @@
 		private readonly int historyLength;
 		private readonly bool includeTryOutData;
 		private readonly decimal monthlyPayment;
+		private readonly BucketRepository bucketRepo;
 		private string argList;
 	} // class InferenceLoader
 } // namespace

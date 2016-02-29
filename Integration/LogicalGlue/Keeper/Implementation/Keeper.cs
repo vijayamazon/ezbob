@@ -51,7 +51,8 @@
 					customerID,
 					time,
 					includeTryOutData,
-					monthlyPayment
+					monthlyPayment,
+					LoadBuckets()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -60,8 +61,11 @@
 
 		public Inference SaveInference(int customerID, long requestID, Response<Reply> response) {
 			try {
-				long responseID = new InferenceSaver(this.db, this.log, requestID, response).Execute().ResponseID;
-				return new InferenceLoader(this.db, this.log, responseID, customerID).Execute().Result;
+				long responseID = new InferenceSaver(this.db, this.log, requestID, response, LoadBuckets())
+					.Execute()
+					.ResponseID;
+
+				return new InferenceLoader(this.db, this.log, responseID, customerID, LoadBuckets()).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceSaverAlert(customerID, requestID, e, this.log);
 			} // try
@@ -98,7 +102,8 @@
 					customerID,
 					time,
 					includeTryOuts,
-					Math.Max(maxHistoryLength ?? 0, 0)
+					Math.Max(maxHistoryLength ?? 0, 0),
+					LoadBuckets()
 				).Execute().Results;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -133,12 +138,27 @@
 					customerID,
 					time,
 					includeTryOutData,
-					monthlyPayment
+					monthlyPayment,
+					LoadBuckets()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
 		} // LoadInferenceIfExists
+
+		public Bucket FindBucket(int bucketID) {
+			return LoadBuckets().Find(bucketID);
+		} // FindBucket
+
+		public Bucket FindBucket(string bucket) {
+			return LoadBuckets().Find(bucket);
+		} // FindBucket
+
+		private BucketRepository LoadBuckets() {
+			var repo = new BucketRepository(this.db, this.log);
+			repo.Load();
+			return repo;
+		} // LoadBuckets
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

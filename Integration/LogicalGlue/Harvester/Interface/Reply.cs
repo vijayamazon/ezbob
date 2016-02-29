@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
-	using System;
 	using System.Collections.Generic;
 	using System.Net;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -78,20 +77,6 @@
 		public override int GetHashCode() {
 			return string.Join("_", Status).GetHashCode();
 		} // GetHashCode
-
-		public Bucket? Bucket {
-			get {
-				if (!this.HasBucket())
-					return null;
-
-				Bucket bucket;
-
-				if (!Enum.TryParse(Inference.Decision.Bucket, out bucket))
-					return null;
-
-				return bucket;
-			} // get
-		} // Bucket
 
 		public string Reason { get { return this.HasDecision() ? Inference.Decision.Reason : null; } }
 		public string Outcome { get { return this.HasDecision() ? Inference.Decision.Outcome : null; } }
