@@ -325,18 +325,22 @@
 			// Customer name validation
 			const string separator = " ";
 
+		    var FN = personalInfo.FirstName.ToLower();
+            var MN = personalInfo.MiddleInitial.ToLower();
+            var LN = personalInfo.Surname.ToLower();
+
 			List<String> nameCombinations = new List<string> {
-				string.Format("{0}{3}{1}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{0}{3}{2}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{1}{3}{0}{3}{2}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{1}{3}{2}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{2}{3}{0}{3}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{2}{3}{1}{3}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, personalInfo.Surname, separator).Replace(separator + separator, separator),
-				string.Format("{0}{2}{1}", personalInfo.FirstName, personalInfo.MiddleInitial, separator),
-				string.Format("{1}{2}{0}", personalInfo.FirstName, personalInfo.MiddleInitial, separator),
+				string.Format("{0}{3}{1}{3}{2}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{0}{3}{2}{3}{1}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{1}{3}{0}{3}{2}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{1}{3}{2}{3}{0}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{2}{3}{0}{3}{1}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{2}{3}{1}{3}{0}", FN, MN, LN, separator).Replace(separator + separator, separator),
+				string.Format("{0}{2}{1}", FN, MN, separator),
+				string.Format("{1}{2}{0}", FN, MN, separator),
 			};
 
-			if (!nameCombinations.Contains(signedName))
+			if (!nameCombinations.Contains(signedName.ToLower()))
 				return Json(new { error = "sign name supplied is incorrect" });
 
 			bool somethingIsMissing =
