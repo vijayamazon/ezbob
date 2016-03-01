@@ -309,7 +309,7 @@
 
 				if (actual.TransactionsWithPaypointSuccesefull.FirstOrDefault(t => t.Id == transaction.Id) == null) {
 
-					_log.Debug(transaction);
+					//_log.Debug(transaction);
 
 					transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
 					transaction.Interest = 0;
@@ -345,9 +345,8 @@
 				}
 			}
 
-			_log.Debug("\n\n final state:");
-			loan.TransactionsWithPaypointSuccesefull.ForEach(xx => _log.Debug(xx.ToString()));
-
+			//_log.Debug("\n\n final state:");
+			//loan.TransactionsWithPaypointSuccesefull.ForEach(xx => _log.Debug(xx.ToString()));
 		}
 		
 		

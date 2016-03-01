@@ -1,11 +1,13 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using EzBob.Models;
 	using EzBob.Web.Areas.Underwriter.Models;
@@ -28,6 +30,9 @@
 		private readonly ServiceClient serviceClient;
 		private readonly IEzbobWorkplaceContext context;
 		private readonly ILoanRepository loanRepository;
+
+		private static readonly ASafeLog log = new SafeILog(typeof(CollectionStatusController));
+
 		public CollectionStatusController(
 			ICustomerRepository customerRepository,
 			CustomerStatusesRepository customerStatusesRepository,
@@ -117,6 +122,7 @@
 
 			customer.CollectionStatus = this.customerStatusesRepository.Get(collectionStatus.CurrentStatus);
 			customer.CollectionDescription = collectionStatus.CollectionDescription;
+			List<int> addFreeseLoans = new List<int>();
 
 			new Transactional(() => {
 				this.customerRepository.SaveOrUpdate(customer);
@@ -162,7 +168,8 @@
 						});
 
 						this.loanRepository.SaveOrUpdate(loan);
-						SaveLoanInterestFreeze(loan.InterestFreeze.Last(), customerId, loan.Id);
+
+						addFreeseLoans.Add(loan.Id);
 					}
 
 					//collection and external status is ok
@@ -206,6 +213,13 @@
 				this.customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}).Execute();
 
+			log.Debug("AaddFreeseLoans {0}", addFreeseLoans);
+
+			foreach (int loanID in addFreeseLoans) {
+				var loan = this.loanRepository.Get(loanID);
+				SaveLoanInterestFreeze(loan.InterestFreeze.Last(), customerId, loan.Id);
+			}
+
 			if (customer.CollectionStatus.Name == "Disabled" && (collectionStatus.Unsubscribe || collectionStatus.ChangeEmail)) {
 				this.serviceClient.Instance.UserDisable(this.context.UserId, customer.Id, customer.Name, collectionStatus.Unsubscribe, collectionStatus.ChangeEmail);
 			}
@@ -245,6 +259,9 @@
 				AssignedByUserID = this.context.UserId,
 				DeletedByUserID = null,
 			};
+
+			log.Debug("ADDING NL FREESE: {0} \n olffreeze: {1}", nlLoanInterestFreeze, loanInterestFreeze);
+
 			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, nlLoanInterestFreeze).Value;
 		}
 	}

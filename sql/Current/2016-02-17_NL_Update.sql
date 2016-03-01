@@ -176,3 +176,14 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE name = 'UC_NL_LoanSch
 BEGIN
 	alter table [dbo].[NL_LoanSchedulePayments] add CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE ([LoanScheduleID],[PaymentID],[PrincipalPaid],[InterestPaid],[ResetPrincipalPaid],[ResetInterestPaid]);
 END
+
+
+BEGIN
+	WITH cte_FeeOldIds (LoanFeeID, OldFeeID)
+	AS(
+	select f.LoanFeeID, ch.Id as OldFeeID
+	from NL_LoanFees f join NL_Loans nl on f.LoanID=nl.LoanID left join LoanCharges ch on nl.OldLoanID=ch.LoanId
+	where datediff(DAY, f.AssignTime, ch.Date)=0 and f.Amount=ch.Amount and [dbo].[udfNL_FeeTypeToConfVariable](f.LoanFeeTypeID)=ch.ConfigurationVariableId	)
+	--select * from cte_FeeOldIds;
+	UPDATE NL_LoanFees SET NL_LoanFees.OldFeeID = cte_FeeOldIds.OldFeeID FROM NL_LoanFees INNER JOIN cte_FeeOldIds ON (NL_LoanFees.LoanFeeID = cte_FeeOldIds.LoanFeeID);
+END
