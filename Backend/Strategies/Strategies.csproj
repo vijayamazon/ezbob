@@ -275,6 +275,7 @@
     <Compile Include="Misc\UpdateUploadedHmrcDisplayName.cs" />
     <Compile Include="NewLoan\DAL\ILoanFees.cs" />
     <Compile Include="NewLoan\DAL\LoanFees.cs" />
+    <Compile Include="NewLoan\Migration\MigrateFees.cs" />
     <Compile Include="SalesForce\ChangeEmail.cs" />
     <Compile Include="NewLoan\Migration\MigrateLoanTransaction.cs" />
     <Compile Include="NewLoan\Migration\MigrateCRDecisionOffer.cs" />

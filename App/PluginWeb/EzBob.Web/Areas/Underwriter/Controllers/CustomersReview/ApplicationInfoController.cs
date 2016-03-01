@@ -292,6 +292,9 @@
 					status = externalStatusID
 				});
 			} // if
+
+			List<int> addFreeseLoans = new List<int>();
+
 			new Transactional(() => {
 				oCustomer.ExternalCollectionStatus = newExternalCollectionStatus;
 				log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
@@ -320,7 +323,7 @@
 								DeactivationDate = null
 							});
 
-							SaveLoanInterestFreeze(loan.InterestFreeze.Last(), oCustomer.Id);
+							addFreeseLoans.Add(loan.Id);
 
 						} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
 							foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
@@ -333,6 +336,12 @@
 					}
 				}
 			}).Execute();
+
+			// sync NL freeze
+			foreach (int loanID in addFreeseLoans) {
+				var loan = this.loanRepository.Get(loanID);
+				SaveLoanInterestFreeze(loan.InterestFreeze.Last(), loan.Customer.Id);
+			}
 
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(this.context.UserId, oCustomer.Name, id, false, false);
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
@@ -385,8 +394,7 @@
 		}
 
 		private void SaveLoanInterestFreeze(LoanInterestFreeze loanInterestFreeze, int customerId) {
-			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId)
-				.Value;
+			long nlLoanId = this.serviceClient.Instance.GetLoanByOldID(loanInterestFreeze.Loan.Id, customerId, this.context.UserId).Value;
 			if (nlLoanId == 0)
 				return;
 			NL_LoanInterestFreeze nlLoanInterestFreeze = new NL_LoanInterestFreeze() {
@@ -400,6 +408,7 @@
 				AssignedByUserID = this.context.UserId,
 				DeletedByUserID = null,
 			};
+			log.Debug("ADDING NL FREESE: {0} \n olffreeze: {1}", nlLoanInterestFreeze, loanInterestFreeze);
 			var nlStrategy = this.serviceClient.Instance.AddLoanInterestFreeze(this.context.UserId, customerId, nlLoanInterestFreeze);
 		}
 
