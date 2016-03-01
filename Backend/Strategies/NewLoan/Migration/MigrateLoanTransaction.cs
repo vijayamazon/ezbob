@@ -5,8 +5,6 @@
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using StructureMap;
 
 	public class MigrateLoanTransaction : AStrategy {
 

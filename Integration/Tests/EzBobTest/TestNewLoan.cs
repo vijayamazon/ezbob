@@ -1154,57 +1154,39 @@
 
 		[Test]
 		public void ExceptPaymentTest() {
-
 			const long loanID = 13;
 			var state = new GetLoanState(351, loanID, DateTime.UtcNow, 1, false); // loanID = 17, customer = 56
 			state.Execute();
 			NL_Model nlLoan = state.Result;
-
 			// loan - from DB, actual - from UI
-
 			ILoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			var loan = loanRep.Get(nlLoan.Loan.OldLoanID);
 			var actual = loanRep.Get(nlLoan.Loan.OldLoanID);
-
-
 			List<PaypointTransaction> loanList = loan.TransactionsWithPaypointSuccesefull;
 			m_oLog.Debug("DB state:");
 			loanList.ForEach(xxx => m_oLog.Debug(xxx.ToString()));
-
 			List<PaypointTransaction> actualList = loan.TransactionsWithPaypointSuccesefull;
 			var toremove = actualList.Last();
 			actualList.Remove(toremove);
-
 			m_oLog.Debug("\n\n from UI:");
 			actualList.ForEach(yyy => m_oLog.Debug(yyy.ToString()));
-
 			var removedPayments = loanList.Except(actualList);
-
 			m_oLog.Debug("\n\n Cancelled payments:");
-
 			foreach (PaypointTransaction transaction in removedPayments.ToList()) {
-
 				m_oLog.Debug(transaction);
-
 				transaction.Description = transaction.Description + "; removed amount = " + transaction.Amount;
 				transaction.Interest = 0;
 				transaction.Fees = 0;
 				transaction.LoanRepayment = 0;
 				transaction.Rollover = 0;
-
 				transaction.Cancelled = true;
 				transaction.CancelledAmount = transaction.Amount;
-
 				transaction.Amount = 0;
-
 				var transaction1 = transaction;
-
 				// reset paid charges 
 				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.AmountPaid = 0);
 				loan.Charges.Where(f => f.Date <= transaction1.PostDate).ForEach(f => f.State = null);
-
 				IEnumerable<LoanScheduleTransaction> schTransactions = loan.ScheduleTransactions.Where(st => st.Transaction.Id == transaction1.Id);
-
 				foreach (LoanScheduleTransaction st in schTransactions) {
 					var paidSchedule = loan.Schedule.FirstOrDefault(s => s.Id == st.Schedule.Id);
 					if (paidSchedule != null) {
@@ -1218,7 +1200,6 @@
 					}
 				}
 			}
-
 			m_oLog.Debug("\n\n final state:");
 			loan.TransactionsWithPaypointSuccesefull.ForEach(xx => m_oLog.Debug(xx.ToString()));
 		}
@@ -1229,12 +1210,9 @@
 			list1.Add("aa");
 			list1.Add("bb");
 			list1.Add("cc");
-
 			List<string> list2 = new List<string>();
 			list2.Add("aa");
-
 			IEnumerable<string> onlyInFirstSet = list1.Except(list2);
-
 			foreach (string xx in onlyInFirstSet)
 				Console.WriteLine(xx);
 		}
