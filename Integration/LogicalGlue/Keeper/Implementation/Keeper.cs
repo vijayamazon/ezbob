@@ -21,7 +21,15 @@
 
 		public InferenceInputPackage LoadInputData(int customerID, DateTime now, bool loadMonthlyRepaymentOnly) {
 			try {
-				var loader = new InputDataLoader(this.db, this.log, customerID, now, loadMonthlyRepaymentOnly).Execute();
+				var loader = new InputDataLoader(
+					this.db,
+					this.log,
+					customerID,
+					now,
+					loadMonthlyRepaymentOnly,
+					LoadKeeperConfiguration().MonthlyPaymentMode
+				).Execute();
+
 				return new InferenceInputPackage(loader.Result, loader.CompanyID);
 			} catch (Exception e) {
 				throw new InputDataLoaderAlert(customerID, now, e, this.log);
@@ -139,6 +147,12 @@
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
 		} // LoadInferenceIfExists
+
+		private KeeperConfiguration LoadKeeperConfiguration() {
+			return new KeeperConfiguration {
+				MonthlyPaymentModeName = CurrentValues.Instance.LogicalGlueMonthlyPaymentMode,
+			};
+		} // KeeperConfiguration
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

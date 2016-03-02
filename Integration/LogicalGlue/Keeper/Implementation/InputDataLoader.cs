@@ -17,10 +17,12 @@
 			ASafeLog log,
 			int customerID,
 			DateTime now,
-			bool loadMonthlyRepaymentOnly
+			bool loadMonthlyRepaymentOnly,
+			MonthlyPaymentMode monthlyPaymentMode
 		) : base(db, log, customerID, now) {
 			Result = new InferenceInput();
 			this.loadMonthlyRepaymentOnly = loadMonthlyRepaymentOnly;
+			this.monthlyPaymentMode = monthlyPaymentMode;
 		} // constructor
 
 		public InputDataLoader Execute() {
@@ -41,7 +43,9 @@
 				MonthlyRepaymentOnly = this.loadMonthlyRepaymentOnly,
 			}.ForEachRowSafe(ProcessInputDataRow);
 
-			Result.MonthlyPayment = (Result.MonthlyPayment ?? 0) + this.openLoanPayments;
+			Result.MonthlyPayment = (Result.MonthlyPayment ?? 0) +
+				(this.monthlyPaymentMode.WithOpen() ? this.openLoanPayments : 0);
+
 			Log.Debug("Executing input data loader({0}, '{1}') complete.", CustomerID, NowStr);
 
 			return this;
@@ -93,6 +97,9 @@
 					Encrypted.Decrypt(rawResponse)
 				);
 
+				// ReSharper disable once PossibleNullReferenceException
+				// Null check is done inside this --+
+				//                                  v
 				Result.EquifaxData = reply.HasEquifaxData() ? reply.Equifax.RawResponse : null;
 				break;
 
@@ -126,16 +133,18 @@
 			decimal lastPayment = Math.Truncate(loanAmount / term);
 			decimal firstPayment = loanAmount - lastPayment * (term - 1);
 
-			decimal payment = Math.Max(firstPayment, lastPayment) + loanAmount * interestRate;
+			decimal payment = Math.Max(firstPayment, lastPayment) +
+				(this.monthlyPaymentMode.WithInterest() ? loanAmount * interestRate : 0);
 
 			this.openLoanPayments += payment;
 
 			Log.Debug(
-				"Open loan payment from loan {0} is {1} = MAX({2}, {3}) + {4} * {5}, term {6}.",
+				"Open loan payment from loan {0} is {1} = MAX({2}, {3}) + ({4} ? {5} * {6} : 0), term {7}.",
 				loanID,
 				payment.ToString("C2", enGB),
 				firstPayment.ToString("C2", enGB),
 				lastPayment.ToString("C2", enGB),
+				this.monthlyPaymentMode.WithInterest(),
 				loanAmount.ToString("C2", enGB),
 				interestRate.ToString("P2", enGB),
 				Grammar.Number(term, "month")
@@ -170,7 +179,7 @@
 			Result.RequestedAmount = amount;
 			Result.RequestedTerm = term;
 
-			Result.MonthlyPayment = amount / term + amount * maxInterestRate;
+			Result.MonthlyPayment = amount / term + (this.monthlyPaymentMode.WithInterest() ? amount * maxInterestRate : 0);
 		} // ProcessRequestedLoan
 
 		[StringFormatMethod("format")]
@@ -189,6 +198,7 @@
 
 		private decimal openLoanPayments;
 		private readonly bool loadMonthlyRepaymentOnly;
+		private readonly MonthlyPaymentMode monthlyPaymentMode;
 
 		private static readonly CultureInfo enGB = new CultureInfo("en-GB", false);
 	} // class InputDataLoader

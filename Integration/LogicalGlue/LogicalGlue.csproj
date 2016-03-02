@@ -125,6 +125,8 @@
     <Compile Include="Exceptions\LogicalGlueException.cs" />
     <Compile Include="Keeper\Implementation\InferenceRequestSaver.cs" />
     <Compile Include="Keeper\Implementation\InferenceSaver.cs" />
+    <Compile Include="Keeper\Implementation\KeeperConfiguration.cs" />
+    <Compile Include="Keeper\Implementation\MonthlyPaymentMode.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ALogicalGlueStoredProc.cs" />
     <Compile Include="Keeper\Implementation\StoredProcedures\ACustomerTimeStoredProc.cs" />

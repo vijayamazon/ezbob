@@ -318,6 +318,7 @@ namespace ConfigManager {
 		LogicalGlueCacheAcceptanceDays,
 		LogicalGlueEnabled,
 		LogicalGlueHostName,
+		LogicalGlueMonthlyPaymentMode,
 		LogicalGlueNewCustomerRequestPath,
 		LogicalGlueOldCustomerRequestPath,
 		LogicalGluePassword,

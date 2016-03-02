@@ -303,6 +303,10 @@
 			get { return this[Variables.LogicalGlueHostName]; }
 		} // LogicalGlueHostName
 
+		public virtual VariableValue LogicalGlueMonthlyPaymentMode {
+			get { return this[Variables.LogicalGlueMonthlyPaymentMode]; }
+		} // LogicalGlueMonthlyPaymentMode
+
 		public virtual VariableValue LogicalGlueNewCustomerRequestPath {
 			get { return this[Variables.LogicalGlueNewCustomerRequestPath]; }
 		} // LogicalGlueNewCustomerRequestPath
