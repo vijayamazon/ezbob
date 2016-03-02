@@ -387,6 +387,22 @@
 			ms_oLog.Debug("Customer {0} applied for a loan, processing complete.", customer.Stringify());
 		} // DoApplyForLoan
 
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult UpdateTurnover(decimal turnover) {
+			var customer = m_oContext.Customer;
+			customer.PersonalInfo.OverallTurnOver = turnover;
+			customer.Turnovers.Add(new CustomerTurnover {
+				CustomerID = customer.Id,
+				Timestamp = DateTime.UtcNow,
+				Turnover = turnover
+			});
+			
+			return Json(new { });
+		} // UpdateTurnover
+
 		private readonly CustomerModelBuilder m_oCustomerModelBuilder;
 		private readonly IEzbobWorkplaceContext m_oContext;
 		private readonly ServiceClient m_oServiceClient;

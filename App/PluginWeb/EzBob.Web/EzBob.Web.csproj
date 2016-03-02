@@ -899,6 +899,7 @@
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
     <Content Include="Content\js\Profile\ezbob.profile.AgreementsDynamicCheckboxes.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.turnover.js" />
     <Content Include="Content\js\Profile\ezbob.profile.processingAutomationPopupView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.reviewSignCreditLine.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
@@ -1024,6 +1025,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Areas\Customer\Views\Profile\DynamicAgreementsCheckboxes.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Profile\TurnoverTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

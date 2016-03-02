@@ -181,12 +181,14 @@
 	public class Customer : IEqualityComparer<Customer> {
 		public Customer() {
 			CustomerMarketPlaces = new HashedSet<MP_CustomerMarketPlace>();
+			Turnovers = new HashedSet<CustomerTurnover>();
 		} // constructor
 
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
 
 		public virtual Iesi.Collections.Generic.ISet<MP_CustomerMarketPlace> CustomerMarketPlaces { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<CustomerTurnover> Turnovers { get; set; }
 
 		private Iesi.Collections.Generic.ISet<CashRequest> _cashRequests = new HashedSet<CashRequest>();
 		public virtual Iesi.Collections.Generic.ISet<CashRequest> CashRequests {

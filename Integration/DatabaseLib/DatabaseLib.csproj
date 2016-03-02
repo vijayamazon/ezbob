@@ -109,6 +109,7 @@
     <Compile Include="Model\Database\CustomerCompanyHistory.cs" />
     <Compile Include="Model\Database\CustomerOrigin.cs" />
     <Compile Include="Model\Database\CustomerPhone.cs" />
+    <Compile Include="Model\Database\Customer\CustomerTurnover.cs" />
     <Compile Include="Model\Database\ExternalCollectionStatuses.cs" />
     <Compile Include="Model\Database\BankAccountWhiteList.cs" />
     <Compile Include="Model\Database\PropertyStatus.cs" />

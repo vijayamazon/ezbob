@@ -47,6 +47,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         EzBob.App.on('ct:profile:payEarly', this.payEarly, this);
         EzBob.App.on('ct:profile:getCash', this.getCash, this);
         EzBob.App.on('ct:profile:loanDetails', this.loanDetails, this);
+        EzBob.App.on('ct:profile:turnover', this.turnover, this);
 
         this.on('all', this.storeRoute, this);
         this.previousViews = [];
@@ -99,7 +100,9 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         "PayEarly": "payEarly",
         "LoanDetails/:id": "loanDetails",
         "Perks": "perks",
-        "CompanyDirectors": "companyDirectors"
+        "CompanyDirectors": "companyDirectors",
+        "Turnover": "turnover",
+        "Turnover/:id": "turnover",
     },
     decide: function () {
         // Workaround for non-standard navigation
@@ -156,6 +159,12 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.trigger('details', id);
         this.marketing("LoanDetails");
         this.removeSteps('LoanDetails');
+    },
+    turnover: function (id) {
+    	EzBob.CT.recordEvent('ct:profile:turnover', id);
+    	this.trigger('turnover', id);
+    	this.marketing("Turnover");
+    	this.removeSteps('Turnover');
     },
     companyDirectors: function() {
     	this.activate("CompanyDirectors");

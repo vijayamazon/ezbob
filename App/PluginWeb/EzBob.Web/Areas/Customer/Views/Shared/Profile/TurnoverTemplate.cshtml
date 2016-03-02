@@ -1,0 +1,60 @@
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+		   
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<script type="text/template" id="turnover-template">
+	<div>
+		<h3>Update your details</h3>
+		<p>Your business income is over 6 months old. Please update us below so we can give you the most accurate loan offer possible.</p>
+		<form id="turnoverForm" class="ev-form">
+			@{ Html.RenderPartial("SideBars/_SecurityIcons"); }
+			<h2>Financial details </h2>
+						
+			@EzForm.InputTextWizard(new EzInputBuilder("previousTurnover",
+				"Previous total revenue",
+				value: "<%-EzBob.formatPounds(turnover)%>",
+				type: "tel",
+				cls: "form_field",
+				isRequired: false,
+				statusIcon: false,
+				uiEventControlID: "profile:turnover-previous",
+				autoCorrect: "off",
+				autoCapitalize: "off",
+				isDisabled: true
+				),
+				origin: origin)
+
+			@EzForm.InputTextWizard(new EzInputBuilder("turnover", 
+				"Current total revenue", 
+				type: "tel",
+				cls: "cashInput form_field", 
+				isRequired: true, 
+				statusIcon: true, 
+				uiEventControlID: "profile:turnover-input", 
+				tabIndex: 1, 
+				autoCorrect: "off", 
+				autoCapitalize: "off", 
+				captionLine2: "(sales)"), 
+				origin: origin)
+
+			
+			@EzForm.WizardButton(new List<EzButtonModel>{
+				new EzButtonModel("turnoverNext", "Next",
+					cls: "btn-continue button btn-green ev-btn-org disabled",
+					uiEventControlID:"profile:turnover-next",
+					buttonType: EzButtonType.button,
+					tabIndex: 2),
+				new EzButtonModel("turnoverCancel", "Cancel",
+					cls: "btn-back button btn-grey cancel clean-btn",
+					uiEventControlID:"profile:turnover-cancel",
+					buttonType: EzButtonType.button,
+					tabIndex: 3)
+			},
+			origin: origin)
+		</form>
+	</div>
+</script>

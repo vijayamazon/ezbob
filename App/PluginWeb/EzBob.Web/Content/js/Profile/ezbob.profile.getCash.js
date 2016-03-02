@@ -6,7 +6,7 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 		this.customer = options.customer;
 
 		this.isRequestInProgress = false;
-
+		this.trustPilotClaim = false;
 		this.refreshInterval = null;
 
 		this.startRefresh();
@@ -178,7 +178,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			} // if never left review
 		} // if review enabled
 
-		this.doApplyForALoan();
+		this.checkTurnoverIsNotExpired();
 	}, // applyForALoan
 
 	openTrustPilotDlg: function() {
@@ -203,12 +203,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				$('a.trustpilot-rate', me).click(function() {
 					me.dialog('close');
 					window.open('http://www.trustpilot.com/evaluate/ezbob.com');
-					self.doApplyForALoan(true);
+					self.trustPilotClaim = true;
 				});
 
 				$('a.trustpilot-skip', me).click(function() {
 					me.dialog('close');
-					self.doApplyForALoan();
+					self.checkTurnoverIsNotExpired();
 				});
 
 				$('*:focus', me).blur();
@@ -216,16 +216,23 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		}); // dialog
 	}, // openTrustPilotDlg
 
-	doApplyForALoan: function(bClaims) {
+	checkTurnoverIsNotExpired: function () {
+		if (this.customer.get('IsTurnoverExpired')) {
+			this.trigger('turnover');
+			return;
+		}
+		
+		this.doApplyForALoan();
+	},//checkTurnoverIsNotExpired
+
+	doApplyForALoan: function () {
 		var that = this;
 
 		this.makeTargeting();
 
-		this.trigger('applyForLoan');
-
 		BlockUi();
 
-		if (bClaims)
+		if (this.trustPilotClaim)
 			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
 
 		EzBob.App.Iovation.callIovation('getcash');
@@ -237,8 +244,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				EzBob.App.trigger('error', oResponse.error);
 				return;
 			} // if
-
-			console.log(oResponse);
 
 			if (!oResponse.good_to_go) {
 				var oDlg = that.$el.find('#refresh-accounts-dlg');

@@ -613,7 +613,11 @@
 			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
 			customer.PersonalInfo.IndustryType = eIndustryType;
 			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
-
+			customer.Turnovers.Add(new CustomerTurnover {
+				CustomerID = customer.Id,
+				Timestamp = DateTime.UtcNow,
+				Turnover = companyAdditionalInfo.OverallTurnOver ?? 0,
+			});
 			if (eIndustryType == IndustryType.Retail || eIndustryType == IndustryType.Online || companyAdditionalInfo.PartBusinessOnline)
 				customer.IsOffline = false;
 			else

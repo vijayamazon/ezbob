@@ -226,6 +226,9 @@ namespace EzBob.Models {
 
 		public int LastApprovedAmount { get; set; }
 
+		public decimal Turnover { get; set; }
+		public bool IsTurnoverExpired { get; set; }
+
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel {

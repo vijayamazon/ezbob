@@ -651,6 +651,7 @@
 				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 				.Add("~/Content/js/Profile/ezbob.profile.companyDirectorsView.js")
 				.Add("~/Content/js/Profile/ezbob.profile.processingAutomationPopupView.js")
+				.Add("~/Content/js/Profile/ezbob.profile.turnover.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
 

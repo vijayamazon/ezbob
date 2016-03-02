@@ -19,6 +19,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Inverse()
 				.Cascade.All();
 
+			HasMany(x => x.Turnovers)
+				.AsSet()
+				.KeyColumn("CustomerID")
+				.Inverse()
+				.Cascade.All();
+
 			References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
 			Map(x => x.IsWasLate);
 			Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();

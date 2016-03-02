@@ -14,7 +14,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 		this.getCashModel = new EzBob.Profile.GetCashModel({ customer: options });
 		this.getCashView = new EzBob.Profile.GetCashView({ model: this.getCashModel, customer: options });
-
+		this.getCashView.on("turnover", this.turnover, this);
 		this.processingPopup = new EzBob.Profile.ProccessingAutomationPopupView({ model: this.getCashModel });
 
 		this.signWidget = new EzBob.Profile.SignWidget({ customerModel: options });
@@ -43,6 +43,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.router.on("details", this.loanDetails, this);
 		this.router.on("getCash", this.getCash, this);
 		this.router.on("payEarly", this.makePayment, this);
+		
 		this.router.on("menuWidgetShown", this.menuWidgetShown, this);
 	},
 
@@ -118,6 +119,21 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.marketing("GetCash");
 	},
 
+	turnover: function () {
+		$(document).attr("title", "Update turnover");
+
+		EzBob.App.GA.trackPage('/Customer/Profile/Turover', 'Update turnover', this.getGTMVariables());
+
+		var turnoverView = new EzBob.Profile.TurnoverView({ customer: this.customer });
+
+		turnoverView.on('cancel', this.turnoverCancel, this);
+		turnoverView.on('next', this.turnoverNext, this);
+
+		this.getCashRegion.show(turnoverView);
+		this.hideProfile();
+		this.marketing("GetCash");
+	},
+
 	finishedWizard: function () {
 		dataLayer.push({ 'event': 'finished-wizard' });
 		EzBob.App.GA.trackPage('/Customer/Profile/FinishedWizard', 'Profile: Finished Wizard', this.getGTMVariables());
@@ -181,6 +197,17 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	applyForLoanSubmit: function(creditSum) {
 		this.applyForLoanBack();
 		this.getCashModel.set('availableCredit', this.getCashModel.get('availableCredit') - creditSum);
+	},
+
+	turnoverCancel: function () {
+		this.router.navigate("");
+		this.getCashModel.refresh();
+		this.menuWidgetShown();
+	},
+
+	turnoverNext: function () {
+		this.turnoverCancel();
+		this.getCashView.doApplyForALoan();
 	},
 
 	makePayment: function(id) {

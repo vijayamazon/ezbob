@@ -347,6 +347,16 @@
 			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.IsDefault;
 			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 
+			 var lastTurnover = customer.Turnovers.OrderByDescending(x => x.Timestamp)
+				.FirstOrDefault();
+			if(lastTurnover != null) {
+				customerModel.Turnover = lastTurnover.Turnover;
+				customerModel.IsTurnoverExpired = (DateTime.Today - lastTurnover.Timestamp).TotalDays > (365.0 / 2); //half year
+			} else {
+				customerModel.Turnover = 0;
+				customerModel.IsTurnoverExpired = true; 
+			}
+			
 			SafeReader sr = DbConnectionGenerator.Get(new SafeILog(this)).GetFirst(
 				"LoadActiveLotteries",
 				CommandSpecies.StoredProcedure,
@@ -356,6 +366,8 @@
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			customerModel.LotteryCode = sr["LotteryCode"];
+
+
 		} // BuildProfileModel
 
 		private QuickOfferModel BuildQuickOfferModel(Customer c) {
