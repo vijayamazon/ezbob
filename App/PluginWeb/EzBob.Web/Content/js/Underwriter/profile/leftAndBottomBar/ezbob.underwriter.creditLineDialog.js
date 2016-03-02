@@ -551,8 +551,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		var interestRateTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
 		this.ui.interestRate.parent().tooltip('destroy').tooltip({ title: interestRateTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var minSetupFeePercent = this.model.get('BrokerID') ? 0 : gradeRanges.MinSetupFee;
-		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(minSetupFeePercent) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
+		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
 		this.ui.manualSetupFeePercent.parent().tooltip('destroy').tooltip({ title: manualSetupFeePercentTooltip, trigger: 'hover focus', placement: 'bottom' });
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
@@ -628,7 +627,13 @@ EzBob.Underwriter.LogicalGluePopupView = EzBob.ItemView.extend({
 
 EzBob.validateCreditLineDialogForm = function(el, gradeRange, isBroker) {
 	var e = el || $('form');
-	var minSetupFeePercent = isBroker ? 0 : (gradeRange.MinSetupFee * 100).toFixed(2);
+
+	var isManagerUW = $('body').hasClass('role-SuperUser') || $('body').hasClass('role-manager') || $('body').hasClass('role-Underwriter');
+
+	var minSetupFeePercent = isBroker || isManagerUW ? 0 : (gradeRange.MinSetupFee * 100).toFixed(2);
+	var maxSetupFeePercent = isManagerUW ? 100 : (gradeRange.MaxSetupFee * 100).toFixed(2);
+	var minInterestRate = isManagerUW ? 0 : (gradeRange.MinInterestRate * 100).toFixed(2);
+	var maxInterestRate = isManagerUW ? 100 : (gradeRange.MaxInterestRate * 100).toFixed(2);
 	return e.validate({
 		rules: {
 			offeredCreditLine: {
@@ -637,11 +642,11 @@ EzBob.validateCreditLineDialogForm = function(el, gradeRange, isBroker) {
 				autonumericMax: _.min([EzBob.Config.MaxLoan, gradeRange.MaxLoanAmount]),
 			},
 			repaymentPeriod: { required: true, min: gradeRange.MinTerm, max: gradeRange.MaxTerm },
-			interestRate: { required: true, autonumericMin: (gradeRange.MinInterestRate * 100).toFixed(2), autonumericMax: (gradeRange.MaxInterestRate * 100).toFixed(2), },
 			startingFromDate: { required: true, dateCheck: true, },
 			offerValidUntil: { required: true, dateCheck: true, },
-			manualSetupFeePercent: { autonumericMin: minSetupFeePercent, autonumericMax: (gradeRange.MaxSetupFee * 100).toFixed(2), required: true, },
-			brokerSetupFeePercent: { autonumericMin: 0, required: false, },
+			brokerSetupFeePercent: { autonumericMin: 0, autonumericMax: 100, required: false, },
+			interestRate: { required: true, autonumericMin: minInterestRate, autonumericMax: maxInterestRate, },
+			manualSetupFeePercent: { autonumericMin: minSetupFeePercent, autonumericMax: maxSetupFeePercent, required: true, },
 		},
 		messages: {
 			offeredCreditLine: {
