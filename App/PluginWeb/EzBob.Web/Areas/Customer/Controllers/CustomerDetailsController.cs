@@ -132,7 +132,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult TakeQuickOffer() {
+		public JsonResult OldTakeQuickOffer() {
 			var customer = this.context.Customer;
 
 			Session["WizardComplete"] = false;
@@ -156,6 +156,46 @@
 
 			return Json(new { });
 		} // TakeQuickOffer
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult TakeQuickOffer() {
+			var customer = this.context.Customer;
+			ms_oLog.Debug("Customer {1} ({0}): TakeNewQuickOffer has completed wizard by taking a quick offer.", customer.Id, customer.PersonalInfo.Fullname);
+			Session["WizardComplete"] = false;
+			TempData["WizardComplete"] = false;
+
+			new Transactional(() => {
+				ms_oLog.Debug("Customer {1} ({0}): has completed wizard by taking a quick offer.", customer.Id, customer.PersonalInfo.Fullname);
+
+				customer.WizardStep = this.databaseHelper.WizardSteps.GetAll()
+					.FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
+
+				//TODO remove
+				customer.QuickOffer = new QuickOffer {
+					Amount = 10000,
+					ImmediateInterestRate = 0.02M,
+					ImmediateSetupFee = 0.05M,
+					CreationDate = DateTime.UtcNow,
+					ExpirationDate = DateTime.UtcNow.AddHours(24),
+					IncorporationDate = new DateTime(2010,01,01)
+
+				};
+				ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+
+				this.cashRequestBuilder.CreateQuickOfferCashRequest(customer, this.context.UserId);
+
+				ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+
+				this.m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+
+				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+			}).Execute();
+
+			return Json(new { redirectUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) + "#GetCash" });
+		} // TakeQuickOffer
+
 
 		[Ajax]
 		[HttpPost]
