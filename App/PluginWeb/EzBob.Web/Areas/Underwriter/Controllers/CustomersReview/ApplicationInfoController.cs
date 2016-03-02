@@ -130,6 +130,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Permission(Name = "ChangePhone")]
 		public JsonResult VerifyPhone(int customerId, string phoneType, bool verifiedPreviousState) {
 			CustomerPhone customerPhone = this.customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == phoneType && x.IsCurrent);
 			if (customerPhone == null) {
