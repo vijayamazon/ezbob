@@ -2452,7 +2452,7 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class LogicalGlueResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<ServiceClientProxy.EzServiceReference.Bucket> BucketField;
+        private ServiceClientProxy.EzServiceReference.Bucket BucketField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal BucketPercentField;
@@ -2488,12 +2488,12 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Guid UniqueIDField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<ServiceClientProxy.EzServiceReference.Bucket> Bucket {
+        public ServiceClientProxy.EzServiceReference.Bucket Bucket {
             get {
                 return this.BucketField;
             }
             set {
-                if ((this.BucketField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.BucketField, value) != true)) {
                     this.BucketField = value;
                     this.RaisePropertyChanged("Bucket");
                 }
@@ -3309,34 +3309,91 @@ namespace ServiceClientProxy.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Bucket", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Inte" +
         "rface")]
-    public enum Bucket : int {
+    [System.SerializableAttribute()]
+    public partial class Bucket : ServiceClientProxy.EzServiceReference.EnumMemberOfint {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="EnumMemberOfint", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Integration.LogicalGlue.Engine.Inte" +
+        "rface")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.Bucket))]
+    public partial class EnumMemberOfint : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        A = 1,
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        B = 2,
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CommunicationCodeField;
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        C = 3,
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        D = 4,
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ValueField;
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        E = 5,
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        F = 6,
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CommunicationCode {
+            get {
+                return this.CommunicationCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CommunicationCodeField, value) != true)) {
+                    this.CommunicationCodeField = value;
+                    this.RaisePropertyChanged("CommunicationCode");
+                }
+            }
+        }
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        G = 7,
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
         
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        H = 8,
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -4507,6 +4564,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrent", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/LogicalGlueSetAsCurrentResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAllResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLogicalGlueForAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAll", ReplyAction="http://tempuri.org/IEzServiceLogicalGlue/BackfillLogicalGlueForAllResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillLogicalGlueForAllAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync", ReplyAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<EZBob.DatabaseLib.Model.Database.CashRequestOriginator> cashRequestOriginator);
@@ -6326,6 +6389,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> LogicalGlueSetAsCurrentAsync(int underwriterID, int customerID, System.Guid uniqueID) {
             return base.Channel.LogicalGlueSetAsCurrentAsync(underwriterID, customerID, uniqueID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillLogicalGlueForAll() {
+            return base.Channel.BackfillLogicalGlueForAll();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillLogicalGlueForAllAsync() {
+            return base.Channel.BackfillLogicalGlueForAllAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategyAsync(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, System.Nullable<EZBob.DatabaseLib.Model.Database.CashRequestOriginator> cashRequestOriginator) {

@@ -182,6 +182,8 @@
 
 				inputData.ResponseHttpStatus = (inference.Status == null) ? (int?)null : (int)inference.Status.HttpStatus;
 
+				bool receivedError = (inference.Etl != null) && (inference.Etl.Code != null) && inference.Etl.Code.IsError;
+
 				if (inference.Error.HasError()) {
 					inputData.ResponseErrors.AddRange(
 						new [] {
@@ -192,7 +194,7 @@
 					);
 
 					if (inference.Error.TimeoutSource != null)
-						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Value);
+						inputData.ResponseErrors.Add("Timeout: " + inference.Error.TimeoutSource.Name);
 
 					ModelOutput model = inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork)
 						? inference.ModelOutputs[ModelNames.NeuralNetwork]
@@ -217,7 +219,11 @@
 					} // if
 				} // if inference has error
 
-				inputData.HardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				inputData.HardReject =
+					(inference.Etl != null) &&
+					(inference.Etl.Code != null) &&
+					inference.Etl.Code.IsHardReject;
+
 				inputData.Bucket = inference.Bucket == null ? (LocalBucket?)null : (LocalBucket)(int)inference.Bucket;
 				inputData.Score = inference.Score;
 

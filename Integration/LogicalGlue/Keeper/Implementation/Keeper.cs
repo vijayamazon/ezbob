@@ -51,7 +51,10 @@
 					customerID,
 					time,
 					includeTryOutData,
-					monthlyPayment
+					monthlyPayment,
+					LoadBuckets(),
+					LoadTimeoutSources(),
+					LoadEtlCodes()
 				).Execute().Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
@@ -60,8 +63,29 @@
 
 		public Inference SaveInference(int customerID, long requestID, Response<Reply> response) {
 			try {
-				long responseID = new InferenceSaver(this.db, this.log, requestID, response).Execute().ResponseID;
-				return new InferenceLoader(this.db, this.log, responseID, customerID).Execute().Result;
+				long responseID = new InferenceSaver(
+					this.db,
+					this.log,
+					requestID,
+					response,
+					LoadBuckets(),
+					LoadTimeoutSources(false),
+					LoadEtlCodes(false)
+				)
+					.Execute()
+					.ResponseID;
+
+				return new InferenceLoader(
+					this.db,
+					this.log,
+					responseID,
+					customerID,
+					LoadBuckets(),
+					LoadTimeoutSources(),
+					LoadEtlCodes()
+				)
+					.Execute()
+					.Result;
 			} catch (Exception e) {
 				throw new InferenceSaverAlert(customerID, requestID, e, this.log);
 			} // try
@@ -98,8 +122,13 @@
 					customerID,
 					time,
 					includeTryOuts,
-					Math.Max(maxHistoryLength ?? 0, 0)
-				).Execute().Results;
+					Math.Max(maxHistoryLength ?? 0, 0),
+					LoadBuckets(),
+					LoadTimeoutSources(),
+					LoadEtlCodes()
+				)
+					.Execute()
+					.Results;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
@@ -133,12 +162,49 @@
 					customerID,
 					time,
 					includeTryOutData,
-					monthlyPayment
-				).Execute().Result;
+					monthlyPayment,
+					LoadBuckets(),
+					LoadTimeoutSources(),
+					LoadEtlCodes()
+				)
+					.Execute()
+					.Result;
 			} catch (Exception e) {
 				throw new InferenceLoaderAlert(customerID, time, e, this.log);
 			} // try
 		} // LoadInferenceIfExists
+
+		public Bucket FindBucket(int bucketID) {
+			return LoadBuckets().Find(bucketID);
+		} // FindBucket
+
+		public Bucket FindBucket(string bucket) {
+			return LoadBuckets().Find(bucket);
+		} // FindBucket
+
+		private BucketRepository LoadBuckets() {
+			var repo = new BucketRepository(this.db, this.log);
+			repo.Load();
+			return repo;
+		} // LoadBuckets
+
+		private TimeoutSourceRepository LoadTimeoutSources(bool doLoad = true) {
+			var repo = new TimeoutSourceRepository(this.db, this.log);
+
+			if (doLoad)
+				repo.Load();
+
+			return repo;
+		} // LoadTimeoutSources
+
+		private EtlCodeRepository LoadEtlCodes(bool doLoad = true) {
+			var repo = new EtlCodeRepository(this.db, this.log);
+
+			if (doLoad)
+				repo.Load();
+
+			return repo;
+		} // LoadEtlCodes
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;

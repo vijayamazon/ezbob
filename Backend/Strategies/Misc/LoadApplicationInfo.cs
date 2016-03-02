@@ -72,10 +72,11 @@
 			var lg = new GetLatestKnownInference(this.customerID, this.now, false);
 			lg.Execute();
 
-			if (lg.Inference == null) { return; }
+			if (lg.Inference == null)
+				return;
 
 			Result.LogicalGlueScore = lg.Inference.Score;
-			Result.GradeID = lg.Inference.Bucket.HasValue ? (int)lg.Inference.Bucket : (int?)null;
+			Result.GradeID = lg.Inference.Bucket;
 
 			if (Result.LogicalGlueScore.HasValue) {
 				var subGrade = Result.SubGrades.FirstOrDefault(

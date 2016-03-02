@@ -7,7 +7,6 @@
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Ezbob.Logger;
-	using Ezbob.Utils.ParsedValue;
 
 	[DataContract]
 	public class LogicalGlueResult : EzService.ActionResult {
@@ -15,7 +14,7 @@
 		public DateTime Date { get; set; }
 
 		[DataMember]
-		public Bucket? Bucket { get; set; }
+		public Bucket Bucket { get; set; }
 
 		[DataMember]
 		public string BucketStr { get; set; }
@@ -56,16 +55,12 @@
 
 			decimal? minScore = 0;
 			decimal? maxScore = 0;
-			inference = inference ?? new Inference {
-				Error = new InferenceError(),
-				ModelOutputs = new SortedDictionary<ModelNames, ModelOutput>()
-			};
 
 			try {
-                if (inference != null && inference.Bucket.HasValue) {
+				if (inference.Bucket != null) {
 					List<I_Grade> allGrades = db.Fill<I_Grade>("SELECT * FROM I_Grade", CommandSpecies.Text);
 
-					int gradeID = (int)inference.Bucket.Value;
+					int gradeID = inference.Bucket.Value;
 
 					maxScore = allGrades.First(x => x.GradeID == gradeID).UpperBound;
 
@@ -81,7 +76,7 @@
 					Error = inference.Error.Message,
 					Date = inference.ReceivedTime,
 					Bucket = inference.Bucket,
-					BucketStr = inference.Bucket.HasValue ? inference.Bucket.ToString() : string.Empty,
+					BucketStr = inference.Bucket != null ? inference.Bucket.Name : string.Empty,
 					MonthlyRepayment = inference.MonthlyRepayment,
 					UniqueID = inference.UniqueID,
 					FLScore = inference.ModelOutputs.ContainsKey(ModelNames.FuzzyLogic)
@@ -96,13 +91,19 @@
 
 				result.BucketPercent = b == 0 ? 0 : a / b;
 
-				result.IsHardReject = (inference.Etl != null) && (inference.Etl.Code == EtlCode.HardReject);
+				result.IsHardReject =
+					(inference.Etl != null) &&
+					(inference.Etl.Code != null) &&
+					inference.Etl.Code.IsHardReject;
+
 				result.ScoreIsReliable =
 					!inference.ModelOutputs.ContainsKey(ModelNames.NeuralNetwork) ||
 					inference.ModelOutputs[ModelNames.NeuralNetwork].Error.IsEmpty;
+
 				return result;
 			} catch (Exception ex) {
 				log.Warn(ex, "Failed loading lg data for customer {0}", customerID);
+
 				return new LogicalGlueResult {
 					Error = "Failed loading logical glue data",
 				};

@@ -17,7 +17,7 @@
 
 			this.log.Debug("Chosen reply in test harvester:\n{0}", reply);
 
-			return new Response<Reply>(HttpStatusCode.OK, reply);
+			return new Response<Reply>(Status, reply);
 		} // Infer
 
 		public ReplyModes ReplyMode { get; set; }
@@ -31,7 +31,11 @@
 			LogicalGlueInferenceApiTimeout,
 			HardRejection,
 			EtlFailBadAddress,
+			TimeoutA,
+			TimeoutL,
 		} // enum ReplyModes
+
+		private HttpStatusCode Status { get; set; }
 
 		private string GetReply() {
 			string now = DateTime.UtcNow.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture);
@@ -42,49 +46,72 @@
 		private string ChooseReply() {
 			switch (ReplyMode) {
 			case ReplyModes.Success:
+				Status = HttpStatusCode.OK;
 				return CreateSuccess();
 
 			case ReplyModes.BadInferenceRequest:
+				Status = HttpStatusCode.BadRequest;
 				return BadInferenceRequest;
 
 			case ReplyModes.BadEtlRequest:
+				Status = HttpStatusCode.BadRequest;
 				return BadEtlRequest;
 
 			case ReplyModes.EquifaxTimeout:
+				Status = HttpStatusCode.GatewayTimeout;
 				return EquifaxTimout;
 
 			case ReplyModes.LogicalGlueInferenceApiTimeout:
+				Status = HttpStatusCode.GatewayTimeout;
 				return LogicalGlueInferenceApiTimout;
 
 			case ReplyModes.HardRejection:
+				Status = HttpStatusCode.OK;
 				return HardRejection;
 
 			case ReplyModes.EtlFailBadAddress:
-				return ReadEtlFailBadAddress();
+				Status = HttpStatusCode.OK;
+				return ReadEmbeddedFile("etl_F_bad_address.json");
+
+			case ReplyModes.TimeoutA:
+			case ReplyModes.TimeoutL:
+				Status = HttpStatusCode.GatewayTimeout;
+				return ReadEmbeddedFile(ReplyMode + ".json");
 			} // switch
 
 			int rnd = new Random().Next(1, 101);
 
-			if (rnd <= 85)
+			if (rnd <= 85) {
+				Status = HttpStatusCode.OK;
 				return CreateSuccess();
+			} // if
 
-			if (rnd <= 88)
+			if (rnd <= 88) {
+				Status = HttpStatusCode.BadRequest;
 				return BadInferenceRequest;
+			} // if
 
-			if (rnd <= 91)
+			if (rnd <= 91) {
+				Status = HttpStatusCode.BadRequest;
 				return BadEtlRequest;
+			} // if
 
-			if (rnd <= 94)
+			if (rnd <= 94) {
+				Status = HttpStatusCode.GatewayTimeout;
 				return EquifaxTimout;
+			} // if
 
-			if (rnd <= 97)
+			if (rnd <= 97) {
+				Status = HttpStatusCode.GatewayTimeout;
 				return LogicalGlueInferenceApiTimout;
+			} // if
 			
+			Status = HttpStatusCode.OK;
 			return HardRejection;
 		} // ChooseReply
 
-		private static string ReadEtlFailBadAddress() {
-			const string fileName = "Ezbob.Integration.LogicalGlue.Harvester.Implementation.etl_F_bad_address.json";
+		private static string ReadEmbeddedFile(string fileNameBase) {
+			string fileName = "Ezbob.Integration.LogicalGlue.Harvester.Implementation." + fileNameBase;
 
 			Stream stream = typeof(TestHarvester).Assembly.GetManifestResourceStream(fileName);
 
@@ -100,7 +127,7 @@
 			stream.Close();
 
 			return json;
-		} // ReadEtlFailBadAddress
+		} // ReadEmbeddedFile
 
 		private static string CreateSuccess() {
 			var fl = ModelContent.Replace("__MAP_OUTPUT_RATIOS__", MapOutputRatios);

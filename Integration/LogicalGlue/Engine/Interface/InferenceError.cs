@@ -4,7 +4,7 @@
 	[DataContract]
 	public class InferenceError {
 		[DataMember]
-		public TimeoutSources? TimeoutSource { get; set; }
+		public TimeoutSource TimeoutSource { get; set; }
 		[DataMember]
 		public string Message { get; set; }
 		[DataMember]

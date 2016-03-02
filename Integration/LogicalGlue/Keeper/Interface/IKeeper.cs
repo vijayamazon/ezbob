@@ -89,5 +89,19 @@
 		/// Otherwise only inferences with this amount are included.</param>
 		/// <returns>Inference that was available for the requested customer at requested time. Can be null.</returns>
 		Inference LoadInferenceIfExists(int customerID, DateTime time, bool includeTryOutData, decimal monthlyPayment);
+
+		/// <summary>
+		/// Find bucket by its id (numeric value, i.e. 1-8).
+		/// </summary>
+		/// <param name="bucketID">Bucket to find.</param>
+		/// <returns>Bucket, if found; null, otherwise.</returns>
+		Bucket FindBucket(int bucketID);
+
+		/// <summary>
+		/// Find bucket by its id (numeric value, i.e. A-H).
+		/// </summary>
+		/// <param name="bucket">Bucket to find.</param>
+		/// <returns>Bucket, if found; null, otherwise.</returns>
+		Bucket FindBucket(string bucket);
 	} // interface IKeeper
 } // namespace

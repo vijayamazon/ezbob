@@ -17,5 +17,8 @@
 
 		[OperationContract]
 		BoolActionResult LogicalGlueSetAsCurrent(int underwriterID, int customerID, Guid uniqueID);
+
+		[OperationContract]
+		ActionMetaData BackfillLogicalGlueForAll();
 	} // interface IEzServiceLogicalGlue
 } // namespace  

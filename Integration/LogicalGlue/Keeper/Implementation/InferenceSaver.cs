@@ -13,10 +13,16 @@
 			AConnection db,
 			ASafeLog log,
 			long requestID,
-			Response<Reply> response
+			Response<Reply> response,
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
 		) : base(db, log) {
 			this.requestID = requestID;
 			this.response = response;
+			this.bucketRepo = bucketRepo;
+			this.timeoutSourceRepo = timeoutSourceRepo;
+			this.etlCodeRepo = etlCodeRepo;
 			ResponseID = 0;
 		} // constructor
 
@@ -51,7 +57,14 @@
 			try {
 				new SaveRawResponse(this.requestID, this.response, DB, Log).ExecuteNonQuery(con);
 
-				ResponseID = new SaveResponse(this.requestID, this.response, DB, Log).ExecuteScalar<long>(con);
+				ResponseID = new SaveResponse(
+					this.requestID,
+					this.response,
+					this.bucketRepo,
+					this.timeoutSourceRepo,
+					DB,
+					Log
+				).Execute(con);
 
 				if (this.response.Parsed.HasInference()) {
 					var map = new SortedDictionary<ModelNames, long>();
@@ -84,9 +97,9 @@
 					} // if
 				} // if
 
-				var saveEtl = new SaveEtlData(ResponseID, this.response, DB, Log);
+				var saveEtl = new SaveEtlData(ResponseID, this.response, this.etlCodeRepo, DB, Log);
 				if (saveEtl.HasValidParameters()) // invalid if e.g. no ETL data
-					saveEtl.ExecuteNonQuery(con);
+					saveEtl.Execute(con);
 
 				new SaveCustomerHistory(ResponseID, DB, Log).ExecuteNonQuery(con);
 
@@ -118,5 +131,8 @@
 
 		private readonly long requestID;
 		private readonly Response<Reply> response;
+		private readonly BucketRepository bucketRepo;
+		private readonly TimeoutSourceRepository timeoutSourceRepo;
+		private readonly EtlCodeRepository etlCodeRepo;
 	} // class InferenceSaver
 } // namespace

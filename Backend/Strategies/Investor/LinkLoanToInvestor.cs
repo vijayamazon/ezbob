@@ -23,9 +23,9 @@
 			if (IsForOpenPlatform) {
 				GetLatestKnownInference inference = new GetLatestKnownInference(this.customerID, this.now, false);
 				inference.Execute();
-				if (inference.Inference != null) {
+
+				if (inference.Inference != null)
 					this.bucket = inference.Inference.Bucket;
-				}
 
 				DB.ForEachRowSafe(HandleOneAssignedToLoanInvestor,
 					"I_LoadAssigedToLoanInvestors",
@@ -50,7 +50,7 @@
 					LoanID = this.loanID,
 					LoanPercentage = investmentPercent,
 					Timestamp = this.now,
-					GradeID = this.bucket.HasValue ? (int)this.bucket.Value : (int?)null
+					GradeID = this.bucket,
 				};
 
 				DB.ExecuteNonQuery("I_PortfolioSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", portfolio));
@@ -78,6 +78,6 @@
 		private readonly int customerID;
 		private readonly int loanID;
 		private readonly DateTime now;
-		private Bucket? bucket;
+		private Bucket bucket;
 	}//LinkLoanToInvestor
 }//ns

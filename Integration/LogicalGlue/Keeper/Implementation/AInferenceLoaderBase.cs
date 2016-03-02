@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Keeper.Implementation {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net;
 	using Ezbob.Database;
 	using Ezbob.Integration.LogicalGlue.Engine.Interface;
@@ -27,7 +26,10 @@
 			DateTime now,
 			int historyLength,
 			bool includeTryOutData,
-			decimal monthlyPayment
+			decimal monthlyPayment,
+			BucketRepository bucketRepo,
+			TimeoutSourceRepository timeoutSourceRepo,
+			EtlCodeRepository etlCodeRepo
 		) : base(db, log, customerID, now) {
 			this.resultSet = new SortedDictionary<long, Inference>();
 			this.models = new SortedDictionary<long, PublicModelOutput>();
@@ -37,6 +39,9 @@
 			this.historyLength = historyLength;
 			this.includeTryOutData = includeTryOutData;
 			this.monthlyPayment = monthlyPayment;
+			this.bucketRepo = bucketRepo;
+			this.timeoutSourceRepo = timeoutSourceRepo;
+			this.etlCodeRepo = etlCodeRepo;
 		} // constructor
 
 		public List<Inference> Results { get; private set; }
@@ -162,7 +167,9 @@
 
 			result.ResponseID = dbResponse.ID;
 			result.ReceivedTime = dbResponse.ReceivedTime;
-			result.Bucket = dbResponse.BucketID == null ? (Bucket?)null : (Bucket)(int)dbResponse.BucketID;
+			result.Bucket = ((dbResponse.BucketID != null) && (this.bucketRepo != null))
+				? this.bucketRepo.Find(dbResponse.BucketID.Value)
+				: null;
 			result.Reason = dbResponse.Reason;
 			result.Outcome = dbResponse.Outcome;
 
@@ -170,9 +177,9 @@
 				Message = dbResponse.ErrorMessage,
 				ParsingExceptionMessage = dbResponse.ParsingExceptionMessage,
 				ParsingExceptionType = dbResponse.ParsingExceptionType,
-				TimeoutSource = dbResponse.TimeoutSourceID == null
-					? (TimeoutSources?)null
-					: (TimeoutSources)dbResponse.TimeoutSourceID.Value,
+				TimeoutSource = (dbResponse.TimeoutSourceID == null) || (this.timeoutSourceRepo == null)
+					? null
+					: this.timeoutSourceRepo.Find(dbResponse.TimeoutSourceID.Value),
 			};
 
 			result.Status = new InferenceStatus {
@@ -198,25 +205,8 @@
 				);
 			} // if
 
-			EtlCode? code = null;
-
-			if (dbEtl.EtlCodeID != null) {
-				int[] x = (int[])Enum.GetValues(typeof(EtlCode));
-
-				if (!x.Contains((int)dbEtl.EtlCodeID.Value)) {
-					throw OutOfRangeException(
-						"Inference loader({0}): ETL '{1}' has unsupported ETL code value of '{2}'.",
-						this.argList,
-						dbEtl.ID,
-						dbEtl.EtlCodeID.Value
-					);
-				} // if
-
-				code = (EtlCode)(int)dbEtl.EtlCodeID.Value;
-			} // if
-
 			this.resultSet[dbEtl.ResponseID].Etl = new PublicEtlData {
-				Code = code,
+				Code = dbEtl.EtlCodeID == null ? null : this.etlCodeRepo.Find(dbEtl.EtlCodeID.Value),
 				Message = dbEtl.Message,
 			};
 		} // ProcessEtl
@@ -389,6 +379,9 @@
 		private readonly int historyLength;
 		private readonly bool includeTryOutData;
 		private readonly decimal monthlyPayment;
+		private readonly BucketRepository bucketRepo;
+		private readonly TimeoutSourceRepository timeoutSourceRepo;
+		private readonly EtlCodeRepository etlCodeRepo;
 		private string argList;
 	} // class InferenceLoader
 } // namespace

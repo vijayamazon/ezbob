@@ -2,6 +2,6 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class Bucket : EnumMember<int> {
-	} // class Bucket
+	public class TimeoutSource : EnumMember<long> {
+	} // class TimeoutSource
 } // namespace

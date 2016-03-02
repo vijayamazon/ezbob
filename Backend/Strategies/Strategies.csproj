@@ -190,6 +190,7 @@
     <Compile Include="LegalDocs\ManualLegalDocsSyncTemplatesFiles.cs" />
     <Compile Include="LegalDocs\GetLegalDocs.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="LogicalGlue\BackfillLogicalGlueForAll.cs" />
     <Compile Include="LogicalGlue\GetTryoutInference.cs" />
     <Compile Include="LogicalGlue\GetHistoryInferences.cs" />
     <Compile Include="LogicalGlue\GetLatestKnownInference.cs" />

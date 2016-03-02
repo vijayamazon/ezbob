@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Integration.LogicalGlue.Harvester.Interface {
-	using Ezbob.Integration.LogicalGlue.Engine.Interface;
 	using Newtonsoft.Json;
 
 	public class Etl {
@@ -7,6 +6,6 @@
 		public string Message { get; set; }
 
 		[JsonProperty(PropertyName = "code", NullValueHandling = NullValueHandling.Ignore)]
-		public EtlCode? Code { get; set; }
+		public string Code { get; set; }
 	} // class Etl
 } // namespace

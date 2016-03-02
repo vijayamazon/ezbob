@@ -4,7 +4,7 @@
 	[DataContract]
 	public class EtlData {
 		[DataMember]
-		public EtlCode? Code { get; set; }
+		public EtlCode Code { get; set; }
 
 		[DataMember]
 		public string Message { get; set; }
