@@ -95,6 +95,7 @@
                             //}
                             //Driver.Manage().Cookies.DeleteAllCookies();
 
+                            actionBot.Sleep(1000);
                             codeToExecute.Invoke(caseID.ToString() + " - " + brand.ToString() + " - " + browser.ToString() + (isDebugMode == false ? " - " + TestRailRepository.TestRailCaseName(caseID) : ""));
                             Driver.Quit();
 
@@ -145,7 +146,8 @@
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Browser>() {
-                    AutomationModels.Browser.Chrome
+                    AutomationModels.Browser.Chrome,
+                    AutomationModels.Browser.Firefox
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();
@@ -154,7 +156,8 @@
         public List<AutomationModels.Brand> GetBrands(ulong caseID) {
             if (IsDebugMode) {
                 return new List<AutomationModels.Brand>() {
-                    AutomationModels.Brand.Ezbob
+                    AutomationModels.Brand.Ezbob,
+                    AutomationModels.Brand.Everline
                 };
             }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).Distinct().ToList();

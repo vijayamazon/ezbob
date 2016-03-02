@@ -264,6 +264,7 @@
             actionBot.Click(accBtn, "(data source login button)");
 
             SharedServiceClass.WaitForAjaxReady(Driver);
+            SharedServiceClass.WaitForBlockUiOff(Driver);
 
             //Step 4 - Click complete.
             //By finishWizardAssert = By.Id("");

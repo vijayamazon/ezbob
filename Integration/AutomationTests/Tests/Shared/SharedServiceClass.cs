@@ -185,7 +185,7 @@
         public static Func<IWebDriver, bool> WaitForBlockUiOff() {
             return (Func<IWebDriver, bool>)(driver => {
                 try {
-                    if (driver.FindElements(By.CssSelector(".blockUI")).Count == 0) {
+                    if (driver.FindElements(By.CssSelector(".blockUI")).Count == 0 && driver.FindElements(By.CssSelector("#cboxOverlay")).Count == 0) {
                         log.Debug("blockUI finished execution.");
                         return true;
                     }

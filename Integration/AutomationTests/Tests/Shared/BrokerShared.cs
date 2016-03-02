@@ -174,7 +174,8 @@
             lock (this.Locker)
                 actionBot.SendKeys(By.Id("LeadEmail"), leadEmail, "(valid lead e-mail)");
 
-            actionBot.MoveToBottom();
+            //actionBot.MoveToBottom();
+            actionBot.MoveToElement(fillWizardMethod);
             //Step 7 - Click fill or send.
             actionBot.Click(fillWizardMethod, "(fill or send button)");
 
