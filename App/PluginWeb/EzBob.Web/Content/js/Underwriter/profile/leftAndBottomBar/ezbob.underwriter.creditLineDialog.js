@@ -542,16 +542,16 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	},//populateDropDowns
 
 	setTooltips: function (gradeRanges) {
-		var offeredCreditLineTooltip = 'Valid between ' + GBPValues(gradeRanges.MinLoanAmount, true) + ' and ' + GBPValues(gradeRanges.MaxLoanAmount, true);
+		var offeredCreditLineTooltip = 'Default between ' + GBPValues(gradeRanges.MinLoanAmount, true) + ' and ' + GBPValues(gradeRanges.MaxLoanAmount, true);
 		this.ui.offeredCreditLine.parent().tooltip('destroy').tooltip({ title: offeredCreditLineTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var repaymentPeriodTooltip = 'Valid between ' + gradeRanges.MinTerm + ' and ' + gradeRanges.MaxTerm + ' months';
+		var repaymentPeriodTooltip = 'Default between ' + gradeRanges.MinTerm + ' and ' + gradeRanges.MaxTerm + ' months';
 		this.ui.repaymentPeriod.parent().tooltip('destroy').tooltip({ title: repaymentPeriodTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var interestRateTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
+		var interestRateTooltip = 'Default between ' + EzBob.formatPercents(gradeRanges.MinInterestRate) + ' and ' + EzBob.formatPercents(gradeRanges.MaxInterestRate);
 		this.ui.interestRate.parent().tooltip('destroy').tooltip({ title: interestRateTooltip, trigger: 'hover focus', placement: 'bottom' });
 
-		var manualSetupFeePercentTooltip = 'Valid between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
+		var manualSetupFeePercentTooltip = 'Default between ' + EzBob.formatPercents(gradeRanges.MinSetupFee) + ' and ' + EzBob.formatPercents(gradeRanges.MaxSetupFee);
 		this.ui.manualSetupFeePercent.parent().tooltip('destroy').tooltip({ title: manualSetupFeePercentTooltip, trigger: 'hover focus', placement: 'bottom' });
 	},//setTooltips
 }); // EzBob.Underwriter.CreditLineDialog
