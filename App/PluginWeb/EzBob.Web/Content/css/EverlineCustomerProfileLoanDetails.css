@@ -113,13 +113,12 @@ dt {
 	text-decoration: none;
 }
 
-	.main-page-everline #get-cash .loan-agreements ul li a i {
-		position: absolute;
-		left: 6px;
-		font-size: 34px;
-		top: 4px;
-		display: inline-block;
-	}
+.main-page-everline #get-cash .loan-agreements ul li a i {
+	font-size: 34px;
+	display: inline-block;
+	float: left;
+	margin-top: 5px;
+}
 
 .main-page-everline #get-cash .buttons_container {
 	text-align: right;
@@ -550,4 +549,6 @@ h3.confirmation-header {
 
 .main-page-everline #get-cash .loan-agreements .clean-btn {
 	margin-left: 0;
+	width: auto;
+    padding: 0 10px 0 0;
 }
