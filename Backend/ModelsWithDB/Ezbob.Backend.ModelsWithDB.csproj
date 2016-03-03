@@ -203,6 +203,7 @@
     <Compile Include="LegalDocs\LoanAgreementTemplate.cs" />
     <Compile Include="MultiBrandLoanSummary.cs" />
     <Compile Include="AStringable.cs" />
+    <Compile Include="NewLoan\MigrationModels.cs" />
     <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
     <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_LoanInterestFreeze.cs" />

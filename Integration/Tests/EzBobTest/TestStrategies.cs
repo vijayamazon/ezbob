@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
-	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
@@ -475,7 +474,7 @@
 
 		[Test]
 		public void TestSetLateLoanStatus() {
-			var stra = new Ezbob.Backend.Strategies.Misc.SetLateLoanStatus();
+			var stra = new SetLateLoanStatus();
 			stra.Execute();
 		}
 

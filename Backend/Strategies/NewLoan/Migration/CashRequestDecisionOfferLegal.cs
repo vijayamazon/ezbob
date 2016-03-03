@@ -12,18 +12,20 @@
 	/// <summary>
 	/// copy CashRequest, DecisionsHistory into NL_CashRequests NL_decisions NL_Offers NL_OfferFees NL_decisionReasons
 	/// </summary>
-	public class MigrateCRDecisionOffer : AStrategy {
-		public MigrateCRDecisionOffer() {
+	public class CashRequestDecisionOfferLegal : AStrategy {
+		public CashRequestDecisionOfferLegal() {
 			loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			legalRep = ObjectFactory.GetInstance<LoanLegalRepository>();
 		}
 
 		public override string Name { get { return "MigrateCRDecisionOffer"; } }
 		public string Error { get; private set; }
 		public LoanRepository loanRep { get; private set; }
+		public LoanLegalRepository legalRep { get; private set; }
 
 		public override void Execute() {
 
-			List<MigrateLoanTransaction.LoanId> loansList = DB.Fill<MigrateLoanTransaction.LoanId>("NL_MigrationCRDecisionOffer", CommandSpecies.StoredProcedure);
+			List<MigrationModels.LoanId> loansList = DB.Fill<MigrationModels.LoanId>("NL_MigrationCRDecisionOffer", CommandSpecies.StoredProcedure);
 
 			NL_AddLog(LogType.Info, "Strategy start", "NL_MigrationCRDecisionOffer", null, null, null);
 
@@ -37,8 +39,8 @@
 			NL_AddLog(LogType.Info, "Loans to migrate", null, loansList.Count, null, null);
 
 			string query;
- 
-			foreach (MigrateLoanTransaction.LoanId l in loansList) {
+
+			foreach (MigrationModels.LoanId l in loansList) {
 
 				Loan loan = loanRep.Get(l.Id);
 
@@ -51,16 +53,16 @@
 
 				Context.CustomerID = loan.Customer.Id;
 				Context.UserID = loan.CashRequest.IdUnderwriter;
-	
+
 				try {
 
 					// [ELINAR-PC].[ezbob].[dbo].[NL_CashRequestGetByOldID]
 
-					query="select CashRequestID from NL_CashRequests where [OldCashRequestID]=" + loan.CashRequest.Id; //= "select top 20 Id from Loan l left join NL_Loans nl on nl.OldLoanID=l.Id and l.Id=null and l.Modified=0";
+					query = "select CashRequestID from NL_CashRequests where [OldCashRequestID]=" + loan.CashRequest.Id; 
 
 					Log.Debug("Processing loan {0}, cr {1}, {2}", loan.Id, loan.CashRequest.Id, query);
 
-					MigrateLoanTransaction.CashReqModel crModel = DB.FillFirst<MigrateLoanTransaction.CashReqModel>(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id));
+					MigrationModels.CashReqModel crModel = DB.FillFirst<MigrationModels.CashReqModel>(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id));
 
 					NL_AddLog(LogType.Info, "crModel", new object[] { query, loan.CashRequest.Id, l.Id }, crModel, null, null);
 
@@ -73,7 +75,7 @@
 							UserID = loan.CashRequest.IdUnderwriter ?? 1,
 							OldCashRequestID = loan.CashRequest.Id
 						});
-						
+
 						sCashRequest.Context.CustomerID = Context.CustomerID;
 						sCashRequest.Context.UserID = Context.UserID;
 
@@ -95,15 +97,7 @@
 							"and d.DecisionNameID={2} and d.DecisionTime='{3}'",
 								dh.CashRequest.Id, dh.Underwriter.Id, (int)dh.Action, dh.Date.ToString("yyyy-MM-dd HH:mm:ss"));
 
-						//query = "select DecisionID from [dbo].[NL_Decisions] d join [dbo].[NL_CashRequests] c on d.CashRequestID=c.CashRequestID and c.OldCashRequestID=@crID " +
-						//	"and d.UserID=@uID and d.DecisionNameID=@dID and d.DecisionTime='@dDate'";
-							//"datediff(DAY, d.DecisionTime, '@dDate')=0";
-
-						MigrateLoanTransaction.CashReqModel dModel = DB.FillFirst<MigrateLoanTransaction.CashReqModel>(query, CommandSpecies.Text/*, 
-							new QueryParameter("@crID", dh.CashRequest.Id),
-							new QueryParameter("@uID", dh.Underwriter.Id),
-							new QueryParameter("@dID", (int)dh.Action),
-							new QueryParameter("@dDate", dh.Date.ToString("yyyy-MM-dd HH:mm:ss"))*/); 
+						MigrationModels.CashReqModel dModel = DB.FillFirst<MigrationModels.CashReqModel>(query, CommandSpecies.Text);
 
 						NL_AddLog(LogType.Info, "dModel", new object[] { query, dh.CashRequest.Id, dh.Underwriter.Id, (int)dh.Action, dh.Date }, dModel, null, null);
 
@@ -137,7 +131,7 @@
 
 							query = string.Format("select OfferID from NL_Offers where DecisionID={0}", dModel.DecisionID);
 
-							dModel = DB.FillFirst<MigrateLoanTransaction.CashReqModel>(query, CommandSpecies.Text);
+							dModel = DB.FillFirst<MigrationModels.CashReqModel>(query, CommandSpecies.Text);
 
 							NL_AddLog(LogType.Info, "dModel-OfferID", new object[] { query }, dModel, null, null);
 
@@ -189,14 +183,16 @@
 						}
 					}
 
+					ConvertLoanLegals();
+
 					// do in backfill -  after migration end
 					// update .[dbo].[MedalCalculations], .[dbo].[MedalCalculationsAV]
-				//	query =
-				//		"IF (SELECT [NLCashRequestID] FROM [dbo].[MedalCalculations] WHERE [CashRequestID]=@crID) is null begin update [dbo].[MedalCalculations] set [NLCashRequestID]=@nlcrID where [CashRequestID]=@crID end " +
-				//			"IF (SELECT [NLCashRequestID] FROM [dbo].[MedalCalculationsAV] WHERE [CashRequestID]=@crID) is null begin update [dbo].[MedalCalculationsAV] set [NLCashRequestID]=@nlcrID where [CashRequestID]=@crID end";
-				//	+	"IF (SELECT [NLOfferID] FROM [dbo].[I_InvestorSystemBalance] WHERE [CashRequestID]=@crID) is null begin update [dbo].[I_InvestorSystemBalance] set [NLOfferID]=@nlcrID where [CashRequestID]=@crID end ";				
-					
-				//	DB.ExecuteNonQuery(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id), new QueryParameter("@nlcrID", crModel.CashRequestID));
+					//	query =
+					//		"IF (SELECT [NLCashRequestID] FROM [dbo].[MedalCalculations] WHERE [CashRequestID]=@crID) is null begin update [dbo].[MedalCalculations] set [NLCashRequestID]=@nlcrID where [CashRequestID]=@crID end " +
+					//			"IF (SELECT [NLCashRequestID] FROM [dbo].[MedalCalculationsAV] WHERE [CashRequestID]=@crID) is null begin update [dbo].[MedalCalculationsAV] set [NLCashRequestID]=@nlcrID where [CashRequestID]=@crID end";
+					//	+	"IF (SELECT [NLOfferID] FROM [dbo].[I_InvestorSystemBalance] WHERE [CashRequestID]=@crID) is null begin update [dbo].[I_InvestorSystemBalance] set [NLOfferID]=@nlcrID where [CashRequestID]=@crID end ";				
+
+					//	DB.ExecuteNonQuery(query, CommandSpecies.Text, new QueryParameter("@crID", loan.CashRequest.Id), new QueryParameter("@nlcrID", crModel.CashRequestID));
 
 					NL_AddLog(LogType.Info, "Strategy end", loansList, Error, null, null);
 
@@ -207,6 +203,37 @@
 					NL_AddLog(LogType.Error, "Strategy failed", null, Error, exc.ToString(), exc.StackTrace);
 					return;
 				}
+			}
+		}
+
+		private void ConvertLoanLegals() {
+
+			List<MigrationModels.CashReqModel> legalsList = DB.Fill<MigrationModels.CashReqModel>("NL_MigrationLoanLegals", CommandSpecies.StoredProcedure);
+
+			foreach (var cashReqModel in legalsList) {
+				LoanLegal legals = legalRep.Get(cashReqModel.LegalID);
+				//CashRequest cr = loanRep.Get(legals.CashRequest.Id);
+
+				NL_LoanLegals nlLegals = new NL_LoanLegals() {
+				//	Amount =    //loan.LoanAmount, // todo check
+				//	RepaymentPeriod = 0, //loan.RepaymentsNum, // todo check
+					OfferID = cashReqModel.OfferID,
+					SignatureTime = legals.Created,
+					CreditActAgreementAgreed = legals.CreditActAgreementAgreed,
+					PreContractAgreementAgreed = legals.PreContractAgreementAgreed,
+					PrivateCompanyLoanAgreementAgreed = legals.PrivateCompanyLoanAgreementAgreed,
+					GuarantyAgreementAgreed = legals.GuarantyAgreementAgreed,
+					EUAgreementAgreed = legals.EUAgreementAgreed,
+					COSMEAgreementAgreed = legals.COSMEAgreementAgreed,
+					NotInBankruptcy = legals.NotInBankruptcy,
+					SignedName = legals.SignedName,
+					SignedLegalDocs = legals.SignedLegalDocs,
+					BrokerSetupFeePercent = legals.BrokerSetupFeePercent
+				};
+
+				long legalsID = DB.ExecuteScalar<long>("NL_LoanLegalsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanLegals>("Tbl", nlLegals));
+
+				NL_AddLog(LogType.Info, "copied LL", cashReqModel, legalsID, null, null);
 			}
 		}
 	}

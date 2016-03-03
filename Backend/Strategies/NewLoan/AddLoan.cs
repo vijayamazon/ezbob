@@ -394,7 +394,7 @@
 			if (LoanID == 0)
 				return;
 
-			MigrateLoanTransaction.LoanTransactionModel rebateTransaction = DB.FillFirst<MigrateLoanTransaction.LoanTransactionModel>(
+			MigrationModels.LoanTransactionModel rebateTransaction = DB.FillFirst<MigrationModels.LoanTransactionModel>(
 				"select t.PostDate,t.Amount,t.Description,t.IP,t.PaypointId,c.Id as CardID from LoanTransaction t " +
 				"join PayPointCard c on c.TransactionId = t.PaypointId " +
 				"where Description='system-repay' " +

@@ -6,35 +6,15 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
-	public class MigrateLoanTransaction : AStrategy {
+	public class ConvertPaypointTransaction : AStrategy {
 
-		public MigrateLoanTransaction() {}
+		//public MigrateLoanTransaction() {}
 
 		public override string Name { get { return "MigrateLoanTransaction"; } }
 
 		public string Error { get; private set; }
 
-		public class LoanTransactionModel {
-			public DateTime PostDate { get; set; }
-			public decimal Amount { get; set; }
-			public string Description { get; set; }
-			public string IP { get; set; }
-			public string PaypointId { get; set; }
-			public int CardID { get; set; }
-			public long LoanID { get; set; }
-			public int LoanTransactionMethodId { get; set; }
-			public int CustomerId { get; set; }
-		}
-
-		public class CashReqModel {
-			public long CashRequestID { get; set; }
-			public long DecisionID { get; set; }
-			public long OfferID { get; set; }
-		}
-
-		public class LoanId {
-			public int Id { get; set; }
-		}
+	
 
 
 		public override void Execute() {
@@ -58,9 +38,9 @@
 				"left join [dbo].[NL_Payments] p on p.LoanID=nl.LoanID " +
 				"where t.[Status]='Done' and t.[Type]='PaypointTransaction' and p.PaymentID is null order by t.LoanId, t.PostDate";
 
-			List<LoanTransactionModel> transactionsList = DB.Fill<LoanTransactionModel>(query, CommandSpecies.Text);
+			List<MigrationModels.LoanTransactionModel> transactionsList = DB.Fill<MigrationModels.LoanTransactionModel>(query, CommandSpecies.Text);
 
-			foreach (LoanTransactionModel transaction in transactionsList) {
+			foreach (MigrationModels.LoanTransactionModel transaction in transactionsList) {
 
 				bool savePayment = false;
 
@@ -138,9 +118,9 @@
 
 
 		public void UpdateLoanStates() {
-			List<LoanTransactionModel> loansList = DB.Fill<LoanTransactionModel>("select nl.[LoanID], l.CustomerId from NL_Loans nl join Loan l on l.Id=nl.OldLoanID", CommandSpecies.Text);
+			List<MigrationModels.LoanTransactionModel> loansList = DB.Fill<MigrationModels.LoanTransactionModel>("select nl.[LoanID], l.CustomerId from NL_Loans nl join Loan l on l.Id=nl.OldLoanID", CommandSpecies.Text);
 
-			foreach (LoanTransactionModel transaction in loansList) {
+			foreach (MigrationModels.LoanTransactionModel transaction in loansList) {
 				// recalculate state by calculator + save new state to DB
 				UpdateLoanDBState reloadLoanDBState = new UpdateLoanDBState(transaction.CustomerId, transaction.LoanID, 1);
 				try {

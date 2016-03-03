@@ -116,8 +116,12 @@
 			bool isSendImail = IsSendImail(collectionType);
 			bool isChangeStatusCall = IsChangeStatusCall(collectionType);
 
+			NL_AddLog(LogType.Info, "NLSendNotifications", new object[] {
+				model, collectionType, collectionStatusName, emailTemplate,isSendEmail, isSendImail, isSendImail, isChangeStatusCall
+			}, null, null, null);
+
 			if (isChangeStatusCall) {
-				ChangeStatus(model.CustomerID, 1, collectionStatusName, collectionType, model);
+				ChangeStatus(model.CustomerID, model.LoanID, collectionStatusName, collectionType, model);
 			}
 			if (isSendEmail) {
 				SendCollectionEmail(emailTemplate, model, collectionType);

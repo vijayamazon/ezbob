@@ -105,12 +105,16 @@
 		}//LoadSmsTemplates
 
 		protected void HandleCuredLoan(int customerID, int loanID, CollectionDataModel model) {
+			NL_AddLog(LogType.Info, "HandleCuredLoan", model, null, null, null);
 			ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured, model);
 		}//HandleCuredLoan
 
 		private int AddCollectionLog(CollectionLog model) {
 			var historyID = model.LoanHistoryID > 0 ? (object)model.LoanHistoryID :null;
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3} history {4}", model.CustomerID, model.LoanID, model.Type, model.Method, model.LoanHistoryID);
+
+			NL_AddLog(LogType.Info, "AddCollectionLog", model, historyID, null, null);
+			
 			return DB.ExecuteScalar<int>("AddCollectionLog",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
@@ -155,6 +159,7 @@
 		}//CalculateFee
 
 		protected void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type, CollectionDataModel model) {
+			NL_AddLog(LogType.Info, "ChangeStatus", new object[] { model, status, type }, null, null, null);
 			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
 			// prevent while running on new loan - duplicate update
 			if (model.UpdateCustomerAllowed) {

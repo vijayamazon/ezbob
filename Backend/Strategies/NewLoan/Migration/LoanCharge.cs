@@ -1,7 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan.Migration {
-	public class MigrateFees : AStrategy {
 
-		//public MigrateFees() {}
+	public class LoanCharge : AStrategy {
+
+		public LoanCharge() {}
 
 		public override string Name { get { return "MigrateFees"; } }
 		public string Error { get; private set; }
@@ -24,4 +25,4 @@
 
 	
 	}
-}//ns
+}//nsk
