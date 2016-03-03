@@ -184,6 +184,9 @@
 			customerModel.RequestedLoan = ra ?? new CustomerRequestedLoan();
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
+
+			customerModel.IsBrokerNonRegulated = customer.Broker != null && !customer.Broker.FCARegistered;
+
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
 
 			var cr = customer.LastCashRequest;

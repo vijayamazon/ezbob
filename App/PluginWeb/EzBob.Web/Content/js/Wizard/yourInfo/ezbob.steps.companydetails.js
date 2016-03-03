@@ -73,7 +73,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		return false;
 	}, // submitForm
-	
+
 	inputChanged: function (evt) {
 		this.setFieldStatusNotRequired(evt, 'promoCode');
 		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
@@ -172,6 +172,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
+	    }
+
+	    if (this.model.get('IsBrokerNonRegulated')) {
+	    	this.$el.find('.NonFCACompliant').remove(); 
 	    }
 
 	    this.readyToProceed = true;

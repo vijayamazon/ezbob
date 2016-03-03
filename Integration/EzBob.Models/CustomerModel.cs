@@ -114,6 +114,7 @@ namespace EzBob.Models {
 		public bool IsAlibaba { get; set; }
 
 		public bool IsBrokerFill { get; set; }
+		public bool IsBrokerNonRegulated { get; set; }
 
 		public bool IsCurrentCashRequestFromQuickOffer { get; set; }
 
