@@ -31,7 +31,6 @@ EzBob.Broker.ChangePasswordView = EzBob.Broker.SubmitView.extend({
 		EzBob.App.trigger('clear');
 		this.$el.find('form').find('.form_field').val('').blur();
 		this.inputChanged();
-		console.log('clear');
 	}, // clear
 
 	setAuthOnRender: function() {
@@ -55,8 +54,12 @@ EzBob.Broker.ChangePasswordView = EzBob.Broker.SubmitView.extend({
 
 			if (res.success) {
 				self.clear();
+				self.$el.find('#OldPassword,#NewPassword,#NewPassword2').removeAttr("style");
 				self.passwordStrengthView.show();
 				self.setSubmitEnabled(false);
+				self.$el.find('.error-wrap label').hide();
+
+				self.$el.find('IMG.field_status').field_status({ required: true });
 
 				EzBob.App.trigger('info', 'Your password has been updated.');
 				return;
