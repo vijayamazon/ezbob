@@ -105,12 +105,16 @@
 		}//LoadSmsTemplates
 
 		protected void HandleCuredLoan(int customerID, int loanID, CollectionDataModel model) {
+			NL_AddLog(LogType.Info, "HandleCuredLoan", model, null, null, null);
 			ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured, model);
 		}//HandleCuredLoan
 
 		private int AddCollectionLog(CollectionLog model) {
-			var historyID = model.LoanHistoryID > 0 ? (object)model.LoanHistoryID :null;
+			var historyID = model.LoanHistoryID > 0 ? (object)model.LoanHistoryID : null;
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3} history {4}", model.CustomerID, model.LoanID, model.Type, model.Method, model.LoanHistoryID);
+
+			NL_AddLog(LogType.Info, "AddCollectionLog", model, historyID, null, null);
+
 			return DB.ExecuteScalar<int>("AddCollectionLog",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
@@ -155,6 +159,7 @@
 		}//CalculateFee
 
 		protected void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type, CollectionDataModel model) {
+			NL_AddLog(LogType.Info, "ChangeStatus", new object[] { model, status, type }, null, null, null);
 			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
 			// prevent while running on new loan - duplicate update
 			if (model.UpdateCustomerAllowed) {
@@ -499,7 +504,7 @@
 								LoanHistoryID = model.LoanHistoryID,
 								Type = type.ToString(),
 								Method = CollectionMethod.Mail.ToString(),
-								Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+								Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
 							});
 
 							SaveCollectionSnailMailMetadata(collection7LogID, personal);
@@ -525,7 +530,7 @@
 							LoanHistoryID = model.LoanHistoryID,
 							Type = type.ToString(),
 							Method = CollectionMethod.Mail.ToString(),
-							Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+							Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
 
 						});
 
@@ -581,7 +586,7 @@
 					LoanHistoryID = model.LoanHistoryID,
 					Type = type.ToString(),
 					Method = CollectionMethod.Sms.ToString(),
-					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
 				});
 
 			} else if (model.SmsSendingAllowed) {
@@ -594,7 +599,7 @@
 					LoanHistoryID = model.LoanHistoryID,
 					Type = type.ToString(),
 					Method = CollectionMethod.Sms.ToString(),
-					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null 
+					Comments = (model.NLLoanID > 0) ? "nlloan " + model.NLLoanID : null
 				});
 			} else {
 				Log.Info("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}", model.CustomerID, model.PhoneNumber, smsTemplate);
