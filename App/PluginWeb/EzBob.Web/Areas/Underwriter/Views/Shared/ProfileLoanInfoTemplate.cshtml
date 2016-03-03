@@ -466,7 +466,7 @@
             <button id="editOfferButton" class="btn btn-dashboard" name="editOfferButton">Edit offer</button>
         <% } %>
 
-		<% if(m.CashRequestId) { %>
+		<%if(m.CashRequestId && (m.SystemDecision !== 'Registered') && m.CreditResult !== '') { %>
 			<a class="btn btn-dashboard downloadOfferButton" data-type="pdf">Download offer pdf</a>
 			<a class="btn btn-dashboard downloadOfferButton" data-type="excel">Download offer excel</a>
 		<% } %>
